@@ -265,4 +265,5 @@ qtUpdateNotifier::~qtUpdateNotifier()
 		m_timer->stop();
 		m_timer->deleteLater();
 	}
+	this->logActivity( QString( "qt-update-notifier quitting" ) ) ;
 }
