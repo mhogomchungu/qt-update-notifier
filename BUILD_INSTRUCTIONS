@@ -1,0 +1,20 @@
+
+To build this project,you need the following packages and their development versions installed
+
+KDE4
+QT4
+g++
+cmake
+
+To build the following commands in the source folder
+
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`  -DCMAKE_BUILD_TYPE=release  ..
+make
+make install ( or sudo make install )
+
+
+To uninstall,run
+
+make uninstall( or sudo make uninstall )
