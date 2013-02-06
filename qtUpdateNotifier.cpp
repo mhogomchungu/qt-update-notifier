@@ -95,7 +95,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 	QFile f( m_configTime ) ;
 	if( !f.open( QIODevice::ReadOnly ) ){
 		/*
-		 * config file doesnt seem to be present
+		 * config file doesnt seem to be present,ignore it,it will be created later on
 		 */
 		this->checkForUpdates();
 	}else{
@@ -104,12 +104,13 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 		u_int64_t interval = m_currentTime - configTime ;
 		if( interval >= m_sleepDuration ){
 			/*
-			 * its been more than a day since last check,check now
+			 * the wait interval has passed,check for updates now
 			 */
 			this->checkForUpdates();
 		}else{
 			/*
-			 * its been less than a day,wait for the remaining time before checking
+			 * the wait interval has not passed,wait for the remainder of the interval before
+			 * checking for updates
 			 */
 			this->scheduleUpdates( m_sleepDuration - interval );
 		}
