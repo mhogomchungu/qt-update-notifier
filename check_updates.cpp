@@ -23,7 +23,6 @@
 check_updates::check_updates( QObject * parent )
 {
 	Q_UNUSED( parent ) ;
-	connect( this,SIGNAL( finished() ),this,SLOT( deleteLater() ) ) ;
 }
 
 bool check_updates::online()

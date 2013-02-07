@@ -41,6 +41,7 @@
 #include <kstatusnotifieritem.h>
 #include <kmenu.h>
 #include "check_updates.h"
+#include "logwindow.h"
 #include <kstandarddirs.h>
 #include <cstdlib>
 #include <cstdio>
@@ -70,6 +71,7 @@ private slots:
 	void _activateRequested( bool state,const QPoint &pos );
 	void scheduleUpdates( int ) ;
 	void updatesFound( int,QStringList ) ;
+	void logWindowShow( void ) ;
 private:
 	u_int64_t getCurrentTime( void ) ;
 	u_int64_t getTimeFromConfigFile( void ) ;

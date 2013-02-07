@@ -31,12 +31,20 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	this->logActivity( QString( "qt-update-notifier started" ) ) ;
 }
 
+void qtUpdateNotifier::logWindowShow()
+{
+	logWindow * log = new logWindow( 0,m_configLog ) ;
+	log->showLogWindow();
+}
+
 void qtUpdateNotifier::createEnvironment()
 {
 	KStandardDirs k ;
 	QString path = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
+
 	QDir d ;
 	d.mkdir( path ) ;
+
 	m_configTime = path + QString( "/qt-update-notifier.time" ) ;
 	m_configLog = path  + QString( "/qt-update-notifier.log" ) ;
 
@@ -79,6 +87,8 @@ void qtUpdateNotifier::run()
 
 	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startSynaptic() ) );
+	m_trayMenu->addAction( tr( "open log window" ),this,SLOT( logWindowShow() ) );
+
 
 	this->setContextMenu( m_trayMenu );
 	this->setObjectName( "qtUpdateNotifier" );
@@ -163,15 +173,20 @@ void qtUpdateNotifier::checkForUpdates()
 		this->logActivity( QString( "warning:\tattempt to start a check while another is already in progress" ) ) ;
 		return ;
 	}
+
 	this->logActivity( QString( "checking for updates" ) ) ;
 	this->changeIcon( QString( "qt-update-notifier-updating" ) );
 	this->setStatus( KStatusNotifierItem::Passive );
+
 	m_threadIsRunning = true ;
 	m_updates = new check_updates( this ) ;
+
 	connect( m_updates,SIGNAL( updateList( QStringList ) ),this,SLOT( updateList( QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( updatesFound( int,QStringList ) ),this,SLOT( updatesFound( int,QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
+	connect( m_updates,SIGNAL( finished() ),m_updates,SLOT( deleteLater() ) ) ;
+
 	m_updatesFound = false ;
 	this->contextMenu()->setEnabled( false );
 	m_updates->start();
@@ -203,7 +218,10 @@ void qtUpdateNotifier::scheduleUpdates( int interval )
 	char num[ 64 ] ;
 	float f = static_cast<float>( interval ) ;
 	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
-	QString r = QString( "scheduled next check to be in %1 hours" ).arg( QString( num ) ) ;
+	QDateTime d ;
+	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + interval ) ;
+	QString n = d.toString( Qt::TextDate ) ;
+	QString r = QString( "scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
 	this->logActivity( r ) ;
 	m_timer->stop();
 	m_timer->start( interval );

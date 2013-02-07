@@ -13,9 +13,13 @@ INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h )
+QT4_WRAP_UI( UI logwindow.ui )
 
-add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp ${MOC} )
+QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h logwindow.h )
+
+QT4_ADD_RESOURCES( ICONS icons.qrc )
+
+add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp logwindow.cpp ${MOC} ${UI} ${ICONS} )
 
 find_library ( kdeui_lib libkdeui.so )
 TARGET_LINK_LIBRARIES( qt-update-notifier ${QT_LIBRARIES} ${kdeui_lib} ) 
