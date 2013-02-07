@@ -38,7 +38,7 @@ public:
 	~check_updates() ;
 signals:
 	void updateList( QStringList ) ;
-	void updatesFound( bool,QStringList ) ;
+	void updatesFound( int,QStringList ) ;
 public slots:
 private:
 	void reportUpdates( void ) ;

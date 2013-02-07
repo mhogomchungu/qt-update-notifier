@@ -169,7 +169,7 @@ void qtUpdateNotifier::checkForUpdates()
 	m_threadIsRunning = true ;
 	m_updates = new check_updates( this ) ;
 	connect( m_updates,SIGNAL( updateList( QStringList ) ),this,SLOT( updateList( QStringList ) ) ) ;
-	connect( m_updates,SIGNAL( updatesFound( bool,QStringList ) ),this,SLOT( updatesFound( bool,QStringList ) ) ) ;
+	connect( m_updates,SIGNAL( updatesFound( int,QStringList ) ),this,SLOT( updatesFound( int,QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
 	m_updatesFound = false ;
@@ -177,17 +177,20 @@ void qtUpdateNotifier::checkForUpdates()
 	m_updates->start();
 }
 
-void qtUpdateNotifier::updatesFound( bool found,QStringList list )
+void qtUpdateNotifier::updatesFound( int st,QStringList list )
 {
 	Q_UNUSED( list ) ;
 	m_threadIsRunning = false ;
 	this->contextMenu()->setEnabled( true );
-	if( found ){
+	if( st == 0 ){
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
 		this->changeIcon( QString( "qt-update-notifier-updates-are-available" ) ) ;
 		m_updatesFound = true ;
 		this->logActivity( QString( "update check complete,updates found" ) ) ;
-	}else{
+	}else if( st == 1 ){
+		this->changeIcon( QString( "qt-update-notifier" ) );
+		this->logActivity( QString( "update check complete,repository appear to be in an inconsistent state" ) ) ;
+	}else if( st == 2 ){
 		this->changeIcon( QString( "qt-update-notifier" ) );
 		this->logActivity( QString( "update check complete,no updates found" ) ) ;
 	}

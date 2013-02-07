@@ -67,9 +67,9 @@ private slots:
 	void checkForUpdates( void ) ;
 	void checkForUpdatesOnStartUp( void ) ;
 	void _activate( QPoint & );
-	void _activateRequested( bool active,const QPoint &pos );
+	void _activateRequested( bool state,const QPoint &pos );
 	void scheduleUpdates( int ) ;
-	void updatesFound( bool,QStringList ) ;
+	void updatesFound( int,QStringList ) ;
 private:
 	u_int64_t getCurrentTime( void ) ;
 	u_int64_t getTimeFromConfigFile( void ) ;

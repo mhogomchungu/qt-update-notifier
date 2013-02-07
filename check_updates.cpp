@@ -66,16 +66,19 @@ void check_updates::reportUpdates()
 		exe.start( aptUpgrade );
 		exe.waitForFinished( -1 ) ;
 		QByteArray output = exe.readAllStandardOutput() ;
-		int st = exe.exitCode() ;
+		//int st = exe.exitCode() ;
 		exe.close();
-		if( st == 0 ){
+		if( !output.isEmpty() ){
 			if( output.contains( "\nThe following packages will be" ) ){
-				emit updatesFound( true,list );
+				emit updatesFound( 0,list );
+				return ;
+			}else if( output.contains( "\nThe following packages have unmet dependencies" ) ){
+				emit updatesFound( 1,list );
 				return ;
 			}
 		}
 	}
-	emit updatesFound( false,list );
+	emit updatesFound( 2,list );
 }
 
 check_updates::~check_updates()
