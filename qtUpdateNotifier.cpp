@@ -197,8 +197,10 @@ void qtUpdateNotifier::updatesFound( bool found,QStringList list )
 
 void qtUpdateNotifier::scheduleUpdates( int interval )
 {
-	int hours = interval / ( 1000 * 60 * 60 ) ;
-	QString r = QString( "scheduled next check to be in %1 hours" ).arg( QString::number( hours ) ) ;
+	char num[ 64 ] ;
+	float f = static_cast<float>( interval ) ;
+	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
+	QString r = QString( "scheduled next check to be in %1 hours" ).arg( QString( num ) ) ;
 	this->logActivity( r ) ;
 	m_timer->stop();
 	m_timer->start( interval );
