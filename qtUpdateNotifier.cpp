@@ -33,6 +33,11 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	this->logActivity( QString( "qt-update-notifier started" ) ) ;
 	QCoreApplication::setApplicationName( QString( "qt-update-notifier" ) ) ;
 	this->setObjectName( "qtUpdateNotifier" );
+
+	QString x = QString( "qt-update-notifier" ) ;
+	QString y = QString( "status" ) ;
+	QString z = QString( "waiting for 5 minutes before checking for updates" ) ;
+	this->showToolTip( x,y,z ) ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -120,7 +125,11 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			 * the wait interval has not passed,wait for the remainder of the interval before
 			 * checking for updates
 			 */
-			this->scheduleUpdates( m_sleepDuration - interval );
+			int x = m_sleepDuration - interval ;
+			this->scheduleUpdates( x );
+			QString y = QString( "qt-update-notifier" ) ;
+			QString z = QString( "status" ) ;
+			this->showToolTip( y,z ) ;
 		}
 	}
 }
@@ -236,6 +245,14 @@ void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList list )
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
 {
+	this->setToolTip( x,y,z );
+}
+
+void qtUpdateNotifier::showToolTip( int interval )
+{
+	QString x = QString( "qt-update-notifier" ) ;
+	QString y = QString( "status" );
+	QString z = this->logMsg( interval ) ;
 	this->setToolTip( x,y,z );
 }
 

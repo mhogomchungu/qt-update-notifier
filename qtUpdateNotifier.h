@@ -80,6 +80,7 @@ private:
 	void showToolTip( QString,QString,QStringList ) ;
 	void showToolTip( QString,QString,QString ) ;
 	void showToolTip( QString,QString ) ;
+	void showToolTip( int ) ;
 	QString nextUpdateTime( void ) ;
 	QString nextUpdateTime( int ) ;
 	QString logMsg( int ) ;
