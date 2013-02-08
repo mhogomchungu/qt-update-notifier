@@ -77,6 +77,12 @@ private:
 	u_int64_t getTimeFromConfigFile( void ) ;
 	void createEnvironment( void ) ;
 	void writeUpdateTimeToConfigFile( void ) ;
+	void showToolTip( QString,QString,QStringList ) ;
+	void showToolTip( QString,QString,QString ) ;
+	void showToolTip( QString,QString ) ;
+	QString nextUpdateTime( void ) ;
+	QString nextUpdateTime( int ) ;
+	QString logMsg( int ) ;
 	bool m_canCloseApplication ;
 	bool m_threadIsRunning ;
 	bool m_updatesFound ;

@@ -26,9 +26,13 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	m_trayMenu = 0 ;
 	m_threadIsRunning = false ;
 	this->setStatus( KStatusNotifierItem::Passive );
-	QCoreApplication::setApplicationName( QString( "qt-update-notifier" ) ) ;
+	this->setCategory( KStatusNotifierItem::ApplicationStatus );
+	this->changeIcon( QString( "qt-update-notifier" ) );
+	//this->setAttentionIconByName( QString( "qt-update-notifier-updates-are-available" ) ) ;
 	this->createEnvironment();
 	this->logActivity( QString( "qt-update-notifier started" ) ) ;
+	QCoreApplication::setApplicationName( QString( "qt-update-notifier" ) ) ;
+	this->setObjectName( "qtUpdateNotifier" );
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -68,6 +72,7 @@ void qtUpdateNotifier::start()
 void qtUpdateNotifier::changeIcon( QString icon )
 {
 	this->setIconByName( icon );
+	this->setOverlayIconByName( icon ) ;
 }
 
 void qtUpdateNotifier::startSynaptic()
@@ -78,10 +83,6 @@ void qtUpdateNotifier::startSynaptic()
 
 void qtUpdateNotifier::run()
 {
-	this->setCategory( KStatusNotifierItem::ApplicationStatus );
-	this->setStatus( KStatusNotifierItem::Passive );
-	this->changeIcon( QString( "qt-update-notifier" ) );
-
 	m_trayMenu = new KMenu() ;
 
 	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
@@ -89,13 +90,12 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "open log window" ),this,SLOT( logWindowShow() ) );
 
 	this->setContextMenu( m_trayMenu );
-	this->setObjectName( "qtUpdateNotifier" );
 	this->contextMenu()->setEnabled( true );
+
 	QTimer * t = new QTimer() ;
 	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
 	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 	t->start( 5 * 60 * 1000 ) ; //wait for 5 minutes before check for updates
-	//t->start( 10 * 1000 ) ;
 }
 
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
@@ -173,8 +173,12 @@ void qtUpdateNotifier::checkForUpdates()
 	}
 
 	this->logActivity( QString( "checking for updates" ) ) ;
-	this->changeIcon( QString( "qt-update-notifier-updating" ) );
-	this->setStatus( KStatusNotifierItem::Passive );
+
+	QString icon = QString( "qt-update-notifier-updating" ) ;
+
+	this->changeIcon( icon );
+
+	this->showToolTip( icon,QString( "status" ),QString( "checking for updates" ) );
 
 	m_threadIsRunning = true ;
 	m_updates = new check_updates( this ) ;
@@ -192,35 +196,81 @@ void qtUpdateNotifier::checkForUpdates()
 
 void qtUpdateNotifier::updatesFound( int st,QStringList list )
 {
-	Q_UNUSED( list ) ;
 	m_threadIsRunning = false ;
 	this->contextMenu()->setEnabled( true );
+	QString icon ;
 	if( st == 0 ){
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
-		this->changeIcon( QString( "qt-update-notifier-updates-are-available" ) ) ;
 		m_updatesFound = true ;
+		icon = QString( "qt-update-notifier-updates-are-available" ) ;
+		this->changeIcon( icon ) ;
 		this->logActivity( QString( "update check complete,updates found" ) ) ;
+		this->showToolTip( icon,QString( "there are updates in the repository" ),list );
 	}else if( st == 1 ){
-		this->changeIcon( QString( "qt-update-notifier" ) );
+		icon = QString( "qt-update-notifier" ) ;
+		this->changeIcon( icon );
+		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( QString( "update check complete,repository appear to be in an inconsistent state" ) ) ;
+		this->showToolTip( icon,QString( "no updates foung" ) );
 	}else if( st == 2 ){
-		this->changeIcon( QString( "qt-update-notifier" ) );
+		icon = QString( "qt-update-notifier" ) ;
+		this->changeIcon( icon );
+		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( QString( "update check complete,no updates found" ) ) ;
+		this->showToolTip( icon,QString( "no updates foung" ) );
+	}else{
+		/*
+		 * currently,we dont get here
+		 */
+		;
 	}
 	this->writeUpdateTimeToConfigFile() ;
 	this->scheduleUpdates( m_sleepDuration );
 }
 
-void qtUpdateNotifier::scheduleUpdates( int interval )
+void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList list )
+{
+	Q_UNUSED( list ) ;
+	this->setToolTip( x,QString( "status" ),y );
+}
+
+void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
+{
+	this->setToolTip( x,y,z );
+}
+
+void qtUpdateNotifier::showToolTip( QString x,QString y )
+{
+	QString n = QString( "next update check will be at %1" ).arg( this->nextUpdateTime() ) ;
+	this->setToolTip( x,y,n );
+}
+
+QString qtUpdateNotifier::nextUpdateTime( void )
+{
+	QDateTime d ;
+	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + m_sleepDuration ) ;
+	return d.toString( Qt::TextDate ) ;
+}
+
+QString qtUpdateNotifier::nextUpdateTime( int interval )
+{
+	QDateTime d ;
+	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + interval ) ;
+	return d.toString( Qt::TextDate ) ;
+}
+
+QString qtUpdateNotifier::logMsg( int interval )
 {
 	char num[ 64 ] ;
 	float f = static_cast<float>( interval ) ;
 	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
-	QDateTime d ;
-	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + interval ) ;
-	QString n = d.toString( Qt::TextDate ) ;
-	QString r = QString( "scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
-	this->logActivity( r ) ;
+	QString n = this->nextUpdateTime( interval ) ;
+	return QString( "scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+}
+
+void qtUpdateNotifier::scheduleUpdates( int interval )
+{
+	this->logActivity( this->logMsg( interval ) ) ;
 	m_timer->stop();
 	m_timer->start( interval );
 }
@@ -228,6 +278,9 @@ void qtUpdateNotifier::scheduleUpdates( int interval )
 void qtUpdateNotifier::updateList( QStringList list )
 {
 	Q_UNUSED( list ) ;
+	/*
+	 * currently unused function
+	 */
 }
 
 void qtUpdateNotifier::threadTerminated( void )
@@ -244,14 +297,18 @@ void qtUpdateNotifier::threadisFinished()
 void qtUpdateNotifier::_activate( QPoint &p )
 {
 	Q_UNUSED( p ) ;
-	this->checkForUpdates();
+	/*
+	 * currently unused function
+	 */
 }
 
 void qtUpdateNotifier::_activateRequested( bool active,const QPoint &pos )
 {
 	Q_UNUSED( active ) ;
 	Q_UNUSED( pos ) ;
-	this->checkForUpdates();
+	/*
+	 * currently unused function
+	 */
 }
 
 void qtUpdateNotifier::closeApp()
