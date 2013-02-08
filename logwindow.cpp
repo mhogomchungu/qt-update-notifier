@@ -26,9 +26,15 @@ void logWindow::showLogWindow()
 		f.close();
 		m_ui->textEditLogField->setText( x );
 	}else{
-		m_ui->textEditLogField->close() ;
+		m_ui->textEditLogField->clear() ;
 	}
 	this->show();
+}
+
+void logWindow::Show( QString logFile )
+{
+	logWindow * w = new logWindow( 0,logFile ) ;
+	w->showLogWindow();
 }
 
 void logWindow::pbClearLog()

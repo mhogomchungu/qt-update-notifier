@@ -33,8 +33,7 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 
 void qtUpdateNotifier::logWindowShow()
 {
-	logWindow * log = new logWindow( 0,m_configLog ) ;
-	log->showLogWindow();
+	logWindow::Show( m_configLog ) ;
 }
 
 void qtUpdateNotifier::createEnvironment()
@@ -88,7 +87,6 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startSynaptic() ) );
 	m_trayMenu->addAction( tr( "open log window" ),this,SLOT( logWindowShow() ) );
-
 
 	this->setContextMenu( m_trayMenu );
 	this->setObjectName( "qtUpdateNotifier" );

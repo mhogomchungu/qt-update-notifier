@@ -17,6 +17,7 @@ public:
 	explicit logWindow( QWidget * parent = 0,QString logFile = QString() );
 	~logWindow();
 	void showLogWindow( void ) ;
+	static void Show( QString ) ;
 private slots:
 	void pbClearLog( void ) ;
 	void pbQuit( void ) ;
