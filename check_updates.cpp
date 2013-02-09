@@ -39,6 +39,9 @@ void check_updates::run()
 {
 	if( this->online() ){
 		this->reportUpdates();
+	}else{
+		QStringList l ;
+		emit updatesFound( 3,l );
 	}
 }
 
