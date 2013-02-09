@@ -76,8 +76,15 @@ void qtUpdateNotifier::start()
 
 void qtUpdateNotifier::changeIcon( QString icon )
 {
-	this->setIconByName( icon );
-	this->setOverlayIconByName( icon ) ;
+	if( icon == QString( "qt-update-notifier-updates-are-available" ) ){
+		//this->setIconByName( QString( "qt-update-notifier-updates-are-available" ) );
+		//this->setOverlayIconByName( QString( "qt-update-notifier-updates-are-available" ) ) ;
+		this->setIconByName( icon );
+		this->setOverlayIconByName( icon ) ;
+	}else{
+		this->setIconByName( icon );
+		this->setOverlayIconByName( icon ) ;
+	}
 }
 
 void qtUpdateNotifier::startSynaptic()
@@ -129,7 +136,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			this->scheduleUpdates( x );
 			QString y = QString( "qt-update-notifier" ) ;
 			QString z = QString( "status" ) ;
-			this->showToolTip( y,z ) ;
+			this->showToolTip( y,z,x ) ;
 		}
 	}
 }
@@ -248,6 +255,12 @@ void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
 	this->setToolTip( x,y,z );
 }
 
+void qtUpdateNotifier::showToolTip( QString x,QString y,int z )
+{
+	QString n = QString( "next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
+	this->setToolTip( x,y,n );
+}
+
 void qtUpdateNotifier::showToolTip( int interval )
 {
 	QString x = QString( "qt-update-notifier" ) ;
@@ -264,9 +277,7 @@ void qtUpdateNotifier::showToolTip( QString x,QString y )
 
 QString qtUpdateNotifier::nextUpdateTime( void )
 {
-	QDateTime d ;
-	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + m_sleepDuration ) ;
-	return d.toString( Qt::TextDate ) ;
+	return this->nextUpdateTime( m_sleepDuration ) ;
 }
 
 QString qtUpdateNotifier::nextUpdateTime( int interval )

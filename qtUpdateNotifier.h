@@ -79,6 +79,7 @@ private:
 	void writeUpdateTimeToConfigFile( void ) ;
 	void showToolTip( QString,QString,QStringList ) ;
 	void showToolTip( QString,QString,QString ) ;
+	void showToolTip( QString,QString,int ) ;
 	void showToolTip( QString,QString ) ;
 	void showToolTip( int ) ;
 	QString nextUpdateTime( void ) ;
