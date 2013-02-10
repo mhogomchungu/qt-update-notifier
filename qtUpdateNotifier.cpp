@@ -151,7 +151,7 @@ void qtUpdateNotifier::logActivity( QString msg )
 	QFile f( m_configLog ) ;
 	f.open( QIODevice::WriteOnly | QIODevice::Append ) ;
 	QDateTime t = QDateTime::currentDateTime() ;
-	QString time = QString( "%1:\t%2\n").arg( t.toString( Qt::TextDate ) ).arg( msg )  ;
+	QString time = QString( "%1:   %2\n").arg( t.toString( Qt::TextDate ) ).arg( msg )  ;
 	QByteArray r = time.toAscii() ;
 	f.write( r ) ;
 	f.close();
