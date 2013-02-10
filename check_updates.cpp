@@ -20,9 +20,10 @@
 
 #include "check_updates.h"
 
-check_updates::check_updates( QObject * parent )
+check_updates::check_updates( QString configPath,QObject * parent )
 {
 	Q_UNUSED( parent ) ;
+	m_configPath = configPath ;
 }
 
 bool check_updates::online()
@@ -47,16 +48,13 @@ void check_updates::run()
 
 void check_updates::reportUpdates()
 {
-	QString userDir = QDir::homePath() + QString( "/.qt-update-notifier" ) ;
-
-	QString aptUpdate = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( userDir ) ;
-	QString aptUpgrade = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( userDir ) ;
+	QString aptUpdate = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( m_configPath ) ;
+	QString aptUpgrade = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( m_configPath ) ;
 
 	QDir dir ;
-	dir.mkdir( userDir ) ;
-	dir.mkdir( userDir + QString( "/apt" ) ) ;
-	dir.mkdir( userDir + QString( "/apt/lists" ) ) ;
-	dir.mkdir( userDir + QString( "/apt/lists/partial" ) ) ;
+	dir.mkdir( m_configPath + QString( "/apt" ) ) ;
+	dir.mkdir( m_configPath + QString( "/apt/lists" ) ) ;
+	dir.mkdir( m_configPath + QString( "/apt/lists/partial" ) ) ;
 
 	QStringList list ;
 	QProcess exe ;

@@ -34,13 +34,14 @@ class check_updates : public QThread
 {
 	Q_OBJECT
 public:
-	explicit check_updates( QObject * parent = 0 );
+	explicit check_updates( QString configPath,QObject * parent = 0 );
 	~check_updates() ;
 signals:
 	void updateList( QStringList ) ;
 	void updatesFound( int,QStringList ) ;
 public slots:
 private:
+	QString m_configPath ;
 	void reportUpdates( void ) ;
 	bool online( void ) ;
 	void run( void ) ;

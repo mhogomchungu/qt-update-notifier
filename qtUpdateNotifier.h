@@ -96,6 +96,7 @@ private:
 	QString m_configLog ;
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
+	QString m_configPath ;
 };
 
 #endif // MAINWINDOW_H

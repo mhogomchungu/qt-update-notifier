@@ -48,15 +48,15 @@ void qtUpdateNotifier::logWindowShow()
 void qtUpdateNotifier::createEnvironment()
 {
 	KStandardDirs k ;
-	QString path = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
+	m_configPath = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
 
 	QDir d ;
-	d.mkdir( path ) ;
+	d.mkdir( m_configPath ) ;
 
-	m_configTime = path + QString( "/qt-update-notifier.time" ) ;
-	m_configLog = path  + QString( "/qt-update-notifier.log" ) ;
+	m_configTime = m_configPath + QString( "/qt-update-notifier.time" ) ;
+	m_configLog = m_configPath  + QString( "/qt-update-notifier.log" ) ;
 
-	QFile f( path + QString( "/qt-update-notifier.interval" ) ) ;
+	QFile f( m_configPath + QString( "/qt-update-notifier.interval" ) ) ;
 	if( !f.exists() ){
 		f.open( QIODevice::WriteOnly ) ;
 		f.write( "86400") ;
@@ -197,7 +197,7 @@ void qtUpdateNotifier::checkForUpdates()
 	this->showToolTip( icon,QString( "status" ),QString( "checking for updates" ) );
 
 	m_threadIsRunning = true ;
-	m_updates = new check_updates( this ) ;
+	m_updates = new check_updates( m_configPath ) ;
 
 	connect( m_updates,SIGNAL( updateList( QStringList ) ),this,SLOT( updateList( QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( updatesFound( int,QStringList ) ),this,SLOT( updatesFound( int,QStringList ) ) ) ;
