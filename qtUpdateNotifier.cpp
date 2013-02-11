@@ -51,7 +51,7 @@ void qtUpdateNotifier::createEnvironment()
 	m_configPath = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
 
 	QDir d ;
-	d.mkdir( m_configPath ) ;
+	d.mkpath( m_configPath ) ;
 
 	m_configTime = m_configPath + QString( "/qt-update-notifier.time" ) ;
 	m_configLog = m_configPath  + QString( "/qt-update-notifier.log" ) ;
