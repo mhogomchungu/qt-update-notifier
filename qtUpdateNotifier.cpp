@@ -93,11 +93,27 @@ void qtUpdateNotifier::startSynaptic()
 	exe.startDetached( QString( "kdesu -c /usr/sbin/synaptic" ) ) ;
 }
 
+void qtUpdateNotifier::doneUpdating()
+{
+	u_int64_t currentTime = this->getCurrentTime() ;
+	u_int64_t configTime = this->getTimeFromConfigFile() ;
+	u_int64_t interval = currentTime - configTime ;
+
+	int x = m_sleepDuration - interval ;
+	QString y = QString( "qt-update-notifier" ) ;
+	QString z = QString( "status" ) ;
+	this->showToolTip( y,z,x ) ;
+
+	this->changeIcon( QString( "qt-update-notifier" ) );
+	this->setStatus( KStatusNotifierItem::Passive );
+}
+
 void qtUpdateNotifier::run()
 {
 	m_trayMenu = new KMenu() ;
 
 	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
+	m_trayMenu->addAction( tr( "done updating" ),this,SLOT( doneUpdating() ) );
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startSynaptic() ) );
 	m_trayMenu->addAction( tr( "open log window" ),this,SLOT( logWindowShow() ) );
 

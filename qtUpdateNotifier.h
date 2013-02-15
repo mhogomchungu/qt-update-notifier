@@ -72,6 +72,7 @@ private slots:
 	void scheduleUpdates( int ) ;
 	void updatesFound( int,QStringList ) ;
 	void logWindowShow( void ) ;
+	void doneUpdating( void ) ;
 private:
 	u_int64_t getCurrentTime( void ) ;
 	u_int64_t getTimeFromConfigFile( void ) ;
