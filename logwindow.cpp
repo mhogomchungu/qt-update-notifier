@@ -1,6 +1,6 @@
 #include "logwindow.h"
 #include "ui_logwindow.h"
-
+#include <QDebug>
 logWindow::logWindow( QWidget * parent,QString logFile ) :QWidget( parent ),m_ui( new Ui::logWindow ),m_logFile( logFile )
 {
 	m_ui->setupUi( this );
@@ -17,24 +17,27 @@ logWindow::~logWindow()
 	delete m_ui;
 }
 
-void logWindow::showLogWindow()
+QString logWindow::getLogContents()
 {
+	QString x ;
 	QFile f( m_logFile ) ;
 	if( f.exists() ){
 		f.open( QIODevice::ReadOnly ) ;
-		QString x = f.readAll() ;
+		x = f.readAll() ;
 		f.close();
-		m_ui->textEditLogField->setText( x );
-	}else{
-		m_ui->textEditLogField->clear() ;
 	}
+	return x ;
+}
+
+void logWindow::showLogWindow()
+{
+	m_ui->textEditLogField->setText( this->getLogContents() );
 	this->show();
 }
 
-void logWindow::Show( QString logFile )
+void logWindow::updateLogWindow()
 {
-	logWindow * w = new logWindow( 0,logFile ) ;
-	w->showLogWindow();
+	m_ui->textEditLogField->setText( this->getLogContents() );
 }
 
 void logWindow::pbClearLog()

@@ -7,3 +7,7 @@
 -version 1.1.1
 	-in the log window,check text on the button that close the windo from "quit" to "close"
 	-change where the icon is located on the menu to a more appropriate location.
+-version next
+	-If the log window is visible,update its contents if log contents change
+
+	

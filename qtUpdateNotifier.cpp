@@ -42,7 +42,9 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 
 void qtUpdateNotifier::logWindowShow()
 {
-	logWindow::Show( m_configLog ) ;
+	logWindow * w = new logWindow( 0,m_configLog ) ;
+	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) );
+	w->showLogWindow();
 }
 
 void qtUpdateNotifier::createEnvironment()
@@ -224,6 +226,7 @@ void qtUpdateNotifier::checkForUpdates()
 	m_updatesFound = false ;
 	this->contextMenu()->setEnabled( false );
 	m_updates->start();
+	emit updateLogWindow() ;
 }
 
 void qtUpdateNotifier::updatesFound( int st,QStringList list )
@@ -264,6 +267,7 @@ void qtUpdateNotifier::updatesFound( int st,QStringList list )
 	}
 	this->writeUpdateTimeToConfigFile() ;
 	this->scheduleUpdates( m_sleepDuration );
+	emit updateLogWindow();
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList list )

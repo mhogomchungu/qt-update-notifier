@@ -17,11 +17,12 @@ public:
 	explicit logWindow( QWidget * parent = 0,QString logFile = QString() );
 	~logWindow();
 	void showLogWindow( void ) ;
-	static void Show( QString ) ;
 private slots:
 	void pbClearLog( void ) ;
 	void pbQuit( void ) ;
+	void updateLogWindow( void ) ;
 private:
+	QString getLogContents( void ) ;
 	void closeEvent( QCloseEvent * ) ;
 	Ui::logWindow * m_ui;
 	QString m_logFile ;

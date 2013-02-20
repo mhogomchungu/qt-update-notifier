@@ -54,6 +54,8 @@ public:
 	~qtUpdateNotifier();
 	void start( void ) ;
 	void logActivity( QString ) ;
+signals:
+	void updateLogWindow( void ) ;
 public slots:
 	void startSynaptic( void ) ;
 private slots:
