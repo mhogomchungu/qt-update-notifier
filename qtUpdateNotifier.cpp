@@ -260,6 +260,11 @@ void qtUpdateNotifier::updatesFound( int st,QStringList list )
 		this->logActivity( QString( "check skipped,user is not connected to the internet" ) ) ;
 		this->showToolTip( icon,QString( "no updates foung" ) );
 	}else{
+		icon = QString( "qt-update-notifier" ) ;
+		this->changeIcon( icon );
+		this->setStatus( KStatusNotifierItem::Passive );
+		this->logActivity( QString( "update check complete,repository is in an unknown state" ) ) ;
+		this->showToolTip( icon,QString( "no updates foung" ) );
 		/*
 		 * currently,we dont get here
 		 */
