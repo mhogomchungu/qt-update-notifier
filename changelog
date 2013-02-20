@@ -1,0 +1,9 @@
+
+-version 1.0.0
+	-initial release
+-version 1.1.0
+	-log more information about the state of the repository.A log will be made for example if the repository
+	 if found to be in an inconsistent state( ie missing dependencies or held back packages )
+-version 1.1.1
+	-in the log window,check text on the button that close the windo from "quit" to "close"
+	-change where the icon is located on the menu to a more appropriate location.
