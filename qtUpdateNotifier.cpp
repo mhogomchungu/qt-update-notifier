@@ -82,10 +82,10 @@ void qtUpdateNotifier::changeIcon( QString icon )
 		//this->setIconByName( QString( "qt-update-notifier-updates-are-available" ) );
 		//this->setOverlayIconByName( QString( "qt-update-notifier-updates-are-available" ) ) ;
 		this->setIconByName( icon );
-		this->setOverlayIconByName( icon ) ;
+		//this->setOverlayIconByName( icon ) ;
 	}else{
 		this->setIconByName( icon );
-		this->setOverlayIconByName( icon ) ;
+		//this->setOverlayIconByName( icon ) ;
 	}
 }
 
