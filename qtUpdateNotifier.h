@@ -90,7 +90,6 @@ private:
 	QString logMsg( int ) ;
 	bool m_canCloseApplication ;
 	bool m_threadIsRunning ;
-	bool m_updatesFound ;
 	QStringList m_updatesList ;
 	check_updates * m_updates ;
 	KMenu * m_trayMenu ;

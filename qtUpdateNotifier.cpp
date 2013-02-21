@@ -28,7 +28,6 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	this->setStatus( KStatusNotifierItem::Passive );
 	this->setCategory( KStatusNotifierItem::ApplicationStatus );
 	this->changeIcon( QString( "qt-update-notifier" ) );
-	//this->setAttentionIconByName( QString( "qt-update-notifier-updates-are-available" ) ) ;
 	this->createEnvironment();
 	this->logActivity( QString( "qt-update-notifier started" ) ) ;
 	QCoreApplication::setApplicationName( QString( "qt-update-notifier" ) ) ;
@@ -78,15 +77,8 @@ void qtUpdateNotifier::start()
 
 void qtUpdateNotifier::changeIcon( QString icon )
 {
-	if( icon == QString( "qt-update-notifier-updates-are-available" ) ){
-		//this->setIconByName( QString( "qt-update-notifier-updates-are-available" ) );
-		//this->setOverlayIconByName( QString( "qt-update-notifier-updates-are-available" ) ) ;
-		this->setIconByName( icon );
-		//this->setOverlayIconByName( icon ) ;
-	}else{
-		this->setIconByName( icon );
-		//this->setOverlayIconByName( icon ) ;
-	}
+	this->setIconByName( icon );
+	this->setAttentionIconByName( icon ) ;
 }
 
 void qtUpdateNotifier::startSynaptic()
@@ -223,7 +215,6 @@ void qtUpdateNotifier::checkForUpdates()
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),m_updates,SLOT( deleteLater() ) ) ;
 
-	m_updatesFound = false ;
 	this->contextMenu()->setEnabled( false );
 	m_updates->start();
 	emit updateLogWindow() ;
@@ -235,10 +226,9 @@ void qtUpdateNotifier::updatesFound( int st,QStringList list )
 	this->contextMenu()->setEnabled( true );
 	QString icon ;
 	if( st == 0 ){
-		this->setStatus( KStatusNotifierItem::NeedsAttention );
-		m_updatesFound = true ;
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		this->changeIcon( icon ) ;
+		this->setStatus( KStatusNotifierItem::NeedsAttention );
 		this->logActivity( QString( "update check complete,updates found" ) ) ;
 		this->showToolTip( icon,QString( "there are updates in the repository" ),list );
 	}else if( st == 1 ){
