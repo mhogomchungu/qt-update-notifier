@@ -18,6 +18,7 @@
  */
 
 #include "qtUpdateNotifier.h"
+#include <cmath>
 
 qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 {
@@ -32,11 +33,6 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	this->logActivity( QString( "qt-update-notifier started" ) ) ;
 	QCoreApplication::setApplicationName( QString( "qt-update-notifier" ) ) ;
 	this->setObjectName( "qtUpdateNotifier" );
-
-	QString x = QString( "qt-update-notifier" ) ;
-	QString y = QString( "status" ) ;
-	QString z = QString( "waiting for 5 minutes before checking for updates" ) ;
-	this->showToolTip( x,y,z ) ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -70,6 +66,24 @@ void qtUpdateNotifier::createEnvironment()
 	w.close();
 	const char * wdc = wd.constData() ;
 	m_waitForFirstCheck = 1000 * atoi( wdc ) ;
+
+	int rr = 60 * 1000 ;
+
+	char buffer[64] ;
+
+	if( fmod( m_waitForFirstCheck,rr ) == 0 ){
+		int ff = m_waitForFirstCheck / rr ;
+		snprintf( buffer,64,"%d",ff ) ;
+	}else{
+		float ff =  static_cast<float>( m_waitForFirstCheck ) / rr ;
+		snprintf( buffer,64,"%.2f",ff ) ;
+	}
+
+	QString z = QString( "waiting for %1 minutes before checking for updates" ).arg( QString( buffer ) ) ;
+	QString a = QString( "qt-update-notifier" ) ;
+	QString b = QString( "status" ) ;
+
+	this->showToolTip( a,b,z ) ;
 
 	QFile f( m_configPath + QString( "/qt-update-notifier.interval" ) ) ;
 	if( !f.exists() ){
