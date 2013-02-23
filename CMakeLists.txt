@@ -54,12 +54,12 @@ file( WRITE "${PROJECT_BINARY_DIR}/qt-update-notifier.desktop"
 Comment[en_US]=
 Comment=
 Exec=${CMAKE_INSTALL_PREFIX}/bin/qt-update-notifier
-GenericName[en_US]=update notifier
-GenericName=update notifier
+GenericName[en_US]=PCLinuxOS Qt based updates notifier
+GenericName=PCLinuxOS Qt based update notifier
 Icon=${CMAKE_INSTALL_PREFIX}/share/icons/qt-update-notifier.png
 MimeType=
-Name[en_US]=qt-update-notifier
-Name=qt-update-notifier
+Name[en_US]=Qt-update-notifier
+Name=Qt-update-notifier
 NoDisplay=false
 Path=
 StartupNotify=true

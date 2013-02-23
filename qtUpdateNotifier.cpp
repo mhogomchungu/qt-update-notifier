@@ -60,7 +60,7 @@ void qtUpdateNotifier::createEnvironment()
 	QFile f( m_configPath + QString( "/qt-update-notifier.interval" ) ) ;
 	if( !f.exists() ){
 		f.open( QIODevice::WriteOnly ) ;
-		f.write( "86400") ;
+		f.write( "86400" ) ;
 		f.close();
 	}
 	f.open( QIODevice::ReadOnly ) ;

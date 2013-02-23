@@ -7,7 +7,11 @@
 -version 1.1.1
 	-in the log window,check text on the button that close the windo from "quit" to "close"
 	-change where the icon is located on the menu to a more appropriate location.
--version next
+-version 1.2.0
 	-If the log window is visible,update its contents if log contents change
-
+	-fix a behavior where the icon that shows updates are available did not show properly
+	-use better icons provided by a forum member agmg
+-versio next
+	-capitalize menu icon names
 	
+
