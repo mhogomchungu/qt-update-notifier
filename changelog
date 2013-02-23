@@ -13,5 +13,6 @@
 	-use better icons provided by a forum member agmg
 -versio next
 	-capitalize menu icon names
+	-add a config file that manages how long to wait after startup before checking if an update check is to be made or not
 	
 

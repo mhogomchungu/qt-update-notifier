@@ -57,12 +57,27 @@ void qtUpdateNotifier::createEnvironment()
 	m_configTime = m_configPath + QString( "/qt-update-notifier.time" ) ;
 	m_configLog = m_configPath  + QString( "/qt-update-notifier.log" ) ;
 
+	QFile w( m_configPath + QString( "/qt-update-notifier-firstCheck.time" ) ) ;
+
+	if( !w.exists() ){
+		w.open( QIODevice::WriteOnly ) ;
+		w.write( "300" ) ; // wait for 5 minutes before check for updates on startup
+		w.close();
+	}
+
+	w.open( QIODevice::ReadOnly ) ;
+	QByteArray wd = w.readAll() ;
+	w.close();
+	const char * wdc = wd.constData() ;
+	m_waitForFirstCheck = 1000 * atoi( wdc ) ;
+
 	QFile f( m_configPath + QString( "/qt-update-notifier.interval" ) ) ;
 	if( !f.exists() ){
 		f.open( QIODevice::WriteOnly ) ;
-		f.write( "86400" ) ;
+		f.write( "86400" ) ; // wait for 24 hours before checking for updates
 		f.close();
 	}
+
 	f.open( QIODevice::ReadOnly ) ;
 	QByteArray x = f.readAll() ;
 	f.close();
@@ -117,7 +132,7 @@ void qtUpdateNotifier::run()
 	QTimer * t = new QTimer() ;
 	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
 	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
-	t->start( 5 * 60 * 1000 ) ; //wait for 5 minutes before check for updates
+	t->start( m_waitForFirstCheck ) ;
 }
 
 void qtUpdateNotifier::checkForUpdatesOnStartUp()

@@ -98,6 +98,7 @@ private:
 	QString m_configLog ;
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
+	int m_waitForFirstCheck ;
 	QString m_configPath ;
 };
 
