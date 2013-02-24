@@ -1,7 +1,7 @@
 #include "logwindow.h"
 #include "ui_logwindow.h"
 #include <QDebug>
-logWindow::logWindow( QWidget * parent,QString logFile ) :QWidget( parent ),m_ui( new Ui::logWindow ),m_logFile( logFile )
+logWindow::logWindow( QString logFile,QWidget * parent ) :QWidget( parent ),m_ui( new Ui::logWindow ),m_logFile( logFile )
 {
 	m_ui->setupUi( this );
 	m_ui->textEditLogField->setAlignment( Qt::AlignHCenter );

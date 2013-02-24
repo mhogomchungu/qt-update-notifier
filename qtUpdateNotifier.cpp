@@ -37,7 +37,7 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 
 void qtUpdateNotifier::logWindowShow()
 {
-	logWindow * w = new logWindow( 0,m_configLog ) ;
+	logWindow * w = new logWindow( m_configLog ) ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) );
 	w->showLogWindow();
 }
