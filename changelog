@@ -15,4 +15,5 @@
 	-capitalize menu icon names
 	-add a config file that manages how long to wait after startup before checking if an update check is to be made or not
 	-add an option to autostart the tool in the tray context menu
-
+	-set synaptic to autoreload on startup
+	
