@@ -113,7 +113,7 @@ void qtUpdateNotifier::changeIcon( QString icon )
 void qtUpdateNotifier::startSynaptic()
 {
 	QProcess exe ;
-	exe.startDetached( QString( "kdesu -c /usr/sbin/synaptic" ) ) ;
+	exe.startDetached( QString( "kdesu -c \"/usr/sbin/synaptic --update-at-startup\"" ) ) ;
 }
 
 void qtUpdateNotifier::doneUpdating()
