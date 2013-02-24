@@ -131,6 +131,52 @@ void qtUpdateNotifier::doneUpdating()
 	this->setStatus( KStatusNotifierItem::Passive );
 }
 
+bool qtUpdateNotifier::autoStartEnabled()
+{
+	QDir d ;
+	QString x = d.homePath() + QString( "/.config/autostart/qt-update-notifier.desktop" ) ;
+	QFile f( x ) ;
+	m_autoStartEnabled = f.exists() ;
+	return m_autoStartEnabled ;
+}
+
+void qtUpdateNotifier::enableAutoStart()
+{
+	QDir dir ;
+	QString autoStart = dir.homePath() + QString( "/.config/autostart" ) ;
+	dir.mkpath( autoStart ) ;
+
+	QFile f( DESKTOP_FILE_PATH ) ;
+	if( f.exists() ){
+		if( f.open( QIODevice::ReadOnly ) ){
+			QFile x( autoStart + "/qt-update-notifier.desktop" ) ;
+			if( x.open( QIODevice::WriteOnly ) ){
+				QByteArray d = f.readAll() ;
+				x.write( d ) ;
+				x.close();
+			}
+			f.close();
+		}
+	}
+}
+
+void qtUpdateNotifier::disableAutoStart()
+{
+	QDir dir ;
+	QString autoStart = dir.homePath() + QString( "/.config/autostart/qt-update-notifier.desktop" ) ;
+	QFile f( autoStart ) ;
+	f.remove() ;
+}
+
+void qtUpdateNotifier::toggleAutoStart( bool b )
+{
+	if( b ){
+		this->enableAutoStart();
+	}else{
+		this->disableAutoStart();
+	}
+}
+
 void qtUpdateNotifier::run()
 {
 	m_trayMenu = new KMenu() ;
@@ -140,6 +186,20 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startSynaptic() ) );
 	m_trayMenu->addAction( tr( "open log window" ),this,SLOT( logWindowShow() ) );
 
+	QAction * ac = new QAction( m_trayMenu ) ;
+
+	connect( ac,SIGNAL( toggled( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
+
+	ac->setText( tr( "enable autostart" ) ) ;
+	ac->setCheckable( true ) ;
+
+	if( this->autoStartEnabled() ){
+		ac->setChecked( true );
+	}else{
+		ac->setChecked( false );
+	}
+
+	m_trayMenu->addAction( ac ) ;
 	this->setContextMenu( m_trayMenu );
 	this->contextMenu()->setEnabled( true );
 

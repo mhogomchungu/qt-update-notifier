@@ -46,6 +46,8 @@
 #include <cstdlib>
 #include <cstdio>
 
+#include "desktop_file.h"
+
 class qtUpdateNotifier : public KStatusNotifierItem
 {
 	Q_OBJECT
@@ -75,6 +77,9 @@ private slots:
 	void updatesFound( int,QStringList ) ;
 	void logWindowShow( void ) ;
 	void doneUpdating( void ) ;
+	void enableAutoStart( void ) ;
+	void disableAutoStart( void ) ;
+	void toggleAutoStart( bool ) ;
 private:
 	u_int64_t getCurrentTime( void ) ;
 	u_int64_t getTimeFromConfigFile( void ) ;
@@ -85,11 +90,13 @@ private:
 	void showToolTip( QString,QString,int ) ;
 	void showToolTip( QString,QString ) ;
 	void showToolTip( int ) ;
+	bool autoStartEnabled( void ) ;
 	QString nextUpdateTime( void ) ;
 	QString nextUpdateTime( int ) ;
 	QString logMsg( int ) ;
 	bool m_canCloseApplication ;
 	bool m_threadIsRunning ;
+	bool m_autoStartEnabled ;
 	QStringList m_updatesList ;
 	check_updates * m_updates ;
 	KMenu * m_trayMenu ;

@@ -23,7 +23,7 @@ HEADERS  += qtUpdateNotifier.h \
 RESOURCES += icons.qrc
 
 
-INCLUDEPATH += /home/local/KDE4/include /usr/include
+INCLUDEPATH += /home/local/KDE4/include /usr/include /home/ink/src/build-qt-update-notifier
 
 LIBS += -lkdeui -L/home/local/KDE4/lib -L/usr/lib
 

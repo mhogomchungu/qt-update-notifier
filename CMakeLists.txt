@@ -32,6 +32,8 @@ install ( FILES qt-update-notifier-updates-are-available.png DESTINATION share/i
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 
+file( WRITE  ${PROJECT_BINARY_DIR}/desktop_file.h "\n#define DESKTOP_FILE_PATH      \"${CMAKE_INSTALL_PREFIX}/share/applications/qt-update-notifier.desktop\"\n")
+
 install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier.desktop DESTINATION share/applications 
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE 
 )
