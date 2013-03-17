@@ -318,7 +318,7 @@ void qtUpdateNotifier::updatesFound( int st,QStringList list )
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		this->changeIcon( icon ) ;
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
-		this->logActivity( QString( "update check complete,updates found" ) ) ;
+		this->logActivity( QString( "--update check complete,updates found--" ) ) ;
 		this->showToolTip( icon,QString( "there are updates in the repository" ),list );
 	}else if( st == 1 ){
 		icon = QString( "qt-update-notifier" ) ;
