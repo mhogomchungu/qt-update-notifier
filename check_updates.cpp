@@ -73,7 +73,8 @@ void check_updates::reportUpdates()
 				emit updatesFound( 0,list );
 				return ;
 			}else if( output.contains( "\nThe following packages have unmet dependencies" ) ||
-				  output.contains( "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ) ){
+				  output.contains( "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ) ||
+				  output.contains( "The following packages have been kept back" ) ){
 				emit updatesFound( 1,list );
 				return ;
 			}
