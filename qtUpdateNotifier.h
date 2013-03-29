@@ -74,7 +74,7 @@ private slots:
 	void _activate( QPoint & );
 	void _activateRequested( bool state,const QPoint &pos );
 	void scheduleUpdates( int ) ;
-	void updatesFound( int,QStringList ) ;
+	void updateStatus( int,QStringList ) ;
 	void logWindowShow( void ) ;
 	void doneUpdating( void ) ;
 	void enableAutoStart( void ) ;

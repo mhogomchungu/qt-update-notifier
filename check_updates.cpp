@@ -17,7 +17,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "check_updates.h"
 
 check_updates::check_updates( QString configPath,QObject * parent )
@@ -42,7 +41,7 @@ void check_updates::run()
 		this->reportUpdates();
 	}else{
 		QStringList l ;
-		emit updatesFound( 3,l );
+		emit updateStatus( NO_NET_CONNECTION,l );
 	}
 }
 
@@ -66,24 +65,28 @@ void check_updates::reportUpdates()
 		exe.start( aptUpgrade );
 		exe.waitForFinished( -1 ) ;
 		QByteArray output = exe.readAllStandardOutput() ;
-		//int st = exe.exitCode() ;
 		exe.close();
 		if( !output.isEmpty() ){
 			if( output.contains( "\nThe following packages will be" ) ){
-				emit updatesFound( 0,list );
-				return ;
+				emit updateStatus( UPDATES_FOUND,list );
 			}else if( output.contains( "\nThe following packages have unmet dependencies" ) ||
 				  output.contains( "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ) ||
 				  output.contains( "The following packages have been kept back" ) ){
-				emit updatesFound( 1,list );
-				return ;
+				emit updateStatus( INCONSISTENT_STATE,list );
+			}else{
+				emit updateStatus( NO_UPDATES_FOUND,list );
 			}
+		}else{
+			emit updateStatus( NO_UPDATES_FOUND,list );
 		}
+	}else{
+		/*
+		 * I cant see how i will get here
+		 */
+		emit updateStatus( NO_UPDATES_FOUND,list );
 	}
-	emit updatesFound( 2,list );
 }
 
 check_updates::~check_updates()
 {
-	;//qDebug() << "~check_updates()";
 }

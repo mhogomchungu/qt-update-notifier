@@ -30,6 +30,12 @@
 #include <QProcess>
 #include <QFile>
 
+#define UPDATES_FOUND      0 
+#define INCONSISTENT_STATE 1
+#define NO_UPDATES_FOUND   2
+#define NO_NET_CONNECTION  3
+#define UNDEFINED_STATE    4
+
 class check_updates : public QThread
 {
 	Q_OBJECT
@@ -38,7 +44,7 @@ public:
 	~check_updates() ;
 signals:
 	void updateList( QStringList ) ;
-	void updatesFound( int,QStringList ) ;
+	void updateStatus( int,QStringList ) ;
 public slots:
 private:
 	QString m_configPath ;

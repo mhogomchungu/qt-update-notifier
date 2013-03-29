@@ -299,7 +299,7 @@ void qtUpdateNotifier::checkForUpdates()
 	m_updates = new check_updates( m_configPath ) ;
 
 	connect( m_updates,SIGNAL( updateList( QStringList ) ),this,SLOT( updateList( QStringList ) ) ) ;
-	connect( m_updates,SIGNAL( updatesFound( int,QStringList ) ),this,SLOT( updatesFound( int,QStringList ) ) ) ;
+	connect( m_updates,SIGNAL( updateStatus( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),m_updates,SLOT( deleteLater() ) ) ;
@@ -309,30 +309,30 @@ void qtUpdateNotifier::checkForUpdates()
 	emit updateLogWindow() ;
 }
 
-void qtUpdateNotifier::updatesFound( int st,QStringList list )
+void qtUpdateNotifier::updateStatus( int st,QStringList list )
 {
 	m_threadIsRunning = false ;
 	this->contextMenu()->setEnabled( true );
 	QString icon ;
-	if( st == 0 ){
+	if( st == UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		this->changeIcon( icon ) ;
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
-		this->logActivity( QString( "--update check complete,updates found--" ) ) ;
+		this->logActivity( QString( "update check complete,UPDATES FOUND" ) ) ;
 		this->showToolTip( icon,QString( "there are updates in the repository" ),list );
-	}else if( st == 1 ){
+	}else if( st == INCONSISTENT_STATE ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( QString( "update check complete,repository appear to be in an inconsistent state" ) ) ;
 		this->showToolTip( icon,QString( "no updates foung" ) );
-	}else if( st == 2 ){
+	}else if( st == NO_UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( QString( "update check complete,no updates found" ) ) ;
 		this->showToolTip( icon,QString( "no updates foung" ) );
-	}else if( st == 3 ){
+	}else if( st == NO_NET_CONNECTION ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
