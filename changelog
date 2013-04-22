@@ -16,4 +16,6 @@
 	-add a config file that manages how long to wait after startup before checking if an update check is to be made or not
 	-add an option to autostart the tool in the tray context menu
 	-set synaptic to autoreload on startup
-	
+-version 1.3.1
+	-change of behavior,the application now auto starts by default and the user has to configure it not to if they prefer it not to
+	-use capital letters in the log when updates are found to make them easily identifiable
