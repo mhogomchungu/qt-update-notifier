@@ -38,6 +38,10 @@ install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier.desktop DESTINATION sha
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE 
 )
 
+install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier-autostart.desktop DESTINATION /etc/xdg/autostart/
+PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE 
+)
+
 install ( SCRIPT "${CMAKE_SOURCE_DIR}/PostInstall.cmake" )
 
 # uninstall target
@@ -62,6 +66,30 @@ Icon=${CMAKE_INSTALL_PREFIX}/share/icons/qt-update-notifier.png
 MimeType=
 Name[en_US]=Qt-update-notifier
 Name=Qt-update-notifier
+NoDisplay=false
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+Categories=PackageManager;System;Application;X-MandrivaLinux-System-Configuration;X-MandrivaLinux-System-Configuration-Packaging;\n")
+
+file( WRITE "${PROJECT_BINARY_DIR}/qt-update-notifier-autostart.desktop"
+"#!/usr/bin/env xdg-open
+[Desktop Entry]
+Comment[en_US]=
+Comment=
+Exec=${CMAKE_INSTALL_PREFIX}/bin/qt-update-notifier -a
+GenericName[en_US]=PCLinuxOS Qt based updates notifier
+GenericName=PCLinuxOS Qt based update notifier
+Icon=${CMAKE_INSTALL_PREFIX}/share/icons/qt-update-notifier.png
+MimeType=
+Name[en_US]=Qt-update-notifier-autostart
+Name=Qt-update-notifier-autostart
 NoDisplay=false
 Path=
 StartupNotify=true

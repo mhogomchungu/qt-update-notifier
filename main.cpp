@@ -26,6 +26,28 @@
 #include <kaboutdata.h>
 #include <klocalizedstring.h>
 
+#include <unistd.h>
+
+int autoStart( void )
+{
+	if( qtUpdateNotifier::autoStartEnabled() ){
+		KApplication a ;
+		qtUpdateNotifier w;
+		w.start();
+		return a.exec();
+	}else{
+		return 0 ;
+	}
+}
+
+int start( void )
+{
+	KApplication a ;
+	qtUpdateNotifier w;
+	w.start();
+	return a.exec();
+}
+
 int main( int argc,char * argv[] )
 {
 	KAboutData aboutData( "qt-update-notifier",0,
@@ -37,8 +59,14 @@ int main( int argc,char * argv[] )
 				    );
 
 	KCmdLineArgs::init( argc,argv,&aboutData );
-	KApplication a ;
-	qtUpdateNotifier w;
-	w.start();
-	return a.exec();
+	
+	KCmdLineOptions options;
+	options.add( "a",ki18n( "auto start application" ) ) ;
+	KCmdLineArgs::addCmdLineOptions( options ) ;
+
+	if( KCmdLineArgs::allArguments().contains( "-a" ) ){
+		return autoStart() ;
+	}else{
+		return start() ;
+	}
 }

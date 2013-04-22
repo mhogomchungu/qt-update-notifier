@@ -56,6 +56,7 @@ public:
 	~qtUpdateNotifier();
 	void start( void ) ;
 	void logActivity( QString ) ;
+	static bool autoStartEnabled( void ) ;
 signals:
 	void updateLogWindow( void ) ;
 public slots:
@@ -90,7 +91,6 @@ private:
 	void showToolTip( QString,QString,int ) ;
 	void showToolTip( QString,QString ) ;
 	void showToolTip( int ) ;
-	bool autoStartEnabled( void ) ;
 	QString nextUpdateTime( void ) ;
 	QString nextUpdateTime( int ) ;
 	QString logMsg( int ) ;

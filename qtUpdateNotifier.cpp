@@ -133,39 +133,27 @@ void qtUpdateNotifier::doneUpdating()
 
 bool qtUpdateNotifier::autoStartEnabled()
 {
-	QDir d ;
-	QString x = d.homePath() + QString( "/.config/autostart/qt-update-notifier.desktop" ) ;
-	QFile f( x ) ;
-	m_autoStartEnabled = f.exists() ;
-	return m_autoStartEnabled ;
+	KStandardDirs k ;
+	QString configPath = k.localxdgconfdir() + QString( "/qt-update-notifier/doNotAutoStart" ) ;
+	QFile f( configPath ) ;
+	return !f.exists() ;
 }
 
 void qtUpdateNotifier::enableAutoStart()
 {
-	QDir dir ;
-	QString autoStart = dir.homePath() + QString( "/.config/autostart" ) ;
-	dir.mkpath( autoStart ) ;
-
-	QFile f( DESKTOP_FILE_PATH ) ;
-	if( f.exists() ){
-		if( f.open( QIODevice::ReadOnly ) ){
-			QFile x( autoStart + "/qt-update-notifier.desktop" ) ;
-			if( x.open( QIODevice::WriteOnly ) ){
-				QByteArray d = f.readAll() ;
-				x.write( d ) ;
-				x.close();
-			}
-			f.close();
-		}
-	}
+	KStandardDirs k ;
+	QString autoStart = k.localxdgconfdir() + QString( "/qt-update-notifier/doNotAutoStart" ) ;
+	QFile f( autoStart ) ;
+	f.remove() ;
 }
 
 void qtUpdateNotifier::disableAutoStart()
 {
-	QDir dir ;
-	QString autoStart = dir.homePath() + QString( "/.config/autostart/qt-update-notifier.desktop" ) ;
-	QFile f( autoStart ) ;
-	f.remove() ;
+	KStandardDirs k ;
+	QString configPath = k.localxdgconfdir() + QString( "/qt-update-notifier/doNotAutoStart" ) ;
+	QFile f( configPath ) ;
+	f.open( QIODevice::WriteOnly ) ;
+	f.close();
 }
 
 void qtUpdateNotifier::toggleAutoStart( bool b )
@@ -193,7 +181,7 @@ void qtUpdateNotifier::run()
 	ac->setText( tr( "enable autostart" ) ) ;
 	ac->setCheckable( true ) ;
 
-	if( this->autoStartEnabled() ){
+	if( qtUpdateNotifier::autoStartEnabled() ){
 		ac->setChecked( true );
 	}else{
 		ac->setChecked( false );
@@ -340,7 +328,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->showToolTip( icon,QString( "no updates foung" ) );
 	}else{
 		/*
-		 * currently,we dont get here,added for completeness' sake 
+		 * currently,we dont get here,added for completeness' sake
 		 */
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
