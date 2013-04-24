@@ -190,7 +190,7 @@ void qtUpdateNotifier::run()
 	ac->setCheckable( true ) ;
 
 	ac->setChecked( qtUpdateNotifier::autoStartEnabled() ) ;
-	
+
 	m_trayMenu->addAction( ac ) ;
 	this->setContextMenu( m_trayMenu );
 	this->contextMenu()->setEnabled( true );
@@ -308,9 +308,13 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 	this->contextMenu()->setEnabled( true );
 	QString icon ;
 
+	QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
+	QString msg = QString( "log entry was created at:" ) ;
+	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
+
 	switch( list.size() ){
-		case 1 : m_updateLog = list.at( 0 ) ; break ;
-		case 2 : m_updateLog = list.at( 1 ) ; break ;
+		case 1 : m_updateLog = header + list.at( 0 ) ; break ;
+		case 2 : m_updateLog = header + list.at( 1 ) ; break ;
 		default: m_updateLog = QString( "-- log is empty --" ) ;
 	}
 
