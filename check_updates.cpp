@@ -47,60 +47,61 @@ void check_updates::run()
 
 void check_updates::processUpdates( QByteArray data )
 {
-	int index = data.indexOf( QString( "The following packages will be upgraded" ) ) ;
-
-	ssize_t pos = strlen( "The following packages will be upgraded" ) ;
-
 	QString updates ;
 
 	int count ;
+
+	QStringList l = QString( data ).split( "\n" ) ;
+	int index = l.indexOf( QString( "The following packages will be upgraded" ) ) ;
+
+	const char * threeSpaceCharacters = "   " ;
+
 	if( index != -1 ){
 		count = 0 ;
 		while( true ){
-			pos = data.indexOf( "\n  ",index + pos ) ;
-			if( pos != -1 ){
+			index++ ;
+			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
 				count++ ;
 			}else{
 				break ;
 			}
 		}
 
-		updates = QString( "packages to be updated: %1\n" ).arg( QString::number( count ) ) ;
+		updates = QString( "pkgs to be upgraded: %1\n" ).arg( QString::number( count ) ) ;
 	}
 
-	index = data.indexOf( QString( "The following packages will be REPLACED" ) ) ;
-	pos = strlen( "The following packages will be upgraded" ) ;
+	index = l.indexOf( QString( "The following packages will be REPLACED:" ) ) ;
+
 	if( index != -1 ){
 		count = 0 ;
 		while( true ){
-			pos = data.indexOf( "\n  ",index + pos ) ;
-			if( pos != -1 ){
+			index++ ;
+			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
 				count++ ;
 			}else{
 				break ;
 			}
 		}
 
-		updates += QString( "packages to be replaces: %1\n" ).arg( QString::number( count ) ) ;
+		updates += QString( "pkgs to be replaced: %1 \n" ).arg( QString::number( count ) ) ;
 	}
 
-#if 0
-	index = data.indexOf( QString( "The following NEW packages will be installed:" ) ) ;
-	pos = strlen( "The following NEW packages will be installed:" ) ;
+	index = l.indexOf( QString( "The following NEW packages will be installed:" ) ) ;
+
 	if( index != -1 ){
 		count = 0 ;
 		while( true ){
-			pos = data.indexOf( "\n  ",index + pos ) ;
-			if( pos != -1 ){
+			index++ ;
+			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
 				count++ ;
 			}else{
 				break ;
 			}
 		}
 
-		updates += QString( "new packages: %" ).arg( QString::number( count ) ) ;
+		updates += QString( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
 	}
-#endif
+
 	QStringList list ;
 	list.append( updates ) ;
 	list.append( QString( data ) ) ;
