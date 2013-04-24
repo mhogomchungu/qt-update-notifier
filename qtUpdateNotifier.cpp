@@ -45,8 +45,7 @@ void qtUpdateNotifier::logWindowShow()
 
 void qtUpdateNotifier::aptGetLogWindow()
 {
-	logWindow * w = new logWindow( m_configLog ) ;
-	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) );
+	logWindow * w = new logWindow( QString( "" ) ) ;
 	w->showAptGetWindow( m_updateLog );
 }
 
@@ -190,12 +189,8 @@ void qtUpdateNotifier::run()
 	ac->setText( tr( "enable autostart" ) ) ;
 	ac->setCheckable( true ) ;
 
-	if( qtUpdateNotifier::autoStartEnabled() ){
-		ac->setChecked( true );
-	}else{
-		ac->setChecked( false );
-	}
-
+	ac->setChecked( qtUpdateNotifier::autoStartEnabled() ) ;
+	
 	m_trayMenu->addAction( ac ) ;
 	this->setContextMenu( m_trayMenu );
 	this->contextMenu()->setEnabled( true );
