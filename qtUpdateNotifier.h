@@ -77,6 +77,7 @@ private slots:
 	void scheduleUpdates( int ) ;
 	void updateStatus( int,QStringList ) ;
 	void logWindowShow( void ) ;
+	void aptGetLogWindow( void) ;
 	void doneUpdating( void ) ;
 	void enableAutoStart( void ) ;
 	void disableAutoStart( void ) ;
@@ -107,6 +108,7 @@ private:
 	u_int64_t m_currentTime ;
 	int m_waitForFirstCheck ;
 	QString m_configPath ;
+	QString m_updateLog ;
 };
 
 #endif // MAINWINDOW_H

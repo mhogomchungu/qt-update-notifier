@@ -30,7 +30,7 @@
 #include <QProcess>
 #include <QFile>
 
-#define UPDATES_FOUND      0 
+#define UPDATES_FOUND      0
 #define INCONSISTENT_STATE 1
 #define NO_UPDATES_FOUND   2
 #define NO_NET_CONNECTION  3
@@ -47,6 +47,7 @@ signals:
 	void updateStatus( int,QStringList ) ;
 public slots:
 private:
+	void processUpdates( QByteArray ) ;
 	QString m_configPath ;
 	void reportUpdates( void ) ;
 	bool online( void ) ;

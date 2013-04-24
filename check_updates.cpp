@@ -45,6 +45,68 @@ void check_updates::run()
 	}
 }
 
+void check_updates::processUpdates( QByteArray data )
+{
+	int index = data.indexOf( QString( "The following packages will be upgraded" ) ) ;
+
+	ssize_t pos = strlen( "The following packages will be upgraded" ) ;
+
+	QString updates ;
+
+	int count ;
+	if( index != -1 ){
+		count = 0 ;
+		while( true ){
+			pos = data.indexOf( "\n  ",index + pos ) ;
+			if( pos != -1 ){
+				count++ ;
+			}else{
+				break ;
+			}
+		}
+
+		updates = QString( "packages to be updated: %1\n" ).arg( QString::number( count ) ) ;
+	}
+
+	index = data.indexOf( QString( "The following packages will be REPLACED" ) ) ;
+	pos = strlen( "The following packages will be upgraded" ) ;
+	if( index != -1 ){
+		count = 0 ;
+		while( true ){
+			pos = data.indexOf( "\n  ",index + pos ) ;
+			if( pos != -1 ){
+				count++ ;
+			}else{
+				break ;
+			}
+		}
+
+		updates += QString( "packages to be replaces: %1\n" ).arg( QString::number( count ) ) ;
+	}
+
+#if 0
+	index = data.indexOf( QString( "The following NEW packages will be installed:" ) ) ;
+	pos = strlen( "The following NEW packages will be installed:" ) ;
+	if( index != -1 ){
+		count = 0 ;
+		while( true ){
+			pos = data.indexOf( "\n  ",index + pos ) ;
+			if( pos != -1 ){
+				count++ ;
+			}else{
+				break ;
+			}
+		}
+
+		updates += QString( "new packages: %" ).arg( QString::number( count ) ) ;
+	}
+#endif
+	QStringList list ;
+	list.append( updates ) ;
+	list.append( QString( data ) ) ;
+	emit updateStatus( UPDATES_FOUND,list );
+}
+
 void check_updates::reportUpdates()
 {
 	QString aptUpdate = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( m_configPath ) ;
@@ -54,6 +116,10 @@ void check_updates::reportUpdates()
 	dir.mkdir( m_configPath + QString( "/apt" ) ) ;
 	dir.mkdir( m_configPath + QString( "/apt/lists" ) ) ;
 	dir.mkdir( m_configPath + QString( "/apt/lists/partial" ) ) ;
+
+	const char * error1 = "The following packages have unmet dependencies" ;
+	const char * error2 = "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ;
+	const char * error3 = "The following packages have been kept back" ;
 
 	QStringList list ;
 	QProcess exe ;
@@ -67,16 +133,17 @@ void check_updates::reportUpdates()
 		QByteArray output = exe.readAllStandardOutput() ;
 		exe.close();
 		if( !output.isEmpty() ){
-			if( output.contains( "\nThe following packages will be" ) ){
-				emit updateStatus( UPDATES_FOUND,list );
-			}else if( output.contains( "\nThe following packages have unmet dependencies" ) ||
-				  output.contains( "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ) ||
-				  output.contains( "The following packages have been kept back" ) ){
+			if( output.contains( error1 ) || output.contains( error2 ) || output.contains( error3 ) ){
+				list.append( output );
 				emit updateStatus( INCONSISTENT_STATE,list );
+			}else if( output.contains( "\nThe following packages will be" ) ){
+				this->processUpdates( output );
 			}else{
+				list.append( output );
 				emit updateStatus( NO_UPDATES_FOUND,list );
 			}
 		}else{
+			list.append( output );
 			emit updateStatus( NO_UPDATES_FOUND,list );
 		}
 	}else{

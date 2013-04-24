@@ -9,6 +9,7 @@ logWindow::logWindow( QString logFile,QWidget * parent ) :QWidget( parent ),m_ui
 	this->setFixedSize( this->size() ) ;
 	this->setWindowIcon( QIcon( QString( ":/qt-update-notifier.png" ) ) );
 	connect( m_ui->pbQuit,SIGNAL( clicked() ),this,SLOT( pbQuit() ) ) ;
+	connect( m_ui->pbQuit_2,SIGNAL( clicked() ),this,SLOT( pbQuit() ) ) ;
 	connect( m_ui->pbClear,SIGNAL( clicked() ),this,SLOT( pbClearLog() ) ) ;
 }
 
@@ -32,12 +33,22 @@ QString logWindow::getLogContents()
 void logWindow::showLogWindow()
 {
 	m_ui->textEditLogField->setText( this->getLogContents() );
+	m_ui->pbQuit_2->setVisible( false ) ;
 	this->show();
 }
 
 void logWindow::updateLogWindow()
 {
 	m_ui->textEditLogField->setText( this->getLogContents() );
+}
+
+void logWindow::showAptGetWindow( QString log )
+{
+	m_ui->textEditLogField->clear();
+	m_ui->textEditLogField->setText( log );
+	m_ui->pbClear->setVisible( false );
+	m_ui->pbQuit->setVisible( false ) ;
+	this->show();
 }
 
 void logWindow::pbClearLog()

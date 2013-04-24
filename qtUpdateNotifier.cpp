@@ -22,6 +22,7 @@
 
 qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 {
+	m_updateLog = QString( "-- log is empty --" ) ;
 	m_timer = new QTimer() ;
 	connect( m_timer,SIGNAL( timeout() ),this,SLOT( checkForUpdates() ) ) ;
 	m_trayMenu = 0 ;
@@ -40,6 +41,13 @@ void qtUpdateNotifier::logWindowShow()
 	logWindow * w = new logWindow( m_configLog ) ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) );
 	w->showLogWindow();
+}
+
+void qtUpdateNotifier::aptGetLogWindow()
+{
+	logWindow * w = new logWindow( m_configLog ) ;
+	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) );
+	w->showAptGetWindow( m_updateLog );
 }
 
 void qtUpdateNotifier::createEnvironment()
@@ -173,6 +181,7 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "done updating" ),this,SLOT( doneUpdating() ) );
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startSynaptic() ) );
 	m_trayMenu->addAction( tr( "open log window" ),this,SLOT( logWindowShow() ) );
+	m_trayMenu->addAction( tr( "open apt-get log window" ),this,SLOT( aptGetLogWindow() ) );
 
 	QAction * ac = new QAction( m_trayMenu ) ;
 
@@ -192,6 +201,7 @@ void qtUpdateNotifier::run()
 	this->contextMenu()->setEnabled( true );
 
 	QTimer * t = new QTimer() ;
+	t->setSingleShot( true ) ;
 	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
 	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 	t->start( m_waitForFirstCheck ) ;
@@ -302,6 +312,13 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 	m_threadIsRunning = false ;
 	this->contextMenu()->setEnabled( true );
 	QString icon ;
+
+	switch( list.size() ){
+		case 1 : m_updateLog = list.at( 0 ) ; break ;
+		case 2 : m_updateLog = list.at( 1 ) ; break ;
+		default: m_updateLog = QString( "-- log is empty --" ) ;
+	}
+
 	if( st == UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		this->changeIcon( icon ) ;
@@ -344,8 +361,8 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList list )
 {
-	Q_UNUSED( list ) ;
-	this->setToolTip( x,QString( "status" ),y );
+	Q_UNUSED( y ) ;
+	this->setToolTip( x,QString( "updates found" ),list.at( 0 ) );
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
@@ -355,8 +372,10 @@ void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,int z )
 {
-	QString n = QString( "next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
-	this->setToolTip( x,y,n );
+	if( KStatusNotifierItem::status() != KStatusNotifierItem::NeedsAttention ){
+		QString n = QString( "next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
+		this->setToolTip( x,y,n );
+	}
 }
 
 void qtUpdateNotifier::showToolTip( int interval )

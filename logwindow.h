@@ -17,6 +17,7 @@ public:
 	explicit logWindow( QString logFile = QString(),QWidget * parent = 0 );
 	~logWindow();
 	void showLogWindow( void ) ;
+	void showAptGetWindow( QString ) ;
 private slots:
 	void pbClearLog( void ) ;
 	void pbQuit( void ) ;
