@@ -323,12 +323,10 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 
 	QString log ;
 	switch( list.size() ){
-		case 1 : log = header + list.at( 0 ) ; break ;
-		case 2 : log = header + list.at( 1 ) ; break ;
-		default: log = header + QString( "-- log is empty --" ) ;
+		case 1 : this->saveAptGetLogOutPut( header + list.at( 0 ) ) ; break ;
+		case 2 : this->saveAptGetLogOutPut( header + list.at( 1 ) ) ; break ;
+		default: ;
 	}
-
-	this->saveAptGetLogOutPut( log );
 
 	if( st == UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
