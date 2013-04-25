@@ -14,9 +14,9 @@ class logWindow : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit logWindow( QString logFile = QString(),QWidget * parent = 0 );
+	explicit logWindow( QString = QString(),QWidget * parent = 0 );
 	~logWindow();
-	void showLogWindow( void ) ;
+	void showLogWindow( QString ) ;
 	void showAptGetWindow( QString ) ;
 private slots:
 	void pbClearLog( void ) ;

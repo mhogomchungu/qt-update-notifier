@@ -22,7 +22,6 @@
 
 qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 {
-	m_updateLog = QString( "-- log is empty --" ) ;
 	m_timer = new QTimer() ;
 	connect( m_timer,SIGNAL( timeout() ),this,SLOT( checkForUpdates() ) ) ;
 	m_trayMenu = 0 ;
@@ -38,21 +37,23 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 
 void qtUpdateNotifier::logWindowShow()
 {
-	logWindow * w = new logWindow( m_configLog ) ;
+	logWindow * w = new logWindow( QString( "update output log window" ) ) ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) );
-	w->showLogWindow();
+	w->showLogWindow( m_configLog );
 }
 
 void qtUpdateNotifier::aptGetLogWindow()
 {
-	logWindow * w = new logWindow( QString( "" ) ) ;
-	w->showAptGetWindow( m_updateLog );
+	logWindow * w = new logWindow( QString( "apt-get upgrade output log window" ) )  ;
+	w->showAptGetWindow( m_aptGetConfigLog );
 }
 
 void qtUpdateNotifier::createEnvironment()
 {
 	KStandardDirs k ;
 	m_configPath = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
+
+	m_aptGetConfigLog = k.localxdgconfdir() + QString( "/qt-update-notifier/aptGetOutPut.log" ) ;
 
 	QDir d ;
 	d.mkpath( m_configPath ) ;
@@ -179,7 +180,7 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
 	m_trayMenu->addAction( tr( "done updating" ),this,SLOT( doneUpdating() ) );
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startSynaptic() ) );
-	m_trayMenu->addAction( tr( "open log window" ),this,SLOT( logWindowShow() ) );
+	m_trayMenu->addAction( tr( "open update log window" ),this,SLOT( logWindowShow() ) );
 	m_trayMenu->addAction( tr( "open apt-get log window" ),this,SLOT( aptGetLogWindow() ) );
 
 	QAction * ac = new QAction( m_trayMenu ) ;
@@ -302,6 +303,14 @@ void qtUpdateNotifier::checkForUpdates()
 	emit updateLogWindow() ;
 }
 
+void qtUpdateNotifier::saveAptGetLogOutPut( QString log )
+{
+	QFile f( m_aptGetConfigLog ) ;
+	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
+	f.write( log.toAscii() ) ;
+	f.close();
+}
+
 void qtUpdateNotifier::updateStatus( int st,QStringList list )
 {
 	m_threadIsRunning = false ;
@@ -312,11 +321,14 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 	QString msg = QString( "log entry was created at:" ) ;
 	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
 
+	QString log ;
 	switch( list.size() ){
-		case 1 : m_updateLog = header + list.at( 0 ) ; break ;
-		case 2 : m_updateLog = header + list.at( 1 ) ; break ;
-		default: m_updateLog = QString( "-- log is empty --" ) ;
+		case 1 : log = header + list.at( 0 ) ; break ;
+		case 2 : log = header + list.at( 1 ) ; break ;
+		default: log = header + QString( "-- log is empty --" ) ;
 	}
+
+	this->saveAptGetLogOutPut( log );
 
 	if( st == UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;

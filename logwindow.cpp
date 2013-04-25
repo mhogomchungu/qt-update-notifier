@@ -1,9 +1,10 @@
 #include "logwindow.h"
 #include "ui_logwindow.h"
 #include <QDebug>
-logWindow::logWindow( QString logFile,QWidget * parent ) :QWidget( parent ),m_ui( new Ui::logWindow ),m_logFile( logFile )
+logWindow::logWindow( QString title,QWidget * parent ) :QWidget( parent ),m_ui( new Ui::logWindow )
 {
 	m_ui->setupUi( this );
+	this->setWindowTitle( title );
 	m_ui->textEditLogField->setAlignment( Qt::AlignHCenter );
 	m_ui->pbQuit->setFocus();
 	this->setFixedSize( this->size() ) ;
@@ -30,8 +31,9 @@ QString logWindow::getLogContents()
 	return x ;
 }
 
-void logWindow::showLogWindow()
+void logWindow::showLogWindow( QString log )
 {
+	m_logFile = log ;
 	m_ui->textEditLogField->setText( this->getLogContents() );
 	m_ui->pbQuit_2->setVisible( false ) ;
 	this->show();
@@ -42,10 +44,15 @@ void logWindow::updateLogWindow()
 	m_ui->textEditLogField->setText( this->getLogContents() );
 }
 
-void logWindow::showAptGetWindow( QString log )
+void logWindow::showAptGetWindow( QString logpath )
 {
-	m_ui->textEditLogField->clear();
-	m_ui->textEditLogField->setText( log );
+	QFile f( logpath ) ;
+	if( f.exists() ){
+		f.open( QIODevice::ReadOnly ) ;
+		m_ui->textEditLogField->setText( f.readAll() );
+	}else{
+		m_ui->textEditLogField->setText( QString( "-- log is empty --" ) );
+	}
 	m_ui->pbClear->setVisible( false );
 	m_ui->pbQuit->setVisible( false ) ;
 	this->show();

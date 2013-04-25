@@ -83,6 +83,7 @@ private slots:
 	void disableAutoStart( void ) ;
 	void toggleAutoStart( bool ) ;
 private:
+	void saveAptGetLogOutPut( QString ) ;
 	u_int64_t getCurrentTime( void ) ;
 	u_int64_t getTimeFromConfigFile( void ) ;
 	void createEnvironment( void ) ;
@@ -108,7 +109,7 @@ private:
 	u_int64_t m_currentTime ;
 	int m_waitForFirstCheck ;
 	QString m_configPath ;
-	QString m_updateLog ;
+	QString m_aptGetConfigLog ;
 };
 
 #endif // MAINWINDOW_H
