@@ -127,8 +127,7 @@ void qtUpdateNotifier::startUpdater()
 
 void qtUpdateNotifier::updaterClosed()
 {
-	this->changeIcon( QString( "qt-update-notifier" ) );
-	this->setStatus( KStatusNotifierItem::Passive );
+	this->doneUpdating() ;
 }
 
 void qtUpdateNotifier::doneUpdating()
