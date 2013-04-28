@@ -22,4 +22,5 @@
 -version 1.3.2
 	-add a log window to show output of apt-get
 	-tooltip now show numbers of packages to be updated,replaced and installed
+	-force only one instance to run at a time
 	
