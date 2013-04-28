@@ -26,5 +26,7 @@
 -version 1.3.3
 	-change the tray icon status from "need attention" to "passive" when a user start synaptic by clicking "start synaptic"
 	-do not pass an option to synaptic to auto refresh on start up as it causes crashes.
-
+-version 1.3.4
+	-fix a bug from improperly update of the icon in the version feature above in version 1.3.3
+	
  	
