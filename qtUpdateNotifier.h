@@ -83,7 +83,7 @@ private slots:
 	void disableAutoStart( void ) ;
 	void toggleAutoStart( bool ) ;
 private:
-	void saveAptGetLogOutPut( QString ) ;
+	void saveAptGetLogOutPut( QStringList ) ;
 	u_int64_t getCurrentTime( void ) ;
 	u_int64_t getTimeFromConfigFile( void ) ;
 	void createEnvironment( void ) ;

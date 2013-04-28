@@ -52,6 +52,7 @@ void check_updates::processUpdates( QByteArray data )
 	int count ;
 
 	QStringList l = QString( data ).split( "\n" ) ;
+
 	int index = l.indexOf( QString( "The following packages will be upgraded" ) ) ;
 
 	const char * threeSpaceCharacters = "   " ;
@@ -102,10 +103,32 @@ void check_updates::processUpdates( QByteArray data )
 		updates += QString( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
 	}
 
-	QStringList list ;
-	list.append( updates ) ;
-	list.append( QString( data ) ) ;
-	emit updateStatus( UPDATES_FOUND,list );
+	int size = l.size() ;
+	int i = 0 ;
+	while( i < size ){
+		if( l.at( i ).startsWith( QString( "Inst " ) ) ){
+			l.removeAt( i );
+			i = 0 ;
+			size = l.size() ;
+		}else{
+			i++ ;
+		}
+	}
+
+	size = l.size() ;
+	i = 0 ;
+	while( i < size ){
+		if( l.at( i ).startsWith( QString( "Conf " ) ) ){
+			l.removeAt( i );
+			i = 0 ;
+			size = l.size() ;
+		}else{
+			i++ ;
+		}
+	}
+
+	l.prepend( updates );
+	emit updateStatus( UPDATES_FOUND,l );
 }
 
 void check_updates::reportUpdates()

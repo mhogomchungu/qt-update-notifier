@@ -303,11 +303,22 @@ void qtUpdateNotifier::checkForUpdates()
 	emit updateLogWindow() ;
 }
 
-void qtUpdateNotifier::saveAptGetLogOutPut( QString log )
+void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
 {
 	QFile f( m_aptGetConfigLog ) ;
 	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-	f.write( log.toAscii() ) ;
+
+	QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
+	QString msg = QString( "log entry was created at: " ) ;
+	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
+
+	f.write( header.toAscii() ) ;
+
+	QByteArray nl( "\n" ) ;
+	int j = log.size() ;
+	for( int i = 1 ; i < j ; i++ ){
+		f.write( log.at( i ).toAscii() + nl ) ;
+	}
 	f.close();
 }
 
@@ -317,16 +328,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 	this->contextMenu()->setEnabled( true );
 	QString icon ;
 
-	QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
-	QString msg = QString( "log entry was created at:" ) ;
-	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
-
-	QString log ;
-	switch( list.size() ){
-		case 1 : this->saveAptGetLogOutPut( header + list.at( 0 ) ) ; break ;
-		case 2 : this->saveAptGetLogOutPut( header + list.at( 1 ) ) ; break ;
-		default: ;
-	}
+	this->saveAptGetLogOutPut( list ) ;
 
 	if( st == UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
