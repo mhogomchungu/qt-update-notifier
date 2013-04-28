@@ -48,6 +48,7 @@
 
 #include "instance.h"
 #include "desktop_file.h"
+#include "startsynaptic.h"
 
 class qtUpdateNotifier : public KStatusNotifierItem
 {
@@ -61,7 +62,7 @@ public:
 signals:
 	void updateLogWindow( void ) ;
 public slots:
-	void startSynaptic( void ) ;
+	void startUpdater( void ) ;
 private slots:
 	void run( void ) ;
 	void closeApp( int ) ;
@@ -83,6 +84,7 @@ private slots:
 	void enableAutoStart( void ) ;
 	void disableAutoStart( void ) ;
 	void toggleAutoStart( bool ) ;
+	void updaterClosed( void ) ;
 private:
 	void saveAptGetLogOutPut( QStringList ) ;
 	u_int64_t getCurrentTime( void ) ;

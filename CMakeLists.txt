@@ -15,11 +15,11 @@ INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
 QT4_WRAP_UI( UI logwindow.ui )
 
-QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h logwindow.h instance.h )
+QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h logwindow.h instance.h startsynaptic.h )
 
 QT4_ADD_RESOURCES( ICONS icons.qrc )
 
-add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp logwindow.cpp instance.cpp ${MOC} ${UI} ${ICONS} )
+add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp logwindow.cpp instance.cpp startsynaptic.cpp ${MOC} ${UI} ${ICONS} )
 
 TARGET_LINK_LIBRARIES( qt-update-notifier ${QT_LIBRARIES} -L${KDE4_LIB_DIR} -lkdeui -lQtNetwork ) 
 

@@ -118,10 +118,17 @@ void qtUpdateNotifier::changeIcon( QString icon )
 	this->setAttentionIconByName( icon ) ;
 }
 
-void qtUpdateNotifier::startSynaptic()
+void qtUpdateNotifier::startUpdater()
 {
-	QProcess exe ;
-	exe.startDetached( QString( "kdesu -c \"/usr/sbin/synaptic --update-at-startup\"" ) ) ;
+	startSynaptic * s = new startSynaptic() ;
+	connect( s,SIGNAL( destroyed() ),this,SLOT( updaterClosed() ) ) ;
+	s->start();
+}
+
+void qtUpdateNotifier::updaterClosed()
+{
+	this->changeIcon( QString( "qt-update-notifier" ) );
+	this->setStatus( KStatusNotifierItem::Passive );
 }
 
 void qtUpdateNotifier::doneUpdating()
@@ -186,7 +193,7 @@ void qtUpdateNotifier::run()
 
 	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
 	m_trayMenu->addAction( tr( "done updating" ),this,SLOT( doneUpdating() ) );
-	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startSynaptic() ) );
+	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startUpdater() ) );
 	m_trayMenu->addAction( tr( "open update log window" ),this,SLOT( logWindowShow() ) );
 	m_trayMenu->addAction( tr( "open apt-get log window" ),this,SLOT( aptGetLogWindow() ) );
 

@@ -15,12 +15,14 @@ SOURCES += main.cpp\
 qtUpdateNotifier.cpp \
     check_updates.cpp \
     logwindow.cpp \
-    instance.cpp
+    instance.cpp \
+    startsynaptic.cpp
 
 HEADERS  += qtUpdateNotifier.h \
     check_updates.h \
     logwindow.h \
-    instance.h
+    instance.h \
+    startsynaptic.h
 
 RESOURCES += icons.qrc
 

@@ -18,35 +18,23 @@
  */
 
 
-#ifndef LOGWINDOW_H
-#define LOGWINDOW_H
+#ifndef STARTSYNAPTIC_H
+#define STARTSYNAPTIC_H
 
-#include <QWidget>
-#include <QFile>
-#include <QString>
-#include <QCloseEvent>
+#include <QObject>
+#include <QRunnable>
+#include <QProcess>
+#include <QThreadPool>
 
-namespace Ui {
-class logWindow;
-}
-
-class logWindow : public QWidget
+class startSynaptic : public QObject,public QRunnable
 {
 	Q_OBJECT
 public:
-	explicit logWindow( QString = QString(),QWidget * parent = 0 );
-	~logWindow();
-	void showLogWindow( QString ) ;
-	void showAptGetWindow( QString ) ;
-private slots:
-	void pbClearLog( void ) ;
-	void pbQuit( void ) ;
-	void updateLogWindow( void ) ;
+	explicit startSynaptic( QObject * parent = 0 ) ;
+	~startSynaptic() ;
+	void start( void ) ;
 private:
-	QString getLogContents( void ) ;
-	void closeEvent( QCloseEvent * ) ;
-	Ui::logWindow * m_ui;
-	QString m_logFile ;
+	void run( void ) ;
 };
 
-#endif // LOGWINDOW_H
+#endif // STARTSYNAPTIC_H
