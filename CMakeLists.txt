@@ -15,13 +15,13 @@ INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
 QT4_WRAP_UI( UI logwindow.ui )
 
-QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h logwindow.h )
+QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h logwindow.h instance.h )
 
 QT4_ADD_RESOURCES( ICONS icons.qrc )
 
-add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp logwindow.cpp ${MOC} ${UI} ${ICONS} )
+add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp logwindow.cpp instance.cpp ${MOC} ${UI} ${ICONS} )
 
-TARGET_LINK_LIBRARIES( qt-update-notifier ${QT_LIBRARIES} -L${KDE4_LIB_DIR} -lkdeui ) 
+TARGET_LINK_LIBRARIES( qt-update-notifier ${QT_LIBRARIES} -L${KDE4_LIB_DIR} -lkdeui -lQtNetwork ) 
 
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )

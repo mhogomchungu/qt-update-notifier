@@ -175,6 +175,13 @@ void qtUpdateNotifier::toggleAutoStart( bool b )
 
 void qtUpdateNotifier::run()
 {
+	instance * s = new instance( this ) ;
+
+	if( !s->firstInstance() ){
+		qDebug() << "another instance is already running,closing this one" ;
+		this->closeApp();
+	}
+
 	m_trayMenu = new KMenu() ;
 
 	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
@@ -363,7 +370,6 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( QString( "update check complete,repository is in an unknown state" ) ) ;
 		this->showToolTip( icon,QString( "no updates foung" ) );
-		;
 	}
 	this->writeUpdateTimeToConfigFile() ;
 	this->scheduleUpdates( m_sleepDuration );

@@ -14,18 +14,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
 qtUpdateNotifier.cpp \
     check_updates.cpp \
-    logwindow.cpp
+    logwindow.cpp \
+    instance.cpp
 
 HEADERS  += qtUpdateNotifier.h \
     check_updates.h \
-    logwindow.h
+    logwindow.h \
+    instance.h
 
 RESOURCES += icons.qrc
 
 
 INCLUDEPATH += /home/local/KDE4/include /usr/include /home/ink/src/build-qt-update-notifier
 
-LIBS += -lkdeui -L/home/local/KDE4/lib -L/usr/lib
+LIBS += -lkdeui -L/home/local/KDE4/lib -L/usr/lib -lQtNetwork
 
 FORMS += \
     logwindow.ui

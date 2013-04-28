@@ -46,6 +46,7 @@
 #include <cstdlib>
 #include <cstdio>
 
+#include "instance.h"
 #include "desktop_file.h"
 
 class qtUpdateNotifier : public KStatusNotifierItem
