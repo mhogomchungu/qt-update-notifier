@@ -57,8 +57,8 @@ void check_updates::processUpdates( QByteArray data )
 
 	const char * threeSpaceCharacters = "   " ;
 
+	count = 0 ;
 	if( index != -1 ){
-		count = 0 ;
 		while( true ){
 			index++ ;
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
@@ -73,8 +73,8 @@ void check_updates::processUpdates( QByteArray data )
 
 	index = l.indexOf( QString( "The following packages will be REPLACED:" ) ) ;
 
+	count = 0 ;
 	if( index != -1 ){
-		count = 0 ;
 		while( true ){
 			index++ ;
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
@@ -83,14 +83,14 @@ void check_updates::processUpdates( QByteArray data )
 				break ;
 			}
 		}
-
-		updates += QString( "pkgs to be replaced: %1 \n" ).arg( QString::number( count ) ) ;
 	}
+
+	updates += QString( "pkgs to be replaced: %1\n" ).arg( QString::number( count ) ) ;
 
 	index = l.indexOf( QString( "The following NEW packages will be installed:" ) ) ;
 
+	count = 0 ;
 	if( index != -1 ){
-		count = 0 ;
 		while( true ){
 			index++ ;
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
@@ -99,9 +99,9 @@ void check_updates::processUpdates( QByteArray data )
 				break ;
 			}
 		}
-
-		updates += QString( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
 	}
+
+	updates += QString( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
 
 	int size = l.size() ;
 	int i = 0 ;
@@ -167,7 +167,6 @@ void check_updates::reportUpdates()
 				emit updateStatus( NO_UPDATES_FOUND,list );
 			}
 		}else{
-			list.append( output );
 			emit updateStatus( NO_UPDATES_FOUND,list );
 		}
 	}else{

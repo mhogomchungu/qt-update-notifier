@@ -305,7 +305,6 @@ void qtUpdateNotifier::checkForUpdates()
 	m_threadIsRunning = true ;
 	m_updates = new check_updates( m_configPath ) ;
 
-	connect( m_updates,SIGNAL( updateList( QStringList ) ),this,SLOT( updateList( QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( updateStatus( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
@@ -318,6 +317,14 @@ void qtUpdateNotifier::checkForUpdates()
 
 void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
 {
+	int j = log.size() ;
+	if( j == 0 ){
+		/*
+		 * log appear to be empty,dont replace a log file with useful info with an empty one
+		 */
+		return ;
+	}
+
 	QFile f( m_aptGetConfigLog ) ;
 	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
 
@@ -328,8 +335,7 @@ void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
 	f.write( header.toAscii() ) ;
 
 	QByteArray nl( "\n" ) ;
-	int j = log.size() ;
-	for( int i = 1 ; i < j ; i++ ){
+	for( int i = 0 ; i < j ; i++ ){
 		f.write( log.at( i ).toAscii() + nl ) ;
 	}
 	f.close();
@@ -395,18 +401,8 @@ void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,int z )
 {
-	if( KStatusNotifierItem::status() != KStatusNotifierItem::NeedsAttention ){
-		QString n = QString( "next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
-		this->setToolTip( x,y,n );
-	}
-}
-
-void qtUpdateNotifier::showToolTip( int interval )
-{
-	QString x = QString( "qt-update-notifier" ) ;
-	QString y = QString( "status" );
-	QString z = this->logMsg( interval ) ;
-	this->setToolTip( x,y,z );
+	QString n = QString( "next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
+	this->setToolTip( x,y,n );
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y )
@@ -441,14 +437,6 @@ void qtUpdateNotifier::scheduleUpdates( int interval )
 	this->logActivity( this->logMsg( interval ) ) ;
 	m_timer->stop();
 	m_timer->start( interval );
-}
-
-void qtUpdateNotifier::updateList( QStringList list )
-{
-	Q_UNUSED( list ) ;
-	/*
-	 * currently unused function
-	 */
 }
 
 void qtUpdateNotifier::threadTerminated( void )

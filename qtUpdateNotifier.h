@@ -67,7 +67,6 @@ private slots:
 	void run( void ) ;
 	void closeApp( int ) ;
 	void closeApp( void ) ;
-	void updateList( QStringList ) ;
 	void threadTerminated( void ) ;
 	void threadisFinished( void ) ;
 	void closeApplication( void ) ;
@@ -95,7 +94,6 @@ private:
 	void showToolTip( QString,QString,QString ) ;
 	void showToolTip( QString,QString,int ) ;
 	void showToolTip( QString,QString ) ;
-	void showToolTip( int ) ;
 	QString nextUpdateTime( void ) ;
 	QString nextUpdateTime( int ) ;
 	QString logMsg( int ) ;
