@@ -44,15 +44,21 @@ void logWindow::updateLogWindow()
 	m_ui->textEditLogField->setText( this->getLogContents() );
 }
 
-void logWindow::showAptGetWindow( QString logpath )
+void logWindow::updateLogWindow_1()
 {
-	QFile f( logpath ) ;
+	QFile f( m_logPath ) ;
 	if( f.exists() ){
 		f.open( QIODevice::ReadOnly ) ;
 		m_ui->textEditLogField->setText( f.readAll() );
 	}else{
 		m_ui->textEditLogField->setText( QString( "-- log is empty --" ) );
 	}
+}
+
+void logWindow::showAptGetWindow( QString logpath )
+{
+	m_logPath = logpath ;
+	this->updateLogWindow_1();
 	m_ui->pbClear->setVisible( false );
 	m_ui->pbQuit->setVisible( false ) ;
 	this->show();

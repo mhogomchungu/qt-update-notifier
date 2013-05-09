@@ -71,12 +71,9 @@ private slots:
 	void closeApp( void ) ;
 	void threadTerminated( void ) ;
 	void threadisFinished( void ) ;
-	void closeApplication( void ) ;
 	void changeIcon( QString ) ;
 	void checkForUpdates( void ) ;
 	void checkForUpdatesOnStartUp( void ) ;
-	void _activate( QPoint & );
-	void _activateRequested( bool state,const QPoint &pos );
 	void scheduleUpdates( int ) ;
 	void updateStatus( int,QStringList ) ;
 	void logWindowShow( void ) ;
@@ -90,7 +87,7 @@ private slots:
 private:
 	void saveAptGetLogOutPut( QStringList ) ;
 	u_int64_t getCurrentTime( void ) ;
-	u_int64_t getTimeFromConfigFile( void ) ;
+	u_int64_t nextScheduledUpdateTime( void ) ;
 	void createEnvironment( void ) ;
 	void writeUpdateTimeToConfigFile( void ) ;
 	void showToolTip( QString,QString,QStringList ) ;

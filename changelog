@@ -32,5 +32,8 @@
 	-fix a bug,the tray bubble did not update correctly when synaptic was started from within qt-update-notifier
 -version 1.3.6
 	-add a configuration dialog window to give a GUI solution for setting up of various options.
-	
+-version 1.3.7
+	-manual update check nolonger reset automatic update schedule interval.The only place is change automatic schedule interval
+	 is by changing the interval in the configuration window
+	 
  	

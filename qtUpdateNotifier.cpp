@@ -45,6 +45,7 @@ void qtUpdateNotifier::logWindowShow()
 void qtUpdateNotifier::aptGetLogWindow()
 {
 	logWindow * w = new logWindow( QString( "apt-get upgrade output log window" ) )  ;
+	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow_1() ) );
 	w->showAptGetWindow( m_aptGetConfigLog );
 }
 
@@ -136,14 +137,9 @@ void qtUpdateNotifier::updaterClosed()
 
 void qtUpdateNotifier::doneUpdating()
 {
-	u_int64_t currentTime = this->getCurrentTime() ;
-	u_int64_t configTime = this->getTimeFromConfigFile() ;
-	u_int64_t interval = currentTime - configTime ;
-
-	int x = m_sleepDuration - interval ;
 	QString y = QString( "qt-update-notifier" ) ;
 	QString z = QString( "status" ) ;
-	this->showToolTip( y,z,x ) ;
+	this->showToolTip( y,z ) ;
 
 	this->changeIcon( QString( "qt-update-notifier" ) );
 	this->setStatus( KStatusNotifierItem::Passive );
@@ -232,7 +228,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 		this->checkForUpdates();
 	}else{
 		m_currentTime = this->getCurrentTime() ;
-		u_int64_t configTime = this->getTimeFromConfigFile() ;
+		u_int64_t configTime = this->nextScheduledUpdateTime() ;
 		u_int64_t interval = m_currentTime - configTime ;
 		if( interval >= m_sleepDuration ){
 			/*
@@ -269,15 +265,13 @@ void qtUpdateNotifier::logActivity( QString msg )
 	f.close();
 }
 
-u_int64_t qtUpdateNotifier::getTimeFromConfigFile()
+u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
 {
 	QFile f( m_configTime ) ;
 	if( f.open( QIODevice::ReadOnly ) ){
 		QString x = f.readAll() ;
 		f.close();
-		QByteArray y = x.toAscii() ;
-		const char * z = y.constData() ;
-		return atoll( z ) ;
+		return x.toULongLong() ;
 	}else{
 		return 0 ;
 	}
@@ -287,9 +281,8 @@ void qtUpdateNotifier::writeUpdateTimeToConfigFile()
 {
 	QFile f( m_configTime ) ;
 	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-	char num[ 64 ] ;
-	snprintf( num,64,"%llu",this->getCurrentTime() ) ;
-	f.write( num ) ;
+	QString z = QString::number( this->getCurrentTime() ) ;
+	f.write( z.toAscii() ) ;
 	f.close();
 }
 
@@ -389,8 +382,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->logActivity( QString( "update check complete,repository is in an unknown state" ) ) ;
 		this->showToolTip( icon,QString( "no updates foung" ) );
 	}
-	this->writeUpdateTimeToConfigFile() ;
-	this->scheduleUpdates( m_sleepDuration );
+
 	emit updateLogWindow();
 }
 
@@ -413,7 +405,9 @@ void qtUpdateNotifier::showToolTip( QString x,QString y,int z )
 
 void qtUpdateNotifier::showToolTip( QString x,QString y )
 {
-	QString n = QString( "next update check will be at %1" ).arg( this->nextUpdateTime() ) ;
+	QDateTime d ;
+	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() );
+	QString n = QString( "next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
 	this->setToolTip( x,y,n );
 }
 
@@ -472,7 +466,8 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 	QString x = this->iconName() ;
 	QString y = this->toolTipTitle();
 
-	this->showToolTip( x,y ) ;
+	int d = static_cast<int>( m_sleepDuration ) ;
+	this->showToolTip( x,y,d ) ;
 }
 
 void qtUpdateNotifier::threadTerminated( void )
@@ -484,23 +479,6 @@ void qtUpdateNotifier::threadisFinished()
 {
 	m_threadIsRunning = false ;
 	this->contextMenu()->setEnabled( true );
-}
-
-void qtUpdateNotifier::_activate( QPoint &p )
-{
-	Q_UNUSED( p ) ;
-	/*
-	 * currently unused function
-	 */
-}
-
-void qtUpdateNotifier::_activateRequested( bool active,const QPoint &pos )
-{
-	Q_UNUSED( active ) ;
-	Q_UNUSED( pos ) ;
-	/*
-	 * currently unused function
-	 */
 }
 
 void qtUpdateNotifier::closeApp()
@@ -519,11 +497,6 @@ void qtUpdateNotifier::closeApp( int st )
 	}else{
 		QCoreApplication::exit( st ) ;
 	}
-}
-
-void qtUpdateNotifier::closeApplication()
-{
-
 }
 
 qtUpdateNotifier::~qtUpdateNotifier()

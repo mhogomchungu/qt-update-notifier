@@ -42,11 +42,13 @@ private slots:
 	void pbClearLog( void ) ;
 	void pbQuit( void ) ;
 	void updateLogWindow( void ) ;
+	void updateLogWindow_1( void ) ;
 private:
 	QString getLogContents( void ) ;
 	void closeEvent( QCloseEvent * ) ;
 	Ui::logWindow * m_ui;
 	QString m_logFile ;
+	QString m_logPath ;
 };
 
 #endif // LOGWINDOW_H
