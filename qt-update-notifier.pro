@@ -16,13 +16,15 @@ qtUpdateNotifier.cpp \
     check_updates.cpp \
     logwindow.cpp \
     instance.cpp \
-    startsynaptic.cpp
+    startsynaptic.cpp \
+    configuredialog.cpp
 
 HEADERS  += qtUpdateNotifier.h \
     check_updates.h \
     logwindow.h \
     instance.h \
-    startsynaptic.h
+    startsynaptic.h \
+    configuredialog.h
 
 RESOURCES += icons.qrc
 
@@ -32,5 +34,6 @@ INCLUDEPATH += /home/local/KDE4/include /usr/include /home/ink/src/build-qt-upda
 LIBS += -lkdeui -L/home/local/KDE4/lib -L/usr/lib -lQtNetwork
 
 FORMS += \
-    logwindow.ui
+    logwindow.ui \
+    configuredialog.ui
 

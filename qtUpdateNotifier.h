@@ -49,6 +49,7 @@
 #include "instance.h"
 #include "desktop_file.h"
 #include "startsynaptic.h"
+#include "configuredialog.h"
 
 class qtUpdateNotifier : public KStatusNotifierItem
 {
@@ -63,6 +64,7 @@ signals:
 	void updateLogWindow( void ) ;
 public slots:
 	void startUpdater( void ) ;
+	void setUpdateInterval( int ) ;
 private slots:
 	void run( void ) ;
 	void closeApp( int ) ;
@@ -84,6 +86,7 @@ private slots:
 	void disableAutoStart( void ) ;
 	void toggleAutoStart( bool ) ;
 	void updaterClosed( void ) ;
+	void openConfigureDialog( void ) ;
 private:
 	void saveAptGetLogOutPut( QStringList ) ;
 	u_int64_t getCurrentTime( void ) ;
@@ -111,6 +114,8 @@ private:
 	int m_waitForFirstCheck ;
 	QString m_configPath ;
 	QString m_aptGetConfigLog ;
+	QString m_CheckDelayOnStartUp ;
+	QString m_updateCheckInterval ;
 };
 
 #endif // MAINWINDOW_H

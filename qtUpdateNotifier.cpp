@@ -61,7 +61,9 @@ void qtUpdateNotifier::createEnvironment()
 	m_configTime = m_configPath + QString( "/qt-update-notifier.time" ) ;
 	m_configLog = m_configPath  + QString( "/qt-update-notifier.log" ) ;
 
-	QFile w( m_configPath + QString( "/qt-update-notifier-firstCheck.time" ) ) ;
+	m_CheckDelayOnStartUp = m_configPath + QString( "/qt-update-notifier-firstCheck.time" ) ;
+
+	QFile w( m_CheckDelayOnStartUp ) ;
 
 	if( !w.exists() ){
 		w.open( QIODevice::WriteOnly ) ;
@@ -93,7 +95,9 @@ void qtUpdateNotifier::createEnvironment()
 
 	this->showToolTip( a,b,z ) ;
 
-	QFile f( m_configPath + QString( "/qt-update-notifier.interval" ) ) ;
+	m_updateCheckInterval = m_configPath + QString( "/qt-update-notifier.interval" ) ;
+
+	QFile f( m_updateCheckInterval ) ;
 	if( !f.exists() ){
 		f.open( QIODevice::WriteOnly ) ;
 		f.write( "86400" ) ; // wait for 24 hours before checking for updates
@@ -179,6 +183,17 @@ void qtUpdateNotifier::toggleAutoStart( bool b )
 	}
 }
 
+void qtUpdateNotifier::openConfigureDialog()
+{
+	QStringList l ;
+	l.append( m_CheckDelayOnStartUp ) ;
+	l.append( m_updateCheckInterval );
+	configureDialog * cfg = new configureDialog( l,qtUpdateNotifier::autoStartEnabled() ) ;
+	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
+	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
+	cfg->showUI();
+}
+
 void qtUpdateNotifier::run()
 {
 	instance * s = new instance( this ) ;
@@ -195,17 +210,8 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startUpdater() ) );
 	m_trayMenu->addAction( tr( "open update log window" ),this,SLOT( logWindowShow() ) );
 	m_trayMenu->addAction( tr( "open apt-get log window" ),this,SLOT( aptGetLogWindow() ) );
+	m_trayMenu->addAction( tr( "configuration window" ),this,SLOT( openConfigureDialog() ) );
 
-	QAction * ac = new QAction( m_trayMenu ) ;
-
-	connect( ac,SIGNAL( toggled( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
-
-	ac->setText( tr( "enable autostart" ) ) ;
-	ac->setCheckable( true ) ;
-
-	ac->setChecked( qtUpdateNotifier::autoStartEnabled() ) ;
-
-	m_trayMenu->addAction( ac ) ;
 	this->setContextMenu( m_trayMenu );
 	this->contextMenu()->setEnabled( true );
 
@@ -434,9 +440,39 @@ QString qtUpdateNotifier::logMsg( int interval )
 
 void qtUpdateNotifier::scheduleUpdates( int interval )
 {
-	this->logActivity( this->logMsg( interval ) ) ;
+	if( interval >= 10 * 60 * 1000 ){
+		this->logActivity( this->logMsg( interval ) ) ;
+		m_timer->stop();
+		m_timer->start( interval );
+	}else{
+		this->logActivity( QString( "schedules check interval is less that 10 minutes,reseting it to 10 minutes" ) ) ;
+		m_timer->stop();
+		m_timer->start( 10 * 60 * 1000 );
+	}
+}
+
+void qtUpdateNotifier::setUpdateInterval( int interval )
+{
+	this->logActivity( QString( "rescheduling update check" ) ) ;
+
+	m_sleepDuration = interval;
+
+	if( m_sleepDuration < 10 * 60 * 1000 ){
+		this->logActivity( QString( "update interval is less than 10 minutes,resetting it to 10 minutes" ) ) ;
+		m_sleepDuration = 10 * 60 * 1000 ;
+	}
+
+	this->logActivity( this->logMsg( m_sleepDuration ) ) ;
+
+	this->writeUpdateTimeToConfigFile();
+
 	m_timer->stop();
-	m_timer->start( interval );
+	m_timer->start( m_sleepDuration );
+
+	QString x = this->iconName() ;
+	QString y = this->toolTipTitle();
+
+	this->showToolTip( x,y ) ;
 }
 
 void qtUpdateNotifier::threadTerminated( void )

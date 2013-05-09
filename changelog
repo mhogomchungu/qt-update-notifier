@@ -30,6 +30,7 @@
 	-fix a bug from improperly update of the icon in the version feature above in version 1.3.3
 -version 1.3.5
 	-fix a bug,the tray bubble did not update correctly when synaptic was started from within qt-update-notifier
-	
+-version 1.3.6
+	-add a configuration dialog window to give a GUI solution for setting up of various options.
 	
  	

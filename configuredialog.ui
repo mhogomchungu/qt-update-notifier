@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>configureDialog</class>
+ <widget class="QDialog" name="configureDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>492</width>
+    <height>344</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>configuration window</string>
+  </property>
+  <widget class="QPushButton" name="pbClose">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>310</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&amp;close</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="gbUpdateInterval">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>451</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>251</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set the time interval btw updates.
+
+default and recommeded interval is
+1 day,0 hours,0 minutes</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="gbUpdateIntervalComboBoxDays">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>10</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>7</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="gbUpdateIntervalComboBoxHours">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>40</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>7</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>8</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>9</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>10</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>11</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>12</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>13</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>14</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>15</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>16</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>17</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>18</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>19</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>20</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>21</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>22</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>23</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>24</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="gbUpdateIntervalComboBoxMinutes">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>70</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>7</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>8</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>9</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>10</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>11</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>12</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>13</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>14</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>15</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>16</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>17</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>18</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>19</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>20</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>21</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>22</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>23</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>24</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>25</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>26</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>27</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>28</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>29</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>30</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>31</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>32</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>33</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>34</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>35</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>36</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>37</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>38</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>39</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>40</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>41</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>42</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>43</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>44</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>45</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>46</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>47</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>48</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>49</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>50</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>51</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>52</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>53</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>54</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>55</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>56</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>57</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>58</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>59</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>60</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>15</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>days(s)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>45</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>hours(s)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>75</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>minutes(s)</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="gbDelayStartInterval">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>140</y>
+     <width>451</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>241</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>251</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>when the program starts,wait for this
+number of minutes before checking
+for updates(useful to give time to setup
+network interfaces)</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="gbDelayStartIntervalComboBox">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>30</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>10</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>15</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>30</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="gbAutoStart">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>240</y>
+     <width>451</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>-20</y>
+      <width>241</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>251</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>auto start application at login</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBoxAutoStart">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>20</y>
+      <width>85</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>gbUpdateIntervalComboBoxDays</tabstop>
+  <tabstop>gbUpdateIntervalComboBoxHours</tabstop>
+  <tabstop>gbUpdateIntervalComboBoxMinutes</tabstop>
+  <tabstop>gbDelayStartIntervalComboBox</tabstop>
+  <tabstop>checkBoxAutoStart</tabstop>
+  <tabstop>pbClose</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
