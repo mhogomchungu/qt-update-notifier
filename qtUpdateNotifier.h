@@ -73,6 +73,8 @@ private slots:
 	void threadisFinished( void ) ;
 	void changeIcon( QString ) ;
 	void checkForUpdates( void ) ;
+	void manualCheckForUpdates( void ) ;
+	void automaticCheckForUpdates( void ) ;
 	void checkForUpdatesOnStartUp( void ) ;
 	void scheduleUpdates( int ) ;
 	void updateStatus( int,QStringList ) ;

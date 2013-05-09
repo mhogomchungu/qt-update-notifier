@@ -23,7 +23,7 @@
 qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 {
 	m_timer = new QTimer() ;
-	connect( m_timer,SIGNAL( timeout() ),this,SLOT( checkForUpdates() ) ) ;
+	connect( m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
 	m_trayMenu = 0 ;
 	m_threadIsRunning = false ;
 	this->setStatus( KStatusNotifierItem::Passive );
@@ -73,10 +73,9 @@ void qtUpdateNotifier::createEnvironment()
 	}
 
 	w.open( QIODevice::ReadOnly ) ;
-	QByteArray wd = w.readAll() ;
+	QString wd = w.readAll() ;
 	w.close();
-	const char * wdc = wd.constData() ;
-	m_waitForFirstCheck = 1000 * atoi( wdc ) ;
+	m_waitForFirstCheck = 1000 * wd.toInt() ;
 
 	int rr = 60 * 1000 ;
 
@@ -106,10 +105,9 @@ void qtUpdateNotifier::createEnvironment()
 	}
 
 	f.open( QIODevice::ReadOnly ) ;
-	QByteArray x = f.readAll() ;
+	QString x = f.readAll() ;
 	f.close();
-	const char * y = x.constData() ;
-	m_sleepDuration = 1000 * atol( y ) ;
+	m_sleepDuration = 1000 * x.toInt() ;
 }
 
 void qtUpdateNotifier::start()
@@ -201,7 +199,7 @@ void qtUpdateNotifier::run()
 
 	m_trayMenu = new KMenu() ;
 
-	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( checkForUpdates() ) );
+	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( manualCheckForUpdates() ) );
 	m_trayMenu->addAction( tr( "done updating" ),this,SLOT( doneUpdating() ) );
 	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startUpdater() ) );
 	m_trayMenu->addAction( tr( "open update log window" ),this,SLOT( logWindowShow() ) );
@@ -286,14 +284,24 @@ void qtUpdateNotifier::writeUpdateTimeToConfigFile()
 	f.close();
 }
 
+void qtUpdateNotifier::manualCheckForUpdates()
+{
+	this->logActivity( QString( "manual check for updates initiated" ) ) ;
+	this->checkForUpdates();
+}
+
+void qtUpdateNotifier::automaticCheckForUpdates()
+{
+	this->logActivity( QString( "automatic check for updates initiated" ) ) ;
+	this->checkForUpdates();
+}
+
 void qtUpdateNotifier::checkForUpdates()
 {
 	if( m_threadIsRunning ){
 		this->logActivity( QString( "warning:\tattempt to start a check while another is already in progress" ) ) ;
 		return ;
 	}
-
-	this->logActivity( QString( "checking for updates" ) ) ;
 
 	QString icon = QString( "qt-update-notifier-updating" ) ;
 
