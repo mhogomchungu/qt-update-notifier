@@ -55,10 +55,9 @@ void configureDialog::closeUI()
 
 	if( m_duration < 10 * 60 ){
 		QMessageBox msg( this ) ;
-		msg.setText( QString( "a minimum of 10 minutes between updates required" ) ) ;
+		msg.setText( QString( "update check interval must be atleast 10 minutes" ) ) ;
 		msg.exec() ;
 	}else{
-
 		this->autoStartToggled( m_ui->checkBoxAutoStart->isChecked() ) ;
 
 		this->delayTimeChanged( m_ui->gbDelayStartIntervalComboBox->currentIndex() );
@@ -74,6 +73,7 @@ void configureDialog::closeUI()
 
 		if( m_duration != m_interval ){
 			emit setUpdateInterval( m_duration * 1000 );
+			emit configOptionsChanged();
 		}else{
 			;
 		}

@@ -17,47 +17,33 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONFIGUREDIALOG_H
-#define CONFIGUREDIALOG_H
+#ifndef CHECKOLDPACKAGES_H
+#define CHECKOLDPACKAGES_H
 
-#include <QDialog>
+#include <QObject>
 #include <QString>
-#include <QFile>
-#include <QDir>
 #include <QStringList>
-#include <QCloseEvent>
+#include <QProcess>
+#include <QThreadPool>
+#include <QRunnable>
 #include <QDebug>
-#include <QMessageBox>
 
-namespace Ui {
-class configureDialog;
-}
-
-class configureDialog : public QDialog
+class checkoldpackages : public QObject,public QRunnable
 {
 	Q_OBJECT
-
 public:
-	configureDialog( QStringList list = QStringList(),bool autostart = true,QWidget * parent = 0 );
-	~configureDialog();
-	void showUI() ;
+	explicit checkoldpackages( QObject * parent = 0 ) ;
+	~checkoldpackages() ;
+	void start( void ) ;
 signals:
-	void toggleAutoStart( bool ) ;
-	void setUpdateInterval( int ) ;
-	void configOptionsChanged( void ) ;
-private slots:
-	void closeUI( void ) ;
-	void autoStartToggled( bool ) ;
-	void delayTimeChanged( int ) ;
+	void outdatedPackages( QStringList ) ;
+public slots:
 private:
-	void setDelayTimeAtLogIn( void ) ;
-	void setIntervalBetweenUpdateChecks( void ) ;
-	void closeEvent( QCloseEvent * ) ;
-	Ui::configureDialog * m_ui;
-	QString m_CheckDelayOnStartUp ;
-	QString m_updateCheckInterval ;
-	int m_interval ;
-	int m_duration ;
+	void run( void ) ;
+	void checkKernelVersion( void ) ;
+	void checkLibreOfficeVersion( void ) ;
+	void checkVirtualBoxVersion( void ) ;
+	QStringList m_package ;
 };
 
-#endif // CONFIGUREDIALOG_H
+#endif // CHECKOLDPACKAGES_H

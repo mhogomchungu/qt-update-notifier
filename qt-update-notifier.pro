@@ -17,14 +17,16 @@ qtUpdateNotifier.cpp \
     logwindow.cpp \
     instance.cpp \
     startsynaptic.cpp \
-    configuredialog.cpp
+    configuredialog.cpp \
+    checkoldpackages.cpp
 
 HEADERS  += qtUpdateNotifier.h \
     check_updates.h \
     logwindow.h \
     instance.h \
     startsynaptic.h \
-    configuredialog.h
+    configuredialog.h \
+    checkoldpackages.h
 
 RESOURCES += icons.qrc
 

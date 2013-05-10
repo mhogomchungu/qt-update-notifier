@@ -50,6 +50,7 @@
 #include "desktop_file.h"
 #include "startsynaptic.h"
 #include "configuredialog.h"
+#include "checkoldpackages.h"
 
 class qtUpdateNotifier : public KStatusNotifierItem
 {
@@ -59,9 +60,11 @@ public:
 	~qtUpdateNotifier();
 	void start( void ) ;
 	void logActivity( QString ) ;
+	void logActivity_1( QString ) ;
 	static bool autoStartEnabled( void ) ;
 signals:
 	void updateLogWindow( void ) ;
+	void configOptionsChanged_1( void ) ;
 public slots:
 	void startUpdater( void ) ;
 	void setUpdateInterval( int ) ;
@@ -86,12 +89,18 @@ private slots:
 	void toggleAutoStart( bool ) ;
 	void updaterClosed( void ) ;
 	void openConfigureDialog( void ) ;
+	void checkOldPackages( QStringList ) ;
+	void startTimer( void ) ;
+	void startTimer_1( void ) ;
+	void configOptionsChanged( void ) ;
 private:
+	void printTime( QString,u_int64_t ) ;
 	void saveAptGetLogOutPut( QStringList ) ;
 	u_int64_t getCurrentTime( void ) ;
+	QString getCurrentTime_1( void ) ;
 	u_int64_t nextScheduledUpdateTime( void ) ;
 	void createEnvironment( void ) ;
-	void writeUpdateTimeToConfigFile( void ) ;
+	void writeUpdateTimeToConfigFile( u_int64_t ) ;
 	void showToolTip( QString,QString,QStringList ) ;
 	void showToolTip( QString,QString,QString ) ;
 	void showToolTip( QString,QString,int ) ;
@@ -99,6 +108,7 @@ private:
 	QString nextUpdateTime( void ) ;
 	QString nextUpdateTime( int ) ;
 	QString logMsg( int ) ;
+	QString logMsg( void ) ;
 	bool m_canCloseApplication ;
 	bool m_threadIsRunning ;
 	bool m_autoStartEnabled ;

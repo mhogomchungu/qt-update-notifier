@@ -38,7 +38,8 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 void qtUpdateNotifier::logWindowShow()
 {
 	logWindow * w = new logWindow( QString( "update output log window" ) ) ;
-	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) );
+	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) ) ;
+	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow() ) ) ;
 	w->showLogWindow( m_configLog );
 }
 
@@ -46,6 +47,7 @@ void qtUpdateNotifier::aptGetLogWindow()
 {
 	logWindow * w = new logWindow( QString( "apt-get upgrade output log window" ) )  ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow_1() ) );
+	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow_1() ) ) ;
 	w->showAptGetWindow( m_aptGetConfigLog );
 }
 
@@ -185,7 +187,13 @@ void qtUpdateNotifier::openConfigureDialog()
 	configureDialog * cfg = new configureDialog( l,qtUpdateNotifier::autoStartEnabled() ) ;
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
+	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
 	cfg->showUI();
+}
+
+void qtUpdateNotifier::configOptionsChanged()
+{
+	emit configOptionsChanged_1();
 }
 
 void qtUpdateNotifier::run()
@@ -216,35 +224,87 @@ void qtUpdateNotifier::run()
 	t->start( m_waitForFirstCheck ) ;
 }
 
+void qtUpdateNotifier::printTime( QString zz,u_int64_t time )
+{
+	QDateTime d ;
+	d.setMSecsSinceEpoch( time );
+	qDebug() << zz << d.toString( Qt::TextDate );
+}
+
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
 	QFile f( m_configTime ) ;
 	if( !f.open( QIODevice::ReadOnly ) ){
+
 		/*
-		 * config file doesnt seem to be present,ignore it,it will be created later on
+		 * create a logfile that records time for the next update.
 		 */
-		this->checkForUpdates();
+		//printTime( "kk",this->() + m_sleepDuration );
+
+		m_timer->stop();
+		m_timer->start( m_sleepDuration );
+		this->automaticCheckForUpdates();
 	}else{
 		m_currentTime = this->getCurrentTime() ;
-		u_int64_t configTime = this->nextScheduledUpdateTime() ;
-		u_int64_t interval = m_currentTime - configTime ;
-		if( interval >= m_sleepDuration ){
-			/*
-			 * the wait interval has passed,check for updates now
-			 */
-			this->checkForUpdates();
-		}else{
+		u_int64_t x = m_currentTime ;
+		u_int64_t y = this->nextScheduledUpdateTime() ;
+		u_int64_t z = m_sleepDuration ;
+
+		int64_t interval = y - x ;
+
+		if( interval >= 0 ){
 			/*
 			 * the wait interval has not passed,wait for the remainder of the interval before
 			 * checking for updates
 			 */
-			int x = m_sleepDuration - interval ;
-			this->scheduleUpdates( x );
-			QString y = QString( "qt-update-notifier" ) ;
-			QString z = QString( "status" ) ;
-			this->showToolTip( y,z,x ) ;
+
+			//printTime( "ii",this->getCurrentTime() + interval );
+
+			QTimer * t = new QTimer() ;
+			t->setSingleShot( true ) ;
+			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
+			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
+			t->start( interval );
+
+			this->showToolTip( QString( "qt-update-notifier" ),QString( "status" ),interval ) ;
+
+			this->logActivity( this->logMsg() ) ;
+		}else{
+			u_int64_t e = ( x - y ) / z ;
+			e = e + 1 ;
+			z = z * e ;
+
+			//printTime( "rr",y + z );
+
+			this->writeUpdateTimeToConfigFile( y + z ) ;
+
+			this->logActivity( QString( "automatic check for updates initiated" ) ) ;
+
+			this->checkForUpdates();
+
+			QTimer * t = new QTimer() ;
+			t->setSingleShot( true ) ;
+			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
+			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer_1() ) ) ;
+			t->start( y + z - x ) ;
 		}
 	}
+}
+
+void qtUpdateNotifier::startTimer()
+{
+	qDebug() << "starting timer";
+	m_timer->stop();
+	m_timer->start( m_sleepDuration );
+	this->automaticCheckForUpdates();
+}
+
+void qtUpdateNotifier::startTimer_1()
+{
+	qDebug() << "starting timer_1";
+	m_timer->stop();
+	m_timer->start( m_sleepDuration );
+	this->automaticCheckForUpdates();
 }
 
 u_int64_t qtUpdateNotifier::getCurrentTime()
@@ -252,15 +312,33 @@ u_int64_t qtUpdateNotifier::getCurrentTime()
 	return static_cast<u_int64_t>( QDateTime::currentDateTime().toMSecsSinceEpoch() );
 }
 
+QString qtUpdateNotifier::getCurrentTime_1()
+{
+	return QDateTime::currentDateTime().toString( Qt::TextDate ) ;
+}
+
 void qtUpdateNotifier::logActivity( QString msg )
 {
 	QFile f( m_configLog ) ;
 	f.open( QIODevice::WriteOnly | QIODevice::Append ) ;
-	QDateTime t = QDateTime::currentDateTime() ;
-	QString time = QString( "%1:   %2\n").arg( t.toString( Qt::TextDate ) ).arg( msg )  ;
+
+	QString t = this->getCurrentTime_1() ;
+	QString time = QString( "%1:   %2\n").arg( t ).arg( msg )  ;
 	QByteArray r = time.toAscii() ;
 	f.write( r ) ;
 	f.close();
+}
+
+void qtUpdateNotifier::logActivity_1( QString msg )
+{
+	QFile f( m_configLog ) ;
+	f.open( QIODevice::WriteOnly | QIODevice::Append ) ;
+	QString line = QString( "----------------------------------------------------------------------------------------------------------------------" ) ;
+	QString t = this->getCurrentTime_1() ;
+	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
+	f.write( log.toAscii() ) ;
+	f.close();
+
 }
 
 u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
@@ -275,11 +353,11 @@ u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
 	}
 }
 
-void qtUpdateNotifier::writeUpdateTimeToConfigFile()
+void qtUpdateNotifier::writeUpdateTimeToConfigFile( u_int64_t time )
 {
 	QFile f( m_configTime ) ;
 	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-	QString z = QString::number( this->getCurrentTime() ) ;
+	QString z = QString::number( time ) ;
 	f.write( z.toAscii() ) ;
 	f.close();
 }
@@ -294,6 +372,7 @@ void qtUpdateNotifier::automaticCheckForUpdates()
 {
 	this->logActivity( QString( "automatic check for updates initiated" ) ) ;
 	this->checkForUpdates();
+	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
 }
 
 void qtUpdateNotifier::checkForUpdates()
@@ -310,8 +389,8 @@ void qtUpdateNotifier::checkForUpdates()
 	this->showToolTip( icon,QString( "status" ),QString( "checking for updates" ) );
 
 	m_threadIsRunning = true ;
-	m_updates = new check_updates( m_configPath ) ;
 
+	m_updates = new check_updates( m_configPath ) ;
 	connect( m_updates,SIGNAL( updateStatus( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
@@ -319,7 +398,6 @@ void qtUpdateNotifier::checkForUpdates()
 
 	this->contextMenu()->setEnabled( false );
 	m_updates->start();
-	emit updateLogWindow() ;
 }
 
 void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
@@ -391,6 +469,36 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->showToolTip( icon,QString( "no updates foung" ) );
 	}
 
+	checkoldpackages * s = new checkoldpackages() ;
+	connect( s,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
+	s->start();
+
+	this->logActivity( this->logMsg() ) ;
+}
+
+void qtUpdateNotifier::checkOldPackages( QStringList list )
+{
+	QString kernelVersion = list.at( 0 ) ;
+	if( kernelVersion.isEmpty() ){
+		;
+	}else{
+		this->logActivity_1( kernelVersion ) ;
+	}
+
+	QString libreofficeVersion = list.at( 1 ) ;
+	if( libreofficeVersion.isEmpty() ){
+		;
+	}else{
+		;
+	}
+
+	QString virtualBoxVersion = list.at( 2 ) ;
+	if( virtualBoxVersion.isEmpty() ){
+		;
+	}else{
+		;
+	}
+
 	emit updateLogWindow();
 }
 
@@ -440,17 +548,23 @@ QString qtUpdateNotifier::logMsg( int interval )
 	return QString( "scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
 }
 
+QString qtUpdateNotifier::logMsg( void )
+{
+	u_int64_t x = this->getCurrentTime() ;
+	u_int64_t y = this->nextScheduledUpdateTime() ;
+	u_int64_t e = y - x ;
+	char num[ 64 ] ;
+	float f = static_cast<float>( e ) ;
+	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
+	QString n = this->nextUpdateTime( e ) ;
+	return QString( "scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+}
+
 void qtUpdateNotifier::scheduleUpdates( int interval )
 {
-	if( interval >= 10 * 60 * 1000 ){
-		this->logActivity( this->logMsg( interval ) ) ;
-		m_timer->stop();
-		m_timer->start( interval );
-	}else{
-		this->logActivity( QString( "schedules check interval is less that 10 minutes,reseting it to 10 minutes" ) ) ;
-		m_timer->stop();
-		m_timer->start( 10 * 60 * 1000 );
-	}
+	this->logActivity( this->logMsg( interval ) ) ;
+	m_timer->stop() ;
+	m_timer->start( interval ) ;
 }
 
 void qtUpdateNotifier::setUpdateInterval( int interval )
@@ -459,14 +573,9 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 
 	m_sleepDuration = interval;
 
-	if( m_sleepDuration < 10 * 60 * 1000 ){
-		this->logActivity( QString( "update interval is less than 10 minutes,resetting it to 10 minutes" ) ) ;
-		m_sleepDuration = 10 * 60 * 1000 ;
-	}
-
 	this->logActivity( this->logMsg( m_sleepDuration ) ) ;
 
-	this->writeUpdateTimeToConfigFile();
+	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
 
 	m_timer->stop();
 	m_timer->start( m_sleepDuration );
