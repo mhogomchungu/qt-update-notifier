@@ -293,7 +293,6 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 
 void qtUpdateNotifier::startTimer()
 {
-	qDebug() << "starting timer";
 	m_timer->stop();
 	m_timer->start( m_sleepDuration );
 	this->automaticCheckForUpdates();
@@ -301,7 +300,6 @@ void qtUpdateNotifier::startTimer()
 
 void qtUpdateNotifier::startTimer_1()
 {
-	qDebug() << "starting timer_1";
 	m_timer->stop();
 	m_timer->start( m_sleepDuration );
 	this->automaticCheckForUpdates();
