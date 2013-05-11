@@ -325,6 +325,7 @@ void qtUpdateNotifier::logActivity( QString msg )
 	QByteArray r = time.toAscii() ;
 	f.write( r ) ;
 	f.close();
+	emit updateLogWindow() ;
 }
 
 void qtUpdateNotifier::logActivity_1( QString msg )
@@ -336,7 +337,7 @@ void qtUpdateNotifier::logActivity_1( QString msg )
 	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
 	f.write( log.toAscii() ) ;
 	f.close();
-
+	emit updateLogWindow() ;
 }
 
 u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
