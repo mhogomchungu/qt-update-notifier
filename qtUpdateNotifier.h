@@ -46,11 +46,17 @@
 #include <cstdlib>
 #include <cstdio>
 
+#include <QTranslator>
+#include <QLibraryInfo>
+
+#include <klocalizedstring.h>
+
 #include "instance.h"
 #include "desktop_file.h"
 #include "startsynaptic.h"
 #include "configuredialog.h"
 #include "checkoldpackages.h"
+#include "qt-update-install-path.h"
 
 class qtUpdateNotifier : public KStatusNotifierItem
 {
@@ -94,6 +100,7 @@ private slots:
 	void startTimer_1( void ) ;
 	void configOptionsChanged( void ) ;
 private:
+	void setupTranslationText( void ) ;
 	void printTime( QString,u_int64_t ) ;
 	void saveAptGetLogOutPut( QStringList ) ;
 	u_int64_t getCurrentTime( void ) ;

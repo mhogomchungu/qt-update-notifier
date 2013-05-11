@@ -39,3 +39,4 @@ FORMS += \
     logwindow.ui \
     configuredialog.ui
 
+TRANSLATIONS = translations.ts

@@ -33,6 +33,12 @@ install ( FILES qt-update-notifier-updating.png DESTINATION share/icons )
 install ( FILES qt-update-notifier-updates-are-available.png DESTINATION share/icons )
 install ( FILES qt-update-notifier-need-attention.png DESTINATION share/icons )
 
+file( WRITE "${PROJECT_BINARY_DIR}/qt-update-install-path.h"
+"#define QT_UPDATE_TRANSLATION_PATH \"${CMAKE_INSTALL_PREFIX}/share/qt-update-translations\""
+)
+
+install ( FILES translations.qm DESTINATION share/qt-update-translations )
+
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 
 file( WRITE  ${PROJECT_BINARY_DIR}/desktop_file.h "\n#define DESKTOP_FILE_PATH      \"${CMAKE_INSTALL_PREFIX}/share/applications/qt-update-notifier.desktop\"\n")
