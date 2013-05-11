@@ -37,6 +37,8 @@ file( WRITE "${PROJECT_BINARY_DIR}/qt-update-install-path.h"
 "#define QT_UPDATE_TRANSLATION_PATH \"${CMAKE_INSTALL_PREFIX}/share/qt-update-translations\""
 )
 
+install ( FILES translations.ts DESTINATION share/qt-update-translations )
+
 if( "${CMAKE_SOURCE_DIR}/translations.qm" )
 	install ( FILES translations.qm DESTINATION share/qt-update-translations )
 endif()
