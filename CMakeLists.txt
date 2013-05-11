@@ -31,6 +31,7 @@ set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
 install ( FILES qt-update-notifier.png DESTINATION share/icons )
 install ( FILES qt-update-notifier-updating.png DESTINATION share/icons )
 install ( FILES qt-update-notifier-updates-are-available.png DESTINATION share/icons )
+install ( FILES qt-update-notifier-need-attention.png DESTINATION share/icons )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 

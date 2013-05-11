@@ -477,28 +477,32 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 
 void qtUpdateNotifier::checkOldPackages( QStringList list )
 {
+	QString	icon = QString( "qt-update-notifier-need-attention" ) ;
+
 	QString kernelVersion = list.at( 0 ) ;
-	if( kernelVersion.isEmpty() ){
-		;
-	}else{
+	if( !kernelVersion.isEmpty() ){
 		this->logActivity_1( kernelVersion ) ;
+		this->changeIcon( icon );
+		this->showToolTip( icon,QString( "warning" ) ) ;
 	}
 
 	QString libreofficeVersion = list.at( 1 ) ;
-	if( libreofficeVersion.isEmpty() ){
-		;
-	}else{
-		;
+	if( !libreofficeVersion.isEmpty() ){
+		this->logActivity_1( libreofficeVersion ) ;
+		this->changeIcon( icon );
+		this->showToolTip( icon,QString( "warning" ) );
 	}
 
 	QString virtualBoxVersion = list.at( 2 ) ;
-	if( virtualBoxVersion.isEmpty() ){
-		;
-	}else{
-		;
+	if( !virtualBoxVersion.isEmpty() ){
+		this->logActivity_1( virtualBoxVersion ) ;
+		this->changeIcon( icon );
+		this->showToolTip( icon,QString( "warning" ) );
 	}
 
-	emit updateLogWindow();
+	if( !kernelVersion.isEmpty() || !libreofficeVersion.isEmpty() || !virtualBoxVersion.isEmpty() ){
+		emit updateLogWindow() ;
+	}
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList list )
