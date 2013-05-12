@@ -9,12 +9,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="26"/>
+        <location filename="configuredialog.ui" line="735"/>
+        <source>select localization language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.ui" line="759"/>
         <source>&amp;close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="51"/>
+        <location filename="configuredialog.ui" line="38"/>
         <source>Set the time interval btw updates.
 
 default and recommeded interval is
@@ -22,365 +27,365 @@ default and recommeded interval is
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="68"/>
-        <location filename="configuredialog.ui" line="118"/>
-        <location filename="configuredialog.ui" line="253"/>
-        <location filename="configuredialog.ui" line="649"/>
+        <location filename="configuredialog.ui" line="55"/>
+        <location filename="configuredialog.ui" line="105"/>
+        <location filename="configuredialog.ui" line="240"/>
+        <location filename="configuredialog.ui" line="636"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="73"/>
-        <location filename="configuredialog.ui" line="123"/>
-        <location filename="configuredialog.ui" line="258"/>
+        <location filename="configuredialog.ui" line="60"/>
+        <location filename="configuredialog.ui" line="110"/>
+        <location filename="configuredialog.ui" line="245"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="78"/>
-        <location filename="configuredialog.ui" line="128"/>
-        <location filename="configuredialog.ui" line="263"/>
+        <location filename="configuredialog.ui" line="65"/>
+        <location filename="configuredialog.ui" line="115"/>
+        <location filename="configuredialog.ui" line="250"/>
         <source>2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="83"/>
-        <location filename="configuredialog.ui" line="133"/>
-        <location filename="configuredialog.ui" line="268"/>
+        <location filename="configuredialog.ui" line="70"/>
+        <location filename="configuredialog.ui" line="120"/>
+        <location filename="configuredialog.ui" line="255"/>
         <source>3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="88"/>
-        <location filename="configuredialog.ui" line="138"/>
-        <location filename="configuredialog.ui" line="273"/>
+        <location filename="configuredialog.ui" line="75"/>
+        <location filename="configuredialog.ui" line="125"/>
+        <location filename="configuredialog.ui" line="260"/>
         <source>4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="93"/>
-        <location filename="configuredialog.ui" line="143"/>
-        <location filename="configuredialog.ui" line="278"/>
-        <location filename="configuredialog.ui" line="654"/>
+        <location filename="configuredialog.ui" line="80"/>
+        <location filename="configuredialog.ui" line="130"/>
+        <location filename="configuredialog.ui" line="265"/>
+        <location filename="configuredialog.ui" line="641"/>
         <source>5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="98"/>
-        <location filename="configuredialog.ui" line="148"/>
-        <location filename="configuredialog.ui" line="283"/>
+        <location filename="configuredialog.ui" line="85"/>
+        <location filename="configuredialog.ui" line="135"/>
+        <location filename="configuredialog.ui" line="270"/>
         <source>6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="103"/>
-        <location filename="configuredialog.ui" line="153"/>
-        <location filename="configuredialog.ui" line="288"/>
+        <location filename="configuredialog.ui" line="90"/>
+        <location filename="configuredialog.ui" line="140"/>
+        <location filename="configuredialog.ui" line="275"/>
         <source>7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="158"/>
-        <location filename="configuredialog.ui" line="293"/>
+        <location filename="configuredialog.ui" line="145"/>
+        <location filename="configuredialog.ui" line="280"/>
         <source>8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="163"/>
-        <location filename="configuredialog.ui" line="298"/>
+        <location filename="configuredialog.ui" line="150"/>
+        <location filename="configuredialog.ui" line="285"/>
         <source>9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="168"/>
-        <location filename="configuredialog.ui" line="303"/>
-        <location filename="configuredialog.ui" line="659"/>
+        <location filename="configuredialog.ui" line="155"/>
+        <location filename="configuredialog.ui" line="290"/>
+        <location filename="configuredialog.ui" line="646"/>
         <source>10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="173"/>
-        <location filename="configuredialog.ui" line="308"/>
+        <location filename="configuredialog.ui" line="160"/>
+        <location filename="configuredialog.ui" line="295"/>
         <source>11</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="178"/>
-        <location filename="configuredialog.ui" line="313"/>
+        <location filename="configuredialog.ui" line="165"/>
+        <location filename="configuredialog.ui" line="300"/>
         <source>12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="183"/>
-        <location filename="configuredialog.ui" line="318"/>
+        <location filename="configuredialog.ui" line="170"/>
+        <location filename="configuredialog.ui" line="305"/>
         <source>13</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="188"/>
-        <location filename="configuredialog.ui" line="323"/>
+        <location filename="configuredialog.ui" line="175"/>
+        <location filename="configuredialog.ui" line="310"/>
         <source>14</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="193"/>
-        <location filename="configuredialog.ui" line="328"/>
-        <location filename="configuredialog.ui" line="664"/>
+        <location filename="configuredialog.ui" line="180"/>
+        <location filename="configuredialog.ui" line="315"/>
+        <location filename="configuredialog.ui" line="651"/>
         <source>15</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="198"/>
-        <location filename="configuredialog.ui" line="333"/>
+        <location filename="configuredialog.ui" line="185"/>
+        <location filename="configuredialog.ui" line="320"/>
         <source>16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="203"/>
-        <location filename="configuredialog.ui" line="338"/>
+        <location filename="configuredialog.ui" line="190"/>
+        <location filename="configuredialog.ui" line="325"/>
         <source>17</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="208"/>
-        <location filename="configuredialog.ui" line="343"/>
+        <location filename="configuredialog.ui" line="195"/>
+        <location filename="configuredialog.ui" line="330"/>
         <source>18</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="213"/>
-        <location filename="configuredialog.ui" line="348"/>
+        <location filename="configuredialog.ui" line="200"/>
+        <location filename="configuredialog.ui" line="335"/>
         <source>19</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="218"/>
-        <location filename="configuredialog.ui" line="353"/>
+        <location filename="configuredialog.ui" line="205"/>
+        <location filename="configuredialog.ui" line="340"/>
         <source>20</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="223"/>
-        <location filename="configuredialog.ui" line="358"/>
+        <location filename="configuredialog.ui" line="210"/>
+        <location filename="configuredialog.ui" line="345"/>
         <source>21</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="228"/>
-        <location filename="configuredialog.ui" line="363"/>
+        <location filename="configuredialog.ui" line="215"/>
+        <location filename="configuredialog.ui" line="350"/>
         <source>22</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="233"/>
-        <location filename="configuredialog.ui" line="368"/>
+        <location filename="configuredialog.ui" line="220"/>
+        <location filename="configuredialog.ui" line="355"/>
         <source>23</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="238"/>
-        <location filename="configuredialog.ui" line="373"/>
+        <location filename="configuredialog.ui" line="225"/>
+        <location filename="configuredialog.ui" line="360"/>
         <source>24</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="378"/>
+        <location filename="configuredialog.ui" line="365"/>
         <source>25</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="383"/>
+        <location filename="configuredialog.ui" line="370"/>
         <source>26</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="388"/>
+        <location filename="configuredialog.ui" line="375"/>
         <source>27</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="393"/>
+        <location filename="configuredialog.ui" line="380"/>
         <source>28</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="398"/>
+        <location filename="configuredialog.ui" line="385"/>
         <source>29</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="403"/>
-        <location filename="configuredialog.ui" line="669"/>
+        <location filename="configuredialog.ui" line="390"/>
+        <location filename="configuredialog.ui" line="656"/>
         <source>30</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="408"/>
+        <location filename="configuredialog.ui" line="395"/>
         <source>31</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="413"/>
+        <location filename="configuredialog.ui" line="400"/>
         <source>32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="418"/>
+        <location filename="configuredialog.ui" line="405"/>
         <source>33</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="423"/>
+        <location filename="configuredialog.ui" line="410"/>
         <source>34</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="428"/>
+        <location filename="configuredialog.ui" line="415"/>
         <source>35</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="433"/>
+        <location filename="configuredialog.ui" line="420"/>
         <source>36</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="438"/>
+        <location filename="configuredialog.ui" line="425"/>
         <source>37</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="443"/>
+        <location filename="configuredialog.ui" line="430"/>
         <source>38</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="448"/>
+        <location filename="configuredialog.ui" line="435"/>
         <source>39</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="453"/>
+        <location filename="configuredialog.ui" line="440"/>
         <source>40</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="458"/>
+        <location filename="configuredialog.ui" line="445"/>
         <source>41</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="463"/>
+        <location filename="configuredialog.ui" line="450"/>
         <source>42</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="468"/>
+        <location filename="configuredialog.ui" line="455"/>
         <source>43</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="473"/>
+        <location filename="configuredialog.ui" line="460"/>
         <source>44</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="478"/>
+        <location filename="configuredialog.ui" line="465"/>
         <source>45</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="483"/>
+        <location filename="configuredialog.ui" line="470"/>
         <source>46</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="488"/>
+        <location filename="configuredialog.ui" line="475"/>
         <source>47</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="493"/>
+        <location filename="configuredialog.ui" line="480"/>
         <source>48</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="498"/>
+        <location filename="configuredialog.ui" line="485"/>
         <source>49</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="503"/>
+        <location filename="configuredialog.ui" line="490"/>
         <source>50</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="508"/>
+        <location filename="configuredialog.ui" line="495"/>
         <source>51</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="513"/>
+        <location filename="configuredialog.ui" line="500"/>
         <source>52</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="518"/>
+        <location filename="configuredialog.ui" line="505"/>
         <source>53</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="523"/>
+        <location filename="configuredialog.ui" line="510"/>
         <source>54</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="528"/>
+        <location filename="configuredialog.ui" line="515"/>
         <source>55</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="533"/>
+        <location filename="configuredialog.ui" line="520"/>
         <source>56</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="538"/>
+        <location filename="configuredialog.ui" line="525"/>
         <source>57</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="543"/>
+        <location filename="configuredialog.ui" line="530"/>
         <source>58</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="548"/>
+        <location filename="configuredialog.ui" line="535"/>
         <source>59</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="553"/>
+        <location filename="configuredialog.ui" line="540"/>
         <source>60</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="567"/>
+        <location filename="configuredialog.ui" line="554"/>
         <source>days(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="580"/>
+        <location filename="configuredialog.ui" line="567"/>
         <source>hours(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="593"/>
+        <location filename="configuredialog.ui" line="580"/>
         <source>minutes(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="632"/>
+        <location filename="configuredialog.ui" line="619"/>
         <source>when the program starts,wait for this
 number of minutes before checking
 for updates(useful to give time to setup
@@ -388,12 +393,12 @@ network interfaces)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="709"/>
+        <location filename="configuredialog.ui" line="696"/>
         <source>auto start application at login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="58"/>
+        <location filename="configuredialog.cpp" line="60"/>
         <source>update check interval must be atleast 10 minutes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -422,7 +427,7 @@ network interfaces)</source>
     <message>
         <location filename="qtUpdateNotifier.cpp" line="31"/>
         <location filename="qtUpdateNotifier.cpp" line="34"/>
-        <location filename="qtUpdateNotifier.cpp" line="140"/>
+        <location filename="qtUpdateNotifier.cpp" line="152"/>
         <source>qt-update-notifier</source>
         <translation type="unfinished"></translation>
     </message>
@@ -442,137 +447,137 @@ network interfaces)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="141"/>
-        <location filename="qtUpdateNotifier.cpp" line="278"/>
-        <location filename="qtUpdateNotifier.cpp" line="397"/>
+        <location filename="qtUpdateNotifier.cpp" line="153"/>
+        <location filename="qtUpdateNotifier.cpp" line="316"/>
+        <location filename="qtUpdateNotifier.cpp" line="435"/>
         <source>status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="211"/>
+        <location filename="qtUpdateNotifier.cpp" line="249"/>
         <source>another instance is already running,closing this one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="219"/>
+        <location filename="qtUpdateNotifier.cpp" line="257"/>
         <source>check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="220"/>
+        <location filename="qtUpdateNotifier.cpp" line="258"/>
         <source>done updating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="221"/>
+        <location filename="qtUpdateNotifier.cpp" line="259"/>
         <source>open synaptic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="222"/>
+        <location filename="qtUpdateNotifier.cpp" line="260"/>
         <source>open update log window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="223"/>
+        <location filename="qtUpdateNotifier.cpp" line="261"/>
         <source>open apt-get log window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="224"/>
+        <location filename="qtUpdateNotifier.cpp" line="262"/>
         <source>configuration window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="290"/>
-        <location filename="qtUpdateNotifier.cpp" line="381"/>
+        <location filename="qtUpdateNotifier.cpp" line="328"/>
+        <location filename="qtUpdateNotifier.cpp" line="419"/>
         <source>automatic check for updates initiated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="375"/>
+        <location filename="qtUpdateNotifier.cpp" line="413"/>
         <source>manual check for updates initiated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="389"/>
+        <location filename="qtUpdateNotifier.cpp" line="427"/>
         <source>warning:	attempt to start a check while another is already in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="397"/>
+        <location filename="qtUpdateNotifier.cpp" line="435"/>
         <source>checking for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="449"/>
+        <location filename="qtUpdateNotifier.cpp" line="487"/>
         <source>update check complete,UPDATES FOUND</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="450"/>
+        <location filename="qtUpdateNotifier.cpp" line="488"/>
         <source>there are updates in the repository</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="455"/>
+        <location filename="qtUpdateNotifier.cpp" line="493"/>
         <source>update check complete,repository appear to be in an inconsistent state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="456"/>
-        <location filename="qtUpdateNotifier.cpp" line="462"/>
-        <location filename="qtUpdateNotifier.cpp" line="468"/>
-        <location filename="qtUpdateNotifier.cpp" line="477"/>
+        <location filename="qtUpdateNotifier.cpp" line="494"/>
+        <location filename="qtUpdateNotifier.cpp" line="500"/>
+        <location filename="qtUpdateNotifier.cpp" line="506"/>
+        <location filename="qtUpdateNotifier.cpp" line="515"/>
         <source>no updates foung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="461"/>
+        <location filename="qtUpdateNotifier.cpp" line="499"/>
         <source>update check complete,no updates found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="467"/>
+        <location filename="qtUpdateNotifier.cpp" line="505"/>
         <source>check skipped,user is not connected to the internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="476"/>
+        <location filename="qtUpdateNotifier.cpp" line="514"/>
         <source>update check complete,repository is in an unknown state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="495"/>
-        <location filename="qtUpdateNotifier.cpp" line="502"/>
-        <location filename="qtUpdateNotifier.cpp" line="509"/>
+        <location filename="qtUpdateNotifier.cpp" line="533"/>
+        <location filename="qtUpdateNotifier.cpp" line="540"/>
+        <location filename="qtUpdateNotifier.cpp" line="547"/>
         <source>warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="520"/>
+        <location filename="qtUpdateNotifier.cpp" line="558"/>
         <source>updates found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="530"/>
-        <location filename="qtUpdateNotifier.cpp" line="538"/>
+        <location filename="qtUpdateNotifier.cpp" line="568"/>
+        <location filename="qtUpdateNotifier.cpp" line="576"/>
         <source>next update check will be at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="560"/>
-        <location filename="qtUpdateNotifier.cpp" line="572"/>
+        <location filename="qtUpdateNotifier.cpp" line="598"/>
+        <location filename="qtUpdateNotifier.cpp" line="610"/>
         <source>scheduled next check to be in %1 hours at %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="584"/>
+        <location filename="qtUpdateNotifier.cpp" line="622"/>
         <source>rescheduling update check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="640"/>
+        <location filename="qtUpdateNotifier.cpp" line="678"/>
         <source>qt-update-notifier quitting</source>
         <translation type="unfinished"></translation>
     </message>
