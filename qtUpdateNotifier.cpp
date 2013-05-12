@@ -58,6 +58,18 @@ void qtUpdateNotifier::createEnvironment()
 
 	m_aptGetConfigLog = k.localxdgconfdir() + QString( "/qt-update-notifier/aptGetOutPut.log" ) ;
 
+	QFile e( m_configPath + QString( "/language.option"  ) ) ;
+
+	if( !e.exists() ){
+		e.open( QIODevice::WriteOnly ) ;
+		e.write( "english_US" ) ;
+		e.close() ;
+	}
+
+	e.open( QIODevice::ReadOnly ) ;
+	m_prefferedLanguage = e.readAll() ;
+	e.close();
+
 	QDir d ;
 	d.mkpath( m_configPath ) ;
 
@@ -188,7 +200,8 @@ void qtUpdateNotifier::openConfigureDialog()
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
 	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
-	cfg->showUI();
+	connect( cfg,SIGNAL( localizationLanguage( QString ) ),this,SLOT( localizationLanguage( QString ) ) ) ;
+	cfg->showUI( m_prefferedLanguage );
 }
 
 void qtUpdateNotifier::configOptionsChanged()
@@ -198,9 +211,34 @@ void qtUpdateNotifier::configOptionsChanged()
 
 void qtUpdateNotifier::setupTranslationText()
 {
-	QTranslator * r = new QTranslator( this ) ;
-	r->load( "translations",QString( QT_UPDATE_TRANSLATION_PATH ) ) ;
-	QCoreApplication::installTranslator( r ) ;
+	QFile f( m_configPath + QString( "/language.option" ) ) ;
+
+	m_translator = new QTranslator( this ) ;
+
+	f.open( QIODevice::ReadOnly ) ;
+	QByteArray r = f.readAll() ;
+	f.close() ;
+	QByteArray e( "english_US" ) ;
+	if( e == r ){
+		/*
+		 *english_US language,its the default and hence dont load anything
+		 */
+	}else{
+		m_translator->load( r.constData(),QString( QT_UPDATE_TRANSLATION_PATH ) ) ;
+		QCoreApplication::installTranslator( m_translator ) ;
+	}
+}
+
+void qtUpdateNotifier::localizationLanguage( QString language )
+{
+	m_prefferedLanguage = language ;
+	QFile f( m_configPath + QString( "/language.option" ) ) ;
+	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
+	f.write( language.toAscii() ) ;
+	f.close() ;
+	QCoreApplication::removeTranslator( m_translator ) ;
+	m_translator->deleteLater();
+	this->setupTranslationText();
 }
 
 void qtUpdateNotifier::run()

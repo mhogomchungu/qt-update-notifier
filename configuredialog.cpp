@@ -38,10 +38,12 @@ configureDialog::~configureDialog()
 	delete m_ui;
 }
 
-void configureDialog::showUI()
+void configureDialog::showUI( QString language )
 {
+	m_prefferedLanguage = language ;
 	this->setIntervalBetweenUpdateChecks();
 	this->setDelayTimeAtLogIn();
+	this->setupLanguageList();
 	this->show();
 }
 
@@ -78,6 +80,10 @@ void configureDialog::closeUI()
 			;
 		}
 
+		if( m_ui->comboBoxLanguageList->currentText() != m_prefferedLanguage ){
+			emit localizationLanguage( m_ui->comboBoxLanguageList->currentText() );
+		}
+
 		this->hide();
 		this->deleteLater();
 	}
@@ -102,6 +108,31 @@ void configureDialog::delayTimeChanged( int index )
 	QFile f( m_CheckDelayOnStartUp ) ;
 	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
 	f.write( interval.toAscii() ) ;
+}
+
+void configureDialog::setupLanguageList()
+{
+	QDir d ;
+	d.setPath( QT_UPDATE_TRANSLATION_PATH );
+	QStringList list = d.entryList() ;
+
+	list.removeOne( "." ) ;
+	list.removeOne( ".." ) ;
+	list.removeOne( "translations.ts" ) ;
+
+	m_ui->comboBoxLanguageList->addItem( QString( "english_US" ) ) ;
+
+	int j = list.size() ;
+	for( int i = 0 ; i < j ; i++ ){
+		m_ui->comboBoxLanguageList->addItem( list.at( i ) ) ;
+	}
+
+	int index = m_ui->comboBoxLanguageList->findText( m_prefferedLanguage ) ;
+	if( index == -1 ){
+		m_ui->comboBoxLanguageList->setCurrentIndex( 0 );
+	}else{
+		m_ui->comboBoxLanguageList->setCurrentIndex( index ) ;
+	}
 }
 
 void configureDialog::setDelayTimeAtLogIn()

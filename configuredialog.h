@@ -28,6 +28,10 @@
 #include <QCloseEvent>
 #include <QDebug>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QDir>
+
+#include "qt-update-install-path.h"
 
 namespace Ui {
 class configureDialog;
@@ -40,15 +44,17 @@ class configureDialog : public QDialog
 public:
 	configureDialog( QStringList list = QStringList(),bool autostart = true,QWidget * parent = 0 );
 	~configureDialog();
-	void showUI() ;
+	void showUI( QString ) ;
 signals:
 	void toggleAutoStart( bool ) ;
 	void setUpdateInterval( int ) ;
 	void configOptionsChanged( void ) ;
+	void localizationLanguage( QString ) ;
 private slots:
 	void closeUI( void ) ;
 	void autoStartToggled( bool ) ;
 	void delayTimeChanged( int ) ;
+	void setupLanguageList( void ) ;
 private:
 	void setDelayTimeAtLogIn( void ) ;
 	void setIntervalBetweenUpdateChecks( void ) ;
@@ -58,6 +64,7 @@ private:
 	QString m_updateCheckInterval ;
 	int m_interval ;
 	int m_duration ;
+	QString m_prefferedLanguage ;
 };
 
 #endif // CONFIGUREDIALOG_H

@@ -27,6 +27,7 @@
 #include <QThreadPool>
 #include <QRunnable>
 #include <QDebug>
+#include <QDir>
 
 class checkoldpackages : public QObject,public QRunnable
 {

@@ -99,6 +99,7 @@ private slots:
 	void startTimer( void ) ;
 	void startTimer_1( void ) ;
 	void configOptionsChanged( void ) ;
+	void localizationLanguage( QString ) ;
 private:
 	void setupTranslationText( void ) ;
 	void printTime( QString,u_int64_t ) ;
@@ -132,6 +133,8 @@ private:
 	QString m_aptGetConfigLog ;
 	QString m_CheckDelayOnStartUp ;
 	QString m_updateCheckInterval ;
+	QTranslator * m_translator ;
+	QString m_prefferedLanguage ;
 };
 
 #endif // MAINWINDOW_H
