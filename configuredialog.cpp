@@ -122,12 +122,22 @@ void configureDialog::setupLanguageList()
 
 	m_ui->comboBoxLanguageList->addItem( QString( "english_US" ) ) ;
 
+	QString e ;
+	int index ;
 	int j = list.size() ;
+	QChar c( '.' ) ;
+
 	for( int i = 0 ; i < j ; i++ ){
-		m_ui->comboBoxLanguageList->addItem( list.at( i ) ) ;
+		e = list.at( i ) ;
+		index = e.indexOf( c ) ;
+		if( index == -1 ){
+			m_ui->comboBoxLanguageList->addItem( e ) ;
+		}else{
+			m_ui->comboBoxLanguageList->addItem( e.remove( index,100 )  ) ;
+		}
 	}
 
-	int index = m_ui->comboBoxLanguageList->findText( m_prefferedLanguage ) ;
+	index = m_ui->comboBoxLanguageList->findText( m_prefferedLanguage ) ;
 	if( index == -1 ){
 		m_ui->comboBoxLanguageList->setCurrentIndex( 0 );
 	}else{
