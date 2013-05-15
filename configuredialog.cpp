@@ -25,6 +25,8 @@ configureDialog::configureDialog( QStringList list,bool autoStart,QWidget * pare
 {
 	m_ui->setupUi( this );
 
+	this->setWindowTitle( tr( "Configuration window" ) );
+
 	m_ui->checkBoxAutoStart->setChecked( autoStart );
 
 	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( -1 );

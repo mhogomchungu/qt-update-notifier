@@ -425,37 +425,42 @@ network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="67"/>
+        <location filename="configuredialog.cpp" line="28"/>
+        <source>Configuration window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.cpp" line="69"/>
         <source>Update check interval must be atleast 10 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="158"/>
+        <location filename="configuredialog.cpp" line="160"/>
         <source>Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="160"/>
+        <location filename="configuredialog.cpp" line="162"/>
         <source>Days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="167"/>
+        <location filename="configuredialog.cpp" line="169"/>
         <source>Minute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="169"/>
+        <location filename="configuredialog.cpp" line="171"/>
         <source>Minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="176"/>
+        <location filename="configuredialog.cpp" line="178"/>
         <source>Hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="178"/>
+        <location filename="configuredialog.cpp" line="180"/>
         <source>Hours</source>
         <translation type="unfinished"></translation>
     </message>
