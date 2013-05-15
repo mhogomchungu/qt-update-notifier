@@ -103,9 +103,9 @@ void qtUpdateNotifier::createEnvironment()
 		snprintf( buffer,64,"%.2f",ff ) ;
 	}
 
-	QString z = QString( "waiting for %1 minutes before checking for updates" ).arg( QString( buffer ) ) ;
+	QString z = tr( "waiting for %1 minutes before checking for updates" ).arg( QString( buffer ) ) ;
 	QString a = QString( "qt-update-notifier" ) ;
-	QString b = QString( "status" ) ;
+	QString b = tr( "status" ) ;
 
 	this->showToolTip( a,b,z ) ;
 
