@@ -51,7 +51,7 @@ void logWindow::updateLogWindow_1()
 		f.open( QIODevice::ReadOnly ) ;
 		m_ui->textEditLogField->setText( f.readAll() );
 	}else{
-		m_ui->textEditLogField->setText( QString( "-- log is empty --" ) );
+		m_ui->textEditLogField->setText( tr( "Log is empty" ) );
 	}
 }
 

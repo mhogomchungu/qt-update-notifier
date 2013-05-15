@@ -67,9 +67,9 @@ void check_updates::processUpdates( QByteArray data )
 				break ;
 			}
 		}
-
-		updates = tr( "pkgs to be upgraded: %1\n" ).arg( QString::number( count ) ) ;
 	}
+
+	updates = tr( "pkgs to be upgraded: %1\n" ).arg( QString::number( count ) ) ;
 
 	index = l.indexOf( QString( "The following packages will be REPLACED:" ) ) ;
 

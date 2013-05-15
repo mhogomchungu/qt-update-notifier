@@ -40,5 +40,7 @@
 	-add a translation file for easy translation
 -version 1.4.0
 	-add support for localization
+-version 1.4.1
+	-fix user visible strings as recommended in the forum
 	
  	
