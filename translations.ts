@@ -381,25 +381,32 @@ Default and recommeded interval is
     </message>
     <message>
         <location filename="configuredialog.ui" line="554"/>
-        <source>days(s)</source>
+        <source>day(s)</source>
+        <oldsource>days(s)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="configuredialog.ui" line="567"/>
-        <source>hours(s)</source>
+        <source>hour(s)</source>
+        <oldsource>hours(s)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="configuredialog.ui" line="580"/>
-        <source>minutes(s)</source>
+        <source>minute(s)</source>
+        <oldsource>minutes(s)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="configuredialog.ui" line="619"/>
-        <source>When the program starts,wait for this
+        <source>When the program starts, wait for this
 number of minutes before checking
 for updates(useful to give time to setup
 network interfaces)</source>
+        <oldsource>When the program starts,wait for this
+number of minutes before checking
+for updates(useful to give time to setup
+network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -418,8 +425,38 @@ network interfaces)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.cpp" line="60"/>
+        <location filename="configuredialog.cpp" line="67"/>
         <source>Update check interval must be atleast 10 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.cpp" line="158"/>
+        <source>Day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.cpp" line="160"/>
+        <source>Days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.cpp" line="167"/>
+        <source>Minute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.cpp" line="169"/>
+        <source>Minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.cpp" line="176"/>
+        <source>Hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.cpp" line="178"/>
+        <source>Hours</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -479,6 +516,7 @@ network interfaces)</source>
     <message>
         <location filename="qtUpdateNotifier.cpp" line="108"/>
         <location filename="qtUpdateNotifier.cpp" line="153"/>
+        <location filename="qtUpdateNotifier.cpp" line="316"/>
         <location filename="qtUpdateNotifier.cpp" line="435"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
@@ -516,11 +554,6 @@ network interfaces)</source>
     <message>
         <location filename="qtUpdateNotifier.cpp" line="262"/>
         <source>Configuration window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtUpdateNotifier.cpp" line="316"/>
-        <source>status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

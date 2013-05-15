@@ -313,7 +313,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
 			t->start( interval );
 
-			this->showToolTip( QString( "qt-update-notifier" ),tr( "status" ),interval ) ;
+			this->showToolTip( QString( "qt-update-notifier" ),tr( "Status" ),interval ) ;
 
 			this->logActivity( this->logMsg() ) ;
 		}else{

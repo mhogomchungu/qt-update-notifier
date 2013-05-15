@@ -541,7 +541,7 @@ Default and recommeded interval is
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="labelDays">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -551,10 +551,10 @@ Default and recommeded interval is
      </rect>
     </property>
     <property name="text">
-     <string>days(s)</string>
+     <string>day(s)</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="labelHours">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -564,10 +564,10 @@ Default and recommeded interval is
      </rect>
     </property>
     <property name="text">
-     <string>hours(s)</string>
+     <string>hour(s)</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="labelMinutes">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -577,7 +577,7 @@ Default and recommeded interval is
      </rect>
     </property>
     <property name="text">
-     <string>minutes(s)</string>
+     <string>minute(s)</string>
     </property>
    </widget>
   </widget>
@@ -616,7 +616,7 @@ Default and recommeded interval is
      </rect>
     </property>
     <property name="text">
-     <string>When the program starts,wait for this
+     <string>When the program starts, wait for this
 number of minutes before checking
 for updates(useful to give time to setup
 network interfaces)</string>

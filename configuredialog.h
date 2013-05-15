@@ -55,6 +55,9 @@ private slots:
 	void autoStartToggled( bool ) ;
 	void delayTimeChanged( int ) ;
 	void setupLanguageList( void ) ;
+	void labelDays( int ) ;
+	void labelMinutes( int ) ;
+	void labelHours( int ) ;
 private:
 	void setDelayTimeAtLogIn( void ) ;
 	void setIntervalBetweenUpdateChecks( void ) ;

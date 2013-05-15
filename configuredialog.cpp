@@ -27,7 +27,14 @@ configureDialog::configureDialog( QStringList list,bool autoStart,QWidget * pare
 
 	m_ui->checkBoxAutoStart->setChecked( autoStart );
 
+	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( -1 );
+	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( -1 );
+	m_ui->gbUpdateIntervalComboBoxMinutes->setCurrentIndex( -1 ) ;
+
 	connect( m_ui->pbClose,SIGNAL( clicked() ),this,SLOT( closeUI() ) ) ;
+	connect( m_ui->gbUpdateIntervalComboBoxDays,SIGNAL( currentIndexChanged( int ) ),this,SLOT( labelDays( int ) ) ) ;
+	connect( m_ui->gbUpdateIntervalComboBoxHours,SIGNAL( currentIndexChanged( int ) ),this,SLOT( labelHours( int ) ) ) ;
+	connect( m_ui->gbUpdateIntervalComboBoxMinutes,SIGNAL( currentIndexChanged( int ) ),this,SLOT(labelMinutes( int ) ) ) ;
 
 	m_CheckDelayOnStartUp = list.at( 0 ) ;
 	m_updateCheckInterval = list.at( 1 ) ;
@@ -142,6 +149,33 @@ void configureDialog::setupLanguageList()
 		m_ui->comboBoxLanguageList->setCurrentIndex( 0 );
 	}else{
 		m_ui->comboBoxLanguageList->setCurrentIndex( index ) ;
+	}
+}
+
+void configureDialog::labelDays( int index )
+{
+	if( index == 1 ){
+		m_ui->labelDays->setText( tr( "Day" ) ) ;
+	}else{
+		m_ui->labelDays->setText( tr( "Days" ) ) ;
+	}
+}
+
+void configureDialog::labelMinutes( int index )
+{
+	if( index == 1 ){
+		m_ui->labelMinutes->setText( tr( "Minute" ) ) ;
+	}else{
+		m_ui->labelMinutes->setText( tr( "Minutes") ) ;
+	}
+}
+
+void configureDialog::labelHours( int index )
+{
+	if( index == 1 ){
+		m_ui->labelHours->setText( tr( "Hour" ) ) ;
+	}else{
+		m_ui->labelHours->setText( tr( "Hours") ) ;
 	}
 }
 
