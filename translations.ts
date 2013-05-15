@@ -496,7 +496,6 @@ network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qtUpdateNotifier.cpp" line="108"/>
         <location filename="qtUpdateNotifier.cpp" line="316"/>
         <source>status</source>
         <translation type="unfinished"></translation>
@@ -508,6 +507,7 @@ network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qtUpdateNotifier.cpp" line="108"/>
         <location filename="qtUpdateNotifier.cpp" line="153"/>
         <location filename="qtUpdateNotifier.cpp" line="435"/>
         <source>Status</source>
@@ -515,7 +515,8 @@ network interfaces)</oldsource>
     </message>
     <message>
         <location filename="qtUpdateNotifier.cpp" line="106"/>
-        <source>waiting for %1 minutes before checking for updates</source>
+        <source>Waiting for %1 minutes before checking for updates</source>
+        <oldsource>waiting for %1 minutes before checking for updates</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
