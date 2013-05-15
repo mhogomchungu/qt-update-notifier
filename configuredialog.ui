@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>493</width>
-    <height>394</height>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,8 +37,8 @@
     <property name="text">
      <string>Set the time interval btw updates.
 
-default and recommeded interval is
-1 day,0 hours,0 minutes</string>
+Default and recommeded interval is
+1 day, 0 hours, 0 minutes</string>
     </property>
    </widget>
    <widget class="QComboBox" name="gbUpdateIntervalComboBoxDays">
@@ -616,7 +616,7 @@ default and recommeded interval is
      </rect>
     </property>
     <property name="text">
-     <string>when the program starts,wait for this
+     <string>When the program starts,wait for this
 number of minutes before checking
 for updates(useful to give time to setup
 network interfaces)</string>
@@ -658,11 +658,60 @@ network interfaces)</string>
     </item>
    </widget>
   </widget>
+  <widget class="QGroupBox" name="gbAutoStart_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>300</y>
+     <width>451</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>251</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select localization language</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBoxLanguageList">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>10</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pbClose">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>350</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+  </widget>
   <widget class="QGroupBox" name="gbAutoStart">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>240</y>
+     <y>230</y>
      <width>451</width>
      <height>71</height>
     </rect>
@@ -693,7 +742,7 @@ network interfaces)</string>
      </rect>
     </property>
     <property name="text">
-     <string>auto start application at login</string>
+     <string>Auto start application at login</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxAutoStart">
@@ -709,55 +758,6 @@ network interfaces)</string>
      <string/>
     </property>
    </widget>
-  </widget>
-  <widget class="QGroupBox" name="gbAutoStart_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>300</y>
-     <width>451</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string/>
-   </property>
-   <widget class="QLabel" name="label_10">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>251</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>select localization language</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBoxLanguageList">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>10</y>
-      <width>161</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QPushButton" name="pbClose">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>360</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&amp;close</string>
-   </property>
   </widget>
  </widget>
  <tabstops>

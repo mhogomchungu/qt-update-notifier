@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>qt-update-notifier log window</string>
+   <string>Qt-update-notifier log window</string>
   </property>
   <widget class="QPushButton" name="pbClear">
    <property name="geometry">
@@ -26,7 +26,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&amp;clear log</string>
+    <string>&amp;Clear log</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pbQuit">
@@ -39,7 +39,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&amp;close</string>
+    <string>&amp;Close</string>
    </property>
    <property name="autoDefault">
     <bool>true</bool>
@@ -74,7 +74,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&amp;close</string>
+    <string>&amp;Close</string>
    </property>
    <property name="autoDefault">
     <bool>true</bool>

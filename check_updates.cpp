@@ -68,7 +68,7 @@ void check_updates::processUpdates( QByteArray data )
 			}
 		}
 
-		updates = QString( "pkgs to be upgraded: %1\n" ).arg( QString::number( count ) ) ;
+		updates = tr( "pkgs to be upgraded: %1\n" ).arg( QString::number( count ) ) ;
 	}
 
 	index = l.indexOf( QString( "The following packages will be REPLACED:" ) ) ;
@@ -85,7 +85,7 @@ void check_updates::processUpdates( QByteArray data )
 		}
 	}
 
-	updates += QString( "pkgs to be replaced: %1\n" ).arg( QString::number( count ) ) ;
+	updates += tr( "pkgs to be replaced: %1\n" ).arg( QString::number( count ) ) ;
 
 	index = l.indexOf( QString( "The following NEW packages will be installed:" ) ) ;
 
@@ -101,7 +101,7 @@ void check_updates::processUpdates( QByteArray data )
 		}
 	}
 
-	updates += QString( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
+	updates += tr( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
 
 	int size = l.size() ;
 	int i = 0 ;

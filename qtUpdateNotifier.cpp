@@ -37,7 +37,7 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 
 void qtUpdateNotifier::logWindowShow()
 {
-	logWindow * w = new logWindow( tr( "update output log window" ) ) ;
+	logWindow * w = new logWindow( tr( "Update output log window" ) ) ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) ) ;
 	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow() ) ) ;
 	w->showLogWindow( m_configLog );
@@ -45,7 +45,7 @@ void qtUpdateNotifier::logWindowShow()
 
 void qtUpdateNotifier::aptGetLogWindow()
 {
-	logWindow * w = new logWindow( tr( "apt-get upgrade output log window" ) )  ;
+	logWindow * w = new logWindow( tr( "Apt-get upgrade output log window" ) )  ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow_1() ) );
 	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow_1() ) ) ;
 	w->showAptGetWindow( m_aptGetConfigLog );
@@ -150,7 +150,7 @@ void qtUpdateNotifier::updaterClosed()
 void qtUpdateNotifier::doneUpdating()
 {
 	QString y = tr( "qt-update-notifier" ) ;
-	QString z = tr( "status" ) ;
+	QString z = tr( "Status" ) ;
 	this->showToolTip( y,z ) ;
 
 	this->changeIcon( QString( "qt-update-notifier" ) );
@@ -246,7 +246,7 @@ void qtUpdateNotifier::run()
 	instance * s = new instance( this ) ;
 
 	if( !s->firstInstance() ){
-		qDebug() << tr( "another instance is already running,closing this one" ) ;
+		qDebug() << tr( "Another instance is already running, closing this one" ) ;
 		this->closeApp();
 	}
 
@@ -254,12 +254,12 @@ void qtUpdateNotifier::run()
 
 	m_trayMenu = new KMenu() ;
 
-	m_trayMenu->addAction( tr( "check for updates" ),this,SLOT( manualCheckForUpdates() ) );
-	m_trayMenu->addAction( tr( "done updating" ),this,SLOT( doneUpdating() ) );
-	m_trayMenu->addAction( tr( "open synaptic" ),this,SLOT( startUpdater() ) );
-	m_trayMenu->addAction( tr( "open update log window" ),this,SLOT( logWindowShow() ) );
-	m_trayMenu->addAction( tr( "open apt-get log window" ),this,SLOT( aptGetLogWindow() ) );
-	m_trayMenu->addAction( tr( "configuration window" ),this,SLOT( openConfigureDialog() ) );
+	m_trayMenu->addAction( tr( "Open synaptic" ),this,SLOT( startUpdater() ) );
+	m_trayMenu->addAction( tr( "Check for updates" ),this,SLOT( manualCheckForUpdates() ) );
+	m_trayMenu->addAction( tr( "Done updating" ),this,SLOT( doneUpdating() ) );
+	m_trayMenu->addAction( tr( "Open update log window" ),this,SLOT( logWindowShow() ) );
+	m_trayMenu->addAction( tr( "Open apt-get log window" ),this,SLOT( aptGetLogWindow() ) );
+	m_trayMenu->addAction( tr( "Configuration window" ),this,SLOT( openConfigureDialog() ) );
 
 	this->setContextMenu( m_trayMenu );
 	this->contextMenu()->setEnabled( true );
@@ -325,7 +325,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 
 			this->writeUpdateTimeToConfigFile( y + z ) ;
 
-			this->logActivity( tr( "automatic check for updates initiated" ) ) ;
+			this->logActivity( tr( "Automatic check for updates initiated" ) ) ;
 
 			this->checkForUpdates();
 
@@ -410,13 +410,13 @@ void qtUpdateNotifier::writeUpdateTimeToConfigFile( u_int64_t time )
 
 void qtUpdateNotifier::manualCheckForUpdates()
 {
-	this->logActivity( tr( "manual check for updates initiated" ) ) ;
+	this->logActivity( tr( "Manual check for updates initiated" ) ) ;
 	this->checkForUpdates();
 }
 
 void qtUpdateNotifier::automaticCheckForUpdates()
 {
-	this->logActivity( tr( "automatic check for updates initiated" ) ) ;
+	this->logActivity( tr( "Automatic check for updates initiated" ) ) ;
 	this->checkForUpdates();
 	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
 }
@@ -424,7 +424,7 @@ void qtUpdateNotifier::automaticCheckForUpdates()
 void qtUpdateNotifier::checkForUpdates()
 {
 	if( m_threadIsRunning ){
-		this->logActivity( tr( "warning:\tattempt to start a check while another is already in progress" ) ) ;
+		this->logActivity( tr( "Warning:\tattempt to start update check while another one is still in progress" ) ) ;
 		return ;
 	}
 
@@ -432,7 +432,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 	this->changeIcon( icon );
 
-	this->showToolTip( icon,tr( "status" ),tr( "checking for updates" ) );
+	this->showToolTip( icon,tr( "Status" ),tr( "Checking for updates" ) );
 
 	m_threadIsRunning = true ;
 
@@ -460,7 +460,7 @@ void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
 	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
 
 	QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
-	QString msg = QString( "log entry was created at: " ) ;
+	QString msg = tr( "Log entry was created at: " ) ;
 	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
 
 	f.write( header.toAscii() ) ;
@@ -484,26 +484,26 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		this->changeIcon( icon ) ;
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
-		this->logActivity( tr( "update check complete,UPDATES FOUND" ) ) ;
-		this->showToolTip( icon,tr( "there are updates in the repository" ),list );
+		this->logActivity( tr( "Update check complete,UPDATES FOUND" ) ) ;
+		this->showToolTip( icon,tr( "There are updates in the repository" ),list );
 	}else if( st == INCONSISTENT_STATE ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
-		this->logActivity( tr( "update check complete,repository appear to be in an inconsistent state" ) ) ;
-		this->showToolTip( icon,tr( "no updates found" ) );
+		this->logActivity( tr( "Update check complete,repository appear to be in an inconsistent state" ) ) ;
+		this->showToolTip( icon,tr( "No updates found" ) );
 	}else if( st == NO_UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
-		this->logActivity( tr( "update check complete,no updates found" ) ) ;
-		this->showToolTip( icon,tr( "no updates found" ) );
+		this->logActivity( tr( "Update check complete,no updates found" ) ) ;
+		this->showToolTip( icon,tr( "No updates found" ) );
 	}else if( st == NO_NET_CONNECTION ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
-		this->logActivity( tr( "check skipped,user is not connected to the internet" ) ) ;
-		this->showToolTip( icon,tr( "no updates found" ) );
+		this->logActivity( tr( "Check skipped,user is not connected to the internet" ) ) ;
+		this->showToolTip( icon,tr( "No updates found" ) );
 	}else{
 		/*
 		 * currently,we dont get here,added for completeness' sake
@@ -512,7 +512,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "update check complete,repository is in an unknown state" ) ) ;
-		this->showToolTip( icon,tr( "no updates found" ) );
+		this->showToolTip( icon,tr( "No updates found" ) );
 	}
 
 	checkoldpackages * s = new checkoldpackages() ;
@@ -530,21 +530,21 @@ void qtUpdateNotifier::checkOldPackages( QStringList list )
 	if( !kernelVersion.isEmpty() ){
 		this->logActivity_1( kernelVersion ) ;
 		this->changeIcon( icon );
-		this->showToolTip( icon,tr( "warning" ) ) ;
+		this->showToolTip( icon,tr( "Warning" ) ) ;
 	}
 
 	QString libreofficeVersion = list.at( 1 ) ;
 	if( !libreofficeVersion.isEmpty() ){
 		this->logActivity_1( libreofficeVersion ) ;
 		this->changeIcon( icon );
-		this->showToolTip( icon,tr( "warning" ) );
+		this->showToolTip( icon,tr( "Warning" ) );
 	}
 
 	QString virtualBoxVersion = list.at( 2 ) ;
 	if( !virtualBoxVersion.isEmpty() ){
 		this->logActivity_1( virtualBoxVersion ) ;
 		this->changeIcon( icon );
-		this->showToolTip( icon,tr( "warning" ) );
+		this->showToolTip( icon,tr( "Warning" ) );
 	}
 
 	if( !kernelVersion.isEmpty() || !libreofficeVersion.isEmpty() || !virtualBoxVersion.isEmpty() ){
@@ -555,7 +555,7 @@ void qtUpdateNotifier::checkOldPackages( QStringList list )
 void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList list )
 {
 	Q_UNUSED( y ) ;
-	this->setToolTip( x,tr( "updates found" ),list.at( 0 ) );
+	this->setToolTip( x,tr( "Updates found" ),list.at( 0 ) );
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
@@ -565,7 +565,7 @@ void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,int z )
 {
-	QString n = tr( "next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
+	QString n = tr( "Next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
 	this->setToolTip( x,y,n );
 }
 
@@ -573,7 +573,7 @@ void qtUpdateNotifier::showToolTip( QString x,QString y )
 {
 	QDateTime d ;
 	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() );
-	QString n = tr( "next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
+	QString n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
 	this->setToolTip( x,y,n );
 }
 
@@ -595,7 +595,7 @@ QString qtUpdateNotifier::logMsg( int interval )
 	float f = static_cast<float>( interval ) ;
 	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
 	QString n = this->nextUpdateTime( interval ) ;
-	return tr( "scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+	return tr( "Scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
 }
 
 QString qtUpdateNotifier::logMsg( void )
@@ -607,7 +607,7 @@ QString qtUpdateNotifier::logMsg( void )
 	float f = static_cast<float>( e ) ;
 	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
 	QString n = this->nextUpdateTime( e ) ;
-	return tr( "scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+	return tr( "Scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
 }
 
 void qtUpdateNotifier::scheduleUpdates( int interval )
@@ -619,7 +619,7 @@ void qtUpdateNotifier::scheduleUpdates( int interval )
 
 void qtUpdateNotifier::setUpdateInterval( int interval )
 {
-	this->logActivity( tr( "rescheduling update check" ) ) ;
+	this->logActivity( tr( "Rescheduling update check" ) ) ;
 
 	m_sleepDuration = interval;
 
