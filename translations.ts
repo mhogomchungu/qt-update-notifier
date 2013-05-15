@@ -9,16 +9,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="735"/>
-        <source>select localization language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="configuredialog.ui" line="759"/>
-        <source>&amp;close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="configuredialog.ui" line="38"/>
         <source>Set the time interval btw updates.
 
@@ -398,6 +388,16 @@ network interfaces)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="configuredialog.ui" line="735"/>
+        <source>select localization language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="configuredialog.ui" line="759"/>
+        <source>&amp;close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="configuredialog.cpp" line="60"/>
         <source>update check interval must be atleast 10 minutes</source>
         <translation type="unfinished"></translation>
@@ -529,7 +529,7 @@ network interfaces)</source>
         <location filename="qtUpdateNotifier.cpp" line="500"/>
         <location filename="qtUpdateNotifier.cpp" line="506"/>
         <location filename="qtUpdateNotifier.cpp" line="515"/>
-        <source>no updates foung</source>
+        <source>no updates found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -545,6 +545,15 @@ network interfaces)</source>
     <message>
         <location filename="qtUpdateNotifier.cpp" line="514"/>
         <source>update check complete,repository is in an unknown state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qtUpdateNotifier.cpp" line="494"/>
+        <location filename="qtUpdateNotifier.cpp" line="500"/>
+        <location filename="qtUpdateNotifier.cpp" line="506"/>
+        <location filename="qtUpdateNotifier.cpp" line="515"/>
+        <source>no updates found</source>
+        <oldsource>no updates foung</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

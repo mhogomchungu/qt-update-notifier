@@ -491,19 +491,19 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "update check complete,repository appear to be in an inconsistent state" ) ) ;
-		this->showToolTip( icon,tr( "no updates foung" ) );
+		this->showToolTip( icon,tr( "no updates found" ) );
 	}else if( st == NO_UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "update check complete,no updates found" ) ) ;
-		this->showToolTip( icon,tr( "no updates foung" ) );
+		this->showToolTip( icon,tr( "no updates found" ) );
 	}else if( st == NO_NET_CONNECTION ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "check skipped,user is not connected to the internet" ) ) ;
-		this->showToolTip( icon,tr( "no updates foung" ) );
+		this->showToolTip( icon,tr( "no updates found" ) );
 	}else{
 		/*
 		 * currently,we dont get here,added for completeness' sake
@@ -512,7 +512,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "update check complete,repository is in an unknown state" ) ) ;
-		this->showToolTip( icon,tr( "no updates foung" ) );
+		this->showToolTip( icon,tr( "no updates found" ) );
 	}
 
 	checkoldpackages * s = new checkoldpackages() ;
