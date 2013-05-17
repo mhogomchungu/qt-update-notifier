@@ -30,10 +30,11 @@
     </message>
     <message>
         <location filename="configuredialog.ui" line="38"/>
-        <source>Set the time interval btw updates.
+        <source>Set the time interval btw updates.Default and recommeded interval is 1 day, 0 hours, 0 minutes</source>
+        <oldsource>Set the time interval btw updates.
 
 Default and recommeded interval is
-1 day, 0 hours, 0 minutes</source>
+1 day, 0 hours, 0 minutes</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -399,11 +400,8 @@ Default and recommeded interval is
     </message>
     <message>
         <location filename="configuredialog.ui" line="619"/>
-        <source>When the program starts, wait for this
-number of minutes before checking
-for updates(useful to give time to setup
-network interfaces)</source>
-        <oldsource>When the program starts,wait for this
+        <source>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</source>
+        <oldsource>When the program starts, wait for this
 number of minutes before checking
 for updates(useful to give time to setup
 network interfaces)</oldsource>
@@ -415,12 +413,12 @@ network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="707"/>
+        <location filename="configuredialog.ui" line="710"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="configuredialog.ui" line="745"/>
+        <location filename="configuredialog.ui" line="748"/>
         <source>Auto start application at login</source>
         <translation type="unfinished"></translation>
     </message>
