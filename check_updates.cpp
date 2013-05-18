@@ -145,34 +145,58 @@ void check_updates::reportUpdates()
 	const char * error2 = "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ;
 	const char * error3 = "The following packages have been kept back" ;
 
+	const char * success = "\nThe following packages will be" ;
+
 	QStringList list ;
 	QProcess exe ;
+
+	QProcessEnvironment env ;
+	env.insert( QString( "LANG" ),QString( "en_US.UTF-8" ) ) ;
+	env.insert( QString( "LANGUAGE" ),QString( "en_US.UTF-8:en_US:en" ) ) ;
+
+	exe.setProcessEnvironment( env ) ;
+
 	exe.start( aptUpdate );
 	exe.waitForFinished( -1 ) ;
+
 	int st = exe.exitCode() ;
 	exe.close();
+
+	QByteArray bogusData = "xyz" ;
+
 	if( st == 0 ){
+
 		exe.start( aptUpgrade );
 		exe.waitForFinished( -1 ) ;
 		QByteArray output = exe.readAllStandardOutput() ;
 		exe.close();
+
 		if( !output.isEmpty() ){
 			if( output.contains( error1 ) || output.contains( error2 ) || output.contains( error3 ) ){
+				list.append( bogusData );
 				list.append( output );
 				emit updateStatus( INCONSISTENT_STATE,list );
-			}else if( output.contains( "\nThe following packages will be" ) ){
+			}else if( output.contains( success ) ){
 				this->processUpdates( output );
 			}else{
-				list.append( output );
+				list.append( bogusData );
+				QString s = tr( "no updates found" ) ;
+				list.append( s.toAscii() );
 				emit updateStatus( NO_UPDATES_FOUND,list );
 			}
 		}else{
+			list.append( bogusData );
+			QString s = tr( "no updates found" ) ;
+			list.append( s.toAscii() );
 			emit updateStatus( NO_UPDATES_FOUND,list );
 		}
 	}else{
 		/*
 		 * I cant see how i will get here
 		 */
+		list.append( bogusData );
+		QString s = tr( "warning: apt-get update finished with errors" ) ;
+		list.append( s.toAscii() );
 		emit updateStatus( NO_UPDATES_FOUND,list );
 	}
 }

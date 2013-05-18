@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QFile>
+#include <QProcessEnvironment>
 
 #define UPDATES_FOUND      0
 #define INCONSISTENT_STATE 1

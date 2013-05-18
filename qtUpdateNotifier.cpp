@@ -466,7 +466,7 @@ void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
 	f.write( header.toAscii() ) ;
 
 	QByteArray nl( "\n" ) ;
-	for( int i = 0 ; i < j ; i++ ){
+	for( int i = 1 ; i < j ; i++ ){
 		f.write( log.at( i ).toAscii() + nl ) ;
 	}
 	f.close();
