@@ -28,11 +28,8 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	m_threadIsRunning = false ;
 	this->setStatus( KStatusNotifierItem::Passive );
 	this->setCategory( KStatusNotifierItem::ApplicationStatus );
-	this->changeIcon( tr( "qt-update-notifier" ) );
+	this->changeIcon( QString( "qt-update-notifier" ) );
 	this->createEnvironment();
-	this->logActivity( tr( "qt-update-notifier started" ) ) ;
-	QCoreApplication::setApplicationName( tr( "qt-update-notifier" ) ) ;
-	this->setObjectName( "qtUpdateNotifier" );
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -149,7 +146,7 @@ void qtUpdateNotifier::updaterClosed()
 
 void qtUpdateNotifier::doneUpdating()
 {
-	QString y = tr( "qt-update-notifier" ) ;
+	QString y = QString( "qt-update-notifier" ) ;
 	QString z = tr( "Status" ) ;
 	this->showToolTip( y,z ) ;
 
@@ -252,6 +249,11 @@ void qtUpdateNotifier::run()
 
 	this->setupTranslationText();
 
+	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
+	this->setObjectName( "qtUpdateNotifier" );
+
+	this->logActivity( tr( "Qt-update-notifier started" ) ) ;
+
 	m_trayMenu = new KMenu() ;
 
 	m_trayMenu->addAction( tr( "Open synaptic" ),this,SLOT( startUpdater() ) );
@@ -313,7 +315,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
 			t->start( interval );
 
-			this->showToolTip( QString( "qt-update-notifier" ),tr( "Status" ),interval ) ;
+			this->showToolTip( QString( "Qt-update-notifier" ),tr( "Status" ),interval ) ;
 
 			this->logActivity( this->logMsg() ) ;
 		}else{
@@ -484,7 +486,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		this->changeIcon( icon ) ;
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
-		this->logActivity( tr( "Update check complete,UPDATES FOUND" ) ) ;
+		this->logActivity( tr( "Update check complete, UPDATES FOUND" ) ) ;
 		this->showToolTip( icon,tr( "There are updates in the repository" ),list );
 	}else if( st == INCONSISTENT_STATE ){
 		icon = QString( "qt-update-notifier" ) ;
@@ -675,5 +677,5 @@ qtUpdateNotifier::~qtUpdateNotifier()
 		m_timer->stop();
 		m_timer->deleteLater();
 	}
-	this->logActivity( tr( "qt-update-notifier quitting" ) ) ;
+	this->logActivity( tr( "Qt-update-notifier quitting" ) ) ;
 }
