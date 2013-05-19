@@ -39,4 +39,5 @@ FORMS += \
     logwindow.ui \
     configuredialog.ui
 
-TRANSLATIONS = translations.ts
+TRANSLATIONS = translations.ts/translations.ts
+TRANSLATIONS += translations.ts/dutch_NL.ts
