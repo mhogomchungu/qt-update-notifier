@@ -122,7 +122,7 @@ void configureDialog::delayTimeChanged( int index )
 void configureDialog::setupLanguageList()
 {
 	QDir d ;
-	d.setPath( QT_UPDATE_TRANSLATION_PATH );
+	d.setPath( QT_UPDATE_NOTIFIER_TRANSLATION_PATH );
 	QStringList list = d.entryList() ;
 
 	list.removeOne( "." ) ;

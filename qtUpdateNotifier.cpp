@@ -224,7 +224,7 @@ void qtUpdateNotifier::setupTranslationText()
 		 *english_US language,its the default and hence dont load anything
 		 */
 	}else{
-		m_translator->load( r.constData(),QString( QT_UPDATE_TRANSLATION_PATH ) ) ;
+		m_translator->load( r.constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
 		QCoreApplication::installTranslator( m_translator ) ;
 	}
 }

@@ -20,6 +20,17 @@
         <source>pkgs to be installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="check_updates.cpp" line="183"/>
+        <location filename="check_updates.cpp" line="189"/>
+        <source>no updates found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="check_updates.cpp" line="198"/>
+        <source>warning: apt-get update finished with errors</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>configureDialog</name>

@@ -44,5 +44,6 @@
 	-fix user visible strings as recommended in the forum
 -version 1.4.2
 	- fix a bug that prevented the tool from working as expected when the user's language is not english
+	- move translations folder path from "$PREFIX/share/qt-update-translations" to "$PREFIX/share/qt-update-notifier-translations"
+ 	- add a few translatable strings
 	
- 	
