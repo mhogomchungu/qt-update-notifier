@@ -24,12 +24,12 @@
         <location filename="../check_updates.cpp" line="183"/>
         <location filename="../check_updates.cpp" line="189"/>
         <source>no updates found</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen opwaarderingen gevonden</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="198"/>
         <source>warning: apt-get update finished with errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarschuwing: Apt-get opwaardering beëndigd met fouten</translation>
     </message>
 </context>
 <context>
