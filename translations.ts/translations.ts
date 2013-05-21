@@ -4,7 +4,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../utility.cpp" line="81"/>
+        <location filename="../utility.cpp" line="134"/>
         <source>Log is empty</source>
         <translation type="unfinished"></translation>
     </message>

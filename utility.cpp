@@ -20,62 +20,115 @@
 
 #include "utility.h"
 
+class bufferManager{
+public:
+	explicit bufferManager( size_t size ) ;
+	wchar_t * getBuffer( void ) ;
+	~bufferManager();
+private:
+	wchar_t * m_buffer ;
+};
+
+bufferManager::bufferManager( size_t size )
+{
+	m_buffer = new wchar_t[ size ] ;
+}
+
+bufferManager::~bufferManager()
+{
+	if( m_buffer ){
+		delete[] m_buffer ;
+	}
+}
+
+wchar_t * bufferManager::getBuffer()
+{
+	return m_buffer ;
+}
+
+class fileManager{
+public:
+	explicit fileManager( QString ) ;
+	fileManager( QString,bool ) ;
+	int getFd( void ) ;
+	bool fileIsOpened( void ) ;
+	size_t fileSize( void ) ;
+	~fileManager();
+private:
+	int m_fd ;
+};
+
+fileManager::fileManager( QString filepath,bool truncate )
+{
+	QByteArray f = filepath.toAscii() ;
+	if( truncate ){
+		m_fd = open( f.constData(),O_CREAT | O_TRUNC | O_WRONLY ) ;
+	}else{
+		m_fd = open( f.constData(),O_CREAT | O_APPEND | O_WRONLY ) ;
+	}
+	if( m_fd != -1 ){
+		fchmod( m_fd,S_IRUSR|S_IWUSR ) ;
+	}
+}
+
+fileManager::fileManager( QString filepath )
+{
+	QByteArray f = filepath.toAscii() ;
+	m_fd = open( f.constData(),O_RDONLY ) ;
+}
+
+fileManager::~fileManager()
+{
+	if( m_fd != -1 ){
+		close( m_fd );
+	}
+}
+
+int fileManager::getFd()
+{
+	return m_fd;
+}
+
+bool fileManager::fileIsOpened()
+{
+	return m_fd != -1 ;
+}
+
+size_t fileManager::fileSize()
+{
+	struct stat st ;
+	fstat( m_fd,&st ) ;
+	return st.st_size ;
+}
+
 utility::utility()
 {
 }
 
 void utility::writeToFile( QString filepath,QString content,bool truncate )
 {
-	QByteArray f = filepath.toAscii() ;
-	int fd ;
-	if( truncate ){
-		fd = open( f.constData(),O_CREAT | O_TRUNC | O_WRONLY ) ;
-	}else{
-		fd = open( f.constData(),O_CREAT | O_APPEND | O_WRONLY ) ;
-	}
-	if( fd != -1 ){
-
-		fchmod( fd,S_IRUSR|S_IWUSR ) ;
-
-		size_t n = content.size() ;
-
-		size_t t = sizeof( wchar_t ) ;
-
-		wchar_t * x = new wchar_t[ n ] ;
-
-		size_t y = content.toWCharArray( x ) ;
-
-		write( fd,x,y * t ) ;
-
-		close( fd ) ;
-
-		delete[] x ;
+	fileManager f( filepath,truncate ) ;
+	if( f.fileIsOpened() ){
+		int fd = f.getFd();
+		bufferManager buffer( content.size() ) ;
+		wchar_t * x = buffer.getBuffer() ;
+		if( x ){
+			size_t y = content.toWCharArray( x ) ;
+			write( fd,x,y * sizeof( wchar_t ) ) ;
+		}
 	}
 }
 
 QString utility::readFromFile( QString filepath )
 {
-	QByteArray f = filepath.toAscii() ;
-	const char * path = f.constData() ;
-	int fd = open( path,O_RDONLY ) ;
-	if( fd != -1 ){
-		struct stat st ;
-		fstat( fd,&st ) ;
-
-		size_t n = st.st_size ;
-
-		size_t t = sizeof( wchar_t ) ;
-
-		wchar_t * x = new wchar_t[ n ] ;
-
+	fileManager f( filepath ) ;
+	if( f.fileIsOpened() ){
+		size_t n = f.fileSize() ;
+		int fd = f.getFd() ;
+		bufferManager buffer( n ) ;
+		wchar_t * x = buffer.getBuffer() ;
 		size_t z = read( fd,x,n ) ;
-
-		close( fd ) ;
-
-		QString s = QString::fromWCharArray( x,z/t ) ;
-
-		delete[] x ;
-
+		QString s = QString::fromWCharArray( x,z / sizeof( wchar_t ) ) ;
 		return s ;
 	}else{
 		return QObject::tr( "Log is empty" ) ;
