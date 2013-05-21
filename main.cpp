@@ -49,10 +49,16 @@ int start( KUniqueApplication& a )
 
 int main( int argc,char * argv[] )
 {
-	KAboutData aboutData( "qt-update-notifier",0,ki18n( "qt-update-notifier" ),
-			      "1.4.2",ki18n( "a qt based apt-get package updates checker." ),
-				KAboutData::License_GPL_V2,ki18n( "mhogomchungu@gmail.com" ),
-				KLocalizedString() );
+	KAboutData aboutData( 	"qt-update-notifier",
+				0,
+				ki18n( "qt-update-notifier" ),
+				"1.4.2",
+				ki18n( "a qt based apt-get package updates checker." ),
+				KAboutData::License_GPL_V2,
+				ki18n( "(c)2013,ink Francis\nemail:mhogomchungu@gmail.com" ),
+				ki18n( "mhogomchungu@gmail.com" ),
+				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html",
+				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html" );
 
 	KCmdLineArgs::init( argc,argv,&aboutData );
 
