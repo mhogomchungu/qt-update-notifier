@@ -127,9 +127,12 @@ QString utility::readFromFile( QString filepath )
 		int fd = f.getFd() ;
 		bufferManager buffer( n ) ;
 		wchar_t * x = buffer.getBuffer() ;
-		size_t z = read( fd,x,n ) ;
-		QString s = QString::fromWCharArray( x,z / sizeof( wchar_t ) ) ;
-		return s ;
+		if( x ){
+			size_t z = read( fd,x,n ) ;
+			return QString::fromWCharArray( x,z / sizeof( wchar_t ) ) ;
+		}else{
+			return QObject::tr( "Log is empty" ) ;
+		}
 	}else{
 		return QObject::tr( "Log is empty" ) ;
 	}

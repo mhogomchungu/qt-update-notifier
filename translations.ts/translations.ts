@@ -5,6 +5,7 @@
     <name>QObject</name>
     <message>
         <location filename="../utility.cpp" line="134"/>
+        <location filename="../utility.cpp" line="137"/>
         <source>Log is empty</source>
         <translation type="unfinished"></translation>
     </message>
