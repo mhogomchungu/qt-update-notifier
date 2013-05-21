@@ -19,10 +19,11 @@
 
 #include "check_updates.h"
 
-check_updates::check_updates( QString configPath,QObject * parent )
+check_updates::check_updates( QString configPath,QString language,QObject * parent )
 {
 	Q_UNUSED( parent ) ;
 	m_configPath = configPath ;
+	m_language = language ;
 }
 
 bool check_updates::online()
@@ -45,13 +46,13 @@ void check_updates::run()
 	}
 }
 
-void check_updates::processUpdates( QByteArray data )
+void check_updates::processUpdates( QByteArray output1,QByteArray output2 )
 {
 	QString updates ;
 
 	int count ;
 
-	QStringList l = QString( data ).split( "\n" ) ;
+	QStringList l = QString( output1 ).split( "\n" ) ;
 
 	int index = l.indexOf( QString( "The following packages will be upgraded" ) ) ;
 
@@ -102,7 +103,7 @@ void check_updates::processUpdates( QByteArray data )
 	}
 
 	updates += tr( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
-
+#if 0
 	int size = l.size() ;
 	int i = 0 ;
 	while( i < size ){
@@ -126,15 +127,18 @@ void check_updates::processUpdates( QByteArray data )
 			i++ ;
 		}
 	}
+#endif
 
-	l.prepend( updates );
-	emit updateStatus( UPDATES_FOUND,l );
+	QStringList n ;
+	n.append( updates ) ;
+	n.append( output2 );
+	emit updateStatus( UPDATES_FOUND,n ) ;
 }
 
 void check_updates::reportUpdates()
 {
-	QString aptUpdate = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( m_configPath ) ;
-	QString aptUpgrade = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( m_configPath ) ;
+	m_aptUpdate = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( m_configPath ) ;
+	m_aptUpgrade = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( m_configPath ) ;
 
 	QDir dir ;
 	dir.mkdir( m_configPath + QString( "/apt" ) ) ;
@@ -156,7 +160,7 @@ void check_updates::reportUpdates()
 
 	exe.setProcessEnvironment( env ) ;
 
-	exe.start( aptUpdate );
+	exe.start( m_aptUpdate );
 	exe.waitForFinished( -1 ) ;
 
 	int st = exe.exitCode() ;
@@ -166,28 +170,45 @@ void check_updates::reportUpdates()
 
 	if( st == 0 ){
 
-		exe.start( aptUpgrade );
+		exe.start( m_aptUpgrade );
 		exe.waitForFinished( -1 ) ;
 		QByteArray output = exe.readAllStandardOutput() ;
 		exe.close();
 
+		QByteArray output1 ;
+		if( m_language != QString( "english_US" ) ){
+			QProcess e ;
+			e.start( m_aptUpgrade );
+			e.waitForFinished( -1 ) ;
+			output1 = e.readAllStandardOutput() ;
+			e.close();
+		}
+
 		if( !output.isEmpty() ){
 			if( output.contains( error1 ) || output.contains( error2 ) || output.contains( error3 ) ){
 				list.append( bogusData );
-				list.append( output );
+				if( m_language == QString( "english_US" ) ){
+					list.append( output );
+				}else{
+					list.append( output1 );
+				}
 				emit updateStatus( INCONSISTENT_STATE,list );
 			}else if( output.contains( success ) ){
-				this->processUpdates( output );
+				if( m_language == QString( "english_US" ) ){
+					this->processUpdates( output,output );
+				}else{
+					this->processUpdates( output,output1 );
+				}
 			}else{
 				list.append( bogusData );
 				QString s = tr( "no updates found" ) ;
-				list.append( s.toAscii() );
+				list.append( s );
 				emit updateStatus( NO_UPDATES_FOUND,list );
 			}
 		}else{
 			list.append( bogusData );
 			QString s = tr( "no updates found" ) ;
-			list.append( s.toAscii() );
+			list.append( s );
 			emit updateStatus( NO_UPDATES_FOUND,list );
 		}
 	}else{
@@ -196,7 +217,7 @@ void check_updates::reportUpdates()
 		 */
 		list.append( bogusData );
 		QString s = tr( "warning: apt-get update finished with errors" ) ;
-		list.append( s.toAscii() );
+		list.append( s );
 		emit updateStatus( NO_UPDATES_FOUND,list );
 	}
 }

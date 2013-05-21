@@ -18,7 +18,8 @@ qtUpdateNotifier.cpp \
     instance.cpp \
     startsynaptic.cpp \
     configuredialog.cpp \
-    checkoldpackages.cpp
+    checkoldpackages.cpp \
+    utility.cpp
 
 HEADERS  += qtUpdateNotifier.h \
     check_updates.h \
@@ -26,7 +27,8 @@ HEADERS  += qtUpdateNotifier.h \
     instance.h \
     startsynaptic.h \
     configuredialog.h \
-    checkoldpackages.h
+    checkoldpackages.h \
+    utility.h
 
 RESOURCES += icons.qrc
 
@@ -41,3 +43,5 @@ FORMS += \
 
 TRANSLATIONS = translations.ts/translations.ts
 TRANSLATIONS += translations.ts/dutch_NL.ts
+TRANSLATIONS += translations.ts/greek_GR.ts
+

@@ -45,11 +45,8 @@
 #include <kstandarddirs.h>
 #include <cstdlib>
 #include <cstdio>
-
 #include <QTranslator>
 #include <QLibraryInfo>
-
-#include <klocalizedstring.h>
 
 #include "instance.h"
 #include "desktop_file.h"
@@ -57,6 +54,7 @@
 #include "configuredialog.h"
 #include "checkoldpackages.h"
 #include "qt-update-install-path.h"
+#include "utility.h"
 
 class qtUpdateNotifier : public KStatusNotifierItem
 {
@@ -68,6 +66,7 @@ public:
 	void logActivity( QString ) ;
 	void logActivity_1( QString ) ;
 	static bool autoStartEnabled( void ) ;
+	static int instanceAlreadyRunning( void ) ;
 signals:
 	void updateLogWindow( void ) ;
 	void configOptionsChanged_1( void ) ;

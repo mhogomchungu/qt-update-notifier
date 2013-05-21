@@ -67,6 +67,11 @@ void qtUpdateNotifier::createEnvironment()
 	m_prefferedLanguage = e.readAll() ;
 	e.close();
 
+	this->setupTranslationText();
+
+	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
+	this->setObjectName( "qtUpdateNotifier" );
+
 	QDir d ;
 	d.mkpath( m_configPath ) ;
 
@@ -238,20 +243,41 @@ void qtUpdateNotifier::localizationLanguage( QString language )
 	this->setupTranslationText();
 }
 
+int qtUpdateNotifier::instanceAlreadyRunning()
+{
+	KStandardDirs k ;
+
+	QFile f( k.localxdgconfdir() + QString( "/qt-update-notifier/language.option" ) ) ;
+
+	QTranslator * translator = new QTranslator() ;
+
+	f.open( QIODevice::ReadOnly ) ;
+	QByteArray r = f.readAll() ;
+	f.close() ;
+	QByteArray e( "english_US" ) ;
+	if( e == r ){
+		/*
+		 * english_US language,its the default and hence dont load anything
+		 */
+		qDebug() << tr( "Another instance is already running, closing this one" ) ;
+	}else{
+		const char * x[ 2 ] ;
+		x[ 0 ] = "qt-update-notifier" ;
+		x[ 1 ] = 0 ;
+		int z = 1 ;
+		QCoreApplication app( z,( char ** ) x ) ;
+
+		translator->load( r.constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
+		app.installTranslator( translator ) ;
+		qDebug() << tr( "Another instance is already running, closing this one" ) ;
+		app.removeTranslator( translator ) ;
+		translator->deleteLater();
+	}
+	return 1 ;
+}
+
 void qtUpdateNotifier::run()
 {
-	instance * s = new instance( this ) ;
-
-	if( !s->firstInstance() ){
-		qDebug() << tr( "Another instance is already running, closing this one" ) ;
-		this->closeApp();
-	}
-
-	this->setupTranslationText();
-
-	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
-	this->setObjectName( "qtUpdateNotifier" );
-
 	this->logActivity( tr( "Qt-update-notifier started" ) ) ;
 
 	m_trayMenu = new KMenu() ;
@@ -315,7 +341,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
 			t->start( interval );
 
-			this->showToolTip( QString( "Qt-update-notifier" ),tr( "Status" ),interval ) ;
+			this->showToolTip( QString( "qt-update-notifier" ),tr( "Status" ),interval ) ;
 
 			this->logActivity( this->logMsg() ) ;
 		}else{
@@ -366,26 +392,18 @@ QString qtUpdateNotifier::getCurrentTime_1()
 
 void qtUpdateNotifier::logActivity( QString msg )
 {
-	QFile f( m_configLog ) ;
-	f.open( QIODevice::WriteOnly | QIODevice::Append ) ;
-
 	QString t = this->getCurrentTime_1() ;
-	QString time = QString( "%1:   %2\n").arg( t ).arg( msg )  ;
-	QByteArray r = time.toAscii() ;
-	f.write( r ) ;
-	f.close();
+	QString log = QString( "%1:   %2\n").arg( t ).arg( msg ) ;
+	utility::writeToFile( m_configLog,log,false ) ;
 	emit updateLogWindow() ;
 }
 
 void qtUpdateNotifier::logActivity_1( QString msg )
 {
-	QFile f( m_configLog ) ;
-	f.open( QIODevice::WriteOnly | QIODevice::Append ) ;
 	QString line = QString( "----------------------------------------------------------------------------------------------------------------------" ) ;
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
-	f.write( log.toAscii() ) ;
-	f.close();
+	utility::writeToFile( m_configLog,log,false ) ;
 	emit updateLogWindow() ;
 }
 
@@ -438,7 +456,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 	m_threadIsRunning = true ;
 
-	m_updates = new check_updates( m_configPath ) ;
+	m_updates = new check_updates( m_configPath,m_prefferedLanguage ) ;
 	connect( m_updates,SIGNAL( updateStatus( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
 	connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
@@ -458,20 +476,11 @@ void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
 		return ;
 	}
 
-	QFile f( m_aptGetConfigLog ) ;
-	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-
 	QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
 	QString msg = tr( "Log entry was created at: " ) ;
 	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
 
-	f.write( header.toAscii() ) ;
-
-	QByteArray nl( "\n" ) ;
-	for( int i = 1 ; i < j ; i++ ){
-		f.write( log.at( i ).toAscii() + nl ) ;
-	}
-	f.close();
+	utility::writeToFile( m_aptGetConfigLog,header + log.at( 1 ),true ) ;
 }
 
 void qtUpdateNotifier::updateStatus( int st,QStringList list )
@@ -492,7 +501,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
-		this->logActivity( tr( "Update check complete, repository appear to be in an inconsistent state" ) ) ;
+		this->logActivity( tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 	}else if( st == NO_UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier" ) ;

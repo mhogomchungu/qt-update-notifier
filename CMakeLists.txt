@@ -20,7 +20,7 @@ QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h logwindow.h instance.h star
 QT4_ADD_RESOURCES( ICONS icons.qrc )
 
 add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp 
-                logwindow.cpp instance.cpp startsynaptic.cpp configuredialog.cpp checkoldpackages.cpp 
+                logwindow.cpp instance.cpp startsynaptic.cpp configuredialog.cpp checkoldpackages.cpp utility.cpp
                 ${MOC} ${UI} ${ICONS} )
 
 TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lkdeui ) 
@@ -41,8 +41,10 @@ SET( TS_PATH share/qt-update-notifier-translations/translations.ts )
 SET( QM_PATH share/qt-update-notifier-translations/translations.qm )
 
 install ( FILES translations.ts/translations.ts DESTINATION ${TS_PATH} )
+install ( FILES translations.ts/greek_GR.ts DESTINATION     ${TS_PATH} )
 install ( FILES translations.ts/dutch_NL.ts DESTINATION     ${TS_PATH} )
 
+install ( FILES translations.qm/greek_GR.qm DESTINATION ${QM_PATH} )
 install ( FILES translations.qm/dutch_NL.qm DESTINATION ${QM_PATH} )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
@@ -88,7 +90,7 @@ Terminal=false
 TerminalOptions=
 Type=Application
 X-DBUS-ServiceName=
-X-DBUS-StartupType=
+X-DBUS-StartupType=Unique
 X-KDE-SubstituteUID=false
 X-KDE-Username=
 Categories=PackageManager;System;Application;X-MandrivaLinux-System-Configuration;X-MandrivaLinux-System-Configuration-Packaging;\n")
@@ -112,7 +114,7 @@ Terminal=false
 TerminalOptions=
 Type=Application
 X-DBUS-ServiceName=
-X-DBUS-StartupType=
+X-DBUS-StartupType=Unique
 X-KDE-SubstituteUID=false
 X-KDE-Username=
 Categories=PackageManager;System;Application;X-MandrivaLinux-System-Configuration;X-MandrivaLinux-System-Configuration-Packaging;\n")

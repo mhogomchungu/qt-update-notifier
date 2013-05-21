@@ -142,7 +142,8 @@ void configureDialog::setupLanguageList()
 		if( index == -1 ){
 			m_ui->comboBoxLanguageList->addItem( e ) ;
 		}else{
-			m_ui->comboBoxLanguageList->addItem( e.remove( index,100 )  ) ;
+			e.truncate( index ) ;
+			m_ui->comboBoxLanguageList->addItem( e ) ;
 		}
 	}
 
