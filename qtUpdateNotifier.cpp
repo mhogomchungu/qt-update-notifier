@@ -50,6 +50,11 @@ void qtUpdateNotifier::aptGetLogWindow()
 
 void qtUpdateNotifier::createEnvironment()
 {
+	/*
+	 * delete ~/.config/autostart/qt-update-notifier.desktop if present as its no longer necessary
+	 */
+	QFile::remove( QDir::homePath() + QString( "/.config/autostart/qt-update-notifier.desktop" ) ) ;
+
 	KStandardDirs k ;
 	m_configPath = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
 
