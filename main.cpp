@@ -25,13 +25,13 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocalizedstring.h>
+#include <kuniqueapplication.h>
 
 #include <unistd.h>
 
-int autoStart( void )
+int autoStart( KUniqueApplication& a )
 {
 	if( qtUpdateNotifier::autoStartEnabled() ){
-		KApplication a ;
 		qtUpdateNotifier w;
 		w.start();
 		return a.exec();
@@ -40,9 +40,8 @@ int autoStart( void )
 	}
 }
 
-int start( void )
+int start( KUniqueApplication& a )
 {
-	KApplication a ;
 	qtUpdateNotifier w;
 	w.start();
 	return a.exec();
@@ -50,20 +49,33 @@ int start( void )
 
 int main( int argc,char * argv[] )
 {
+	KAboutData aboutData( 	"qt-update-notifier",
+				0,
+				ki18n( "qt-update-notifier" ),
+				"1.4.2",
+				ki18n( "a qt based apt-get package updates checker." ),
+				KAboutData::License_GPL_V2,
+				ki18n( "(c)2013,ink Francis\nemail:mhogomchungu@gmail.com" ),
+				ki18n( "mhogomchungu@gmail.com" ),
+				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html",
+				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html" );
 
-	KAboutData aboutData( "qt-update-notifier",0,ki18n("qt-update-notifier"),
-			      "1.4.1",ki18n("a qt based apt-get package updates checker."),
-				KAboutData::License_GPL_V2,ki18n("mhogomchungu@gmail.com"),
-				KLocalizedString());
 	KCmdLineArgs::init( argc,argv,&aboutData );
 
 	KCmdLineOptions options;
 	options.add( "a",ki18n( "auto start application" ) ) ;
 	KCmdLineArgs::addCmdLineOptions( options ) ;
 
-	if( KCmdLineArgs::allArguments().contains( "-a" ) ){
-		return autoStart() ;
+	KUniqueApplication::addCmdLineOptions();
+
+	if( KUniqueApplication::start() ){
+		KUniqueApplication a ;
+		if( KCmdLineArgs::allArguments().contains( "-a" ) ){
+			return autoStart( a ) ;
+		}else{
+			return start( a ) ;
+		}
 	}else{
-		return start() ;
+		return qtUpdateNotifier::instanceAlreadyRunning() ;
 	}
 }

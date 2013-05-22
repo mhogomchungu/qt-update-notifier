@@ -17,39 +17,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef UTILITY_H
+#define UTILITY_H
 
-#ifndef LOGWINDOW_H
-#define LOGWINDOW_H
-
-#include <QWidget>
-#include <QFile>
 #include <QString>
-#include <QCloseEvent>
+#include <QObject>
+#include <QDebug>
+#include <QFile>
+#include <QIODevice>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
-#include "utility.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
-namespace Ui {
-class logWindow;
-}
-
-class logWindow : public QWidget
+class utility
 {
-	Q_OBJECT
 public:
-	explicit logWindow( QString = QString(),QWidget * parent = 0 );
-	~logWindow();
-	void showLogWindow( QString ) ;
-	void showAptGetWindow( QString ) ;
-private slots:
-	void pbClearLog( void ) ;
-	void pbQuit( void ) ;
-	void updateLogWindow( void ) ;
-	void updateLogWindow_1( void ) ;
-private:
-	void closeEvent( QCloseEvent * ) ;
-	Ui::logWindow * m_ui;
-	QString m_logFile ;
-	QString m_logPath ;
+	utility();
+	static void writeToFile( QString filepath,QString content,bool truncate ) ;
+	static QString readFromFile( QString filepath ) ;
 };
 
-#endif // LOGWINDOW_H
+#endif // UTILITY_H

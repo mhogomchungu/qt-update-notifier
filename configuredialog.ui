@@ -35,10 +35,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Set the time interval btw updates.
-
-Default and recommeded interval is
-1 day, 0 hours, 0 minutes</string>
+     <string>Set the time interval btw updates.Default and recommeded interval is 1 day, 0 hours, 0 minutes</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QComboBox" name="gbUpdateIntervalComboBoxDays">
@@ -616,10 +616,10 @@ Default and recommeded interval is
      </rect>
     </property>
     <property name="text">
-     <string>When the program starts, wait for this
-number of minutes before checking
-for updates(useful to give time to setup
-network interfaces)</string>
+     <string>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QComboBox" name="gbDelayStartIntervalComboBox">
@@ -682,6 +682,9 @@ network interfaces)</string>
     <property name="text">
      <string>Select localization language</string>
     </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QComboBox" name="comboBoxLanguageList">
     <property name="geometry">
@@ -743,6 +746,9 @@ network interfaces)</string>
     </property>
     <property name="text">
      <string>Auto start application at login</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBoxAutoStart">

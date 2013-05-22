@@ -25,6 +25,8 @@ configureDialog::configureDialog( QStringList list,bool autoStart,QWidget * pare
 {
 	m_ui->setupUi( this );
 
+	this->setWindowTitle( tr( "Configuration window" ) );
+
 	m_ui->checkBoxAutoStart->setChecked( autoStart );
 
 	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( -1 );
@@ -120,7 +122,7 @@ void configureDialog::delayTimeChanged( int index )
 void configureDialog::setupLanguageList()
 {
 	QDir d ;
-	d.setPath( QT_UPDATE_TRANSLATION_PATH );
+	d.setPath( QT_UPDATE_NOTIFIER_TRANSLATION_PATH );
 	QStringList list = d.entryList() ;
 
 	list.removeOne( "." ) ;
@@ -140,7 +142,8 @@ void configureDialog::setupLanguageList()
 		if( index == -1 ){
 			m_ui->comboBoxLanguageList->addItem( e ) ;
 		}else{
-			m_ui->comboBoxLanguageList->addItem( e.remove( index,100 )  ) ;
+			e.truncate( index ) ;
+			m_ui->comboBoxLanguageList->addItem( e ) ;
 		}
 	}
 

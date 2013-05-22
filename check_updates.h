@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QFile>
+#include <QProcessEnvironment>
 
 #define UPDATES_FOUND      0
 #define INCONSISTENT_STATE 1
@@ -40,18 +41,21 @@ class check_updates : public QThread
 {
 	Q_OBJECT
 public:
-	explicit check_updates( QString configPath,QObject * parent = 0 );
+	explicit check_updates( QString configPath,QString language,QObject * parent = 0 );
 	~check_updates() ;
 signals:
 	void updateList( QStringList ) ;
 	void updateStatus( int,QStringList ) ;
 public slots:
 private:
-	void processUpdates( QByteArray ) ;
+	void processUpdates( QByteArray output1,QByteArray output2 ) ;
 	QString m_configPath ;
+	QString m_language ;
 	void reportUpdates( void ) ;
 	bool online( void ) ;
 	void run( void ) ;
+	QString m_aptUpdate ;
+	QString m_aptUpgrade ;
 };
 
 #endif // CHECK_UPDATES_H

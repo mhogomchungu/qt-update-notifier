@@ -19,40 +19,23 @@ logWindow::~logWindow()
 	delete m_ui;
 }
 
-QString logWindow::getLogContents()
-{
-	QString x ;
-	QFile f( m_logFile ) ;
-	if( f.exists() ){
-		f.open( QIODevice::ReadOnly ) ;
-		x = f.readAll() ;
-		f.close();
-	}
-	return x ;
-}
-
 void logWindow::showLogWindow( QString log )
 {
 	m_logFile = log ;
-	m_ui->textEditLogField->setText( this->getLogContents() );
+	m_logPath = log ;
+	m_ui->textEditLogField->setText( utility::readFromFile( log ) );
 	m_ui->pbQuit_2->setVisible( false ) ;
 	this->show();
 }
 
 void logWindow::updateLogWindow()
 {
-	m_ui->textEditLogField->setText( this->getLogContents() );
+	m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ) );
 }
 
 void logWindow::updateLogWindow_1()
 {
-	QFile f( m_logPath ) ;
-	if( f.exists() ){
-		f.open( QIODevice::ReadOnly ) ;
-		m_ui->textEditLogField->setText( f.readAll() );
-	}else{
-		m_ui->textEditLogField->setText( tr( "Log is empty" ) );
-	}
+	m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ) ) ;
 }
 
 void logWindow::showAptGetWindow( QString logpath )

@@ -42,5 +42,13 @@
 	-add support for localization
 -version 1.4.1
 	-fix user visible strings as recommended in the forum
+-version 1.4.2
+	- fix a bug that prevented the tool from working as expected when the user's language is not english
+	- .ts translation files are now stored at "$PREFIX/share/qt-update-notifier-translations/translations.ts"
+	- .qm translation files are now stored at ""$PREFIX/share/qt-update-notifier-translations/translations.qm"
+	   - .qm translation files are the ones used by the program for translation
+	   - .ts files are shipped with the tool to help translators update strings if necessary
+	- is kuniqueApplication to force only one instantiation of the program
+	- add a few translatable strings
+	- greek and dutch translations are now complete
 	
- 	
