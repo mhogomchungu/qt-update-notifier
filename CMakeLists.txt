@@ -43,9 +43,11 @@ SET( QM_PATH share/qt-update-notifier-translations/translations.qm )
 install ( FILES translations.ts/translations.ts DESTINATION ${TS_PATH} )
 install ( FILES translations.ts/greek_GR.ts DESTINATION     ${TS_PATH} )
 install ( FILES translations.ts/dutch_NL.ts DESTINATION     ${TS_PATH} )
+install ( FILES translations.ts/german_DE.ts DESTINATION    ${TS_PATH} )
 
-install ( FILES translations.qm/greek_GR.qm DESTINATION ${QM_PATH} )
-install ( FILES translations.qm/dutch_NL.qm DESTINATION ${QM_PATH} )
+install ( FILES translations.qm/greek_GR.qm DESTINATION  ${QM_PATH} )
+install ( FILES translations.qm/dutch_NL.qm DESTINATION  ${QM_PATH} )
+install ( FILES translations.qm/german_DE.qm DESTINATION ${QM_PATH} )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 
