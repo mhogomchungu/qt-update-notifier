@@ -19,9 +19,9 @@
   <widget class="QPushButton" name="pbClear">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>220</x>
      <y>340</y>
-     <width>91</width>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
@@ -34,7 +34,7 @@
     <rect>
      <x>350</x>
      <y>340</y>
-     <width>91</width>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
