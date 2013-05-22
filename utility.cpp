@@ -60,13 +60,10 @@ fileManager::fileManager( QString filepath,bool truncate )
 {
 	QByteArray f = filepath.toAscii() ;
 	if( truncate ){
-		m_fd = open( f.constData(),O_CREAT | O_TRUNC | O_WRONLY ) ;
+		m_fd = open( f.constData(),O_CREAT | O_TRUNC | O_WRONLY,S_IRUSR|S_IWUSR ) ;
 	}else{
-		m_fd = open( f.constData(),O_CREAT | O_APPEND | O_WRONLY ) ;
-	}
-	if( m_fd != -1 ){
-		fchmod( m_fd,S_IRUSR|S_IWUSR ) ;
-	}
+		m_fd = open( f.constData(),O_CREAT | O_APPEND | O_WRONLY,S_IRUSR|S_IWUSR ) ;
+	}	
 }
 
 fileManager::fileManager( QString filepath )
