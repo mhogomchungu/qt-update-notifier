@@ -432,7 +432,7 @@ Standaard en aanbevolen interva 1 dag, 0 uren, 0 minuten</translation>
         <translation>Vertragingstijd in minuten na aanmelden(i.v.m. instellen van de netwerkverbinding)</translation>
     </message>
     <message>
-        <location filename="../configuredialog.ui" line="794"/>
+        <location filename="../configuredialog.ui" line="790"/>
         <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
         <translation type="unfinished"></translation>
     </message>

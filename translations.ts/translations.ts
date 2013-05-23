@@ -443,7 +443,7 @@ network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configuredialog.ui" line="794"/>
+        <location filename="../configuredialog.ui" line="790"/>
         <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
         <translation type="unfinished"></translation>
     </message>

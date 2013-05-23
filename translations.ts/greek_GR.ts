@@ -431,7 +431,7 @@ Default and recommeded interval is
         <translation>Αναμονή (σε λεπτά) πριν τον έλεγχο για ενημερώσεις κατά την εκκίνηση του προγράμματος</translation>
     </message>
     <message>
-        <location filename="../configuredialog.ui" line="794"/>
+        <location filename="../configuredialog.ui" line="790"/>
         <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
         <translation type="unfinished"></translation>
     </message>
