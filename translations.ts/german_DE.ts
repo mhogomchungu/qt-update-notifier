@@ -446,7 +446,7 @@ network interfaces)</oldsource>
     <message>
         <location filename="../configuredialog.ui" line="794"/>
         <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
-        <translation type="unfinished"></translation>
+        <translation>Synaptic automatisch neu starten, wenn es vom Kontextmenü aus gestartet wird (Synaptic könnte in bestimmten Szenarien abstürzen)</translation>
     </message>
     <message>
         <location filename="../configuredialog.cpp" line="28"/>
