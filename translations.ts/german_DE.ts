@@ -50,12 +50,16 @@ sind Fehler aufgetreten.</translation>
         <translation>Konfigurationsfenster</translation>
     </message>
     <message>
-        <location filename="../configuredialog.ui" line="38"/>
         <source>Set the time interval btw updates.Default and recommeded interval is 1 day, 0 hours, 0 minutes</source>
         <oldsource>Set the time interval btw updates.
 
 Default and recommeded interval is
 1 day, 0 hours, 0 minutes</oldsource>
+        <translation type="obsolete">Setzt das Zeitintervall zwischen den Aktualisierungen. Das empfohlene Standardintervall ist 1 Tag, 0 Stunden, 0 Minuten.</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog.ui" line="38"/>
+        <source>Set the time interval btw updates.Default and recommended interval is 1 day, 0 hours, 0 minutes</source>
         <translation>Setzt das Zeitintervall zwischen den Aktualisierungen. Das empfohlene Standardintervall ist 1 Tag, 0 Stunden, 0 Minuten.</translation>
     </message>
     <message>
@@ -421,12 +425,21 @@ Default and recommeded interval is
     </message>
     <message>
         <location filename="../configuredialog.ui" line="619"/>
+        <source>When the program starts, wait for this number of minutes before checking for updates (useful to give time to set up network interfaces)</source>
+        <translation>Warte die Anzahl der Minuten bevor nach Aktualisierungen gesucht wird (nützlich, wenn die Internetverbindung noch gestartet werden muss)</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog.ui" line="790"/>
+        <source>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
+        <translation>In Synaptic automatisch &quot;Neu laden&quot; ausführen, wenn es vom Kontextmenü aus gestartet wird (Synaptic könnte in bestimmten Szenarien abstürzen)</translation>
+    </message>
+    <message>
         <source>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</source>
         <oldsource>When the program starts, wait for this
 number of minutes before checking
 for updates(useful to give time to setup
 network interfaces)</oldsource>
-        <translation>Warte die Anzahl der Minuten bevor nach Aktualisierungen gesucht wird (nützlich, wenn die Internetverbindung noch gestartet werden muss)</translation>
+        <translation type="obsolete">Warte die Anzahl der Minuten bevor nach Aktualisierungen gesucht wird (nützlich, wenn die Internetverbindung noch gestartet werden muss)</translation>
     </message>
     <message>
         <location filename="../configuredialog.ui" line="683"/>
@@ -444,9 +457,8 @@ network interfaces)</oldsource>
         <translation>Programm beim Systemstart starten</translation>
     </message>
     <message>
-        <location filename="../configuredialog.ui" line="790"/>
         <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
-        <translation type="unfinished">In Synaptic automatisch &quot;Neu laden&quot; ausführen, wenn es vom Kontextmenü aus gestartet wird (Synaptic könnte in bestimmten Szenarien abstürzen)</translation>
+        <translation type="obsolete">In Synaptic automatisch &quot;Neu laden&quot; ausführen, wenn es vom Kontextmenü aus gestartet wird (Synaptic könnte in bestimmten Szenarien abstürzen)</translation>
     </message>
     <message>
         <location filename="../configuredialog.cpp" line="28"/>

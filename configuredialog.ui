@@ -35,7 +35,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Set the time interval btw updates.Default and recommeded interval is 1 day, 0 hours, 0 minutes</string>
+     <string>Set the time interval btw updates.Default and recommended interval is 1 day, 0 hours, 0 minutes</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -616,7 +616,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</string>
+     <string>When the program starts, wait for this number of minutes before checking for updates (useful to give time to set up network interfaces)</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -787,7 +787,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</string>
+     <string>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>

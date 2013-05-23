@@ -59,8 +59,14 @@ Standaard en aanbevolen interval
      1 dag, 0 uren, 0 minuten</translation>
     </message>
     <message>
-        <location filename="../configuredialog.ui" line="38"/>
         <source>Set the time interval btw updates.Default and recommeded interval is 1 day, 0 hours, 0 minutes</source>
+        <translation type="obsolete">Tijdinterval tussen bijwerken
+
+Standaard en aanbevolen interva 1 dag, 0 uren, 0 minuten</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog.ui" line="38"/>
+        <source>Set the time interval btw updates.Default and recommended interval is 1 day, 0 hours, 0 minutes</source>
         <translation>Tijdinterval tussen bijwerken
 
 Standaard en aanbevolen interva 1 dag, 0 uren, 0 minuten</translation>
@@ -428,13 +434,21 @@ Standaard en aanbevolen interva 1 dag, 0 uren, 0 minuten</translation>
     </message>
     <message>
         <location filename="../configuredialog.ui" line="619"/>
-        <source>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</source>
+        <source>When the program starts, wait for this number of minutes before checking for updates (useful to give time to set up network interfaces)</source>
         <translation>Vertragingstijd in minuten na aanmelden(i.v.m. instellen van de netwerkverbinding)</translation>
     </message>
     <message>
         <location filename="../configuredialog.ui" line="790"/>
+        <source>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
+        <translation>Automatisch verversen van Synaptic wanneer het van de contextmenu gestart wordt (Synaptic kan eventueel crashen)</translation>
+    </message>
+    <message>
+        <source>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</source>
+        <translation type="obsolete">Vertragingstijd in minuten na aanmelden(i.v.m. instellen van de netwerkverbinding)</translation>
+    </message>
+    <message>
         <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Automatisch verversen van Synaptic wanneer het van de contextmenu gestart wordt (Synaptic kan eventueel crashen)</translation>
     </message>
     <message>
         <source>When the program starts, wait for this

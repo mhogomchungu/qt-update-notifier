@@ -59,8 +59,13 @@ Default and recommeded interval is
 1 ημέρα,0 ώρες,0 λεπτά</translation>
     </message>
     <message>
-        <location filename="../configuredialog.ui" line="38"/>
         <source>Set the time interval btw updates.Default and recommeded interval is 1 day, 0 hours, 0 minutes</source>
+        <translation type="obsolete">Ορίστε το χρονικό διάστημα μεταξύ των ενημερώσεων. Το προκαθορισμένο και προτεινόμενο διάστημα είναι
+1 ημέρα,0 ώρες,0 λεπτά</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog.ui" line="38"/>
+        <source>Set the time interval btw updates.Default and recommended interval is 1 day, 0 hours, 0 minutes</source>
         <translation>Ορίστε το χρονικό διάστημα μεταξύ των ενημερώσεων. Το προκαθορισμένο και προτεινόμενο διάστημα είναι
 1 ημέρα,0 ώρες,0 λεπτά</translation>
     </message>
@@ -427,13 +432,21 @@ Default and recommeded interval is
     </message>
     <message>
         <location filename="../configuredialog.ui" line="619"/>
-        <source>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</source>
+        <source>When the program starts, wait for this number of minutes before checking for updates (useful to give time to set up network interfaces)</source>
         <translation>Αναμονή (σε λεπτά) πριν τον έλεγχο για ενημερώσεις κατά την εκκίνηση του προγράμματος</translation>
     </message>
     <message>
         <location filename="../configuredialog.ui" line="790"/>
-        <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
+        <source>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
         <translation>Αυτόματη ανανέωση του Synaptic κατά την εκκίνηση από το μενού (μπορεί να μην λειτουργεί σε ορισμένες συνθήκες χρήσης)</translation>
+    </message>
+    <message>
+        <source>When the program starts, wait for this number of minutes before checking for updates(useful to give time to setup network interfaces)</source>
+        <translation type="obsolete">Αναμονή (σε λεπτά) πριν τον έλεγχο για ενημερώσεις κατά την εκκίνηση του προγράμματος</translation>
+    </message>
+    <message>
+        <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
+        <translation type="obsolete">Αυτόματη ανανέωση του Synaptic κατά την εκκίνηση από το μενού (μπορεί να μην λειτουργεί σε ορισμένες συνθήκες χρήσης)</translation>
     </message>
     <message>
         <source>When the program starts, wait for this
