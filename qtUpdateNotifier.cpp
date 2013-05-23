@@ -58,7 +58,7 @@ void qtUpdateNotifier::createEnvironment()
 	KStandardDirs k ;
 	m_configPath = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
 
-	m_aptGetConfigLog = k.localxdgconfdir() + QString( "/qt-update-notifier/aptGetOutPut.log" ) ;
+	m_aptGetConfigLog = k.localxdgconfdir() + QString( "/qt-update-notifier/qt-update-notifier-apt_output.log" ) ;
 
 	QFile e( m_configPath + QString( "/language.option"  ) ) ;
 
@@ -81,9 +81,9 @@ void qtUpdateNotifier::createEnvironment()
 	d.mkpath( m_configPath ) ;
 
 	m_configTime = m_configPath + QString( "/qt-update-notifier.time" ) ;
-	m_configLog = m_configPath  + QString( "/qt-update-notifier.log" ) ;
+	m_configLog = m_configPath  + QString( "/qt-update-notifier-activity.log" ) ;
 
-	m_CheckDelayOnStartUp = m_configPath + QString( "/qt-update-notifier-firstCheck.time" ) ;
+	m_CheckDelayOnStartUp = m_configPath + QString( "/qt-update-notifier-startup_check_delay.time" ) ;
 
 	QFile w( m_CheckDelayOnStartUp ) ;
 
@@ -214,7 +214,7 @@ void qtUpdateNotifier::openConfigureDialog()
 
 void qtUpdateNotifier::autoRefreshSynaptic( bool b )
 {
-	QString x = m_configPath + QString( "/autoRefreshSynaptic" ) ;
+	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.status" ) ;
 	if( b ){
 		QFile f( x ) ;
 		f.open( QIODevice::WriteOnly ) ;
@@ -226,7 +226,7 @@ void qtUpdateNotifier::autoRefreshSynaptic( bool b )
 
 bool qtUpdateNotifier::autoRefreshSYnaptic()
 {
-	QString x = m_configPath + QString( "/autoRefreshSynaptic" ) ;
+	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.status" ) ;
 	QFile f( x ) ;
 	return f.exists() ;
 }
