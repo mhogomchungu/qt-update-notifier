@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>493</width>
-    <height>496</height>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -664,7 +664,7 @@
      <x>20</x>
      <y>390</y>
      <width>451</width>
-     <height>61</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
@@ -701,7 +701,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>460</y>
+     <y>440</y>
      <width>91</width>
      <height>31</height>
     </rect>
@@ -764,10 +764,6 @@
      <string/>
     </property>
    </widget>
-   <zorder>label_7</zorder>
-   <zorder>label_8</zorder>
-   <zorder>checkBoxAutoStart</zorder>
-   <zorder>gbAutoStart_3</zorder>
   </widget>
   <widget class="QGroupBox" name="gbSynapticAutoRefresh">
    <property name="geometry">
