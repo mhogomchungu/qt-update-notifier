@@ -76,7 +76,7 @@ void configureDialog::closeUI()
 
 	if( m_duration < 10 * 60 ){
 		QMessageBox msg( this ) ;
-		msg.setText( tr( "Update check interval must be atleast 10 minutes" ) ) ;
+		msg.setText( tr( "Update check interval must be at least 10 minutes" ) ) ;
 		msg.exec() ;
 	}else{
 		this->autoStartToggled( m_ui->checkBoxAutoStart->isChecked() ) ;

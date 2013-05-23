@@ -454,8 +454,12 @@ network interfaces)</oldsource>
         <translation>Konfigurationsfenster</translation>
     </message>
     <message>
-        <location filename="../configuredialog.cpp" line="79"/>
         <source>Update check interval must be atleast 10 minutes</source>
+        <translation type="obsolete">Das Suchintervall muss mindestens 10 Minuten betragen.</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog.cpp" line="79"/>
+        <source>Update check interval must be at least 10 minutes</source>
         <translation>Das Suchintervall muss mindestens 10 Minuten betragen.</translation>
     </message>
     <message>

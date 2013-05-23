@@ -467,8 +467,12 @@ network interfaces)</oldsource>
         <translation>Παράθυρο ρυθμίσεων</translation>
     </message>
     <message>
-        <location filename="../configuredialog.cpp" line="79"/>
         <source>Update check interval must be atleast 10 minutes</source>
+        <translation type="obsolete">Το διάστημα μεταξύ των ενημερώσεων πρέπει να είναι τουλάχιστον 10 λεπτά</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog.cpp" line="79"/>
+        <source>Update check interval must be at least 10 minutes</source>
         <translation>Το διάστημα μεταξύ των ενημερώσεων πρέπει να είναι τουλάχιστον 10 λεπτά</translation>
     </message>
     <message>

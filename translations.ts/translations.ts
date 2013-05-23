@@ -454,7 +454,7 @@ network interfaces)</oldsource>
     </message>
     <message>
         <location filename="../configuredialog.cpp" line="79"/>
-        <source>Update check interval must be atleast 10 minutes</source>
+        <source>Update check interval must be at least 10 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -471,8 +471,12 @@ netwerkverbinding)</translation>
         <translation>Configuratiescherm</translation>
     </message>
     <message>
-        <location filename="../configuredialog.cpp" line="79"/>
         <source>Update check interval must be atleast 10 minutes</source>
+        <translation type="obsolete">Interval voor bijwerken dient tenminste 10 minuten te zijn</translation>
+    </message>
+    <message>
+        <location filename="../configuredialog.cpp" line="79"/>
+        <source>Update check interval must be at least 10 minutes</source>
         <translation>Interval voor bijwerken dient tenminste 10 minuten te zijn</translation>
     </message>
     <message>
