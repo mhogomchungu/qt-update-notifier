@@ -20,12 +20,14 @@
 #include "configuredialog.h"
 #include "ui_configuredialog.h"
 
-configureDialog::configureDialog( QStringList list,bool autoStart,QWidget * parent ) :
+configureDialog::configureDialog( QStringList list,bool autoStart,bool autoRefresh,QWidget * parent ) :
 	QDialog( parent ),m_ui( new Ui::configureDialog )
 {
 	m_ui->setupUi( this );
 
 	this->setWindowTitle( tr( "Configuration window" ) );
+
+	m_ui->checkBoxSynapticAutoRefresh->setChecked( autoRefresh ) ;
 
 	m_ui->checkBoxAutoStart->setChecked( autoStart );
 
@@ -37,9 +39,17 @@ configureDialog::configureDialog( QStringList list,bool autoStart,QWidget * pare
 	connect( m_ui->gbUpdateIntervalComboBoxDays,SIGNAL( currentIndexChanged( int ) ),this,SLOT( labelDays( int ) ) ) ;
 	connect( m_ui->gbUpdateIntervalComboBoxHours,SIGNAL( currentIndexChanged( int ) ),this,SLOT( labelHours( int ) ) ) ;
 	connect( m_ui->gbUpdateIntervalComboBoxMinutes,SIGNAL( currentIndexChanged( int ) ),this,SLOT(labelMinutes( int ) ) ) ;
+	connect( m_ui->checkBoxSynapticAutoRefresh,SIGNAL( toggled( bool ) ),this,SLOT( autoRefreshSynaptic_1( bool ) ) ) ;
 
 	m_CheckDelayOnStartUp = list.at( 0 ) ;
 	m_updateCheckInterval = list.at( 1 ) ;
+
+	m_autoRefreshSynaptic = autoRefresh ;
+}
+
+void configureDialog::autoRefreshSynaptic_1( bool b )
+{
+	emit autoReshreshSynaptic( b );
 }
 
 configureDialog::~configureDialog()

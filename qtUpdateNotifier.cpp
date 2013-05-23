@@ -144,7 +144,7 @@ void qtUpdateNotifier::changeIcon( QString icon )
 
 void qtUpdateNotifier::startUpdater()
 {
-	startSynaptic * s = new startSynaptic() ;
+	startSynaptic * s = new startSynaptic( this->autoRefreshSYnaptic() ) ;
 	connect( s,SIGNAL( destroyed() ),this,SLOT( updaterClosed() ) ) ;
 	s->start();
 }
@@ -203,12 +203,32 @@ void qtUpdateNotifier::openConfigureDialog()
 	QStringList l ;
 	l.append( m_CheckDelayOnStartUp ) ;
 	l.append( m_updateCheckInterval );
-	configureDialog * cfg = new configureDialog( l,qtUpdateNotifier::autoStartEnabled() ) ;
+	configureDialog * cfg = new configureDialog( l,qtUpdateNotifier::autoStartEnabled(),this->autoRefreshSYnaptic() ) ;
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
 	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
 	connect( cfg,SIGNAL( localizationLanguage( QString ) ),this,SLOT( localizationLanguage( QString ) ) ) ;
+	connect( cfg,SIGNAL( autoReshreshSynaptic( bool ) ),this,SLOT( autoRefreshSynaptic( bool ) ) ) ;
 	cfg->showUI( m_prefferedLanguage );
+}
+
+void qtUpdateNotifier::autoRefreshSynaptic( bool b )
+{
+	QString x = m_configPath + QString( "/autoRefreshSynaptic" ) ;
+	if( b ){
+		QFile f( x ) ;
+		f.open( QIODevice::WriteOnly ) ;
+		f.close();
+	}else{
+		QFile::remove( x ) ;
+	}
+}
+
+bool qtUpdateNotifier::autoRefreshSYnaptic()
+{
+	QString x = m_configPath + QString( "/autoRefreshSynaptic" ) ;
+	QFile f( x ) ;
+	return f.exists() ;
 }
 
 void qtUpdateNotifier::configOptionsChanged()

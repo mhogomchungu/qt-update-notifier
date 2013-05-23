@@ -30,11 +30,12 @@ class startSynaptic : public QObject,public QRunnable
 {
 	Q_OBJECT
 public:
-	explicit startSynaptic( QObject * parent = 0 ) ;
+	explicit startSynaptic( bool autoRefreshSynaptic,QObject * parent = 0 ) ;
 	~startSynaptic() ;
 	void start( void ) ;
 private:
 	void run( void ) ;
+	bool m_autoRefresh ;
 };
 
 #endif // STARTSYNAPTIC_H

@@ -42,7 +42,7 @@ class configureDialog : public QDialog
 	Q_OBJECT
 
 public:
-	configureDialog( QStringList list = QStringList(),bool autostart = true,QWidget * parent = 0 );
+	configureDialog( QStringList list = QStringList(),bool autostart = true,bool autoRefreshSynaptic = false,QWidget * parent = 0 );
 	~configureDialog();
 	void showUI( QString ) ;
 signals:
@@ -50,6 +50,7 @@ signals:
 	void setUpdateInterval( int ) ;
 	void configOptionsChanged( void ) ;
 	void localizationLanguage( QString ) ;
+	void autoReshreshSynaptic( bool ) ;
 private slots:
 	void closeUI( void ) ;
 	void autoStartToggled( bool ) ;
@@ -58,6 +59,7 @@ private slots:
 	void labelDays( int ) ;
 	void labelMinutes( int ) ;
 	void labelHours( int ) ;
+	void autoRefreshSynaptic_1( bool ) ;
 private:
 	void setDelayTimeAtLogIn( void ) ;
 	void setIntervalBetweenUpdateChecks( void ) ;
@@ -68,6 +70,7 @@ private:
 	int m_interval ;
 	int m_duration ;
 	QString m_prefferedLanguage ;
+	bool m_autoRefreshSynaptic ;
 };
 
 #endif // CONFIGUREDIALOG_H

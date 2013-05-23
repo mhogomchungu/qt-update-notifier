@@ -99,7 +99,9 @@ private slots:
 	void startTimer_1( void ) ;
 	void configOptionsChanged( void ) ;
 	void localizationLanguage( QString ) ;
+	void autoRefreshSynaptic( bool ) ;
 private:
+	bool autoRefreshSYnaptic( void ) ;
 	void setupTranslationText( void ) ;
 	void printTime( QString,u_int64_t ) ;
 	void saveAptGetLogOutPut( QStringList ) ;

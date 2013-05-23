@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>493</width>
-    <height>387</height>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -610,9 +610,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>-10</y>
       <width>251</width>
-      <height>81</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="text">
@@ -662,7 +662,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>300</y>
+     <y>390</y>
      <width>451</width>
      <height>61</height>
     </rect>
@@ -701,7 +701,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>350</y>
+     <y>460</y>
      <width>91</width>
      <height>31</height>
     </rect>
@@ -714,7 +714,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>230</y>
+     <y>320</y>
      <width>451</width>
      <height>71</height>
     </rect>
@@ -764,6 +764,52 @@
      <string/>
     </property>
    </widget>
+   <zorder>label_7</zorder>
+   <zorder>label_8</zorder>
+   <zorder>checkBoxAutoStart</zorder>
+   <zorder>gbAutoStart_3</zorder>
+  </widget>
+  <widget class="QGroupBox" name="gbSynapticAutoRefresh">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>230</y>
+     <width>451</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QLabel" name="labelSynapticAutoRefresh">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>251</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBoxSynapticAutoRefresh">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>30</y>
+      <width>85</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <tabstops>
@@ -772,6 +818,7 @@
   <tabstop>gbUpdateIntervalComboBoxMinutes</tabstop>
   <tabstop>gbDelayStartIntervalComboBox</tabstop>
   <tabstop>checkBoxAutoStart</tabstop>
+  <tabstop>comboBoxLanguageList</tabstop>
   <tabstop>pbClose</tabstop>
  </tabstops>
  <resources/>
