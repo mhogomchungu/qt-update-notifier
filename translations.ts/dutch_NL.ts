@@ -463,8 +463,7 @@ netwerkverbinding)</translation>
     <message>
         <location filename="../configuredialog.ui" line="748"/>
         <source>Auto start application at login</source>
-        <translation>Automatisch starten
-na aanmelden</translation>
+        <translation>Automatisch starten na aanmelden</translation>
     </message>
     <message>
         <location filename="../configuredialog.cpp" line="28"/>

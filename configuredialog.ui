@@ -771,7 +771,7 @@
      <x>20</x>
      <y>240</y>
      <width>511</width>
-     <height>111</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="title">
@@ -813,6 +813,7 @@
   <tabstop>gbUpdateIntervalComboBoxHours</tabstop>
   <tabstop>gbUpdateIntervalComboBoxMinutes</tabstop>
   <tabstop>gbDelayStartIntervalComboBox</tabstop>
+  <tabstop>checkBoxSynapticAutoRefresh</tabstop>
   <tabstop>checkBoxAutoStart</tabstop>
   <tabstop>comboBoxLanguageList</tabstop>
   <tabstop>pbClose</tabstop>
