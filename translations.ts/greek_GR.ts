@@ -433,7 +433,7 @@ Default and recommeded interval is
     <message>
         <location filename="../configuredialog.ui" line="790"/>
         <source>Auto refresh Synaptic when it is started from the context menu(Synaptic may crash under certain use cases)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυτόματη ανανέωση του Synaptic κατά την εκκίνηση από το μενού (μπορεί να μην λειτουργεί σε ορισμένες συνθήκες χρήσης)</translation>
     </message>
     <message>
         <source>When the program starts, wait for this
