@@ -13,30 +13,32 @@
 <context>
     <name>check_updates</name>
     <message>
-        <location filename="../check_updates.cpp" line="73"/>
         <source>pkgs to be upgraded: %1
 </source>
-        <translation>Zu aktualisierende Pakete: %1</translation>
+        <translation type="obsolete">Zu aktualisierende Pakete: %1</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="89"/>
         <source>pkgs to be replaced: %1
 </source>
-        <translation>Zu ersetzende Pakete: %1</translation>
+        <translation type="obsolete">Zu ersetzende Pakete: %1</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="105"/>
         <source>pkgs to be installed: %1</source>
-        <translation>Zu installierende Pakete: 1%</translation>
+        <translation type="obsolete">Zu installierende Pakete: 1%</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="204"/>
-        <location filename="../check_updates.cpp" line="210"/>
+        <location filename="../check_updates.cpp" line="100"/>
+        <source>%1 to be upgraded,%2 to be replaced, %3 to be installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../check_updates.cpp" line="177"/>
+        <location filename="../check_updates.cpp" line="183"/>
         <source>no updates found</source>
         <translation>Es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="219"/>
+        <location filename="../check_updates.cpp" line="192"/>
         <source>warning: apt-get update finished with errors</source>
         <translation>Warnung: bei der Durchführung von apt-get update
 sind Fehler aufgetreten.</translation>

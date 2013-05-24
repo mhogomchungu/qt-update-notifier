@@ -48,86 +48,57 @@ void check_updates::run()
 
 void check_updates::processUpdates( QByteArray& output1,QByteArray& output2 )
 {
-	QString updates ;
-
-	int count ;
-
 	QStringList l = QString( output1 ).split( "\n" ) ;
 
 	int index = l.indexOf( QString( "The following packages will be upgraded" ) ) ;
 
 	const char * threeSpaceCharacters = "   " ;
 
-	count = 0 ;
+	int upgrade = 0 ;
 	if( index != -1 ){
 		while( true ){
 			index++ ;
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
-				count++ ;
+				upgrade++ ;
 			}else{
 				break ;
 			}
 		}
 	}
-
-	updates = tr( "pkgs to be upgraded: %1\n" ).arg( QString::number( count ) ) ;
 
 	index = l.indexOf( QString( "The following packages will be REPLACED:" ) ) ;
 
-	count = 0 ;
+	int replace = 0 ;
 	if( index != -1 ){
 		while( true ){
 			index++ ;
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
-				count++ ;
+				replace++ ;
 			}else{
 				break ;
 			}
 		}
 	}
-
-	updates += tr( "pkgs to be replaced: %1\n" ).arg( QString::number( count ) ) ;
 
 	index = l.indexOf( QString( "The following NEW packages will be installed:" ) ) ;
 
-	count = 0 ;
+	int New = 0 ;
 	if( index != -1 ){
 		while( true ){
 			index++ ;
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
-				count++ ;
+				New++ ;
 			}else{
 				break ;
 			}
 		}
 	}
 
-	updates += tr( "pkgs to be installed: %1" ).arg( QString::number( count ) ) ;
-#if 0
-	int size = l.size() ;
-	int i = 0 ;
-	while( i < size ){
-		if( l.at( i ).startsWith( QString( "Inst " ) ) ){
-			l.removeAt( i );
-			i = 0 ;
-			size = l.size() ;
-		}else{
-			i++ ;
-		}
-	}
+	QString x = QString::number( upgrade ) ;
+	QString y = QString::number( replace ) ;
+	QString z = QString::number( New ) ;
+	QString updates = tr( "%1 to be upgraded,%2 to be replaced, %3 to be installed" ).arg( x ).arg( y ).arg( z ) ;
 
-	size = l.size() ;
-	i = 0 ;
-	while( i < size ){
-		if( l.at( i ).startsWith( QString( "Conf " ) ) ){
-			l.removeAt( i );
-			i = 0 ;
-			size = l.size() ;
-		}else{
-			i++ ;
-		}
-	}
-#endif
 	QStringList n ;
 	n.append( updates ) ;
 	n.append( output2 );
