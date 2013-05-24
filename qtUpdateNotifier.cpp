@@ -491,7 +491,7 @@ void qtUpdateNotifier::checkForUpdates()
 	m_updates->start();
 }
 
-void qtUpdateNotifier::saveAptGetLogOutPut( QStringList log )
+void qtUpdateNotifier::saveAptGetLogOutPut( QStringList& log )
 {
 	int j = log.size() ;
 	if( j == 0 ){
@@ -588,7 +588,7 @@ void qtUpdateNotifier::checkOldPackages( QStringList list )
 	}
 }
 
-void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList list )
+void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList& list )
 {
 	Q_UNUSED( y ) ;
 	this->setToolTip( x,tr( "Updates found" ),list.at( 0 ) );

@@ -104,13 +104,13 @@ private:
 	bool autoRefreshSYnaptic( void ) ;
 	void setupTranslationText( void ) ;
 	void printTime( QString,u_int64_t ) ;
-	void saveAptGetLogOutPut( QStringList ) ;
+	void saveAptGetLogOutPut( QStringList& ) ;
 	u_int64_t getCurrentTime( void ) ;
 	QString getCurrentTime_1( void ) ;
 	u_int64_t nextScheduledUpdateTime( void ) ;
 	void createEnvironment( void ) ;
 	void writeUpdateTimeToConfigFile( u_int64_t ) ;
-	void showToolTip( QString,QString,QStringList ) ;
+	void showToolTip( QString,QString,QStringList& ) ;
 	void showToolTip( QString,QString,QString ) ;
 	void showToolTip( QString,QString,int ) ;
 	void showToolTip( QString,QString ) ;
