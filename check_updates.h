@@ -48,7 +48,7 @@ signals:
 	void updateStatus( int,QStringList ) ;
 public slots:
 private:
-	void processUpdates( QByteArray output1,QByteArray output2 ) ;
+	void processUpdates( QByteArray& output1,QByteArray& output2 ) ;
 	QString m_configPath ;
 	QString m_language ;
 	void reportUpdates( void ) ;

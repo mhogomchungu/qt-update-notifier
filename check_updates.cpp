@@ -46,7 +46,7 @@ void check_updates::run()
 	}
 }
 
-void check_updates::processUpdates( QByteArray output1,QByteArray output2 )
+void check_updates::processUpdates( QByteArray& output1,QByteArray& output2 )
 {
 	QString updates ;
 
@@ -199,7 +199,6 @@ void check_updates::reportUpdates()
 					e.waitForFinished( -1 ) ;
 					output1 = e.readAllStandardOutput() ;
 					e.close();
-					list.append( output1 );
 					this->processUpdates( output,output1 );
 				}
 			}else{
