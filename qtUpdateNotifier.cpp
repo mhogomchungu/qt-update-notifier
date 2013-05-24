@@ -501,11 +501,20 @@ void qtUpdateNotifier::saveAptGetLogOutPut( QStringList& log )
 		return ;
 	}
 
+	QString x = log.at( 1 ) ;
+
+	if( x == tr( "no updates found" ) ){
+		/*
+		 * update log file only when there are new updates
+		 */
+		return ;
+	}
+
 	QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
 	QString msg = tr( "Log entry was created at: " ) ;
 	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
 
-	utility::writeToFile( m_aptGetConfigLog,header + log.at( 1 ),true ) ;
+	utility::writeToFile( m_aptGetConfigLog,header + x,true ) ;
 }
 
 void qtUpdateNotifier::updateStatus( int st,QStringList list )
