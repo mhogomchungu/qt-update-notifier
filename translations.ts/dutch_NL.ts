@@ -29,7 +29,7 @@
     <message>
         <location filename="../check_updates.cpp" line="100"/>
         <source>%1 to be upgraded,%2 to be replaced, %3 to be installed</source>
-        <translation type="unfinished"></translation>
+        <translation>bijwerken %1, vervangen %2, installeren %3</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="177"/>
