@@ -80,7 +80,7 @@ void qtUpdateNotifier::createEnvironment()
 	QDir d ;
 	d.mkpath( m_configPath ) ;
 
-	m_configTime = m_configPath + QString( "/qt-update-notifier.time" ) ;
+	m_configTime = m_configPath + QString( "/qt-update-notifier-next_auto_update.time" ) ;
 	m_configLog = m_configPath  + QString( "/qt-update-notifier-activity.log" ) ;
 
 	m_CheckDelayOnStartUp = m_configPath + QString( "/qt-update-notifier-startup_check_delay.time" ) ;
@@ -116,7 +116,7 @@ void qtUpdateNotifier::createEnvironment()
 
 	this->showToolTip( a,b,z ) ;
 
-	m_updateCheckInterval = m_configPath + QString( "/qt-update-notifier.interval" ) ;
+	m_updateCheckInterval = m_configPath + QString( "/qt-update-notifier-interval.time" ) ;
 
 	QFile f( m_updateCheckInterval ) ;
 	if( !f.exists() ){
@@ -214,7 +214,7 @@ void qtUpdateNotifier::openConfigureDialog()
 
 void qtUpdateNotifier::autoRefreshSynaptic( bool b )
 {
-	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.status" ) ;
+	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.option" ) ;
 	if( b ){
 		QFile f( x ) ;
 		f.open( QIODevice::WriteOnly ) ;
@@ -226,7 +226,7 @@ void qtUpdateNotifier::autoRefreshSynaptic( bool b )
 
 bool qtUpdateNotifier::autoRefreshSYnaptic()
 {
-	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.status" ) ;
+	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.option" ) ;
 	QFile f( x ) ;
 	return f.exists() ;
 }
