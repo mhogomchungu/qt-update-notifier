@@ -128,7 +128,6 @@ void check_updates::processUpdates( QByteArray output1,QByteArray output2 )
 		}
 	}
 #endif
-
 	QStringList n ;
 	n.append( updates ) ;
 	n.append( output2 );
@@ -175,21 +174,18 @@ void check_updates::reportUpdates()
 		QByteArray output = exe.readAllStandardOutput() ;
 		exe.close();
 
-		QByteArray output1 ;
-		if( m_language != QString( "english_US" ) ){
-			QProcess e ;
-			e.start( m_aptUpgrade );
-			e.waitForFinished( -1 ) ;
-			output1 = e.readAllStandardOutput() ;
-			e.close();
-		}
-
 		if( !output.isEmpty() ){
 			if( output.contains( error1 ) || output.contains( error2 ) || output.contains( error3 ) ){
 				list.append( bogusData );
 				if( m_language == QString( "english_US" ) ){
 					list.append( output );
 				}else{
+					QByteArray output1 ;
+					QProcess e ;
+					e.start( m_aptUpgrade );
+					e.waitForFinished( -1 ) ;
+					output1 = e.readAllStandardOutput() ;
+					e.close();
 					list.append( output1 );
 				}
 				emit updateStatus( INCONSISTENT_STATE,list );
@@ -197,6 +193,13 @@ void check_updates::reportUpdates()
 				if( m_language == QString( "english_US" ) ){
 					this->processUpdates( output,output );
 				}else{
+					QByteArray output1 ;
+					QProcess e ;
+					e.start( m_aptUpgrade );
+					e.waitForFinished( -1 ) ;
+					output1 = e.readAllStandardOutput() ;
+					e.close();
+					list.append( output1 );
 					this->processUpdates( output,output1 );
 				}
 			}else{
