@@ -647,25 +647,25 @@ network interfaces)</oldsource>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="506"/>
         <source>no updates found</source>
-        <translation type="unfinished">Δεν βρέθηκαν ενημερώσεις</translation>
+        <translation>Δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="516"/>
+        <location filename="../qtUpdateNotifier.cpp" line="514"/>
         <source>Log entry was created at: </source>
         <translation>Η εγγραφή δημιουργήθηκε στις: </translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="534"/>
+        <location filename="../qtUpdateNotifier.cpp" line="532"/>
         <source>Update check complete, UPDATES FOUND</source>
         <translation>Ο έλεγχος ολοκληρώθηκε, βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="540"/>
+        <location filename="../qtUpdateNotifier.cpp" line="538"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
         <translation>Ο έλεγχος ολοκληρώθηκε, παρουσιάστηκε σφάλμα, μην προχωρήσετε σε ενημέρωση (δείτε το παράθυρο καταγραφής του apt-get update για λεπτομέρειες)</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="725"/>
+        <location filename="../qtUpdateNotifier.cpp" line="723"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Έξοδος από το qt-update-notifier</translation>
     </message>
@@ -674,7 +674,7 @@ network interfaces)</oldsource>
         <translation type="obsolete">Ο έλεγχος ολοκληρώθηκε, βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="535"/>
+        <location filename="../qtUpdateNotifier.cpp" line="533"/>
         <source>There are updates in the repository</source>
         <translation>Υπάρχουν διαθέσιμες ενημερώσεις</translation>
     </message>
@@ -683,54 +683,54 @@ network interfaces)</oldsource>
         <translation type="obsolete">Ο έλεγχος ολοκληρώθηκε, παρουσιάστηκε σφάλμα, μην προχωρήσετε σε ενημέρωση (δείτε το παράθυρο καταγραφής του apt-get update για λεπτομέρειες)</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="541"/>
-        <location filename="../qtUpdateNotifier.cpp" line="547"/>
-        <location filename="../qtUpdateNotifier.cpp" line="553"/>
-        <location filename="../qtUpdateNotifier.cpp" line="562"/>
+        <location filename="../qtUpdateNotifier.cpp" line="539"/>
+        <location filename="../qtUpdateNotifier.cpp" line="545"/>
+        <location filename="../qtUpdateNotifier.cpp" line="551"/>
+        <location filename="../qtUpdateNotifier.cpp" line="560"/>
         <source>No updates found</source>
         <translation>Δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="546"/>
+        <location filename="../qtUpdateNotifier.cpp" line="544"/>
         <source>Update check complete, no updates found</source>
         <translation>Ο έλεγχος ολοκληρώθηκε, δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="552"/>
+        <location filename="../qtUpdateNotifier.cpp" line="550"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Ο έλεγχος ματαιώθηκε, δεν υπάρχει σύνδεση στο διαδίκτυο</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="561"/>
+        <location filename="../qtUpdateNotifier.cpp" line="559"/>
         <source>Update check complete, repository is in an unknown state</source>
         <translation>Ο έλεγχος ολοκληρώθηκε, το αποθετήριο βρίσκεται σε άγνωστη κατάσταση</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="580"/>
-        <location filename="../qtUpdateNotifier.cpp" line="587"/>
-        <location filename="../qtUpdateNotifier.cpp" line="594"/>
+        <location filename="../qtUpdateNotifier.cpp" line="578"/>
+        <location filename="../qtUpdateNotifier.cpp" line="585"/>
+        <location filename="../qtUpdateNotifier.cpp" line="592"/>
         <source>Warning</source>
         <translation>Προειδοποίηση</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="605"/>
+        <location filename="../qtUpdateNotifier.cpp" line="603"/>
         <source>Updates found</source>
         <translation>Βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="615"/>
-        <location filename="../qtUpdateNotifier.cpp" line="623"/>
+        <location filename="../qtUpdateNotifier.cpp" line="613"/>
+        <location filename="../qtUpdateNotifier.cpp" line="621"/>
         <source>Next update check will be at %1</source>
         <translation>Επόμενος έλεγχος για ενημερώσεις στις %1</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="645"/>
-        <location filename="../qtUpdateNotifier.cpp" line="657"/>
+        <location filename="../qtUpdateNotifier.cpp" line="643"/>
+        <location filename="../qtUpdateNotifier.cpp" line="655"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation>Ο επόμενος έλεγχος έχει προγραμματιστεί σε %1 ώρες στις %2</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="669"/>
+        <location filename="../qtUpdateNotifier.cpp" line="667"/>
         <source>Rescheduling update check</source>
         <translation>Επαναπρογραμματισμός του επόμενου ελέγχου</translation>
     </message>

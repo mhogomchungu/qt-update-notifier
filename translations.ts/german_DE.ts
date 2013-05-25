@@ -624,79 +624,79 @@ network interfaces)</oldsource>
         <translation>Es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="516"/>
+        <location filename="../qtUpdateNotifier.cpp" line="514"/>
         <source>Log entry was created at: </source>
         <translation>Protokolleintrag erstellt in: </translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="534"/>
+        <location filename="../qtUpdateNotifier.cpp" line="532"/>
         <source>Update check complete, UPDATES FOUND</source>
         <translation>Suche nach Aktualisierungen abgeschlossen, es wurden AKTUALISIERUNGEN GEFUNDEN.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="540"/>
+        <location filename="../qtUpdateNotifier.cpp" line="538"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
         <translation>Suche nach Aktualisierungen beendet, die Paketquelle scheint in einem inkonsistenten Zustand zu sein.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="725"/>
+        <location filename="../qtUpdateNotifier.cpp" line="723"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Qt-Update-Notifier beendet</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="535"/>
+        <location filename="../qtUpdateNotifier.cpp" line="533"/>
         <source>There are updates in the repository</source>
         <translation>Es gibt Aktualisierungen in der Paketquelle.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="541"/>
-        <location filename="../qtUpdateNotifier.cpp" line="547"/>
-        <location filename="../qtUpdateNotifier.cpp" line="553"/>
-        <location filename="../qtUpdateNotifier.cpp" line="562"/>
+        <location filename="../qtUpdateNotifier.cpp" line="539"/>
+        <location filename="../qtUpdateNotifier.cpp" line="545"/>
+        <location filename="../qtUpdateNotifier.cpp" line="551"/>
+        <location filename="../qtUpdateNotifier.cpp" line="560"/>
         <source>No updates found</source>
         <translation>Es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="546"/>
+        <location filename="../qtUpdateNotifier.cpp" line="544"/>
         <source>Update check complete, no updates found</source>
         <translation>Suche nach Aktualisierungen beendet, es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="552"/>
+        <location filename="../qtUpdateNotifier.cpp" line="550"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Suche übersprungen, Sie sind nicht mit dem Internet verbunden.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="561"/>
+        <location filename="../qtUpdateNotifier.cpp" line="559"/>
         <source>Update check complete, repository is in an unknown state</source>
         <translation>Suche nach Aktualisierungen beendet, die Paketquelle befindet sich in einem unbekannten Zustand.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="580"/>
-        <location filename="../qtUpdateNotifier.cpp" line="587"/>
-        <location filename="../qtUpdateNotifier.cpp" line="594"/>
+        <location filename="../qtUpdateNotifier.cpp" line="578"/>
+        <location filename="../qtUpdateNotifier.cpp" line="585"/>
+        <location filename="../qtUpdateNotifier.cpp" line="592"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="605"/>
+        <location filename="../qtUpdateNotifier.cpp" line="603"/>
         <source>Updates found</source>
         <translation>Es wurden Aktualisierungen gefunden.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="615"/>
-        <location filename="../qtUpdateNotifier.cpp" line="623"/>
+        <location filename="../qtUpdateNotifier.cpp" line="613"/>
+        <location filename="../qtUpdateNotifier.cpp" line="621"/>
         <source>Next update check will be at %1</source>
         <translation>Die nächste Suche nach Aktualisierungen beginnt um %1.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="645"/>
-        <location filename="../qtUpdateNotifier.cpp" line="657"/>
+        <location filename="../qtUpdateNotifier.cpp" line="643"/>
+        <location filename="../qtUpdateNotifier.cpp" line="655"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation>Nächste Suche ist in %1 Stunden am %2</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="669"/>
+        <location filename="../qtUpdateNotifier.cpp" line="667"/>
         <source>Rescheduling update check</source>
         <translation>Suche nach Aktualisierungen umplanen</translation>
     </message>
