@@ -621,7 +621,7 @@ network interfaces)</oldsource>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="506"/>
         <source>no updates found</source>
-        <translation type="unfinished">Es wurden keine Aktualisierungen gefunden.</translation>
+        <translation>Es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="516"/>
