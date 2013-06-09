@@ -27,18 +27,22 @@
         <translation type="obsolete">te installeren pakketten: %1</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="100"/>
         <source>%1 to be upgraded,%2 to be replaced, %3 to be installed</source>
-        <translation>bijwerken %1, vervangen %2, installeren %3</translation>
+        <translation type="obsolete">bijwerken %1, vervangen %2, installeren %3</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="177"/>
-        <location filename="../check_updates.cpp" line="183"/>
+        <location filename="../check_updates.cpp" line="101"/>
+        <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
+        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;bijwerken %1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;vervangen %2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;installeren %3&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
+    </message>
+    <message>
+        <location filename="../check_updates.cpp" line="178"/>
+        <location filename="../check_updates.cpp" line="184"/>
         <source>no updates found</source>
         <translation>Geen opwaarderingen gevonden</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="192"/>
+        <location filename="../check_updates.cpp" line="193"/>
         <source>warning: apt-get update finished with errors</source>
         <translation>Waarschuwing: Apt-get opwaardering beëndigd met fouten</translation>
     </message>
@@ -654,22 +658,27 @@ netwerkverbinding)</translation>
         <translation>Op bijwerken controleren</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="505"/>
+        <location filename="../qtUpdateNotifier.cpp" line="506"/>
+        <source>no updates found</source>
+        <translation>Geen opwaarderingen gevonden</translation>
+    </message>
+    <message>
+        <location filename="../qtUpdateNotifier.cpp" line="514"/>
         <source>Log entry was created at: </source>
         <translation>Geschiedenisuitvoer aangemaakt op: </translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="523"/>
+        <location filename="../qtUpdateNotifier.cpp" line="532"/>
         <source>Update check complete, UPDATES FOUND</source>
         <translation>Controle is compleet, UPDATES GEVONDEN</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="529"/>
+        <location filename="../qtUpdateNotifier.cpp" line="538"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
         <translation>Controle is compleet, pakketbron lijkt in een inconsistente status te zijn</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="714"/>
+        <location filename="../qtUpdateNotifier.cpp" line="723"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Qt-update-notifier afsluiten</translation>
     </message>
@@ -678,7 +687,7 @@ netwerkverbinding)</translation>
         <translation type="obsolete">Controle is compleet, UPDATES GEVONDEN</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="524"/>
+        <location filename="../qtUpdateNotifier.cpp" line="533"/>
         <source>There are updates in the repository</source>
         <translation>Er zijn in Synaptic bijwerkingen beschikbaar</translation>
     </message>
@@ -687,54 +696,54 @@ netwerkverbinding)</translation>
         <translation type="obsolete">Controle is compleet, pakketbron is in een onbekende status</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="530"/>
-        <location filename="../qtUpdateNotifier.cpp" line="536"/>
-        <location filename="../qtUpdateNotifier.cpp" line="542"/>
+        <location filename="../qtUpdateNotifier.cpp" line="539"/>
+        <location filename="../qtUpdateNotifier.cpp" line="545"/>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
+        <location filename="../qtUpdateNotifier.cpp" line="560"/>
         <source>No updates found</source>
         <translation>Geen bijwerkingen gevonden</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="535"/>
+        <location filename="../qtUpdateNotifier.cpp" line="544"/>
         <source>Update check complete, no updates found</source>
         <translation>Controle is compleet, geen updates gevonden</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="541"/>
+        <location filename="../qtUpdateNotifier.cpp" line="550"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Controle is overgeslagen, er is geen internetverbinding</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="550"/>
+        <location filename="../qtUpdateNotifier.cpp" line="559"/>
         <source>Update check complete, repository is in an unknown state</source>
         <translation>Controle is gedaan, pakketbron is in een onbekende status</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="569"/>
-        <location filename="../qtUpdateNotifier.cpp" line="576"/>
-        <location filename="../qtUpdateNotifier.cpp" line="583"/>
+        <location filename="../qtUpdateNotifier.cpp" line="578"/>
+        <location filename="../qtUpdateNotifier.cpp" line="585"/>
+        <location filename="../qtUpdateNotifier.cpp" line="592"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="594"/>
+        <location filename="../qtUpdateNotifier.cpp" line="603"/>
         <source>Updates found</source>
         <translation>Updates gevonden</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="604"/>
-        <location filename="../qtUpdateNotifier.cpp" line="612"/>
+        <location filename="../qtUpdateNotifier.cpp" line="613"/>
+        <location filename="../qtUpdateNotifier.cpp" line="621"/>
         <source>Next update check will be at %1</source>
         <translation>Volgende controle zal zijn op %1</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="634"/>
-        <location filename="../qtUpdateNotifier.cpp" line="646"/>
+        <location filename="../qtUpdateNotifier.cpp" line="643"/>
+        <location filename="../qtUpdateNotifier.cpp" line="655"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation>Volgende geplande controle is na %1 uren op %2</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="658"/>
+        <location filename="../qtUpdateNotifier.cpp" line="667"/>
         <source>Rescheduling update check</source>
         <translation>Controle opnieuw plannen</translation>
     </message>

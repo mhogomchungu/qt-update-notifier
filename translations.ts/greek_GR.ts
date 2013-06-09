@@ -27,18 +27,22 @@
         <translation type="obsolete">Προς εγκατάσταση: %1</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="100"/>
         <source>%1 to be upgraded,%2 to be replaced, %3 to be installed</source>
-        <translation>%1 προς αναβάθμιση,%2 προς αντικατάσταση, %3 προς εγκατάσταση</translation>
+        <translation type="obsolete">%1 προς αναβάθμιση,%2 προς αντικατάσταση, %3 προς εγκατάσταση</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="177"/>
-        <location filename="../check_updates.cpp" line="183"/>
+        <location filename="../check_updates.cpp" line="101"/>
+        <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
+        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 προς αναβάθμιση&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 προς αντικατάσταση&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 προς εγκατάσταση&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
+    </message>
+    <message>
+        <location filename="../check_updates.cpp" line="178"/>
+        <location filename="../check_updates.cpp" line="184"/>
         <source>no updates found</source>
         <translation>Δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="192"/>
+        <location filename="../check_updates.cpp" line="193"/>
         <source>warning: apt-get update finished with errors</source>
         <translation>Προειδοποίηση: παρουσιάστηκαν σφάλματα στο apt-get update</translation>
     </message>

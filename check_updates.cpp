@@ -97,7 +97,8 @@ void check_updates::processUpdates( QByteArray& output1,QByteArray& output2 )
 	QString x = QString::number( upgrade ) ;
 	QString y = QString::number( replace ) ;
 	QString z = QString::number( New ) ;
-	QString updates = tr( "%1 to be upgraded,%2 to be replaced, %3 to be installed" ).arg( x ).arg( y ).arg( z ) ;
+
+	QString updates = tr( "<table><tr><td>%1 to be upgraded</td></tr><tr><td>%2 to be replaced</td></tr><tr><td>%3 to be installed</td></tr></table>" ).arg( x ).arg( y ).arg( z ) ;
 
 	QStringList n ;
 	n.append( updates ) ;

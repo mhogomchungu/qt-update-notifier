@@ -36,7 +36,7 @@ bufferManager::bufferManager( size_t size )
 
 bufferManager::~bufferManager()
 {
-	delete[] m_buffer ;	
+	delete[] m_buffer ;
 }
 
 wchar_t * bufferManager::getBuffer()

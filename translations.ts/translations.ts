@@ -13,18 +13,18 @@
 <context>
     <name>check_updates</name>
     <message>
-        <location filename="../check_updates.cpp" line="100"/>
-        <source>%1 to be upgraded,%2 to be replaced, %3 to be installed</source>
+        <location filename="../check_updates.cpp" line="101"/>
+        <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="177"/>
-        <location filename="../check_updates.cpp" line="183"/>
+        <location filename="../check_updates.cpp" line="178"/>
+        <location filename="../check_updates.cpp" line="184"/>
         <source>no updates found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../check_updates.cpp" line="192"/>
+        <location filename="../check_updates.cpp" line="193"/>
         <source>warning: apt-get update finished with errors</source>
         <translation type="unfinished"></translation>
     </message>
