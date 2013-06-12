@@ -28,6 +28,11 @@ TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lkdeui )
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
 
+add_executable( qt-update-notifier-start-synaptic qt-update-notifier-start-synaptic.c )
+
+set_target_properties( qt-update-notifier-start-synaptic PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
+set_target_properties( qt-update-notifier-start-synaptic PROPERTIES LINK_FLAGS "-pie" )
+
 install ( FILES qt-update-notifier.png DESTINATION share/icons )
 install ( FILES qt-update-notifier-updating.png DESTINATION share/icons )
 install ( FILES qt-update-notifier-updates-are-available.png DESTINATION share/icons )
@@ -35,6 +40,10 @@ install ( FILES qt-update-notifier-need-attention.png DESTINATION share/icons )
 
 file( WRITE "${PROJECT_BINARY_DIR}/qt-update-install-path.h"
 "#define QT_UPDATE_NOTIFIER_TRANSLATION_PATH \"${CMAKE_INSTALL_PREFIX}/share/qt-update-notifier-translations/translations.qm\""
+)
+
+file( WRITE "${PROJECT_BINARY_DIR}/qt-update-synaptic-helper.h"
+"#define QT_UPDATE_NOTIFIER_HELPER_PATH \"${CMAKE_INSTALL_PREFIX}/bin/qt-update-notifier-start-synaptic\""
 )
 
 SET( TS_PATH share/qt-update-notifier-translations/translations.ts )
@@ -51,7 +60,13 @@ install ( FILES translations.qm/german_DE.qm DESTINATION ${QM_PATH} )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 
+install( TARGETS qt-update-notifier-start-synaptic RUNTIME DESTINATION bin 
+	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE SETUID
+)
+
 file( WRITE  ${PROJECT_BINARY_DIR}/desktop_file.h "\n#define DESKTOP_FILE_PATH      \"${CMAKE_INSTALL_PREFIX}/share/applications/qt-update-notifier.desktop\"\n")
+
+file( WRITE  ${PROJECT_BINARY_DIR}/kdesu_path.h "\n#define KDESU_PATH      \"${KDE4_LIB_DIR}/kde4/libexec/kdesu\"\n")
 
 install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier.desktop DESTINATION share/applications 
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE 

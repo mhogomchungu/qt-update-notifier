@@ -18,6 +18,7 @@
  */
 
 #include "startsynaptic.h"
+#include <QDebug>
 
 startSynaptic::startSynaptic( bool b,QObject * parent ) : QObject( parent ),m_autoRefresh( b )
 {
@@ -35,10 +36,13 @@ void startSynaptic::start()
 void startSynaptic::run()
 {
 	QProcess exe ;
+	qDebug() << QT_UPDATE_NOTIFIER_HELPER_PATH ;
+	
 	if( m_autoRefresh ){
-		exe.start( QString( "kdesu -c \"/usr/sbin/synaptic --update-at-startup\"" ) ) ;
+		QString e = QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) + QString( " --update-at-startup" ) ;
+		exe.start( e ) ;
 	}else{
-		exe.start( QString( "kdesu -c /usr/sbin/synaptic" ) ) ;
+		exe.start( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ;
 	}
 	exe.waitForFinished( -1 ) ;
 }

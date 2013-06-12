@@ -26,6 +26,8 @@
 #include <QProcess>
 #include <QThreadPool>
 
+#include "qt-update-synaptic-helper.h"
+
 class startSynaptic : public QObject,public QRunnable
 {
 	Q_OBJECT
