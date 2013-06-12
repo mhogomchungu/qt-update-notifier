@@ -50,5 +50,8 @@
 	   - .ts files are shipped with the tool to help translators update strings if necessary
 	- is kuniqueApplication to force only one instantiation of the program
 	- add a few translatable strings
-	- greek and dutch translations are now complete
+	- greek,german and dutch translations are now complete
+-version 1.4.3
+	- add ability to start synaptic without being prompted for root's password if a user is a member of group "qtupdatenotifier"
+	
 	
