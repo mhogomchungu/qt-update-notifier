@@ -559,11 +559,11 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 void qtUpdateNotifier::autoDownloadPackages( int r )
 {
 	Q_UNUSED( r ) ;
-	QString icon = QString( "qt-update-notifier" ) ;
-	this->showToolTip( icon,tr( "Package downloading complete" ) );
+	QString icon = QString( "qt-update-notifier-updates-are-available" ) ;
+	this->showToolTip( icon,tr( "Package downloading complete" ) ) ;
 	this->changeIcon( icon );
-	this->setStatus( KStatusNotifierItem::Passive );
-	this->logActivity( this->logMsg() ) ;
+	this->setStatus( KStatusNotifierItem::NeedsAttention ) ;
+	this->autoUpdatePackages() ;
 }
 
 void qtUpdateNotifier::autoDownloadPackages()
@@ -580,7 +580,7 @@ void qtUpdateNotifier::autoDownloadPackages()
 		connect( s,SIGNAL( result( int ) ),this,SLOT( autoDownloadPackages( int ) ) ) ;
 		s->start( QString( "--download-packages" ) ) ;
 	}else{
-		this->logActivity( this->logMsg() ) ;
+		this->autoUpdatePackages() ;
 	}
 }
 
@@ -598,8 +598,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
 		this->logActivity( tr( "Update check complete, UPDATES FOUND" ) ) ;
 		this->showToolTip( icon,tr( "There are updates in the repository" ),list );
-		this->autoUpdatePackages();
-		this->autoDownloadPackages();
+		this->autoDownloadPackages() ;
 	}else if( st == INCONSISTENT_STATE ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
