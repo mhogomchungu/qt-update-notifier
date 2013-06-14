@@ -100,7 +100,11 @@ private slots:
 	void configOptionsChanged( void ) ;
 	void localizationLanguage( QString ) ;
 	void autoRefreshSynaptic( bool ) ;
+	void autoUpdateResult( int ) ;
+	void autoDownloadPackages( int ) ;
 private:
+	void autoDownloadPackages( void ) ;
+	void autoUpdatePackages( void ) ;
 	bool autoRefreshSYnaptic( void ) ;
 	void setupTranslationText( void ) ;
 	void printTime( QString,u_int64_t ) ;

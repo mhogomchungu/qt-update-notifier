@@ -19,7 +19,7 @@ qtUpdateNotifier.cpp \
     startsynaptic.cpp \
     configuredialog.cpp \
     checkoldpackages.cpp \
-    utility.cpp
+    utility.cpp \
 
 HEADERS  += qtUpdateNotifier.h \
     check_updates.h \
@@ -28,7 +28,7 @@ HEADERS  += qtUpdateNotifier.h \
     startsynaptic.h \
     configuredialog.h \
     checkoldpackages.h \
-    utility.h
+    utility.h \
 
 RESOURCES += icons.qrc
 

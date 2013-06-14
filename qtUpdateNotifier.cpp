@@ -144,9 +144,14 @@ void qtUpdateNotifier::changeIcon( QString icon )
 
 void qtUpdateNotifier::startUpdater()
 {
-	startSynaptic * s = new startSynaptic( this->autoRefreshSYnaptic() ) ;
+	startSynaptic * s = new startSynaptic() ;
 	connect( s,SIGNAL( destroyed() ),this,SLOT( updaterClosed() ) ) ;
-	s->start();
+
+	if( this->autoRefreshSYnaptic() ){
+		s->start( QString( "--auto-refresh" ) ) ;
+	}else{
+		s->start();
+	}
 }
 
 void qtUpdateNotifier::updaterClosed()
@@ -517,6 +522,68 @@ void qtUpdateNotifier::saveAptGetLogOutPut( QStringList& log )
 	utility::writeToFile( m_aptGetConfigLog,header + x,true ) ;
 }
 
+void qtUpdateNotifier::autoUpdatePackages()
+{
+	KStandardDirs k ;
+	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/autoUpdatePackages.option" ) ;
+	if( QFile::exists( update ) ){
+		QString icon = QString( "qt-update-notifier-updating" ) ;
+		this->changeIcon( icon );
+		this->showToolTip( icon,tr( "Status" ),tr( "Updating packages" ) );
+		this->setStatus( KStatusNotifierItem::NeedsAttention );
+		this->logActivity( tr( "Automatic package update initiated" ) ) ;
+		startSynaptic * s = new startSynaptic() ;
+		connect( s,SIGNAL( result( int ) ),this,SLOT( autoUpdateResult( int ) ) ) ;
+		s->start( QString( "--auto-update" ) ) ;
+	}else{
+		this->logActivity( this->logMsg() ) ;
+	}
+}
+
+void qtUpdateNotifier::autoUpdateResult( int r )
+{
+	switch( r ){
+		case 0 : this->logActivity( tr( "Automatic package update succeeded" ) )		     ; break ;
+		case 1 : this->logActivity( tr( "Automatic package update failed" ) )			     ; break ;
+		case 2 : this->logActivity( tr( "Automatic package update succeeded,no updates found" ) )    ; break ;
+		case 3 : this->logActivity( tr( "Automatic package failed,synaptic or apt-get is running" ) ); break ;
+	}
+
+	QString icon = QString( "qt-update-notifier" ) ;
+	this->showToolTip( icon,tr( "Automatic update complete" ) );
+	this->changeIcon( icon );
+	this->setStatus( KStatusNotifierItem::Passive );
+	this->logActivity( this->logMsg() ) ;
+}
+
+void qtUpdateNotifier::autoDownloadPackages( int r )
+{
+	Q_UNUSED( r ) ;
+	QString icon = QString( "qt-update-notifier" ) ;
+	this->showToolTip( icon,tr( "Package downloading complete" ) );
+	this->changeIcon( icon );
+	this->setStatus( KStatusNotifierItem::Passive );
+	this->logActivity( this->logMsg() ) ;
+}
+
+void qtUpdateNotifier::autoDownloadPackages()
+{
+	KStandardDirs k ;
+	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/autoDownloadPackages.option" ) ;
+	if( QFile::exists( update ) ){
+		QString icon = QString( "qt-update-notifier-updating" ) ;
+		this->changeIcon( icon );
+		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) );
+		this->setStatus( KStatusNotifierItem::NeedsAttention );
+		this->logActivity( tr( "Package downloading initiated" ) ) ;
+		startSynaptic * s = new startSynaptic() ;
+		connect( s,SIGNAL( result( int ) ),this,SLOT( autoDownloadPackages( int ) ) ) ;
+		s->start( QString( "--download-packages" ) ) ;
+	}else{
+		this->logActivity( this->logMsg() ) ;
+	}
+}
+
 void qtUpdateNotifier::updateStatus( int st,QStringList list )
 {
 	m_threadIsRunning = false ;
@@ -531,24 +598,29 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->setStatus( KStatusNotifierItem::NeedsAttention );
 		this->logActivity( tr( "Update check complete, UPDATES FOUND" ) ) ;
 		this->showToolTip( icon,tr( "There are updates in the repository" ),list );
+		this->autoUpdatePackages();
+		this->autoDownloadPackages();
 	}else if( st == INCONSISTENT_STATE ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
+		this->logActivity( this->logMsg() ) ;
 	}else if( st == NO_UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Update check complete, no updates found" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
+		this->logActivity( this->logMsg() ) ;
 	}else if( st == NO_NET_CONNECTION ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Check skipped, user is not connected to the internet" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
+		this->logActivity( this->logMsg() ) ;
 	}else{
 		/*
 		 * currently,we dont get here,added for completeness' sake
@@ -558,13 +630,12 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Update check complete, repository is in an unknown state" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
+		this->logActivity( this->logMsg() ) ;
 	}
 
 	checkoldpackages * s = new checkoldpackages() ;
 	connect( s,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
 	s->start();
-
-	this->logActivity( this->logMsg() ) ;
 }
 
 void qtUpdateNotifier::checkOldPackages( QStringList list )

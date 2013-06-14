@@ -787,7 +787,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</string>
+     <string>Auto reload Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>

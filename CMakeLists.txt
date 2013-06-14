@@ -28,10 +28,12 @@ TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lkdeui )
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
 
-add_executable( qt-update-notifier-start-synaptic qt-update-notifier-start-synaptic.c )
+add_executable( qt-update-notifier-start-synaptic qt-update-notifier-start-synaptic.c process.c )
 
-set_target_properties( qt-update-notifier-start-synaptic PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
+set_target_properties( qt-update-notifier-start-synaptic PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c99" )
 set_target_properties( qt-update-notifier-start-synaptic PROPERTIES LINK_FLAGS "-pie" )
+
+TARGET_LINK_LIBRARIES( qt-update-notifier-start-synaptic -pthread ) 
 
 install ( FILES qt-update-notifier.png DESTINATION share/icons )
 install ( FILES qt-update-notifier-updating.png DESTINATION share/icons )

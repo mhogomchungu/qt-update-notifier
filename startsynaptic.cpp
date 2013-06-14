@@ -20,7 +20,7 @@
 #include "startsynaptic.h"
 #include <QDebug>
 
-startSynaptic::startSynaptic( bool b,QObject * parent ) : QObject( parent ),m_autoRefresh( b )
+startSynaptic::startSynaptic( QObject * parent ) : QObject( parent )
 {
 }
 
@@ -28,21 +28,24 @@ startSynaptic::~startSynaptic()
 {
 }
 
-void startSynaptic::start()
+void startSynaptic::start( QString option )
 {
+	m_option = option ;
 	QThreadPool::globalInstance()->start( this );
 }
 
 void startSynaptic::run()
 {
 	QProcess exe ;
-	qDebug() << QT_UPDATE_NOTIFIER_HELPER_PATH ;
-	
-	if( m_autoRefresh ){
-		QString e = QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) + QString( " --update-at-startup" ) ;
-		exe.start( e ) ;
-	}else{
+
+	if( m_option.isEmpty() ){
 		exe.start( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ;
+	}else{
+		QString e = QString( "%1 %2" ).arg( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ).arg( m_option )  ;
+		exe.start( e ) ;
 	}
+
 	exe.waitForFinished( -1 ) ;
+
+	emit result( exe.exitCode() ) ;
 }
