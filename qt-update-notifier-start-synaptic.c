@@ -148,17 +148,18 @@ static int refreshPackageList( void )
 static int aptAndSynapticAreRunning( void )
 {
 	int r ;
-	
+	uid_t uid = getuid() ;
 	process_t p = Process( "/bin/pidof" ) ;	
 	ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
+	ProcessSetOptionUser( p,uid ) ;
 	ProcessStart( p ) ;
 	r = ProcessExitStatus( p ) ;
 	ProcessDelete( &p ) ;
 	
 	if( r == 1 ){
-		ProcessDelete( &p ) ;
 		p = Process( "/bin/pidof" ) ;	
 		ProcessSetArgumentList( p,"/usr/bin/apt-get",ENDLIST ) ;
+		ProcessSetOptionUser( p,uid ) ;
 		ProcessStart( p ) ;
 		r = ProcessExitStatus( p ) ;
 		ProcessDelete( &p ) ;
