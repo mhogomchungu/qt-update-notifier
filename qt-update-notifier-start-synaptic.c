@@ -61,7 +61,7 @@ static int userHasPermission( void )
 	return st ;
 }
 
-static void printProcessOUtPut( const char * e )
+static void printOUtPut( const char * e )
 {
 #if DEBUG
 	printf( "%s",e ) ;
@@ -80,7 +80,7 @@ static int itIsSafeToUpdate( const char * e )
 
 	const char * noUpdates = "0 upgraded, 0 newly installed, 0 removed and 0 not upgraded." ;
 	
-	printProcessOUtPut( e ) ;
+	printOUtPut( e ) ;
 
 	if( e == NULL){
 		return 1 ;
@@ -110,10 +110,26 @@ static void setDefaultLanguageToEnglish( void )
 	setenv( "LANG","en_US.UTF-8",1 ) ;
 }
 
+#if DEBUG
+static void printProcessOUtPut( process_t p )
+{
+	char * e ;
+	while( 1 ){
+		e = NULL ;
+		ProcessGetOutPut( p,&e,STDOUT ) ;
+		if( e ){
+			printf( "%s",e ) ;
+			free( e ) ;
+		}else{
+			break ;
+		}
+	}
+}
+#endif
+
 static int refreshPackageList( void )
 {
 	int r ;
-	char * e = NULL ;
 	
 	process_t p = Process( "/usr/bin/apt-get" ) ;
 	
@@ -122,22 +138,8 @@ static int refreshPackageList( void )
 	ProcessStart( p ) ;
 	
 #if DEBUG
-	while( 1 ){
-		e = NULL ;
-		ProcessGetOutPut( p,&e,STDOUT ) ;
-		if( e ){
-			printProcessOUtPut( e ) ;
-			free( e ) ;
-			e = NULL  ;
-		}else{
-			break ;
-		}
-	}
+	printProcessOUtPut( p ) ;
 #endif
-	if( e ){
-		free( e ) ;
-		e = NULL ;
-	}
 	
 	r = ProcessExitStatus( p ) ;
 	ProcessDelete( &p ) ;	
@@ -168,15 +170,39 @@ static int aptAndSynapticAreRunning( void )
 	return r == 0 ;
 }
 
-static int autoUpdate( void )
+char * getProcessOutPut( process_t p )
 {
-	process_t p ;
 	char * e = NULL ;
-	int r ;
 	char * buffer = NULL ;
 	size_t buffer_size = 0 ;
 	size_t output_size = 0 ;
+	
+	while( 1 ){
+		output_size = ProcessGetOutPut( p,&e,STDOUT ) ;
+		if( output_size > 0 ){
+			buffer = realloc( buffer,buffer_size + output_size + 1 ) ;
+			
+			strcpy( buffer + buffer_size,e ) ;
+			
+			buffer_size += output_size ;
+			#if DEBUG
+				printf( "%s",e ) ;
+			#endif
+			free( e ) ;
+		}else{
+			break ;
+		}
+	}
+	
+	return buffer ;
+}
 
+static int autoUpdate( void )
+{
+	process_t p ;
+	int r ;
+	char * buffer ;
+	
 	if( !userHasPermission() ){
 		/*
 		 * user is not privileged,abort
@@ -202,21 +228,8 @@ static int autoUpdate( void )
 			ProcessSetArgumentList( p,"dist-upgrade","--simulate",ENDLIST ) ;
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessStart( p ) ;
-
-			while( 1 ){
-				output_size = ProcessGetOutPut( p,&e,STDOUT ) ;
-				if( output_size > 0 ){
-					buffer = realloc( buffer,buffer_size + output_size + 1 ) ;
-
-					strcpy( buffer + buffer_size,e ) ;
-
-					buffer_size += output_size ;
-					printProcessOUtPut( e ) ;
-					free( e ) ;
-				}else{
-					break ;
-				}
-			}
+			
+			buffer = getProcessOutPut( p ) ;
 
 			ProcessExitStatus( p ) ;
 			ProcessDelete( &p ) ;
@@ -225,7 +238,7 @@ static int autoUpdate( void )
 				r = itIsSafeToUpdate( buffer ) ;
 				free( buffer ) ;
 			}else{
-				printProcessOUtPut( "IT IS NOT SAFE TO UPDATE,apt-get gave no output\n" ) ;
+				printOUtPut( "IT IS NOT SAFE TO UPDATE,apt-get gave no output\n" ) ;
 				r = 1 ;
 			}
 
@@ -233,12 +246,19 @@ static int autoUpdate( void )
 				/*
 				 * it seem to be safe to update,update
 				 */
-				printProcessOUtPut( "There are updates\n" ) ;
+				printOUtPut( "There are updates\n" ) ;
 				
 				p = Process( "/usr/bin/apt-get" ) ;
 				ProcessSetArgumentList( p,"dist-upgrade","--assume-yes",ENDLIST ) ;
 				ProcessSetOptionUser( p,0 ) ;
 				ProcessStart( p ) ;
+				
+				#if DEBUG
+					puts( "\n------------------------------------------------\n" ) ;
+					printProcessOUtPut( p ) ;
+					puts( "\n------------------------------------------------\n" ) ;
+				#endif
+				
 				r = ProcessExitStatus( p ) ;
 				ProcessDelete( &p ) ;
 				
@@ -252,9 +272,9 @@ static int autoUpdate( void )
 				ProcessExitStatus( p ) ;
 				ProcessDelete( &p ) ;
 			}else if( r == 2 ){
-				printProcessOUtPut( "There are no updates\n" ) ;
+				printOUtPut( "There are no updates\n" ) ;
 			}else{
-				printProcessOUtPut( "IT IS NOT SAFE TO UPDATE\n" ) ;
+				printOUtPut( "IT IS NOT SAFE TO UPDATE\n" ) ;
 			}
 		}
 	}

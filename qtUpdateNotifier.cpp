@@ -542,15 +542,22 @@ void qtUpdateNotifier::autoUpdatePackages()
 
 void qtUpdateNotifier::autoUpdateResult( int r )
 {
+	QString icon = QString( "qt-update-notifier" ) ;
 	switch( r ){
-		case 0 : this->logActivity( tr( "Automatic package update succeeded" ) )		     ; break ;
-		case 1 : this->logActivity( tr( "Automatic package update failed" ) )			     ; break ;
-		case 2 : this->logActivity( tr( "Automatic package update succeeded,no updates found" ) )    ; break ;
-		case 3 : this->logActivity( tr( "Automatic package failed,synaptic or apt-get is running" ) ); break ;
+		case 0 : this->logActivity( tr( "Automatic package update succeeded" ) ) ;
+			 this->showToolTip( icon,tr( "Automatic update complete" ) ) ;
+			 break ;
+		case 1 : this->logActivity( tr( "Automatic package update failed" ) ) ;
+			 this->showToolTip( icon,tr( "Automatic update failed" ) ) ;
+			 break ;
+		case 2 : this->logActivity( tr( "Automatic package update succeeded,no updates found" ) ) ;
+			 this->showToolTip( icon,tr( "Automatic update complete" ) ) ;
+			 break ;
+		case 3 : this->logActivity( tr( "Automatic package failed,synaptic or apt-get is running" ) ) ;
+			 this->showToolTip( icon,tr( "Automatic update failed" ) ) ;
+			 break ;
 	}
 
-	QString icon = QString( "qt-update-notifier" ) ;
-	this->showToolTip( icon,tr( "Automatic update complete" ) );
 	this->changeIcon( icon );
 	this->setStatus( KStatusNotifierItem::Passive );
 	this->logActivity( this->logMsg() ) ;
