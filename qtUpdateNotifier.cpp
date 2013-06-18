@@ -565,9 +565,13 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 
 void qtUpdateNotifier::autoDownloadPackages( int r )
 {
-	Q_UNUSED( r ) ;
+	if( r == 0 ){
+		this->logActivity( tr( "Package auto downloading complete" ) ) ;
+	}else{
+		this->logActivity( tr( "Package auto downloading failed" ) ) ;
+	}
 	QString icon = QString( "qt-update-notifier-updates-are-available" ) ;
-	this->showToolTip( icon,tr( "Package downloading complete" ) ) ;
+	this->showToolTip( icon,tr( "Package auto downloading complete" ) ) ;
 	this->changeIcon( icon );
 	this->setStatus( KStatusNotifierItem::NeedsAttention ) ;
 	this->autoUpdatePackages() ;
