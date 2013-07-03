@@ -148,7 +148,7 @@ void qtUpdateNotifier::startUpdater()
 	connect( s,SIGNAL( destroyed() ),this,SLOT( updaterClosed() ) ) ;
 
 	if( this->autoRefreshSYnaptic() ){
-		s->start( QString( "--auto-refresh" ) ) ;
+		s->start( QString( "--update-at-startup" ) ) ;
 	}else{
 		s->start();
 	}
@@ -545,13 +545,13 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 	QString icon = QString( "qt-update-notifier" ) ;
 	switch( r ){
 		case 0 : this->logActivity( tr( "Automatic package update succeeded" ) ) ;
-			 this->showToolTip( icon,tr( "Automatic update complete" ) ) ;
+			 this->showToolTip( icon,tr( "Automatic update completed" ) ) ;
 			 break ;
 		case 1 : this->logActivity( tr( "Automatic package update failed" ) ) ;
 			 this->showToolTip( icon,tr( "Automatic update failed" ) ) ;
 			 break ;
 		case 2 : this->logActivity( tr( "Automatic package update succeeded,no updates found" ) ) ;
-			 this->showToolTip( icon,tr( "Automatic update complete" ) ) ;
+			 this->showToolTip( icon,tr( "Automatic update completed" ) ) ;
 			 break ;
 		case 3 : this->logActivity( tr( "Automatic package failed,synaptic or apt-get is running" ) ) ;
 			 this->showToolTip( icon,tr( "Automatic update failed" ) ) ;
@@ -566,12 +566,13 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 void qtUpdateNotifier::autoDownloadPackages( int r )
 {
 	if( r == 0 ){
-		this->logActivity( tr( "Package auto downloading complete" ) ) ;
+		this->logActivity( tr( "Downloading of packages completed" ) ) ;
 	}else{
-		this->logActivity( tr( "Package auto downloading failed" ) ) ;
+		this->logActivity( tr( "Downloading of packages failed" ) ) ;
 	}
+
 	QString icon = QString( "qt-update-notifier-updates-are-available" ) ;
-	this->showToolTip( icon,tr( "Package auto downloading complete" ) ) ;
+	this->showToolTip( icon,tr( "Package downloading completed" ) ) ;
 	this->changeIcon( icon );
 	this->setStatus( KStatusNotifierItem::NeedsAttention ) ;
 	this->autoUpdatePackages() ;

@@ -1,3 +1,21 @@
+/*
+ * 
+ *  Copyright (c) 2013
+ *  name : mhogo mchungu
+ *  email: mhogomchungu@gmail.com
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include<string.h>
 #include <grp.h>
@@ -5,6 +23,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "kdesu_path.h"
 #include "process.h"
@@ -28,8 +49,9 @@ static int userHasPermission( void )
 	uid_t uid = getuid() ;
 
 	struct group * grp ;
+	
 	struct passwd * pass ;
-
+	
 	if( uid == 0 ){
 		return 1 ;
 	}
@@ -70,6 +92,16 @@ static void printOUtPut( const char * e )
 #endif
 }
 
+static void logStage( int fd,const char * msg )
+{
+	const char * e = "\n-------------------------------------------\n" ;
+	size_t s = strlen( e ) ;
+	printf( "%s\n",msg ) ;
+	write( fd,e,s ) ;
+	write( fd,msg,strlen( msg ) ) ;
+	write( fd,e,s ) ;
+}
+
 static int itIsSafeToUpdate( const char * e )
 {
 	const char * error1 = "The following packages have unmet dependencies" ;
@@ -107,42 +139,54 @@ static int itIsSafeToUpdate( const char * e )
 static void setDefaultLanguageToEnglish( void )
 {
 	setenv( "LANG","en_US.UTF-8",1 ) ;
-	setenv( "LANG","en_US.UTF-8",1 ) ;
+	setenv( "LANGUAGE","en_US.UTF-8",1 ) ;
 }
 
-#if DEBUG
-static void printProcessOUtPut( process_t p )
+static void printProcessOUtPut( process_t p,int fd )
 {
 	char * e ;
+	int z ;
 	while( 1 ){
 		e = NULL ;
-		ProcessGetOutPut( p,&e,STDOUT ) ;
+		z = ProcessGetOutPut( p,&e,STDOUT ) ;
 		if( e ){
-			printf( "%s",e ) ;
+			write( fd,e,z ) ;
+			
+			#if DEBUG
+				printf( "%s",e ) ;
+			#endif
+				
 			free( e ) ;
 		}else{
 			break ;
 		}
 	}
 }
-#endif
 
-static int refreshPackageList( void )
+static int refreshPackageList( int fd )
 {
 	int r ;
+	process_t p ;
 	
-	process_t p = Process( "/usr/bin/apt-get" ) ;
+	logStage( fd,"entering refreshPackageList" ) ;
 	
-	ProcessSetArgumentList( p,"update",ENDLIST ) ;
-	ProcessSetOptionUser( p,0 ) ;
-	ProcessStart( p ) ;
+	if( userHasPermission() ){
+		p = Process( "/usr/bin/apt-get" ) ;
 	
-#if DEBUG
-	printProcessOUtPut( p ) ;
-#endif
+		ProcessSetArgumentList( p,"update",ENDLIST ) ;
+		ProcessSetOptionUser( p,0 ) ;
+		ProcessStart( p ) ;
 	
-	r = ProcessExitStatus( p ) ;
-	ProcessDelete( &p ) ;	
+		printProcessOUtPut( p,fd ) ;
+	
+		r = ProcessExitStatus( p ) ;
+		ProcessDelete( &p ) ;	
+	}else{
+		printf( "error: insufficent privileges to perform this operation\n" ) ;
+		r = 1 ;
+	}
+	
+	logStage( fd,"leaving refreshPackageList" ) ;
 	
 	return r ;
 }
@@ -170,7 +214,7 @@ static int aptAndSynapticAreRunning( void )
 	return r == 0 ;
 }
 
-char * getProcessOutPut( process_t p )
+char * getProcessOutPut( process_t p,int fd )
 {
 	char * e = NULL ;
 	char * buffer = NULL ;
@@ -180,6 +224,9 @@ char * getProcessOutPut( process_t p )
 	while( 1 ){
 		output_size = ProcessGetOutPut( p,&e,STDOUT ) ;
 		if( output_size > 0 ){
+			
+			write( fd,e,output_size ) ;
+			
 			buffer = realloc( buffer,buffer_size + output_size + 1 ) ;
 			
 			strcpy( buffer + buffer_size,e ) ;
@@ -197,19 +244,20 @@ char * getProcessOutPut( process_t p )
 	return buffer ;
 }
 
-static int autoUpdate( void )
+static int autoUpdate( int fd )
 {
 	process_t p ;
 	int r ;
 	char * buffer ;
 	
+	logStage( fd,"entering autoUpdate" ) ;
+	
 	if( !userHasPermission() ){
-		/*
-		 * user is not privileged,abort
-		 */
+		printf( "error: insufficent privileges to perform this operation\n" ) ;
 		r = 1 ;
 	}else{
 		if( aptAndSynapticAreRunning() ){
+			printf( "error: apt and/or synaptic are running\n" ) ;
 			return 3 ;
 		}
 			
@@ -218,7 +266,7 @@ static int autoUpdate( void )
 		 */
 		setDefaultLanguageToEnglish() ;
 
-		r = refreshPackageList() ;
+		r = refreshPackageList( fd ) ;
 
 		if( r == 0 ){
 			/*
@@ -229,7 +277,7 @@ static int autoUpdate( void )
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessStart( p ) ;
 			
-			buffer = getProcessOutPut( p ) ;
+			buffer = getProcessOutPut( p,fd ) ;
 
 			ProcessExitStatus( p ) ;
 			ProcessDelete( &p ) ;
@@ -238,7 +286,7 @@ static int autoUpdate( void )
 				r = itIsSafeToUpdate( buffer ) ;
 				free( buffer ) ;
 			}else{
-				printOUtPut( "IT IS NOT SAFE TO UPDATE,apt-get gave no output\n" ) ;
+				printf( "IT IS NOT SAFE TO UPDATE,apt-get gave no output\n" ) ;
 				r = 1 ;
 			}
 
@@ -246,20 +294,21 @@ static int autoUpdate( void )
 				/*
 				 * it seem to be safe to update,update
 				 */
-				printOUtPut( "There are updates\n" ) ;
+				printf( "updates found\n" ) ;
 				
 				p = Process( "/usr/bin/apt-get" ) ;
 				ProcessSetArgumentList( p,"dist-upgrade","--assume-yes",ENDLIST ) ;
 				ProcessSetOptionUser( p,0 ) ;
 				ProcessStart( p ) ;
 				
-				#if DEBUG
-					puts( "\n------------------------------------------------\n" ) ;
-					printProcessOUtPut( p ) ;
-					puts( "\n------------------------------------------------\n" ) ;
-				#endif
+				printProcessOUtPut( p,fd ) ;
 				
 				r = ProcessExitStatus( p ) ;
+				
+				if( r != 0 ){
+					printf( "error: failed to run dist-upgrade --assume-yes\n" ) ;
+				}
+				
 				ProcessDelete( &p ) ;
 				
 				/*
@@ -272,34 +321,44 @@ static int autoUpdate( void )
 				ProcessExitStatus( p ) ;
 				ProcessDelete( &p ) ;
 			}else if( r == 2 ){
-				printOUtPut( "There are no updates\n" ) ;
+				printf( "There are no updates\n" ) ;
 			}else{
-				printOUtPut( "IT IS NOT SAFE TO UPDATE\n" ) ;
+				printf( "IT IS NOT SAFE TO UPDATE\n" ) ;
 			}
+		}else{
+			printf( "failed to refresh package list\n" ) ;
 		}
 	}
 	
+	logStage( fd,"leaving autoUpdate" ) ;
 	return r ;
 }
 
-static int downloadPackages( void )
+static int downloadPackages( int fd )
 {
 	process_t p ;
 	
 	int r ;
+	
+	logStage( fd,"entering downloadPackages" ) ;
+	
 	if( userHasPermission() ){
-		r = refreshPackageList() ;
+		r = refreshPackageList( fd ) ;
 		if( r == 0 ){
 			p = Process( "/usr/bin/apt-get" ) ;
 			ProcessSetArgumentList( p,"dist-upgrade","--download-only","--assume-yes",ENDLIST ) ;
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessStart( p ) ;
+			printProcessOUtPut( p,fd ) ;
 			r = ProcessExitStatus( p ) ;
 			ProcessDelete( &p ) ;
 		}
 	}else{
+		printf( "error: insufficent privileges to perform this operation\n" ) ;
 		r = 1 ;
 	}
+	
+	logStage( fd,"leaving downloadPackages" ) ;
 	
 	return r ;
 }
@@ -334,22 +393,85 @@ static int startSynaptic( const char * e )
 	return r ;
 }
 
+static int printOptions( void )
+{
+	const char * options = "\
+version  : 1.0.0\n\
+copyright: 2013 Ink Francis,mhogomchungu@gmail.com\n\
+license  : GPLv2+\n\
+\n\
+argument list:\n\
+	--auto-update		calls \"apt-get update\" followed by \"apt-get dist-upgrade\"\n\
+	--download-packages	calls \"apt-get --dist-upgrade --download-only --asuume-yes\"\n\
+	--start-synaptic	calls \"kdesu /usr/sbin/synaptic\"\n\
+	--start-synaptic --update-at-startup	calls \"kdesu /usr/sbin/synaptic --update-at-startup\"\n" ;
+	
+	printf( "%s",options ) ;
+	return 0 ;
+}
+
 int main( int argc,char * argv[] )
 {
 	const char * e ;
-
+	const char * f ;
+	
+	int fd ;
+	int st ;
+	
+	char logPath[ 1024 ] ;
+	
+	struct passwd * pass = getpwuid( getuid() ) ;
+	
+	if( pass == NULL ){
+		return 10 ;
+	}
+	
+	snprintf( logPath,1024,"/home/%s/.config/qt-update-notifier/backEnd.log",pass->pw_name ) ;
+		
 	if( argc < 2 ){
-		return startSynaptic( NULL ) ;
+		
+		return printOptions() ;
+	}
+		
+	e = argv[ 1 ] ;
+
+	#define x( z ) strcmp( e,z ) == 0
+	if( x( "--help" ) || x( "-help" ) || x( "-h" ) || x( "-version" ) || x( "--version" ) || x( "-v" ) ){
+		return printOptions() ;
 	}else{
-		e = argv[ 1 ] ;
-		if( strcmp( e,"--auto-update" ) == 0 ){
-			return autoUpdate() ;
-		}else if( strcmp( e,"--update-at-startup" ) == 0 ){
-			return startSynaptic( e ) ;
-		}else if( strcmp( e,"--download-packages" ) == 0 ){
-			return downloadPackages() ;
-		}else{
-			return 1 ;
+		if( strcmp( e,"--start-synaptic" ) == 0 ){
+			if( argc == 3 ){
+				f = argv[ 2 ] ;
+				if( strcmp( f,"--update-at-startup" ) == 0 ){
+					return startSynaptic( f ) ;
+				}else{
+					printf( "error: unrecognized or invalid synaptic option\n" ) ;
+					return 1 ;
+				}
+			}else{
+				return startSynaptic( NULL ) ;
+			}
 		}
+		
+		fd = open( logPath,O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
+		
+		if( fd == -1 ){
+			return 11 ;
+		}
+		
+		fchmod( fd,S_IRUSR|S_IWUSR|S_IRWXG|S_IRGRP|S_IROTH|S_IWOTH ) ;
+		
+		if( strcmp( e,"--auto-update" ) == 0 ){
+			st = autoUpdate( fd ) ;
+		}else if( strcmp( e,"--download-packages" ) == 0 ){
+			st = downloadPackages( fd ) ;
+		}else{
+			printf( "error: unrecognized or invalid option\n" ) ;
+			st = 1 ;
+		}
+		
+		close( fd ) ;
+		
+		return st ;
 	}
 }

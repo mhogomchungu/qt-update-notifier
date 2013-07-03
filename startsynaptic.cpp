@@ -39,9 +39,9 @@ void startSynaptic::run()
 	QProcess exe ;
 
 	if( m_option.isEmpty() ){
-		exe.start( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ;
+		exe.start( QString( "%1 --start-synaptic" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ;
 	}else{
-		QString e = QString( "%1 %2" ).arg( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ).arg( m_option )  ;
+		QString e = QString( "%1 --start-synaptic %2" ).arg( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ).arg( m_option )  ;
 		exe.start( e ) ;
 	}
 
