@@ -26,8 +26,8 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	connect( m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
 	m_trayMenu = 0 ;
 	m_threadIsRunning = false ;
-	this->setStatus( KStatusNotifierItem::Passive );
-	this->setCategory( KStatusNotifierItem::ApplicationStatus );
+	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
+	KStatusNotifierItem::setCategory( KStatusNotifierItem::ApplicationStatus );
 	this->changeIcon( QString( "qt-update-notifier" ) );
 	this->createEnvironment();
 }
@@ -138,8 +138,8 @@ void qtUpdateNotifier::start()
 
 void qtUpdateNotifier::changeIcon( QString icon )
 {
-	this->setIconByName( icon );
-	this->setAttentionIconByName( icon ) ;
+	KStatusNotifierItem::setIconByName( icon );
+	KStatusNotifierItem::setAttentionIconByName( icon ) ;
 }
 
 void qtUpdateNotifier::startUpdater()
@@ -166,7 +166,7 @@ void qtUpdateNotifier::doneUpdating()
 	this->showToolTip( y,z ) ;
 
 	this->changeIcon( QString( "qt-update-notifier" ) );
-	this->setStatus( KStatusNotifierItem::Passive );
+	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
 }
 
 bool qtUpdateNotifier::autoStartEnabled()
@@ -319,8 +319,7 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "Open apt-get log window" ),this,SLOT( aptGetLogWindow() ) );
 	m_trayMenu->addAction( tr( "Configuration window" ),this,SLOT( openConfigureDialog() ) );
 
-	this->setContextMenu( m_trayMenu );
-	this->contextMenu()->setEnabled( true );
+	KStatusNotifierItem::setContextMenu( m_trayMenu );
 
 	QTimer * t = new QTimer() ;
 	t->setSingleShot( true ) ;
@@ -492,7 +491,6 @@ void qtUpdateNotifier::checkForUpdates()
 	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
 	connect( m_updates,SIGNAL( finished() ),m_updates,SLOT( deleteLater() ) ) ;
 
-	this->contextMenu()->setEnabled( false );
 	m_updates->start();
 }
 
@@ -530,7 +528,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 		QString icon = QString( "qt-update-notifier-updating" ) ;
 		this->changeIcon( icon );
 		this->showToolTip( icon,tr( "Status" ),tr( "Updating packages" ) );
-		this->setStatus( KStatusNotifierItem::NeedsAttention );
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention );
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 		startSynaptic * s = new startSynaptic() ;
 		connect( s,SIGNAL( result( int ) ),this,SLOT( autoUpdateResult( int ) ) ) ;
@@ -559,7 +557,7 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 	}
 
 	this->changeIcon( icon );
-	this->setStatus( KStatusNotifierItem::Passive );
+	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
 	this->logActivity( this->logMsg() ) ;
 }
 
@@ -574,7 +572,7 @@ void qtUpdateNotifier::autoDownloadPackages( int r )
 	QString icon = QString( "qt-update-notifier-updates-are-available" ) ;
 	this->showToolTip( icon,tr( "Package downloading completed" ) ) ;
 	this->changeIcon( icon );
-	this->setStatus( KStatusNotifierItem::NeedsAttention ) ;
+	KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
 	this->autoUpdatePackages() ;
 }
 
@@ -586,7 +584,7 @@ void qtUpdateNotifier::autoDownloadPackages()
 		QString icon = QString( "qt-update-notifier-updating" ) ;
 		this->changeIcon( icon );
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) );
-		this->setStatus( KStatusNotifierItem::NeedsAttention );
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention );
 		this->logActivity( tr( "Package downloading initiated" ) ) ;
 		startSynaptic * s = new startSynaptic() ;
 		connect( s,SIGNAL( result( int ) ),this,SLOT( autoDownloadPackages( int ) ) ) ;
@@ -607,28 +605,28 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 	if( st == UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		this->changeIcon( icon ) ;
-		this->setStatus( KStatusNotifierItem::NeedsAttention );
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention );
 		this->logActivity( tr( "Update check complete, UPDATES FOUND" ) ) ;
 		this->showToolTip( icon,tr( "There are updates in the repository" ),list );
 		this->autoDownloadPackages() ;
 	}else if( st == INCONSISTENT_STATE ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
-		this->setStatus( KStatusNotifierItem::Passive );
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
 	}else if( st == NO_UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
-		this->setStatus( KStatusNotifierItem::Passive );
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Update check complete, no updates found" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
 	}else if( st == NO_NET_CONNECTION ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
-		this->setStatus( KStatusNotifierItem::Passive );
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Check skipped, user is not connected to the internet" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
@@ -638,7 +636,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		 */
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
-		this->setStatus( KStatusNotifierItem::Passive );
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
 		this->logActivity( tr( "Update check complete, repository is in an unknown state" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
@@ -682,18 +680,18 @@ void qtUpdateNotifier::checkOldPackages( QStringList list )
 void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList& list )
 {
 	Q_UNUSED( y ) ;
-	this->setToolTip( x,tr( "Updates found" ),list.at( 0 ) );
+	KStatusNotifierItem::setToolTip( x,tr( "Updates found" ),list.at( 0 ) );
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
 {
-	this->setToolTip( x,y,z );
+	KStatusNotifierItem::setToolTip( x,y,z );
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,int z )
 {
 	QString n = tr( "Next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
-	this->setToolTip( x,y,n );
+	KStatusNotifierItem::setToolTip( x,y,n );
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y )
@@ -701,7 +699,7 @@ void qtUpdateNotifier::showToolTip( QString x,QString y )
 	QDateTime d ;
 	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() );
 	QString n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
-	this->setToolTip( x,y,n );
+	KStatusNotifierItem::setToolTip( x,y,n );
 }
 
 QString qtUpdateNotifier::nextUpdateTime( void )
@@ -772,7 +770,6 @@ void qtUpdateNotifier::threadTerminated( void )
 void qtUpdateNotifier::threadisFinished()
 {
 	m_threadIsRunning = false ;
-	this->contextMenu()->setEnabled( true );
 }
 
 void qtUpdateNotifier::closeApp()
