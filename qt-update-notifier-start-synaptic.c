@@ -291,6 +291,8 @@ static int autoUpdate( int fd )
 			}
 
 			if( r == 0 ){
+				
+				logStage( fd,"running apt-get dist-upgrade --assume-yes" ) ;
 				/*
 				 * it seem to be safe to update,update
 				 */
@@ -305,11 +307,15 @@ static int autoUpdate( int fd )
 				
 				r = ProcessExitStatus( p ) ;
 				
+				logStage( fd,"done running apt-get dist-upgrade --assume-yes" ) ;
+				
 				if( r != 0 ){
 					printf( "error: failed to run dist-upgrade --assume-yes\n" ) ;
 				}
 				
 				ProcessDelete( &p ) ;
+				
+				logStage( fd,"running apt-get clean" ) ;
 				
 				/*
 				 * clear cache 
@@ -320,6 +326,9 @@ static int autoUpdate( int fd )
 				ProcessStart( p ) ;
 				ProcessExitStatus( p ) ;
 				ProcessDelete( &p ) ;
+				
+				logStage( fd,"done running apt-get clean" ) ;
+				
 			}else if( r == 2 ){
 				printf( "There are no updates\n" ) ;
 			}else{

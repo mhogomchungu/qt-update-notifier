@@ -148,9 +148,9 @@ void qtUpdateNotifier::startUpdater()
 	connect( s,SIGNAL( destroyed() ),this,SLOT( updaterClosed() ) ) ;
 
 	if( this->autoRefreshSYnaptic() ){
-		s->start( QString( "--update-at-startup" ) ) ;
+		s->start( QString( "--start-synaptic --update-at-startup" ) ) ;
 	}else{
-		s->start();
+		s->start( QString( "--start-synaptic" ) ) ;
 	}
 }
 
