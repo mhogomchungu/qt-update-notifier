@@ -585,7 +585,7 @@ void qtUpdateNotifier::autoDownloadPackages()
 		this->changeIcon( icon );
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) );
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention );
-		this->logActivity( tr( "Package downloading initiated" ) ) ;
+		this->logActivity( tr( "Packages downloading initiated" ) ) ;
 		startSynaptic * s = new startSynaptic() ;
 		connect( s,SIGNAL( result( int ) ),this,SLOT( autoDownloadPackages( int ) ) ) ;
 		s->start( QString( "--download-packages" ) ) ;
@@ -616,6 +616,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->logActivity( tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
+		this->checkForPackageUpdates() ;
 	}else if( st == NO_UPDATES_FOUND ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
@@ -623,6 +624,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->logActivity( tr( "Update check complete, no updates found" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
+		this->checkForPackageUpdates() ;
 	}else if( st == NO_NET_CONNECTION ){
 		icon = QString( "qt-update-notifier" ) ;
 		this->changeIcon( icon );
@@ -630,6 +632,7 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->logActivity( tr( "Check skipped, user is not connected to the internet" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
+		this->checkForPackageUpdates() ;
 	}else{
 		/*
 		 * currently,we dont get here,added for completeness' sake
@@ -640,11 +643,45 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 		this->logActivity( tr( "Update check complete, repository is in an unknown state" ) ) ;
 		this->showToolTip( icon,tr( "No updates found" ) );
 		this->logActivity( this->logMsg() ) ;
+		this->checkForPackageUpdates() ;
+	}
+}
+
+void qtUpdateNotifier::checkForPackageUpdates()
+{
+	QNetworkAccessManager * m = new QNetworkAccessManager() ;
+
+	connect( m,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( checkForPackageUpdates( QNetworkReply * ) ) ) ;
+
+	QProcess p ;
+	p.start( QString( "uname -m" ) ) ;
+	p.waitForFinished( -1 ) ;
+	QByteArray e = p.readAll() ;
+
+	QString url ;
+
+	if( e == QByteArray( "x86_64\n" ) ){
+		url = QString( "http://ftp.nluug.nl/pub/os/Linux/distr/pclinuxos/pclinuxos/apt/pclinuxos/2011/RPMS.x86_64/" ) ;
+	}else{
+		url = QString( "http://ftp.nluug.nl/pub/os/Linux/distr/pclinuxos/pclinuxos/apt/pclinuxos/2010/RPMS.updates/" ) ;
 	}
 
-	checkoldpackages * s = new checkoldpackages() ;
-	connect( s,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
-	s->start();
+	QNetworkRequest r( url ) ;
+	m->get( r ) ;
+}
+
+void qtUpdateNotifier::checkForPackageUpdates( QNetworkReply * r )
+{
+	checkoldpackages * c = new checkoldpackages( r->readAll() ) ;
+	connect( c,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
+	c->start() ;
+	r->parent()->deleteLater();
+	r->deleteLater();
+}
+
+void qtUpdateNotifier::objectGone( QObject * obj )
+{
+	qDebug() << "destroyed object" << obj->objectName() ;
 }
 
 void qtUpdateNotifier::checkOldPackages( QStringList list )
@@ -655,24 +692,31 @@ void qtUpdateNotifier::checkOldPackages( QStringList list )
 	if( !kernelVersion.isEmpty() ){
 		this->logActivity_1( kernelVersion ) ;
 		this->changeIcon( icon );
-		this->showToolTip( icon,tr( "Warning" ) ) ;
+		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
 	QString libreofficeVersion = list.at( 1 ) ;
 	if( !libreofficeVersion.isEmpty() ){
 		this->logActivity_1( libreofficeVersion ) ;
 		this->changeIcon( icon );
-		this->showToolTip( icon,tr( "Warning" ) );
+		this->showToolTip( icon,tr( "Outdated packages found" ) );
 	}
 
 	QString virtualBoxVersion = list.at( 2 ) ;
 	if( !virtualBoxVersion.isEmpty() ){
 		this->logActivity_1( virtualBoxVersion ) ;
 		this->changeIcon( icon );
-		this->showToolTip( icon,tr( "Warning" ) );
+		this->showToolTip( icon,tr( "Outdated packages found" ) );
 	}
 
-	if( !kernelVersion.isEmpty() || !libreofficeVersion.isEmpty() || !virtualBoxVersion.isEmpty() ){
+	QString callibre = list.at( 3 ) ;
+	if( !virtualBoxVersion.isEmpty() ){
+		this->logActivity_1( virtualBoxVersion ) ;
+		this->changeIcon( icon );
+		this->showToolTip( icon,tr( "Outdated packages found" ) );
+	}
+
+	if( !kernelVersion.isEmpty() || !libreofficeVersion.isEmpty() || !virtualBoxVersion.isEmpty() || !callibre.isEmpty() ){
 		emit updateLogWindow() ;
 	}
 }

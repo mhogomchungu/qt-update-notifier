@@ -47,6 +47,9 @@
 #include <cstdio>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 
 #include "instance.h"
 #include "desktop_file.h"
@@ -102,7 +105,10 @@ private slots:
 	void autoRefreshSynaptic( bool ) ;
 	void autoUpdateResult( int ) ;
 	void autoDownloadPackages( int ) ;
+	void checkForPackageUpdates( QNetworkReply * ) ;
+	void objectGone( QObject * ) ;
 private:
+	void checkForPackageUpdates( void ) ;
 	void autoDownloadPackages( void ) ;
 	void autoUpdatePackages( void ) ;
 	bool autoRefreshSYnaptic( void ) ;
