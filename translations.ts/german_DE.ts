@@ -38,13 +38,21 @@
     <message>
         <location filename="../check_updates.cpp" line="178"/>
         <location filename="../check_updates.cpp" line="184"/>
-        <source>no updates found</source>
-        <translation>Es wurden keine Aktualisierungen gefunden.</translation>
+        <source>No updates found</source>
+        <translation type="unfinished">Es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="193"/>
+        <source>Warning: apt-get update finished with errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>no updates found</source>
+        <translation type="obsolete">Es wurden keine Aktualisierungen gefunden.</translation>
+    </message>
+    <message>
         <source>warning: apt-get update finished with errors</source>
-        <translation>Warnung: bei der Durchführung von apt-get update
+        <translation type="obsolete">Warnung: bei der Durchführung von apt-get update
 sind Fehler aufgetreten.</translation>
     </message>
 </context>
@@ -52,17 +60,17 @@ sind Fehler aufgetreten.</translation>
     <name>checkoldpackages</name>
     <message>
         <location filename="../checkoldpackages.cpp" line="59"/>
-        <source>kernel version %1 is too old,recommending updating it</source>
+        <source>Recommending updating the kernel from version %1 to a more receant version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
-        <source>installed version of libreoffice is &quot;%1&quot; while the version in the repository is &quot;%2&quot;,recommending updating it</source>
+        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
-        <source>installed version of virtualbox is &quot;%1&quot; while the version in the repository is &quot;%2&quot;,recommending updating it</source>
+        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -672,20 +680,10 @@ network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="546"/>
-        <location filename="../qtUpdateNotifier.cpp" line="552"/>
-        <source>Automatic update completed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qtUpdateNotifier.cpp" line="548"/>
-        <source>Automatic package update failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qtUpdateNotifier.cpp" line="549"/>
         <location filename="../qtUpdateNotifier.cpp" line="555"/>
-        <source>Automatic update failed</source>
+        <source>Automatic package update failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -694,23 +692,14 @@ network interfaces)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="554"/>
-        <source>Automatic package failed,synaptic or apt-get is running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>
+        <location filename="../qtUpdateNotifier.cpp" line="573"/>
         <source>Downloading of packages completed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="569"/>
         <source>Downloading of packages failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qtUpdateNotifier.cpp" line="573"/>
-        <source>Package downloading completed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -745,6 +734,17 @@ network interfaces)</oldsource>
         <location filename="../qtUpdateNotifier.cpp" line="610"/>
         <source>There are updates in the repository</source>
         <translation>Es gibt Aktualisierungen in der Paketquelle.</translation>
+    </message>
+    <message>
+        <location filename="../qtUpdateNotifier.cpp" line="546"/>
+        <location filename="../qtUpdateNotifier.cpp" line="552"/>
+        <source>Automatic package update completed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qtUpdateNotifier.cpp" line="554"/>
+        <source>Automatic package update failed,synaptic or apt-get is already running</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="588"/>

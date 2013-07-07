@@ -38,31 +38,47 @@
     <message>
         <location filename="../check_updates.cpp" line="178"/>
         <location filename="../check_updates.cpp" line="184"/>
-        <source>no updates found</source>
+        <source>No updates found</source>
         <translation>Δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="193"/>
-        <source>warning: apt-get update finished with errors</source>
+        <source>Warning: apt-get update finished with errors</source>
         <translation>Προειδοποίηση: παρουσιάστηκαν σφάλματα στο apt-get update</translation>
+    </message>
+    <message>
+        <source>no updates found</source>
+        <translation type="obsolete">Δεν βρέθηκαν ενημερώσεις</translation>
+    </message>
+    <message>
+        <source>warning: apt-get update finished with errors</source>
+        <translation type="obsolete">Προειδοποίηση: παρουσιάστηκαν σφάλματα στο apt-get update</translation>
     </message>
 </context>
 <context>
     <name>checkoldpackages</name>
     <message>
         <location filename="../checkoldpackages.cpp" line="59"/>
-        <source>kernel version %1 is too old,recommending updating it</source>
-        <translation type="unfinished"></translation>
+        <source>Recommending updating the kernel from version %1 to a more receant version.</source>
+        <translation>Συστήνεται η αναβάθμιση του kernel από την έκδοση %1 σε μια πιο πρόσφατη έκδοση.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
-        <source>installed version of libreoffice is &quot;%1&quot; while the version in the repository is &quot;%2&quot;,recommending updating it</source>
-        <translation type="unfinished"></translation>
+        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation>Συστήνεται η αναβάθμιση του LibreOffice από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
-        <source>installed version of virtualbox is &quot;%1&quot; while the version in the repository is &quot;%2&quot;,recommending updating it</source>
-        <translation type="unfinished"></translation>
+        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation>Συστήνεται η αναβάθμιση του VirtualBox από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
+    </message>
+    <message>
+        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended</source>
+        <translation type="obsolete">Συστήνεται η αναβάθμιση του LibreOffice από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;</translation>
+    </message>
+    <message>
+        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended</source>
+        <translation type="obsolete">Συστήνεται η αναβάθμιση του VirtualBox από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;</translation>
     </message>
 </context>
 <context>
@@ -462,7 +478,7 @@ Default and recommeded interval is
     <message>
         <location filename="../configuredialog.ui" line="790"/>
         <source>Auto reload Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυτόματη ανανέωση του Synaptic κατά την εκκίνηση από το μενού (μπορεί να μην λειτουργεί σε ορισμένες συνθήκες χρήσης)</translation>
     </message>
     <message>
         <source>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
@@ -685,69 +701,61 @@ network interfaces)</oldsource>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="530"/>
         <source>Updating packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενημέρωση πακέτων</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="532"/>
         <source>Automatic package update initiated</source>
-        <translation type="unfinished"></translation>
+        <translation>Η αυτόματη ενημέρωση των πακέτων ξεκίνησε</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="545"/>
         <source>Automatic package update succeeded</source>
-        <translation type="unfinished"></translation>
+        <translation>Η αυτόματη ενημέρωση των πακέτων ήταν επιτυχής</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="546"/>
         <location filename="../qtUpdateNotifier.cpp" line="552"/>
-        <source>Automatic update completed</source>
-        <translation type="unfinished"></translation>
+        <source>Automatic package update completed</source>
+        <translation>Η αυτόματη ενημέρωση των πακέτων ολοκληρώθηκε</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="548"/>
-        <source>Automatic package update failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qtUpdateNotifier.cpp" line="549"/>
         <location filename="../qtUpdateNotifier.cpp" line="555"/>
-        <source>Automatic update failed</source>
-        <translation type="unfinished"></translation>
+        <source>Automatic package update failed</source>
+        <translation>Η αυτόματη ενημέρωση των πακέτων απέτυχε</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
         <source>Automatic package update succeeded,no updates found</source>
-        <translation type="unfinished"></translation>
+        <translation>Η αυτόματη ενημέρωση των πακέτων ήταν επιτυχής, δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="554"/>
-        <source>Automatic package failed,synaptic or apt-get is running</source>
-        <translation type="unfinished"></translation>
+        <source>Automatic package update failed,synaptic or apt-get is already running</source>
+        <translation>Η αυτόματη ενημέρωση των πακέτων απέτυχε, το Synaptic ή το apt-get εκτελούνται ήδη</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>
+        <location filename="../qtUpdateNotifier.cpp" line="573"/>
         <source>Downloading of packages completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Η λήψη των πακέτων ολοκληρώθηκε</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="569"/>
         <source>Downloading of packages failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qtUpdateNotifier.cpp" line="573"/>
-        <source>Package downloading completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Η λήψη των πακέτων απέτυχε</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="586"/>
         <source>Downloading packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Λήψη πακέτων</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="588"/>
         <source>Packages downloading initiated</source>
-        <translation type="unfinished"></translation>
+        <translation>Η λήψη των πακέτων ξεκίνησε</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="609"/>
@@ -765,7 +773,7 @@ network interfaces)</oldsource>
         <location filename="../qtUpdateNotifier.cpp" line="709"/>
         <location filename="../qtUpdateNotifier.cpp" line="716"/>
         <source>Outdated packages found</source>
-        <translation type="unfinished"></translation>
+        <translation>Βρέθηκαν ξεπερασμένα πακέτα</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="846"/>

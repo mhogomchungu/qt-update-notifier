@@ -38,30 +38,38 @@
     <message>
         <location filename="../check_updates.cpp" line="178"/>
         <location filename="../check_updates.cpp" line="184"/>
-        <source>no updates found</source>
-        <translation>Geen opwaarderingen gevonden</translation>
+        <source>No updates found</source>
+        <translation type="unfinished">Geen bijwerkingen gevonden</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="193"/>
+        <source>Warning: apt-get update finished with errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>no updates found</source>
+        <translation type="obsolete">Geen opwaarderingen gevonden</translation>
+    </message>
+    <message>
         <source>warning: apt-get update finished with errors</source>
-        <translation>Waarschuwing: Apt-get opwaardering beëndigd met fouten</translation>
+        <translation type="obsolete">Waarschuwing: Apt-get opwaardering beëndigd met fouten</translation>
     </message>
 </context>
 <context>
     <name>checkoldpackages</name>
     <message>
         <location filename="../checkoldpackages.cpp" line="59"/>
-        <source>kernel version %1 is too old,recommending updating it</source>
+        <source>Recommending updating the kernel from version %1 to a more receant version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
-        <source>installed version of libreoffice is &quot;%1&quot; while the version in the repository is &quot;%2&quot;,recommending updating it</source>
+        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
-        <source>installed version of virtualbox is &quot;%1&quot; while the version in the repository is &quot;%2&quot;,recommending updating it</source>
+        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -709,18 +717,14 @@ netwerkverbinding)</translation>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="546"/>
         <location filename="../qtUpdateNotifier.cpp" line="552"/>
-        <source>Automatic update completed</source>
+        <source>Automatic package update completed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="548"/>
-        <source>Automatic package update failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qtUpdateNotifier.cpp" line="549"/>
         <location filename="../qtUpdateNotifier.cpp" line="555"/>
-        <source>Automatic update failed</source>
+        <source>Automatic package update failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -730,22 +734,18 @@ netwerkverbinding)</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="554"/>
-        <source>Automatic package failed,synaptic or apt-get is running</source>
+        <source>Automatic package update failed,synaptic or apt-get is already running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>
+        <location filename="../qtUpdateNotifier.cpp" line="573"/>
         <source>Downloading of packages completed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="569"/>
         <source>Downloading of packages failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qtUpdateNotifier.cpp" line="573"/>
-        <source>Package downloading completed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

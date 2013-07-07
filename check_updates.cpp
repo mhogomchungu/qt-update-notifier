@@ -175,13 +175,13 @@ void check_updates::reportUpdates()
 				}
 			}else{
 				list.append( bogusData );
-				QString s = tr( "no updates found" ) ;
+				QString s = tr( "No updates found" ) ;
 				list.append( s );
 				emit updateStatus( NO_UPDATES_FOUND,list );
 			}
 		}else{
 			list.append( bogusData );
-			QString s = tr( "no updates found" ) ;
+			QString s = tr( "No updates found" ) ;
 			list.append( s );
 			emit updateStatus( NO_UPDATES_FOUND,list );
 		}
@@ -190,7 +190,7 @@ void check_updates::reportUpdates()
 		 * I cant see how i will get here
 		 */
 		list.append( bogusData );
-		QString s = tr( "warning: apt-get update finished with errors" ) ;
+		QString s = tr( "Warning: apt-get update finished with errors" ) ;
 		list.append( s );
 		emit updateStatus( NO_UPDATES_FOUND,list );
 	}

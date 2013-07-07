@@ -56,7 +56,7 @@ void checkoldpackages::checkKernelVersion()
 		 * start warning if a user uses a kernel less than 3.2.18
 		 */
 		if( version < QString( "3.2.18" ) ){
-			m_package.append( tr( "kernel version %1 is too old,recommending updating it" ).arg( version ) ) ;
+			m_package.append( tr( "Recommending updating the kernel from version %1 to a more receant version." ).arg( version ) ) ;
 		}else{
 			m_package.append( QString( "" ) ) ;
 		}
@@ -91,7 +91,7 @@ void checkoldpackages::checkLibreOfficeVersion()
 		QString nv = QString( lomanager ) ;
 
 		if( iv < nv ){
-			QString r = tr( "installed version of libreoffice is \"%1\" while the version in the repository is \"%2\",recommending updating it" ).arg( iv ).arg( nv ) ;
+			QString r = tr( "Updating libreoffice from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 			m_package.append( r ) ;
 		}else{
 			m_package.append( QString( "" ) ) ;
@@ -141,7 +141,7 @@ void checkoldpackages::checkVirtualBoxVersion()
 		QString nv = QString( vb ) ;
 
 		if( iv < nv ){
-			QString r = tr( "installed version of virtualbox is \"%1\" while the version in the repository is \"%2\",recommending updating it" ).arg( iv ).arg( nv ) ;
+			QString r = tr( "Updating Virtualbox from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 			m_package.append( r ) ;
 		}else{
 			m_package.append( QString( "" ) ) ;
