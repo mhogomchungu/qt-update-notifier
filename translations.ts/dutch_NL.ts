@@ -33,18 +33,18 @@
     <message>
         <location filename="../check_updates.cpp" line="101"/>
         <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;bijwerken %1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;vervangen %2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;installeren %3&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="178"/>
         <location filename="../check_updates.cpp" line="184"/>
         <source>No updates found</source>
-        <translation type="unfinished">Geen bijwerkingen gevonden</translation>
+        <translation>Geen bijwerkingen gevonden</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="193"/>
         <source>Warning: apt-get update finished with errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Waarschuwing: apt-get update is met fouten beëindigd</translation>
     </message>
     <message>
         <source>no updates found</source>
@@ -60,17 +60,17 @@
     <message>
         <location filename="../checkoldpackages.cpp" line="59"/>
         <source>Recommending updating the kernel from version %1 to a more receant version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bijwerken van kernel versie &quot;%1&quot; naar een meer recentere versie wordt aanbevolen.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
         <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bijwerken van LibreOffice versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
         <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bijwerken van VirtualBox versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
 </context>
 <context>
@@ -475,7 +475,8 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../configuredialog.ui" line="790"/>
         <source>Auto reload Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch herladen van Synaptic na selecteren &apos;Synaptic openen&apos; in het contextmenu
+(Synaptic kan eventueel crashen)</translation>
     </message>
     <message>
         <source>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
@@ -692,7 +693,7 @@ netwerkverbinding)</translation>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="509"/>
         <source>no updates found</source>
-        <translation type="unfinished">Geen opwaarderingen gevonden</translation>
+        <translation>Geen opwaarderingen gevonden</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="517"/>
@@ -702,71 +703,71 @@ netwerkverbinding)</translation>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="530"/>
         <source>Updating packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketten aan het bijwerken</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="532"/>
         <source>Automatic package update initiated</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische pakketbijwerken is geïnitialiseerd</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="545"/>
         <source>Automatic package update succeeded</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische pakketbijwerken is voltooid</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="546"/>
         <location filename="../qtUpdateNotifier.cpp" line="552"/>
         <source>Automatic package update completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische pakketbijwerken is compleet</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="548"/>
         <location filename="../qtUpdateNotifier.cpp" line="549"/>
         <location filename="../qtUpdateNotifier.cpp" line="555"/>
         <source>Automatic package update failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische pakketbijwerken is mislukt</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
         <source>Automatic package update succeeded,no updates found</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische pakketbijwerken is voltooid, geen opwaarderingen gevonden</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="554"/>
         <source>Automatic package update failed,synaptic or apt-get is already running</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische pakketbijwerken is mislukt, synaptis of apt-get is nog actief</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>
         <location filename="../qtUpdateNotifier.cpp" line="573"/>
         <source>Downloading of packages completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloaden van pakketten is voltooid</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="569"/>
         <source>Downloading of packages failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloaden van pakketten is mislukt</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="586"/>
         <source>Downloading packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketten aan het downloaden</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="588"/>
         <source>Packages downloading initiated</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloaden pakketten is geïnitialiseerd</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="609"/>
         <source>Update check complete, UPDATES FOUND</source>
-        <translation>Controle is compleet, UPDATES GEVONDEN</translation>
+        <translation>Controle is voltooid, UPDATES GEVONDEN</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="616"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
-        <translation>Controle is compleet, pakketbron lijkt in een inconsistente status te zijn</translation>
+        <translation>Controle is voltooid, pakketbron lijkt in een inconsistente status te zijn</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="695"/>
@@ -774,7 +775,7 @@ netwerkverbinding)</translation>
         <location filename="../qtUpdateNotifier.cpp" line="709"/>
         <location filename="../qtUpdateNotifier.cpp" line="716"/>
         <source>Outdated packages found</source>
-        <translation type="unfinished"></translation>
+        <translation>Verouderde pakketten gevonden</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="846"/>
