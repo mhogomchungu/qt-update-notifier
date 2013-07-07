@@ -33,17 +33,17 @@
     <name>checkoldpackages</name>
     <message>
         <location filename="../checkoldpackages.cpp" line="59"/>
-        <source>Recommending updating the kernel from version %1 to a more receant version.</source>
+        <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
-        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
-        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -633,7 +633,12 @@
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
-        <source>Automatic package update succeeded,no updates found</source>
+        <source>Automatic package update succeeded, no updates found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qtUpdateNotifier.cpp" line="554"/>
+        <source>Automatic package update failed, synaptic or apt-get is already running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -684,11 +689,6 @@
         <location filename="../qtUpdateNotifier.cpp" line="546"/>
         <location filename="../qtUpdateNotifier.cpp" line="552"/>
         <source>Automatic package update completed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qtUpdateNotifier.cpp" line="554"/>
-        <source>Automatic package update failed,synaptic or apt-get is already running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

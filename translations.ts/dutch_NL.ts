@@ -58,18 +58,30 @@
 <context>
     <name>checkoldpackages</name>
     <message>
-        <location filename="../checkoldpackages.cpp" line="59"/>
         <source>Recommending updating the kernel from version %1 to a more receant version.</source>
+        <translation type="obsolete">Bijwerken van kernel versie &quot;%1&quot; naar een meer recentere versie wordt aanbevolen.</translation>
+    </message>
+    <message>
+        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation type="obsolete">Bijwerken van LibreOffice versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
+    </message>
+    <message>
+        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation type="obsolete">Bijwerken van VirtualBox versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
+    </message>
+    <message>
+        <location filename="../checkoldpackages.cpp" line="59"/>
+        <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation>Bijwerken van kernel versie &quot;%1&quot; naar een meer recentere versie wordt aanbevolen.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
-        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Bijwerken van LibreOffice versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
-        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Bijwerken van VirtualBox versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
 </context>
@@ -730,13 +742,21 @@ netwerkverbinding)</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
-        <source>Automatic package update succeeded,no updates found</source>
+        <source>Automatic package update succeeded, no updates found</source>
         <translation>Automatische pakketbijwerken is voltooid, geen opwaarderingen gevonden</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="554"/>
-        <source>Automatic package update failed,synaptic or apt-get is already running</source>
+        <source>Automatic package update failed, synaptic or apt-get is already running</source>
         <translation>Automatische pakketbijwerken is mislukt, synaptis of apt-get is nog actief</translation>
+    </message>
+    <message>
+        <source>Automatic package update succeeded,no updates found</source>
+        <translation type="obsolete">Automatische pakketbijwerken is voltooid, geen opwaarderingen gevonden</translation>
+    </message>
+    <message>
+        <source>Automatic package update failed,synaptic or apt-get is already running</source>
+        <translation type="obsolete">Automatische pakketbijwerken is mislukt, synaptis of apt-get is nog actief</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>

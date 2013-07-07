@@ -58,19 +58,16 @@
 <context>
     <name>checkoldpackages</name>
     <message>
-        <location filename="../checkoldpackages.cpp" line="59"/>
         <source>Recommending updating the kernel from version %1 to a more receant version.</source>
-        <translation>Συστήνεται η αναβάθμιση του kernel από την έκδοση %1 σε μια πιο πρόσφατη έκδοση.</translation>
+        <translation type="obsolete">Συστήνεται η αναβάθμιση του kernel από την έκδοση %1 σε μια πιο πρόσφατη έκδοση.</translation>
     </message>
     <message>
-        <location filename="../checkoldpackages.cpp" line="94"/>
         <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation>Συστήνεται η αναβάθμιση του LibreOffice από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
+        <translation type="obsolete">Συστήνεται η αναβάθμιση του LibreOffice από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
     </message>
     <message>
-        <location filename="../checkoldpackages.cpp" line="144"/>
         <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation>Συστήνεται η αναβάθμιση του VirtualBox από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
+        <translation type="obsolete">Συστήνεται η αναβάθμιση του VirtualBox από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
     </message>
     <message>
         <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended</source>
@@ -79,6 +76,21 @@
     <message>
         <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended</source>
         <translation type="obsolete">Συστήνεται η αναβάθμιση του VirtualBox από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;</translation>
+    </message>
+    <message>
+        <location filename="../checkoldpackages.cpp" line="59"/>
+        <source>Recommending updating the kernel from version %1 to a more recent version.</source>
+        <translation>Συστήνεται η αναβάθμιση του kernel από την έκδοση %1 σε μια πιο πρόσφατη έκδοση.</translation>
+    </message>
+    <message>
+        <location filename="../checkoldpackages.cpp" line="94"/>
+        <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation>Συστήνεται η αναβάθμιση του LibreOffice από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../checkoldpackages.cpp" line="144"/>
+        <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation>Συστήνεται η αναβάθμιση του VirtualBox από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
     </message>
 </context>
 <context>
@@ -728,13 +740,21 @@ network interfaces)</oldsource>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
-        <source>Automatic package update succeeded,no updates found</source>
+        <source>Automatic package update succeeded, no updates found</source>
         <translation>Η αυτόματη ενημέρωση των πακέτων ήταν επιτυχής, δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="554"/>
-        <source>Automatic package update failed,synaptic or apt-get is already running</source>
+        <source>Automatic package update failed, synaptic or apt-get is already running</source>
         <translation>Η αυτόματη ενημέρωση των πακέτων απέτυχε, το Synaptic ή το apt-get εκτελούνται ήδη</translation>
+    </message>
+    <message>
+        <source>Automatic package update succeeded,no updates found</source>
+        <translation type="obsolete">Η αυτόματη ενημέρωση των πακέτων ήταν επιτυχής, δεν βρέθηκαν ενημερώσεις</translation>
+    </message>
+    <message>
+        <source>Automatic package update failed,synaptic or apt-get is already running</source>
+        <translation type="obsolete">Η αυτόματη ενημέρωση των πακέτων απέτυχε, το Synaptic ή το apt-get εκτελούνται ήδη</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>

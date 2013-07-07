@@ -548,10 +548,10 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 		case 1 : this->logActivity( tr( "Automatic package update failed" ) ) ;
 			 this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
 			 break ;
-		case 2 : this->logActivity( tr( "Automatic package update succeeded,no updates found" ) ) ;
+		case 2 : this->logActivity( tr( "Automatic package update succeeded, no updates found" ) ) ;
 			 this->showToolTip( icon,tr( "Automatic package update completed" ) ) ;
 			 break ;
-		case 3 : this->logActivity( tr( "Automatic package update failed,synaptic or apt-get is already running" ) ) ;
+		case 3 : this->logActivity( tr( "Automatic package update failed, synaptic or apt-get is already running" ) ) ;
 			 this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
 			 break ;
 	}

@@ -59,18 +59,30 @@ sind Fehler aufgetreten.</translation>
 <context>
     <name>checkoldpackages</name>
     <message>
-        <location filename="../checkoldpackages.cpp" line="59"/>
         <source>Recommending updating the kernel from version %1 to a more receant version.</source>
+        <translation type="obsolete">Es wird empfohlen den Kernel von Version %1 auf eine aktuellere Version zu aktuallisieren.</translation>
+    </message>
+    <message>
+        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation type="obsolete">Es wird empfohlen Libre Office von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
+    </message>
+    <message>
+        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation type="obsolete">Es wird empfohlen VirtualBox von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
+    </message>
+    <message>
+        <location filename="../checkoldpackages.cpp" line="59"/>
+        <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation>Es wird empfohlen den Kernel von Version %1 auf eine aktuellere Version zu aktuallisieren.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
-        <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Es wird empfohlen Libre Office von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
-        <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Es wird empfohlen VirtualBox von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
     </message>
 </context>
@@ -688,8 +700,17 @@ network interfaces)</oldsource>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
-        <source>Automatic package update succeeded,no updates found</source>
+        <source>Automatic package update succeeded, no updates found</source>
         <translation>Automatische Paketaktuallisierung erfolgreich, keine Aktuallisierungen gefunden.</translation>
+    </message>
+    <message>
+        <location filename="../qtUpdateNotifier.cpp" line="554"/>
+        <source>Automatic package update failed, synaptic or apt-get is already running</source>
+        <translation>Automatische Paketaktuallisierung fehlgeschlagen. Synaptic oder apt-get läuft bereits.</translation>
+    </message>
+    <message>
+        <source>Automatic package update succeeded,no updates found</source>
+        <translation type="obsolete">Automatische Paketaktuallisierung erfolgreich, keine Aktuallisierungen gefunden.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>
@@ -742,9 +763,8 @@ network interfaces)</oldsource>
         <translation>Automatische Paketaktuallisierung erfolgreich beendet.</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="554"/>
         <source>Automatic package update failed,synaptic or apt-get is already running</source>
-        <translation>Automatische Paketaktuallisierung fehlgeschlagen. Synaptic oder apt-get läuft bereits.</translation>
+        <translation type="obsolete">Automatische Paketaktuallisierung fehlgeschlagen. Synaptic oder apt-get läuft bereits.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="588"/>
