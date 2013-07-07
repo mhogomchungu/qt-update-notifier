@@ -39,12 +39,12 @@
         <location filename="../check_updates.cpp" line="178"/>
         <location filename="../check_updates.cpp" line="184"/>
         <source>No updates found</source>
-        <translation type="unfinished">Es wurden keine Aktualisierungen gefunden.</translation>
+        <translation>Es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
         <location filename="../check_updates.cpp" line="193"/>
         <source>Warning: apt-get update finished with errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung: apt-get update wurde wegen des Auftretens von Fehlern beendet.</translation>
     </message>
     <message>
         <source>no updates found</source>
@@ -61,17 +61,17 @@ sind Fehler aufgetreten.</translation>
     <message>
         <location filename="../checkoldpackages.cpp" line="59"/>
         <source>Recommending updating the kernel from version %1 to a more receant version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wird empfohlen den Kernel von Version %1 auf eine aktuellere Version zu aktuallisieren.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="94"/>
         <source>Updating libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wird empfohlen Libre Office von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
     </message>
     <message>
         <location filename="../checkoldpackages.cpp" line="144"/>
         <source>Updating Virtualbox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wird empfohlen VirtualBox von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
     </message>
 </context>
 <context>
@@ -463,7 +463,7 @@ Default and recommeded interval is
     <message>
         <location filename="../configuredialog.ui" line="790"/>
         <source>Auto reload Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
-        <translation type="unfinished"></translation>
+        <translation>In Synaptic automatisch &quot;Neu laden&quot; ausführen, wenn es vom Kontextmenü aus gestartet wird (Synaptic könnte in bestimmten Szenarien abstürzen)</translation>
     </message>
     <message>
         <source>Auto refresh Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
@@ -667,45 +667,45 @@ network interfaces)</oldsource>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="530"/>
         <source>Updating packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuallisiere Pakete</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="532"/>
         <source>Automatic package update initiated</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Paketaktuallisierung eingeleitet.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="545"/>
         <source>Automatic package update succeeded</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Paketaktuallisierung erfolgreich durchgeführt.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="548"/>
         <location filename="../qtUpdateNotifier.cpp" line="549"/>
         <location filename="../qtUpdateNotifier.cpp" line="555"/>
         <source>Automatic package update failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Paketaktuallisierung ist fehlgeschlagen.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="551"/>
         <source>Automatic package update succeeded,no updates found</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Paketaktuallisierung erfolgreich, keine Aktuallisierungen gefunden.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="567"/>
         <location filename="../qtUpdateNotifier.cpp" line="573"/>
         <source>Downloading of packages completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladen der Pakete beendet.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="569"/>
         <source>Downloading of packages failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladen der Pakete fehlgeschlagen.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="586"/>
         <source>Downloading packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Lade Pakete herunter.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="609"/>
@@ -723,7 +723,7 @@ network interfaces)</oldsource>
         <location filename="../qtUpdateNotifier.cpp" line="709"/>
         <location filename="../qtUpdateNotifier.cpp" line="716"/>
         <source>Outdated packages found</source>
-        <translation type="unfinished"></translation>
+        <translation>Veraltete Pakete gefunden.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="846"/>
@@ -739,17 +739,17 @@ network interfaces)</oldsource>
         <location filename="../qtUpdateNotifier.cpp" line="546"/>
         <location filename="../qtUpdateNotifier.cpp" line="552"/>
         <source>Automatic package update completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Paketaktuallisierung erfolgreich beendet.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="554"/>
         <source>Automatic package update failed,synaptic or apt-get is already running</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Paketaktuallisierung fehlgeschlagen. Synaptic oder apt-get läuft bereits.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="588"/>
         <source>Packages downloading initiated</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Herunterladen der Pakete wurde eingeleitet.</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="617"/>
