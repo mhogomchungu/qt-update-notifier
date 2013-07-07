@@ -462,7 +462,15 @@ int main( int argc,char * argv[] )
 			}
 		}
 		
+		if( seteuid( getuid() ) == -1 ){
+			return 12 ;
+		}
+		
 		fd = open( logPath,O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
+		
+		if( seteuid( 0 ) == -1 ){
+			return 12 ;
+		}
 		
 		if( fd == -1 ){
 			return 11 ;
