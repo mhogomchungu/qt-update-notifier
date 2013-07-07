@@ -649,6 +649,11 @@ void qtUpdateNotifier::updateStatus( int st,QStringList list )
 
 void qtUpdateNotifier::checkForPackageUpdates()
 {
+	checkoldpackages * c = new checkoldpackages() ;
+	connect( c,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
+	c->start() ;
+
+#if 0
 	QNetworkAccessManager * m = new QNetworkAccessManager() ;
 
 	connect( m,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( checkForPackageUpdates( QNetworkReply * ) ) ) ;
@@ -668,6 +673,7 @@ void qtUpdateNotifier::checkForPackageUpdates()
 
 	QNetworkRequest r( url ) ;
 	m->get( r ) ;
+#endif
 }
 
 void qtUpdateNotifier::checkForPackageUpdates( QNetworkReply * r )

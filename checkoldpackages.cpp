@@ -65,92 +65,60 @@ void checkoldpackages::checkKernelVersion()
 
 void checkoldpackages::checkLibreOfficeVersion()
 {
-	//lomanager-4.0.4-1pclos2013.i586.rpm
-	QString lo = QString( "lomanager" ) ;
-	int index_1 = m_packageList.indexOf( lo ) ;
-	if( index_1 == -1 ){
-		m_package.append( QString( "" ) ) ;
+	if( this->updateAvailable( QString( "lomanager --vinfo" ) ) ){
+		QString r = tr( "Updating Libreoffice from version \"%1\" to available version \"%2\" is recommended." ).arg( m_iv ).arg( m_nv ) ;
+		m_package.append( r ) ;
 	}else{
-		int x = index_1 + lo.size() + 1 ;
-		int index_2 = m_packageList.indexOf( "-",x ) ;
-		int z = index_2 - x ;
-		QByteArray lomanager = m_packageList.mid( x,z ) ;
-		QProcess exe ;
-		exe.start( QString( "libreoffice4.0 --version" ) ) ;
-		exe.waitForFinished( -1 ) ;
-		QByteArray data = exe.readAll() ;
-
-		if( data.isEmpty() ){
-			m_package.append( QString( "" ) ) ;
-			return ;
-		}
-
-		data.remove( data.length() - 2,2 ) ; // remove the last new line character
-
-		QString iv = QString( data.split( ' ' ).last() ) ;
-		QString nv = QString( lomanager ) ;
-
-		if( iv < nv ){
-			QString r = tr( "Updating Libreoffice from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
-			m_package.append( r ) ;
-		}else{
-			m_package.append( QString( "" ) ) ;
-		}
+		m_package.append( QString( "" ) ) ;
 	}
 }
 
 void checkoldpackages::checkVirtualBoxVersion()
 {
-	//getvirtualbox-4.2.14-1pclos2013.i586.rpm
-
-	QString vb = QString( "getvirtualbox" ) ;
-	int index_1 = m_packageList.indexOf( vb ) ;
-	if( index_1 == -1 ){
-		m_package.append( tr( "" ) ) ;
+	if( this->updateAvailable( QString( "getvirtualbox --vinfo" ) ) ){
+		QString r =tr( "Updating VirtualBox from version \"%1\" to available version \"%2\" is recommended." ).arg( m_iv ).arg( m_nv ) ;
+		m_package.append( r ) ;
 	}else{
-		int x = index_1 + vb.size() + 1 ;
-		int index_2 = m_packageList.indexOf( "-",x ) ;
-		int z = index_2 - x ;
-		QByteArray vb = m_packageList.mid( x,z ) ;
-
-		QProcess exe ;
-
-		exe.start( QString( "VirtualBox --help" ) ) ;
-		exe.waitForFinished( -1 ) ;
-
-		QByteArray data = exe.readAll() ;
-
-		if( data.isEmpty() ){
-			m_package.append( QString( "" ) ) ;
-			return ;
-		}
-
-		QString l = QString( "Oracle VM VirtualBox Manager " ) ;
-		int ls = l.size() ;
-
-		int v_1 = data.indexOf( l ) ;
-		if( v_1 == -1 ){
-			m_package.append( QString( "" ) ) ;
-			return ;
-		}
-
-		int v_2 = data.indexOf( "\n",v_1 ) ;
-		QByteArray r = data.mid( v_1 + ls,v_2 - ( v_1 + ls ) ) ;
-
-		QString iv = QString( r ) ;
-		QString nv = QString( vb ) ;
-
-		if( iv < nv ){
-			QString r = tr( "Updating VirtualBox from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
-			m_package.append( r ) ;
-		}else{
-			m_package.append( QString( "" ) ) ;
-		}
+		m_package.append( QString( "" ) ) ;
 	}
 }
 
 void checkoldpackages::checkCallibeVersion()
 {
-	//calibre-manager-0.1-1pclos2013.noarch.rpm
-	m_package.append( QString( "" ) ) ;
+	if( this->updateAvailable( QString( "calibre-manager --vinfo" ) ) ){
+		QString r =tr( "Updating Calibre from version \"%1\" to available version \"%2\" is recommended." ).arg( m_iv ).arg( m_nv ) ;
+		m_package.append( r ) ;
+	}else{
+		m_package.append( QString( "" ) ) ;
+	}
+}
+
+bool checkoldpackages::updateAvailable( QString e )
+{
+	QProcess exe ;
+	exe.start( e ) ;
+	exe.waitForFinished( -1 ) ;
+
+	QString r = exe.readAll() ;
+
+	if( r.isEmpty() ){
+		return false ;
+	}else{
+		QStringList l = r.split( "\n" ) ;
+		if( l.size() > 1 ){
+			m_iv = l.at( 0 ).split( " " ).last() ;
+			m_nv = l.at( 1 ).split( " " ).last() ;
+
+			if( m_iv == QString( "0" ) ){
+				/*
+				* program not installed
+				*/
+				return false ;
+			}else{
+				return m_nv > m_iv ;
+			}
+		}else{
+			return false ;
+		}
+	}
 }

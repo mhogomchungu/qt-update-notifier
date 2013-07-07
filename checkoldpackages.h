@@ -45,6 +45,9 @@ private:
 	void checkLibreOfficeVersion( void ) ;
 	void checkVirtualBoxVersion( void ) ;
 	void checkCallibeVersion( void ) ;
+	bool updateAvailable( QString ) ;
+	QString m_iv ;
+	QString m_nv ;
 	QStringList m_package ;
 	QByteArray m_packageList ;
 };

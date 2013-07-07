@@ -83,14 +83,19 @@
         <translation>Συστήνεται η αναβάθμιση του kernel από την έκδοση %1 σε μια πιο πρόσφατη έκδοση.</translation>
     </message>
     <message>
-        <location filename="../checkoldpackages.cpp" line="94"/>
+        <location filename="../checkoldpackages.cpp" line="69"/>
         <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Συστήνεται η αναβάθμιση του LibreOffice από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
     </message>
     <message>
-        <location filename="../checkoldpackages.cpp" line="144"/>
+        <location filename="../checkoldpackages.cpp" line="79"/>
         <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Συστήνεται η αναβάθμιση του VirtualBox από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../checkoldpackages.cpp" line="89"/>
+        <source>Updating Calibre from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
+        <translation>Συστήνεται η αναβάθμιση του Calibre από την έκδοση &quot;%1&quot; στην διαθέσιμη έκδοση &quot;%2&quot;.</translation>
     </message>
 </context>
 <context>
@@ -788,15 +793,15 @@ network interfaces)</oldsource>
         <translation>Ο έλεγχος ολοκληρώθηκε, παρουσιάστηκε σφάλμα, μην προχωρήσετε σε ενημέρωση (δείτε το παράθυρο καταγραφής του apt-get update για λεπτομέρειες)</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="695"/>
-        <location filename="../qtUpdateNotifier.cpp" line="702"/>
-        <location filename="../qtUpdateNotifier.cpp" line="709"/>
-        <location filename="../qtUpdateNotifier.cpp" line="716"/>
+        <location filename="../qtUpdateNotifier.cpp" line="701"/>
+        <location filename="../qtUpdateNotifier.cpp" line="708"/>
+        <location filename="../qtUpdateNotifier.cpp" line="715"/>
+        <location filename="../qtUpdateNotifier.cpp" line="722"/>
         <source>Outdated packages found</source>
         <translation>Βρέθηκαν ξεπερασμένα πακέτα</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="846"/>
+        <location filename="../qtUpdateNotifier.cpp" line="852"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Έξοδος από το qt-update-notifier</translation>
     </message>
@@ -841,24 +846,24 @@ network interfaces)</oldsource>
         <translation type="obsolete">Προειδοποίηση</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="727"/>
+        <location filename="../qtUpdateNotifier.cpp" line="733"/>
         <source>Updates found</source>
         <translation>Βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="737"/>
-        <location filename="../qtUpdateNotifier.cpp" line="745"/>
+        <location filename="../qtUpdateNotifier.cpp" line="743"/>
+        <location filename="../qtUpdateNotifier.cpp" line="751"/>
         <source>Next update check will be at %1</source>
         <translation>Επόμενος έλεγχος για ενημερώσεις στις %1</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="767"/>
-        <location filename="../qtUpdateNotifier.cpp" line="779"/>
+        <location filename="../qtUpdateNotifier.cpp" line="773"/>
+        <location filename="../qtUpdateNotifier.cpp" line="785"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation>Ο επόμενος έλεγχος έχει προγραμματιστεί σε %1 ώρες στις %2</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="791"/>
+        <location filename="../qtUpdateNotifier.cpp" line="797"/>
         <source>Rescheduling update check</source>
         <translation>Επαναπρογραμματισμός του επόμενου ελέγχου</translation>
     </message>
