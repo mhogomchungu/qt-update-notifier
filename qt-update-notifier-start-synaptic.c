@@ -411,7 +411,7 @@ license  : GPLv2+\n\
 \n\
 argument list:\n\
 	--auto-update		calls \"apt-get update\" followed by \"apt-get dist-upgrade\"\n\
-	--download-packages	calls \"apt-get --dist-upgrade --download-only --asuume-yes\"\n\
+	--download-packages	calls \"apt-get update\" followed by \"apt-get --dist-upgrade --download-only --assume-yes\"\n\
 	--start-synaptic	calls \"kdesu /usr/sbin/synaptic\"\n\
 	--start-synaptic --update-at-startup	calls \"kdesu /usr/sbin/synaptic --update-at-startup\"\n" ;
 	
