@@ -35,8 +35,9 @@
 /*
  * KDESU_PATH constant is set at build time
  */
-static const char * kdesu = KDESU_PATH ;
-static const char * gksu  = "/usr/bin/gksu" ;
+static const char * kdesu  = KDESU_PATH ;
+static const char * gksu   = "/usr/bin/gksu" ;
+static const char * ktsuss = "/usr/bin/ktsuss" ;
 
 static const char * groupName = "qtupdatenotifier" ;
 
@@ -415,8 +416,10 @@ static int startSynaptic( const char * e,int fd )
 			r = startExe( kdesu,e ) ;
 		}else if( path_exists( gksu ) ){
 			r = startExe( gksu,e ) ;
+		}else if( path_exists( ktsuss ) ){
+			r = startExe( ktsuss,e ) ;
 		}else{
-			logStage( fd,"failed to find either kdesu or gksu" ) ;
+			logStage( fd,"failed to find either kdesu,gksu or ktsuss" ) ;
 			r = 1 ;
 		}
 	}
