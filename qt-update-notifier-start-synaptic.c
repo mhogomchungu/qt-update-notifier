@@ -36,6 +36,7 @@
  * KDESU_PATH constant is set at build time
  */
 static const char * kdesu = KDESU_PATH ;
+static const char * gksu  = "/usr/bin/gksu" ;
 
 static const char * groupName = "qtupdatenotifier" ;
 
@@ -372,10 +373,29 @@ static int downloadPackages( int fd )
 	return r ;
 }
 
-static int startSynaptic( const char * e )
+static int startExe( const char * exe,const char * e )
+{
+	int r ;
+	process_t p = Process( exe ) ;
+	ProcessSetOptionUser( p,getuid() ) ;
+	
+	if( e != NULL ){
+		ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,ENDLIST ) ;
+	}else{
+		ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
+	}
+	
+	ProcessStart( p ) ;
+	r = ProcessExitStatus( p ) ;
+	ProcessDelete( &p ) ;
+	return r ;
+}
+
+static int startSynaptic( const char * e,int fd )
 {
 	int r ;
 	process_t p ;
+	struct stat statstr ;
 	
 	if( userHasPermission() ){
 		p = Process( "/usr/sbin/synaptic" ) ;
@@ -384,20 +404,22 @@ static int startSynaptic( const char * e )
 		if( e != NULL ){
 			ProcessSetArgumentList( p,e,ENDLIST ) ;
 		}
-	}else{
-		p = Process( kdesu ) ;
-		ProcessSetOptionUser( p,getuid() ) ;
 		
-		if( e != NULL ){
-			ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,ENDLIST ) ;
+		ProcessStart( p ) ;
+		r = ProcessExitStatus( p ) ;
+		ProcessDelete( &p ) ;
+	}else{
+		#define path_exists( x ) stat( x,&statstr ) == 0
+		
+		if( path_exists( kdesu ) ){
+			r = startExe( kdesu,e ) ;
+		}else if( path_exists( gksu ) ){
+			r = startExe( gksu,e ) ;
 		}else{
-			ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
+			logStage( fd,"failed to find either kdesu or gksu" ) ;
+			r = 1 ;
 		}
 	}
-		
-	ProcessStart( p ) ;
-	r = ProcessExitStatus( p ) ;
-	ProcessDelete( &p ) ;
 	
 	return r ;
 }
@@ -438,57 +460,58 @@ int main( int argc,char * argv[] )
 	snprintf( logPath,1024,"/home/%s/.config/qt-update-notifier/backEnd.log",pass->pw_name ) ;
 		
 	if( argc < 2 ){
-		
 		return printOptions() ;
 	}
-		
+	
+	if( seteuid( getuid() ) == -1 ){
+		return 12 ;
+	}
+	
+	fd = open( logPath,O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
+	
+	if( seteuid( 0 ) == -1 ){
+		close( fd ) ;
+		return 12 ;
+	}
+	
+	if( fd == -1 ){
+		return 11 ;
+	}
+	
+	fchmod( fd,S_IRUSR|S_IWUSR|S_IRWXG|S_IRGRP|S_IROTH|S_IWOTH ) ;
+	
 	e = argv[ 1 ] ;
 
 	#define x( z ) strcmp( e,z ) == 0
+	#define stringsAreEqual( x,y ) strcmp( x,y ) == 0
+	
 	if( x( "--help" ) || x( "-help" ) || x( "-h" ) || x( "-version" ) || x( "--version" ) || x( "-v" ) ){
-		return printOptions() ;
+		st = printOptions() ;
 	}else{
-		if( strcmp( e,"--start-synaptic" ) == 0 ){
+		if( stringsAreEqual( e,"--start-synaptic" ) ){
 			if( argc == 3 ){
 				f = argv[ 2 ] ;
-				if( strcmp( f,"--update-at-startup" ) == 0 ){
-					return startSynaptic( f ) ;
+				if( stringsAreEqual( f,"--update-at-startup" ) ){
+					st = startSynaptic( f,fd ) ;
 				}else{
 					printf( "error: unrecognized or invalid synaptic option\n" ) ;
-					return 1 ;
+					st = 1 ;
 				}
 			}else{
-				return startSynaptic( NULL ) ;
+				st = startSynaptic( NULL,fd ) ;
+			}
+		}else{
+			if( stringsAreEqual( e,"--auto-update" ) ){
+				st = autoUpdate( fd ) ;
+			}else if( stringsAreEqual( e,"--download-packages" ) ){
+				st = downloadPackages( fd ) ;
+			}else{
+				printf( "error: unrecognized or invalid option\n" ) ;
+				st = 1 ;
 			}
 		}
-		
-		if( seteuid( getuid() ) == -1 ){
-			return 12 ;
-		}
-		
-		fd = open( logPath,O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
-		
-		if( seteuid( 0 ) == -1 ){
-			return 12 ;
-		}
-		
-		if( fd == -1 ){
-			return 11 ;
-		}
-		
-		fchmod( fd,S_IRUSR|S_IWUSR|S_IRWXG|S_IRGRP|S_IROTH|S_IWOTH ) ;
-		
-		if( strcmp( e,"--auto-update" ) == 0 ){
-			st = autoUpdate( fd ) ;
-		}else if( strcmp( e,"--download-packages" ) == 0 ){
-			st = downloadPackages( fd ) ;
-		}else{
-			printf( "error: unrecognized or invalid option\n" ) ;
-			st = 1 ;
-		}
-		
-		close( fd ) ;
-		
-		return st ;
 	}
+		
+	close( fd ) ;
+	return st ;
 }
