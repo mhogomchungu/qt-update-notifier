@@ -605,11 +605,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="509"/>
-        <source>no updates found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qtUpdateNotifier.cpp" line="517"/>
         <source>Log entry was created at: </source>
         <translation type="unfinished"></translation>
@@ -702,6 +697,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qtUpdateNotifier.cpp" line="509"/>
         <location filename="../qtUpdateNotifier.cpp" line="617"/>
         <location filename="../qtUpdateNotifier.cpp" line="625"/>
         <location filename="../qtUpdateNotifier.cpp" line="633"/>

@@ -706,9 +706,8 @@ network interfaces)</oldsource>
         <translation>Γίνεται έλεγχος για ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="509"/>
         <source>no updates found</source>
-        <translation>Δεν βρέθηκαν ενημερώσεις</translation>
+        <translation type="obsolete">Δεν βρέθηκαν ενημερώσεις</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="517"/>
@@ -819,6 +818,7 @@ network interfaces)</oldsource>
         <translation type="obsolete">Ο έλεγχος ολοκληρώθηκε, παρουσιάστηκε σφάλμα, μην προχωρήσετε σε ενημέρωση (δείτε το παράθυρο καταγραφής του apt-get update για λεπτομέρειες)</translation>
     </message>
     <message>
+        <location filename="../qtUpdateNotifier.cpp" line="509"/>
         <location filename="../qtUpdateNotifier.cpp" line="617"/>
         <location filename="../qtUpdateNotifier.cpp" line="625"/>
         <location filename="../qtUpdateNotifier.cpp" line="633"/>

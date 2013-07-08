@@ -506,7 +506,7 @@ void qtUpdateNotifier::saveAptGetLogOutPut( QStringList& log )
 
 	QString x = log.at( 1 ) ;
 
-	if( x == tr( "no updates found" ) ){
+	if( x == tr( "No updates found" ) ){
 		/*
 		 * update log file only when there are new updates
 		 */

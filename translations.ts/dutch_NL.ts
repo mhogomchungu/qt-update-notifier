@@ -708,9 +708,8 @@ netwerkverbinding)</translation>
         <translation>Op bijwerken controleren</translation>
     </message>
     <message>
-        <location filename="../qtUpdateNotifier.cpp" line="509"/>
         <source>no updates found</source>
-        <translation>Geen opwaarderingen gevonden</translation>
+        <translation type="obsolete">Geen opwaarderingen gevonden</translation>
     </message>
     <message>
         <location filename="../qtUpdateNotifier.cpp" line="517"/>
@@ -821,6 +820,7 @@ netwerkverbinding)</translation>
         <translation type="obsolete">Controle is compleet, pakketbron is in een onbekende status</translation>
     </message>
     <message>
+        <location filename="../qtUpdateNotifier.cpp" line="509"/>
         <location filename="../qtUpdateNotifier.cpp" line="617"/>
         <location filename="../qtUpdateNotifier.cpp" line="625"/>
         <location filename="../qtUpdateNotifier.cpp" line="633"/>
