@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 #include "kdesu_path.h"
 #include "process.h"
@@ -53,7 +54,7 @@ static int userHasPermission( void )
 	struct group * grp ;
 	
 	struct passwd * pass ;
-	
+
 	if( uid == 0 ){
 		return 1 ;
 	}
@@ -374,29 +375,34 @@ static int downloadPackages( int fd )
 	return r ;
 }
 
-static int startExe( const char * exe,const char * e )
+static const char * getSUExe( void )
 {
-	int r ;
-	process_t p = Process( exe ) ;
-	ProcessSetOptionUser( p,getuid() ) ;
-	
-	if( e != NULL ){
-		ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,ENDLIST ) ;
+	struct stat statstr ;
+	const char * env = getenv( "DESKTOP_SESSION" ) ;
+	if( env == NULL ){
+		return gksu ;
 	}else{
-		ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
+		#define desktopEnvironment( x ) strstr( env,x ) != NULL
+		#define pathExists( x ) stat( x,&statstr ) == 0
+		
+		if( desktopEnvironment( "kde" ) || desktopEnvironment( "KDE" ) ){
+			if( pathExists( kdesu ) ){
+				return kdesu ;
+			}else{
+				return gksu ;
+			}
+		}else{
+			return gksu ;
+		}
 	}
-	
-	ProcessStart( p ) ;
-	r = ProcessExitStatus( p ) ;
-	ProcessDelete( &p ) ;
-	return r ;
 }
 
 static int startSynaptic( const char * e,int fd )
 {
 	int r ;
 	process_t p ;
-	struct stat statstr ;
+	
+	if( 0 && fd && ktsuss ){;}
 	
 	if( userHasPermission() ){
 		p = Process( "/usr/sbin/synaptic" ) ;
@@ -405,25 +411,20 @@ static int startSynaptic( const char * e,int fd )
 		if( e != NULL ){
 			ProcessSetArgumentList( p,e,ENDLIST ) ;
 		}
-		
-		ProcessStart( p ) ;
-		r = ProcessExitStatus( p ) ;
-		ProcessDelete( &p ) ;
 	}else{
-		#define path_exists( x ) stat( x,&statstr ) == 0
+		p = Process( getSUExe() ) ;
+		ProcessSetOptionUser( p,getuid() ) ;
 		
-		if( path_exists( kdesu ) ){
-			r = startExe( kdesu,e ) ;
-		}else if( path_exists( gksu ) ){
-			r = startExe( gksu,e ) ;
-		}else if( path_exists( ktsuss ) ){
-			r = startExe( ktsuss,e ) ;
+		if( e != NULL ){
+			ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,ENDLIST ) ;
 		}else{
-			logStage( fd,"failed to find either kdesu,gksu or ktsuss" ) ;
-			r = 1 ;
+			ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
 		}
 	}
-	
+		
+	ProcessStart( p ) ;
+	r = ProcessExitStatus( p ) ;
+	ProcessDelete( &p ) ;
 	return r ;
 }
 
