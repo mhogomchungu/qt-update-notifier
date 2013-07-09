@@ -33,6 +33,8 @@
 
 #define DEBUG 0
 
+#define PRIORITY -15
+
 /*
  * KDESU_PATH constant is set at build time
  */
@@ -178,6 +180,7 @@ static int refreshPackageList( int fd )
 	
 		ProcessSetArgumentList( p,"update",ENDLIST ) ;
 		ProcessSetOptionUser( p,0 ) ;
+		ProcessSetOptionPriority( p,PRIORITY ) ;
 		ProcessStart( p ) ;
 	
 		printProcessOUtPut( p,fd ) ;
@@ -278,6 +281,7 @@ static int autoUpdate( int fd )
 			p = Process( "/usr/bin/apt-get" ) ;
 			ProcessSetArgumentList( p,"dist-upgrade","--simulate",ENDLIST ) ;
 			ProcessSetOptionUser( p,0 ) ;
+			ProcessSetOptionPriority( p,PRIORITY ) ;
 			ProcessStart( p ) ;
 			
 			buffer = getProcessOutPut( p,fd ) ;
@@ -304,6 +308,7 @@ static int autoUpdate( int fd )
 				p = Process( "/usr/bin/apt-get" ) ;
 				ProcessSetArgumentList( p,"dist-upgrade","--assume-yes",ENDLIST ) ;
 				ProcessSetOptionUser( p,0 ) ;
+				ProcessSetOptionPriority( p,PRIORITY ) ;
 				ProcessStart( p ) ;
 				
 				printProcessOUtPut( p,fd ) ;
@@ -326,6 +331,7 @@ static int autoUpdate( int fd )
 				p = Process( "/usr/bin/apt-get" ) ;
 				ProcessSetArgumentList( p,"clean",ENDLIST ) ;
 				ProcessSetOptionUser( p,0 ) ;
+				ProcessSetOptionPriority( p,PRIORITY ) ;
 				ProcessStart( p ) ;
 				ProcessExitStatus( p ) ;
 				ProcessDelete( &p ) ;
@@ -360,6 +366,7 @@ static int downloadPackages( int fd )
 			p = Process( "/usr/bin/apt-get" ) ;
 			ProcessSetArgumentList( p,"dist-upgrade","--download-only","--assume-yes",ENDLIST ) ;
 			ProcessSetOptionUser( p,0 ) ;
+			ProcessSetOptionPriority( p,PRIORITY ) ;
 			ProcessStart( p ) ;
 			printProcessOUtPut( p,fd ) ;
 			r = ProcessExitStatus( p ) ;
