@@ -26,6 +26,7 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 	connect( m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
 	m_trayMenu = 0 ;
 	m_threadIsRunning = false ;
+	QCoreApplication::setApplicationName( QString( "qt-update-notfier" ) ) ;
 	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive );
 	KStatusNotifierItem::setCategory( KStatusNotifierItem::ApplicationStatus );
 	this->changeIcon( QString( "qt-update-notifier" ) );
