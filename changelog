@@ -53,5 +53,5 @@
 	- greek,german and dutch translations are now complete
 -version 1.4.3
 	- add ability to start synaptic without being prompted for root's password if a user is a member of group "qtupdatenotifier"
-	
-	
+	- add ability to download new packages when they are found
+	- add ability to download and install new packages when they are found
