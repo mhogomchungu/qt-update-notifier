@@ -78,8 +78,6 @@ install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier-autostart.desktop DESTI
 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE 
 )
 
-install ( SCRIPT "${CMAKE_SOURCE_DIR}/PostInstall.cmake" )
-
 # uninstall target
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
