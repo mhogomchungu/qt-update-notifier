@@ -31,7 +31,7 @@
 #include "kdesu_path.h"
 #include "process.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 #define PRIORITY -15
 
@@ -88,16 +88,16 @@ static int userHasPermission( void )
 	return st ;
 }
 
-static void printOUtPut( const char * e )
+static inline void printOUtPut( const char * e,int debug )
 {
-#if DEBUG
-	printf( "%s",e ) ;
-#else
+	if( debug ){
+		printf( "%s",e ) ;
+	}
+	
 	if( e ){;}
-#endif
 }
 
-static void logStage( int fd,const char * msg )
+static inline void logStage( int fd,const char * msg )
 {
 	const char * e = "\n-------------------------------------------\n" ;
 	size_t s = strlen( e ) ;
@@ -107,7 +107,7 @@ static void logStage( int fd,const char * msg )
 	write( fd,e,s ) ;
 }
 
-static int itIsSafeToUpdate( const char * e )
+static int itIsSafeToUpdate( const char * e,int debug )
 {
 	const char * error1 = "The following packages have unmet dependencies" ;
 	const char * error2 = "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ;
@@ -117,24 +117,25 @@ static int itIsSafeToUpdate( const char * e )
 
 	const char * noUpdates = "0 upgraded, 0 newly installed, 0 removed and 0 not upgraded." ;
 	
-	printOUtPut( e ) ;
+	printOUtPut( e,debug ) ;
 
+	#define stringContains( x,y ) strstr( x,y ) != NULL
 	if( e == NULL){
 		return 1 ;
 	}
-	if( strstr( e,error1 ) != NULL ){
+	if( stringContains( e,error1 ) ){
 		return 1 ;
 	}
-	if( strstr( e,error2 ) != NULL ){
+	if( stringContains( e,error2 ) ){
 		return 1 ;
 	}
-	if( strstr( e,error3 ) != NULL ){
+	if( stringContains( e,error3 ) ){
 		return 1 ;
 	}
-	if( strstr( e,success ) != NULL ){
+	if( stringContains( e,success ) ){
 		return 0 ;
 	}
-	if( strstr( e,noUpdates ) != NULL ){
+	if( stringContains( e,noUpdates ) ){
 		return 2 ;
 	}
 	
@@ -147,7 +148,7 @@ static void setDefaultLanguageToEnglish( void )
 	setenv( "LANGUAGE","en_US.UTF-8",1 ) ;
 }
 
-static void printProcessOUtPut( process_t p,int fd )
+static void printProcessOUtPut( process_t p,int fd,int debug )
 {
 	char * e ;
 	int z ;
@@ -157,9 +158,7 @@ static void printProcessOUtPut( process_t p,int fd )
 		if( e ){
 			write( fd,e,z ) ;
 			
-			#if DEBUG
-				printf( "%s",e ) ;
-			#endif
+			printOUtPut( e,debug ) ;
 				
 			free( e ) ;
 		}else{
@@ -168,7 +167,7 @@ static void printProcessOUtPut( process_t p,int fd )
 	}
 }
 
-static int refreshPackageList( int fd )
+static int refreshPackageList( int fd,int debug )
 {
 	int r ;
 	process_t p ;
@@ -183,7 +182,7 @@ static int refreshPackageList( int fd )
 		ProcessSetOptionPriority( p,PRIORITY ) ;
 		ProcessStart( p ) ;
 	
-		printProcessOUtPut( p,fd ) ;
+		printProcessOUtPut( p,fd,debug ) ;
 	
 		r = ProcessExitStatus( p ) ;
 		ProcessDelete( &p ) ;	
@@ -220,7 +219,7 @@ static int aptAndSynapticAreRunning( void )
 	return r == 0 ;
 }
 
-char * getProcessOutPut( process_t p,int fd )
+char * getProcessOutPut( process_t p,int fd,int debug )
 {
 	char * e = NULL ;
 	char * buffer = NULL ;
@@ -238,9 +237,9 @@ char * getProcessOutPut( process_t p,int fd )
 			strcpy( buffer + buffer_size,e ) ;
 			
 			buffer_size += output_size ;
-			#if DEBUG
-				printf( "%s",e ) ;
-			#endif
+			
+			printOUtPut( e,debug ) ;
+			
 			free( e ) ;
 		}else{
 			break ;
@@ -250,7 +249,7 @@ char * getProcessOutPut( process_t p,int fd )
 	return buffer ;
 }
 
-static int autoUpdate( int fd )
+static int autoUpdate( int fd,int debug )
 {
 	process_t p ;
 	int r ;
@@ -272,7 +271,7 @@ static int autoUpdate( int fd )
 		 */
 		setDefaultLanguageToEnglish() ;
 
-		r = refreshPackageList( fd ) ;
+		r = refreshPackageList( fd,debug ) ;
 
 		if( r == 0 ){
 			/*
@@ -284,13 +283,13 @@ static int autoUpdate( int fd )
 			ProcessSetOptionPriority( p,PRIORITY ) ;
 			ProcessStart( p ) ;
 			
-			buffer = getProcessOutPut( p,fd ) ;
+			buffer = getProcessOutPut( p,fd,debug ) ;
 
 			ProcessExitStatus( p ) ;
 			ProcessDelete( &p ) ;
 
 			if( buffer ){
-				r = itIsSafeToUpdate( buffer ) ;
+				r = itIsSafeToUpdate( buffer,debug ) ;
 				free( buffer ) ;
 			}else{
 				printf( "IT IS NOT SAFE TO UPDATE,apt-get gave no output\n" ) ;
@@ -311,7 +310,7 @@ static int autoUpdate( int fd )
 				ProcessSetOptionPriority( p,PRIORITY ) ;
 				ProcessStart( p ) ;
 				
-				printProcessOUtPut( p,fd ) ;
+				printProcessOUtPut( p,fd,debug ) ;
 				
 				r = ProcessExitStatus( p ) ;
 				
@@ -352,7 +351,7 @@ static int autoUpdate( int fd )
 	return r ;
 }
 
-static int downloadPackages( int fd )
+static int downloadPackages( int fd,int debug )
 {
 	process_t p ;
 	
@@ -361,14 +360,14 @@ static int downloadPackages( int fd )
 	logStage( fd,"entering downloadPackages" ) ;
 	
 	if( userHasPermission() ){
-		r = refreshPackageList( fd ) ;
+		r = refreshPackageList( fd,debug ) ;
 		if( r == 0 ){
 			p = Process( "/usr/bin/apt-get" ) ;
 			ProcessSetArgumentList( p,"dist-upgrade","--download-only","--assume-yes",ENDLIST ) ;
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessSetOptionPriority( p,PRIORITY ) ;
 			ProcessStart( p ) ;
-			printProcessOUtPut( p,fd ) ;
+			printProcessOUtPut( p,fd,debug ) ;
 			r = ProcessExitStatus( p ) ;
 			ProcessDelete( &p ) ;
 		}
@@ -446,7 +445,11 @@ argument list:\n\
 	--auto-update		calls \"apt-get update\" followed by \"apt-get dist-upgrade\"\n\
 	--download-packages	calls \"apt-get update\" followed by \"apt-get --dist-upgrade --download-only --assume-yes\"\n\
 	--start-synaptic	calls \"kdesu /usr/sbin/synaptic\"\n\
-	--start-synaptic --update-at-startup	calls \"kdesu /usr/sbin/synaptic --update-at-startup\"\n" ;
+	--start-synaptic --update-at-startup	calls \"kdesu /usr/sbin/synaptic --update-at-startup\"\n\
+	--debug      	this option can be added as the last option to print program output on the terminal.\n\
+			The same printed information will also be  in ~/.config/qt-update-notifier/backEnd.log\n\
+NOTE:\n\
+	\"kdesu\" will be used in kde session and gksu will be used in any other session\n" ; 
 	
 	printf( "%s",options ) ;
 	return 0 ;
@@ -459,6 +462,8 @@ int main( int argc,char * argv[] )
 	
 	int fd ;
 	int st ;
+	
+	int debug ;
 	
 	char logPath[ 1024 ] ;
 	
@@ -496,6 +501,13 @@ int main( int argc,char * argv[] )
 	#define x( z ) strcmp( e,z ) == 0
 	#define stringsAreEqual( x,y ) strcmp( x,y ) == 0
 	
+	if( argc > 1 ){
+		if( stringsAreEqual( argv[ argc - 1 ],"--debug" ) ){
+			debug = 1 ;
+		}else{
+			debug = 0 ;
+		}
+	}
 	if( x( "--help" ) || x( "-help" ) || x( "-h" ) || x( "-version" ) || x( "--version" ) || x( "-v" ) ){
 		st = printOptions() ;
 	}else{
@@ -513,9 +525,9 @@ int main( int argc,char * argv[] )
 			}
 		}else{
 			if( stringsAreEqual( e,"--auto-update" ) ){
-				st = autoUpdate( fd ) ;
+				st = autoUpdate( fd,debug ) ;
 			}else if( stringsAreEqual( e,"--download-packages" ) ){
-				st = downloadPackages( fd ) ;
+				st = downloadPackages( fd,debug ) ;
 			}else{
 				printf( "error: unrecognized or invalid option\n" ) ;
 				st = 1 ;
