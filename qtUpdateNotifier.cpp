@@ -693,7 +693,7 @@ void qtUpdateNotifier::objectGone( QObject * obj )
 
 void qtUpdateNotifier::checkOldPackages( QStringList list )
 {
-	QString	icon = QString( "qt-update-notifier-need-attention" ) ;
+	QString	icon = QString( "qt-update-notifier-important-info" ) ;
 
 	QString kernelVersion = list.at( 0 ) ;
 	if( !kernelVersion.isEmpty() ){
@@ -717,8 +717,8 @@ void qtUpdateNotifier::checkOldPackages( QStringList list )
 	}
 
 	QString callibre = list.at( 3 ) ;
-	if( !virtualBoxVersion.isEmpty() ){
-		this->logActivity_1( virtualBoxVersion ) ;
+	if( !callibre.isEmpty() ){
+		this->logActivity_1( callibre ) ;
 		this->changeIcon( icon );
 		this->showToolTip( icon,tr( "Outdated packages found" ) );
 	}
