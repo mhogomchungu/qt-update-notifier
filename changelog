@@ -57,3 +57,4 @@
 	- add ability to download and install new packages when they are found
 -version 1.4.4
 	- change the icon that asks a user to look for more info in the log file from reddish color to purple color
+	- fix a bug that wrongly advised to update a kernel

@@ -51,11 +51,38 @@ void checkoldpackages::checkKernelVersion()
 
 	int index = version.indexOf( QString( "-" ) ) ;
 	if( index != -1 ){
+
 		version.truncate( index ) ;
+
+		QStringList ver = version.split( "." ) ;
+
+		int major = ver.at( 0 ).toInt() ;
+		int minor = ver.at( 1 ).toInt() ;
+		int patch = 0 ;
+
+		if( ver.size() >= 3 ){
+			patch = ver.at( 2 ).toInt() ;
+		}else{
+			;
+		}
+
+		int base_kernel_major_version = 3 ;
+		int base_kernel_minor_version = 2 ;
+		int base_kernel_patch_version = 18;
+		bool update = false ;
+
+		if( major < base_kernel_major_version ){
+			update = true ;
+		}else if( minor < base_kernel_minor_version && major <= base_kernel_major_version ){
+			update = true ;
+		}else if( patch < base_kernel_patch_version && major <= base_kernel_major_version && minor <= base_kernel_minor_version ){
+			update = true ;
+		}
+
 		/*
 		 * start warning if a user uses a kernel less than 3.2.18
 		 */
-		if( version < QString( "3.2.18" ) ){
+		if( update ){
 			m_package.append( tr( "Recommending updating the kernel from version %1 to a more recent version." ).arg( version ) ) ;
 		}else{
 			m_package.append( QString( "" ) ) ;
@@ -115,7 +142,46 @@ bool checkoldpackages::updateAvailable( QString e )
 				*/
 				return false ;
 			}else{
-				return m_nv > m_iv ;
+				QStringList nv = m_nv.split( "." ) ;
+				QStringList iv = m_iv.split( "." ) ;
+
+				int installed_major_version_number = iv.at( 0 ).toInt() ;
+				int installed_minor_version_number = iv.at( 1 ).toInt() ;
+				int installed_patch_version_numer = 0 ;
+				if( iv.size() >= 3 ){
+					installed_patch_version_numer = iv.at( 2 ).toInt() ;
+				}
+
+				int new_major_version_number = nv.at( 0 ).toInt() ;
+				int new_minor_version_number = nv.at( 1 ).toInt() ;
+				int new_patch_version_numer = 0 ;
+				if( nv.size() >= 3 ){
+					installed_patch_version_numer = iv.at( 2 ).toInt() ;
+				}
+
+				bool update = false ;
+
+				if( installed_major_version_number < new_major_version_number ){
+					/*
+					 * installed major version number is less than new major version number
+					 */
+					update = true ;
+				}else if( installed_minor_version_number < new_minor_version_number &&
+					  installed_major_version_number <= new_major_version_number ){
+					/*
+					 * installed minor version number is less than new minor version number
+					 */
+					update = true ;
+				}else if( installed_patch_version_numer < new_patch_version_numer &&
+					  installed_major_version_number <= new_major_version_number &&
+					  installed_minor_version_number <= new_minor_version_number ){
+					/*
+					 * installed path version number is less than new path version number
+					 */
+					update = true ;
+				}
+
+				return update ;
 			}
 		}else{
 			return false ;
