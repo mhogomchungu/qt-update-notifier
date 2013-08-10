@@ -55,10 +55,14 @@ install ( FILES translations.ts/translations.ts DESTINATION ${TS_PATH} )
 install ( FILES translations.ts/greek_GR.ts DESTINATION     ${TS_PATH} )
 install ( FILES translations.ts/dutch_NL.ts DESTINATION     ${TS_PATH} )
 install ( FILES translations.ts/german_DE.ts DESTINATION    ${TS_PATH} )
+install ( FILES translations.ts/czech_CS.ts DESTINATION     ${TS_PATH} )
+install ( FILES translations.ts/slovak_SK.ts DESTINATION    ${TS_PATH} )
 
 install ( FILES translations.qm/greek_GR.qm DESTINATION  ${QM_PATH} )
 install ( FILES translations.qm/dutch_NL.qm DESTINATION  ${QM_PATH} )
 install ( FILES translations.qm/german_DE.qm DESTINATION ${QM_PATH} )
+install ( FILES translations.qm/czech_CS.qm DESTINATION  ${QM_PATH} )
+install ( FILES translations.qm/slovak_SK.qm DESTINATION ${QM_PATH} )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 
