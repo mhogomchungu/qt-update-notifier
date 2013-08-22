@@ -23,16 +23,16 @@
 configureDialog::configureDialog( QStringList list,bool autoStart,bool autoRefresh,QWidget * parent ) :
 	QDialog( parent ),m_ui( new Ui::configureDialog )
 {
-	m_ui->setupUi( this );
+	m_ui->setupUi( this ) ;
 
-	this->setWindowTitle( tr( "Configuration window" ) );
+	this->setWindowTitle( tr( "Configuration window" ) ) ;
 
 	m_ui->checkBoxSynapticAutoRefresh->setChecked( autoRefresh ) ;
 
-	m_ui->checkBoxAutoStart->setChecked( autoStart );
+	m_ui->checkBoxAutoStart->setChecked( autoStart ) ;
 
-	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( -1 );
-	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( -1 );
+	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( -1 ) ;
+	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( -1 ) ;
 	m_ui->gbUpdateIntervalComboBoxMinutes->setCurrentIndex( -1 ) ;
 
 	connect( m_ui->pbClose,SIGNAL( clicked() ),this,SLOT( closeUI() ) ) ;
@@ -49,7 +49,7 @@ configureDialog::configureDialog( QStringList list,bool autoStart,bool autoRefre
 
 void configureDialog::autoRefreshSynaptic_1( bool b )
 {
-	emit autoReshreshSynaptic( b );
+	emit autoReshreshSynaptic( b ) ;
 }
 
 configureDialog::~configureDialog()
@@ -60,10 +60,10 @@ configureDialog::~configureDialog()
 void configureDialog::showUI( QString language )
 {
 	m_prefferedLanguage = language ;
-	this->setIntervalBetweenUpdateChecks();
-	this->setDelayTimeAtLogIn();
-	this->setupLanguageList();
-	this->show();
+	this->setIntervalBetweenUpdateChecks() ;
+	this->setDelayTimeAtLogIn() ;
+	this->setupLanguageList() ;
+	this->show() ;
 }
 
 void configureDialog::closeUI()
@@ -81,7 +81,7 @@ void configureDialog::closeUI()
 	}else{
 		this->autoStartToggled( m_ui->checkBoxAutoStart->isChecked() ) ;
 
-		this->delayTimeChanged( m_ui->gbDelayStartIntervalComboBox->currentIndex() );
+		this->delayTimeChanged( m_ui->gbDelayStartIntervalComboBox->currentIndex() ) ;
 
 		QFile f( m_updateCheckInterval ) ;
 
@@ -93,24 +93,24 @@ void configureDialog::closeUI()
 		f.close() ;
 
 		if( m_duration != m_interval ){
-			emit setUpdateInterval( m_duration * 1000 );
-			emit configOptionsChanged();
+			emit setUpdateInterval( m_duration * 1000 ) ;
+			emit configOptionsChanged() ;
 		}else{
 			;
 		}
 
 		if( m_ui->comboBoxLanguageList->currentText() != m_prefferedLanguage ){
-			emit localizationLanguage( m_ui->comboBoxLanguageList->currentText() );
+			emit localizationLanguage( m_ui->comboBoxLanguageList->currentText() ) ;
 		}
 
-		this->hide();
-		this->deleteLater();
+		this->hide() ;
+		this->deleteLater() ;
 	}
 }
 
 void configureDialog::autoStartToggled( bool b )
 {
-	emit toggleAutoStart( b );
+	emit toggleAutoStart( b ) ;
 }
 
 void configureDialog::delayTimeChanged( int index )
@@ -121,7 +121,7 @@ void configureDialog::delayTimeChanged( int index )
 		case  1 : interval = QString( "300" ) ; break ;
 		case  2 : interval = QString( "600" ) ; break ;
 		case  3 : interval = QString( "900" ) ; break ;
-		case  4 : interval = QString( "1800" ); break ;
+		case  4 : interval = QString( "1800" ) ; break ;
 	}
 
 	QFile f( m_CheckDelayOnStartUp ) ;
@@ -132,7 +132,7 @@ void configureDialog::delayTimeChanged( int index )
 void configureDialog::setupLanguageList()
 {
 	QDir d ;
-	d.setPath( QT_UPDATE_NOTIFIER_TRANSLATION_PATH );
+	d.setPath( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ;
 	QStringList list = d.entryList() ;
 
 	list.removeOne( "." ) ;
@@ -159,7 +159,7 @@ void configureDialog::setupLanguageList()
 
 	index = m_ui->comboBoxLanguageList->findText( m_prefferedLanguage ) ;
 	if( index == -1 ){
-		m_ui->comboBoxLanguageList->setCurrentIndex( 0 );
+		m_ui->comboBoxLanguageList->setCurrentIndex( 0 ) ;
 	}else{
 		m_ui->comboBoxLanguageList->setCurrentIndex( index ) ;
 	}
@@ -224,19 +224,19 @@ void configureDialog::setIntervalBetweenUpdateChecks()
 
 	u_int32_t remainer = m_interval % ( 1 * 24 * 60 * 60 ) ;
 
-	u_int32_t hours = remainer / ( 60 * 60 );
+	u_int32_t hours = remainer / ( 60 * 60 ) ;
 
-	remainer = remainer % ( 60 * 60 );
+	remainer = remainer % ( 60 * 60 ) ;
 
 	u_int32_t minutes = remainer / 60 ;
 
-	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( days );
-	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( hours );
+	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( days ) ;
+	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( hours ) ;
 	m_ui->gbUpdateIntervalComboBoxMinutes->setCurrentIndex( minutes ) ;
 }
 
 void configureDialog::closeEvent( QCloseEvent * e )
 {
-	e->ignore();
-	this->closeUI();
+	e->ignore() ;
+	this->closeUI() ;
 }

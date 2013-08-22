@@ -36,8 +36,8 @@ class logWindow : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit logWindow( QString = QString(),QWidget * parent = 0 );
-	~logWindow();
+	explicit logWindow( QString = QString(),QWidget * parent = 0 ) ;
+	~logWindow() ;
 	void showLogWindow( QString ) ;
 	void showAptGetWindow( QString ) ;
 private slots:

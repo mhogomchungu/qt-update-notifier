@@ -42,8 +42,8 @@ class configureDialog : public QDialog
 	Q_OBJECT
 
 public:
-	configureDialog( QStringList list = QStringList(),bool autostart = true,bool autoRefreshSynaptic = false,QWidget * parent = 0 );
-	~configureDialog();
+	configureDialog( QStringList list = QStringList(),bool autostart = true,bool autoRefreshSynaptic = false,QWidget * parent = 0 ) ;
+	~configureDialog() ;
 	void showUI( QString ) ;
 signals:
 	void toggleAutoStart( bool ) ;

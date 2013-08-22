@@ -30,18 +30,22 @@
 #include <QProcess>
 #include <QFile>
 #include <QProcessEnvironment>
-
-#define UPDATES_FOUND      0
-#define INCONSISTENT_STATE 1
-#define NO_UPDATES_FOUND   2
-#define NO_NET_CONNECTION  3
-#define UNDEFINED_STATE    4
+#include <QMetaType>
 
 class check_updates : public QThread
 {
 	Q_OBJECT
 public:
-	explicit check_updates( QString configPath,QString language,QObject * parent = 0 );
+	typedef enum {
+		updatesFound = 0,
+		inconsistentState,
+		noUpdatesFound,
+		noNetworkConnection,
+		undefinedState,
+		aptGetFailed
+	}updateState;
+
+	explicit check_updates( QString configPath,QString language,QObject * parent = 0 ) ;
 	~check_updates() ;
 signals:
 	void updateList( QStringList ) ;

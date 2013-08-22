@@ -42,7 +42,7 @@ bool instance::firstInstance()
 			/*
 			 * we got connected,that means another instance is running
 			 */
-			s->close();
+			s->close() ;
 			r =  false ;
 		}else{
 			/*
@@ -51,7 +51,7 @@ bool instance::firstInstance()
 			f.remove() ;
 			r = this->startServer() ;
 		}
-		s->deleteLater();
+		s->deleteLater() ;
 		return r ;
 	}else{
 		/*
@@ -73,8 +73,8 @@ bool instance::startServer()
 void instance::newInstanceObserved()
 {
 	QLocalSocket * s = m_localServer->nextPendingConnection() ;
-	s->close();
-	s->deleteLater();
+	s->close() ;
+	s->deleteLater() ;
 }
 
 instance::~instance()

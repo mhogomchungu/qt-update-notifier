@@ -31,7 +31,7 @@ startSynaptic::~startSynaptic()
 void startSynaptic::start( QString option )
 {
 	m_option = option ;
-	QThreadPool::globalInstance()->start( this );
+	QThreadPool::globalInstance()->start( this ) ;
 }
 
 void startSynaptic::run()

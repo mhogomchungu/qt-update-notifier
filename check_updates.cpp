@@ -32,17 +32,19 @@ bool check_updates::online()
 	exe.start( QString( "ping -c 1 8.8.8.8" ) ) ;
 	exe.waitForFinished() ;
 	int st = exe.exitCode() ;
-	exe.close();
+	exe.close() ;
 	return st == 0 ;
 }
 
 void check_updates::run()
 {
 	if( this->online() ){
-		this->reportUpdates();
+		this->reportUpdates() ;
 	}else{
 		QStringList l ;
-		emit updateStatus( NO_NET_CONNECTION,l );
+		l.append( "xyz" ) ;
+		l.append( tr( "Check skipped, user is not connected to the internet" ) ) ;
+		emit updateStatus( int( check_updates::noNetworkConnection ),l ) ;
 	}
 }
 
@@ -102,8 +104,8 @@ void check_updates::processUpdates( QByteArray& output1,QByteArray& output2 )
 
 	QStringList n ;
 	n.append( updates ) ;
-	n.append( output2 );
-	emit updateStatus( UPDATES_FOUND,n ) ;
+	n.append( output2 ) ;
+	emit updateStatus( int( check_updates::updatesFound ),n ) ;
 }
 
 void check_updates::reportUpdates()
@@ -131,68 +133,65 @@ void check_updates::reportUpdates()
 
 	exe.setProcessEnvironment( env ) ;
 
-	exe.start( m_aptUpdate );
+	exe.start( m_aptUpdate ) ;
 	exe.waitForFinished( -1 ) ;
 
 	int st = exe.exitCode() ;
-	exe.close();
+	exe.close() ;
 
 	QByteArray bogusData = "xyz" ;
 
 	if( st == 0 ){
 
-		exe.start( m_aptUpgrade );
+		exe.start( m_aptUpgrade ) ;
 		exe.waitForFinished( -1 ) ;
 		QByteArray output = exe.readAllStandardOutput() ;
-		exe.close();
+		exe.close() ;
 
 		if( !output.isEmpty() ){
 			if( output.contains( error1 ) || output.contains( error2 ) || output.contains( error3 ) ){
-				list.append( bogusData );
+				list.append( bogusData ) ;
 				if( m_language == QString( "english_US" ) ){
-					list.append( output );
+					list.append( output ) ;
 				}else{
 					QByteArray output1 ;
 					QProcess e ;
-					e.start( m_aptUpgrade );
+					e.start( m_aptUpgrade ) ;
 					e.waitForFinished( -1 ) ;
 					output1 = e.readAllStandardOutput() ;
-					e.close();
-					list.append( output1 );
+					e.close() ;
+					list.append( output1 ) ;
 				}
-				emit updateStatus( INCONSISTENT_STATE,list );
+				emit updateStatus( int( check_updates::inconsistentState ),list ) ;
 			}else if( output.contains( success ) ){
 				if( m_language == QString( "english_US" ) ){
-					this->processUpdates( output,output );
+					this->processUpdates( output,output ) ;
 				}else{
 					QByteArray output1 ;
 					QProcess e ;
-					e.start( m_aptUpgrade );
+					e.start( m_aptUpgrade ) ;
 					e.waitForFinished( -1 ) ;
 					output1 = e.readAllStandardOutput() ;
-					e.close();
-					this->processUpdates( output,output1 );
+					e.close() ;
+					this->processUpdates( output,output1 ) ;
 				}
 			}else{
-				list.append( bogusData );
+				list.append( bogusData ) ;
 				QString s = tr( "No updates found" ) ;
-				list.append( s );
-				emit updateStatus( NO_UPDATES_FOUND,list );
+				list.append( s ) ;
+				emit updateStatus( int( check_updates::noUpdatesFound ),list ) ;
 			}
 		}else{
-			list.append( bogusData );
-			QString s = tr( "No updates found" ) ;
-			list.append( s );
-			emit updateStatus( NO_UPDATES_FOUND,list );
+			list.append( bogusData ) ;
+			QString s = tr( "Warning: apt-get update finished with errors" ) ;
+			list.append( s ) ;
+			emit updateStatus( int( check_updates::undefinedState ),list ) ;
 		}
 	}else{
-		/*
-		 * I cant see how i will get here
-		 */
-		list.append( bogusData );
+		list.append( bogusData ) ;
 		QString s = tr( "Warning: apt-get update finished with errors" ) ;
-		list.append( s );
-		emit updateStatus( NO_UPDATES_FOUND,list );
+		list.append( s ) ;
+		emit updateStatus( int( check_updates::undefinedState ),list ) ;
 	}
 }
 

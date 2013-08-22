@@ -36,7 +36,7 @@
 class utility
 {
 public:
-	utility();
+	utility() ;
 	static void writeToFile( QString filepath,QString content,bool truncate ) ;
 	static QString readFromFile( QString filepath ) ;
 };

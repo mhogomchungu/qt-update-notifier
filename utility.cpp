@@ -24,7 +24,7 @@ class bufferManager{
 public:
 	explicit bufferManager( size_t size ) ;
 	wchar_t * getBuffer( void ) ;
-	~bufferManager();
+	~bufferManager() ;
 private:
 	wchar_t * m_buffer ;
 };
@@ -51,7 +51,7 @@ public:
 	int getFd( void ) ;
 	bool fileIsOpened( void ) ;
 	size_t fileSize( void ) ;
-	~fileManager();
+	~fileManager() ;
 private:
 	int m_fd ;
 };
@@ -63,7 +63,7 @@ fileManager::fileManager( QString filepath,bool truncate )
 		m_fd = open( f.constData(),O_CREAT | O_TRUNC | O_WRONLY,S_IRUSR|S_IWUSR ) ;
 	}else{
 		m_fd = open( f.constData(),O_CREAT | O_APPEND | O_WRONLY,S_IRUSR|S_IWUSR ) ;
-	}	
+	}
 }
 
 fileManager::fileManager( QString filepath )
@@ -75,7 +75,7 @@ fileManager::fileManager( QString filepath )
 fileManager::~fileManager()
 {
 	if( m_fd != -1 ){
-		close( m_fd );
+		close( m_fd ) ;
 	}
 }
 
@@ -104,7 +104,7 @@ void utility::writeToFile( QString filepath,QString content,bool truncate )
 {
 	fileManager f( filepath,truncate ) ;
 	if( f.fileIsOpened() ){
-		int fd = f.getFd();
+		int fd = f.getFd() ;
 		bufferManager buffer( content.size() ) ;
 		wchar_t * x = buffer.getBuffer() ;
 		if( x ){

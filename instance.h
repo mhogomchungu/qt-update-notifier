@@ -35,7 +35,7 @@ class instance : public QObject
 {
 	Q_OBJECT
 public:
-	explicit instance( QObject * parent = 0 );
+	explicit instance( QObject * parent = 0 ) ;
 	~instance() ;
 	bool firstInstance( void ) ;
 signals:

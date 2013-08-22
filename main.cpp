@@ -33,8 +33,8 @@ int autoStart( KUniqueApplication& a )
 {
 	if( qtUpdateNotifier::autoStartEnabled() ){
 		qtUpdateNotifier w;
-		w.start();
-		return a.exec();
+		w.start() ;
+		return a.exec() ;
 	}else{
 		return 0 ;
 	}
@@ -43,8 +43,8 @@ int autoStart( KUniqueApplication& a )
 int start( KUniqueApplication& a )
 {
 	qtUpdateNotifier w;
-	w.start();
-	return a.exec();
+	w.start() ;
+	return a.exec() ;
 }
 
 int main( int argc,char * argv[] )
@@ -52,21 +52,21 @@ int main( int argc,char * argv[] )
 	KAboutData aboutData( 	"qt-update-notifier",
 				0,
 				ki18n( "qt-update-notifier" ),
-				"1.4.4",
+				"1.4.5",
 				ki18n( "a qt based apt-get package updates checker." ),
 				KAboutData::License_GPL_V2,
 				ki18n( "(c)2013,ink Francis\nemail:mhogomchungu@gmail.com" ),
 				ki18n( "mhogomchungu@gmail.com" ),
 				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html",
-				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html" );
+				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html" ) ;
 
-	KCmdLineArgs::init( argc,argv,&aboutData );
+	KCmdLineArgs::init( argc,argv,&aboutData ) ;
 
 	KCmdLineOptions options;
 	options.add( "a",ki18n( "auto start application" ) ) ;
 	KCmdLineArgs::addCmdLineOptions( options ) ;
 
-	KUniqueApplication::addCmdLineOptions();
+	KUniqueApplication::addCmdLineOptions() ;
 
 	if( KUniqueApplication::start() ){
 		KUniqueApplication a ;

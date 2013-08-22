@@ -58,3 +58,5 @@
 -version 1.4.4
 	- change the icon that asks a user to look for more info in the log file from reddish color to purple color
 	- fix a bug that wrongly advised to update a kernel
+-version 1.4.5
+	- add czech and slovak translations.

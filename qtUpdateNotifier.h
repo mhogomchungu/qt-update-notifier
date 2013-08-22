@@ -40,8 +40,6 @@
 #include <QDateTime>
 #include <kstatusnotifieritem.h>
 #include <kmenu.h>
-#include "check_updates.h"
-#include "logwindow.h"
 #include <kstandarddirs.h>
 #include <cstdlib>
 #include <cstdio>
@@ -51,6 +49,8 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 
+#include "check_updates.h"
+#include "logwindow.h"
 #include "instance.h"
 #include "desktop_file.h"
 #include "startsynaptic.h"
@@ -63,8 +63,8 @@ class qtUpdateNotifier : public KStatusNotifierItem
 {
 	Q_OBJECT
 public:
-	explicit qtUpdateNotifier();
-	~qtUpdateNotifier();
+	explicit qtUpdateNotifier() ;
+	~qtUpdateNotifier() ;
 	void start( void ) ;
 	void logActivity( QString ) ;
 	void logActivity_1( QString ) ;

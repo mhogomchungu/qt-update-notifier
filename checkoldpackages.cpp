@@ -25,7 +25,7 @@ checkoldpackages::checkoldpackages( QByteArray data,QObject * parent ) : QObject
 
 checkoldpackages::~checkoldpackages()
 {
-	emit outdatedPackages( m_package );
+	emit outdatedPackages( m_package ) ;
 }
 
 void checkoldpackages::start()
@@ -35,10 +35,10 @@ void checkoldpackages::start()
 
 void checkoldpackages::run()
 {
-	this->checkKernelVersion();
-	this->checkLibreOfficeVersion();
-	this->checkVirtualBoxVersion();
-	this->checkCallibeVersion();
+	this->checkKernelVersion() ;
+	this->checkLibreOfficeVersion() ;
+	this->checkVirtualBoxVersion() ;
+	this->checkCallibeVersion() ;
 }
 
 void checkoldpackages::checkKernelVersion()
@@ -47,7 +47,7 @@ void checkoldpackages::checkKernelVersion()
 	exe.start( QString( "uname -r" ) ) ;
 	exe.waitForFinished( -1 ) ;
 	QString version = exe.readAll() ;
-	exe.close();
+	exe.close() ;
 
 	int index = version.indexOf( QString( "-" ) ) ;
 	if( index != -1 ){
