@@ -162,9 +162,14 @@ void qtUpdateNotifier::updaterClosed()
 
 void qtUpdateNotifier::doneUpdating()
 {
+	QDateTime d ;
+	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() ) ;
+
+	QString n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
+
 	QString y = QString( "qt-update-notifier" ) ;
 	QString z = tr( "Status" ) ;
-	this->showToolTip( y,z,this->logMsg() ) ;
+	this->showToolTip( y,z,n ) ;
 	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 }
 
@@ -360,7 +365,6 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			 * the wait interval has not passed,wait for the remainder of the interval before
 			 * checking for updates
 			 */
-
 			QTimer * t = new QTimer() ;
 			t->setSingleShot( true ) ;
 			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
@@ -469,22 +473,21 @@ void qtUpdateNotifier::checkForUpdates()
 {
 	if( m_threadIsRunning ){
 		this->logActivity( tr( "Warning:\tattempt to start update check while another one is still in progress" ) ) ;
-		return ;
+	}else{
+		QString icon = QString( "qt-update-notifier-updating" ) ;
+
+		this->showToolTip( icon,tr( "Status" ),tr( "Checking for updates" ) ) ;
+
+		m_threadIsRunning = true ;
+
+		m_updates = new check_updates( m_configPath,m_prefferedLanguage ) ;
+		connect( m_updates,SIGNAL( updateStatus( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
+		connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
+		connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
+		connect( m_updates,SIGNAL( finished() ),m_updates,SLOT( deleteLater() ) ) ;
+
+		m_updates->start() ;
 	}
-
-	QString icon = QString( "qt-update-notifier-updating" ) ;
-
-	this->showToolTip( icon,tr( "Status" ),tr( "Checking for updates" ) ) ;
-
-	m_threadIsRunning = true ;
-
-	m_updates = new check_updates( m_configPath,m_prefferedLanguage ) ;
-	connect( m_updates,SIGNAL( updateStatus( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
-	connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
-	connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
-	connect( m_updates,SIGNAL( finished() ),m_updates,SLOT( deleteLater() ) ) ;
-
-	m_updates->start() ;
 }
 
 void qtUpdateNotifier::saveAptGetLogOutPut( QStringList& log )
@@ -541,7 +544,6 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 	}
 
 	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
-	this->logActivity( this->logMsg() ) ;
 }
 
 void qtUpdateNotifier::autoDownloadPackages( int r )
@@ -708,7 +710,9 @@ void qtUpdateNotifier::showToolTip( QString x,QString y )
 {
 	QDateTime d ;
 	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() ) ;
+
 	QString n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
+
 	if( y == tr( "No updates found" ) ){
 		this->logActivity( y ) ;
 		this->logActivity( this->logMsg() ) ;
