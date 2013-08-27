@@ -103,7 +103,7 @@ void checkoldpackages::checkLibreOfficeVersion()
 void checkoldpackages::checkVirtualBoxVersion()
 {
 	if( this->updateAvailable( QString( "getvirtualbox --vinfo" ) ) ){
-		QString r =tr( "Updating VirtualBox from version \"%1\" to available version \"%2\" is recommended." ).arg( m_iv ).arg( m_nv ) ;
+		QString r = tr( "Updating VirtualBox from version \"%1\" to available version \"%2\" is recommended." ).arg( m_iv ).arg( m_nv ) ;
 		m_package.append( r ) ;
 	}else{
 		m_package.append( QString( "" ) ) ;
@@ -113,7 +113,7 @@ void checkoldpackages::checkVirtualBoxVersion()
 void checkoldpackages::checkCallibeVersion()
 {
 	if( this->updateAvailable( QString( "calibre-manager --vinfo" ) ) ){
-		QString r =tr( "Updating Calibre from version \"%1\" to available version \"%2\" is recommended." ).arg( m_iv ).arg( m_nv ) ;
+		QString r = tr( "Updating Calibre from version \"%1\" to available version \"%2\" is recommended." ).arg( m_iv ).arg( m_nv ) ;
 		m_package.append( r ) ;
 	}else{
 		m_package.append( QString( "" ) ) ;
@@ -156,7 +156,7 @@ bool checkoldpackages::updateAvailable( QString e )
 				int new_minor_version_number = nv.at( 1 ).toInt() ;
 				int new_patch_version_numer = 0 ;
 				if( nv.size() >= 3 ){
-					installed_patch_version_numer = iv.at( 2 ).toInt() ;
+					installed_patch_version_numer = nv.at( 2 ).toInt() ;
 				}
 
 				bool update = false ;
