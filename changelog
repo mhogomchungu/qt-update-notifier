@@ -60,3 +60,5 @@
 	- fix a bug that wrongly advised to update a kernel
 -version 1.4.5
 	- add czech and slovak translations.
+-version 1.4.6
+	- fix a crash when checking for calibre version.
