@@ -691,6 +691,7 @@ void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList& list )
 {
 	Q_UNUSED( y ) ;
 	KStatusNotifierItem::setToolTip( x,tr( "Updates found" ),list.at( 0 ) ) ;
+	this->changeIcon( x ) ;
 }
 
 void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )

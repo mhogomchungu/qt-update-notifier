@@ -146,17 +146,33 @@ bool checkoldpackages::updateAvailable( QString e )
 				QStringList iv = m_iv.split( "." ) ;
 
 				int installed_major_version_number = iv.at( 0 ).toInt() ;
-				int installed_minor_version_number = iv.at( 1 ).toInt() ;
-				int installed_patch_version_numer = 0 ;
+				int installed_minor_version_number ;
+				int installed_patch_version_number ;
+
+				if( iv.size() >= 2 ){
+					installed_minor_version_number = iv.at( 1 ).toInt() ;
+				}else{
+					installed_minor_version_number = 0 ;
+				}
 				if( iv.size() >= 3 ){
-					installed_patch_version_numer = iv.at( 2 ).toInt() ;
+					installed_patch_version_number = iv.at( 2 ).toInt() ;
+				}else{
+					installed_patch_version_number = 0 ;
 				}
 
 				int new_major_version_number = nv.at( 0 ).toInt() ;
-				int new_minor_version_number = nv.at( 1 ).toInt() ;
-				int new_patch_version_numer = 0 ;
+				int new_minor_version_number ;
+				int new_patch_version_number  ;
+
+				if( nv.size() >= 2 ){
+					new_minor_version_number = nv.at( 1 ).toInt() ;
+				}else{
+					new_minor_version_number = 0 ;
+				}
 				if( nv.size() >= 3 ){
-					installed_patch_version_numer = nv.at( 2 ).toInt() ;
+					new_patch_version_number = nv.at( 2 ).toInt() ;
+				}else{
+					new_patch_version_number = 0 ;
 				}
 
 				bool update = false ;
@@ -172,7 +188,7 @@ bool checkoldpackages::updateAvailable( QString e )
 					 * installed minor version number is less than new minor version number
 					 */
 					update = true ;
-				}else if( installed_patch_version_numer < new_patch_version_numer &&
+				}else if( installed_patch_version_number < new_patch_version_number &&
 					  installed_major_version_number <= new_major_version_number &&
 					  installed_minor_version_number <= new_minor_version_number ){
 					/*
