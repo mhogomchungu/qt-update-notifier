@@ -332,7 +332,7 @@ void qtUpdateNotifier::run()
 	t->start( m_waitForFirstCheck ) ;
 }
 
-void qtUpdateNotifier::printTime( QString zz,u_int64_t time )
+void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
 {
 	QDateTime d ;
 	d.setMSecsSinceEpoch( time ) ;
@@ -418,7 +418,7 @@ QString qtUpdateNotifier::getCurrentTime_1()
 	return QDateTime::currentDateTime().toString( Qt::TextDate ) ;
 }
 
-void qtUpdateNotifier::logActivity( QString msg )
+void qtUpdateNotifier::logActivity( const QString& msg )
 {
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1:   %2\n").arg( t ).arg( msg ) ;
@@ -426,9 +426,10 @@ void qtUpdateNotifier::logActivity( QString msg )
 	emit updateLogWindow() ;
 }
 
-void qtUpdateNotifier::logActivity_1( QString msg )
+void qtUpdateNotifier::logActivity_1( const QString& msg )
 {
-	QString line = QString( "----------------------------------------------------------------------------------------------------------------------" ) ;
+	QString line = QString( "------------------------------------------------------" ) ;
+	line += QString( "----------------------------------------------------------------" ) ;
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
 	utility::writeToFile( m_configLog,log,false ) ;
@@ -490,7 +491,7 @@ void qtUpdateNotifier::checkForUpdates()
 	}
 }
 
-void qtUpdateNotifier::saveAptGetLogOutPut( QStringList& log )
+void qtUpdateNotifier::saveAptGetLogOutPut( const QStringList& log )
 {
 	int j = log.size() ;
 	if( j == 0 ){
@@ -585,44 +586,48 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 
 	this->saveAptGetLogOutPut( list ) ;
 
-	check_updates::updateState st = check_updates::updateState( r ) ;
-
-	if( st == check_updates::updatesFound ){
+	switch( check_updates::updateState( r ) ){
+	case check_updates::updatesFound :
 
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
 		this->showToolTip( icon,tr( "There are updates in the repository" ),list ) ;
 		this->autoDownloadPackages() ;
 
-	}else if( st == check_updates::inconsistentState ){
+		break ;
+	case check_updates::inconsistentState :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 		this->showToolTip( icon, tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 		this->checkForPackageUpdates() ;
 
-	}else if( st == check_updates::noUpdatesFound ){
+		break ;
+	case check_updates::noUpdatesFound :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 		this->showToolTip( icon,tr( "No updates found" ) ) ;
 		this->checkForPackageUpdates() ;
 
-	}else if( st == check_updates::noNetworkConnection ){
+		break ;
+	case check_updates::noNetworkConnection :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 		this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
 		this->checkForPackageUpdates() ;
 
-	}else if( st == check_updates::undefinedState ){
+		break ;
+	case check_updates::undefinedState :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 		this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 		this->checkForPackageUpdates() ;
 
-	}else{
+		break ;
+	default:
 		/*
 		 * currently,we dont get here,added for completeness' sake
 		 */
@@ -635,18 +640,15 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 
 void qtUpdateNotifier::checkForPackageUpdates()
 {
-	checkoldpackages * c = new checkoldpackages() ;
-	connect( c,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
-	c->start() ;
-}
-
-void qtUpdateNotifier::checkForPackageUpdates( QNetworkReply * r )
-{
-	checkoldpackages * c = new checkoldpackages( r->readAll() ) ;
-	connect( c,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
-	c->start() ;
-	r->parent()->deleteLater() ;
-	r->deleteLater() ;
+	KStandardDirs k ;
+	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/skipOldPackageCheck.option" ) ;
+	if( QFile::exists( update ) ){
+		;
+	}else{
+		checkoldpackages * c = new checkoldpackages() ;
+		connect( c,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
+		c->start() ;
+	}
 }
 
 void qtUpdateNotifier::objectGone( QObject * obj )
@@ -657,57 +659,63 @@ void qtUpdateNotifier::objectGone( QObject * obj )
 void qtUpdateNotifier::checkOldPackages( QStringList list )
 {
 	QString	icon = QString( "qt-update-notifier-important-info" ) ;
+	bool updateWindow = false ;
 
 	QString kernelVersion = list.at( 0 ) ;
+
 	if( !kernelVersion.isEmpty() ){
+		updateWindow = true ;
 		this->logActivity_1( kernelVersion ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
 	QString libreofficeVersion = list.at( 1 ) ;
 	if( !libreofficeVersion.isEmpty() ){
+		updateWindow = true ;
 		this->logActivity_1( libreofficeVersion ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
 	QString virtualBoxVersion = list.at( 2 ) ;
 	if( !virtualBoxVersion.isEmpty() ){
+		updateWindow = true ;
 		this->logActivity_1( virtualBoxVersion ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
 	QString callibre = list.at( 3 ) ;
 	if( !callibre.isEmpty() ){
+		updateWindow = true ;
 		this->logActivity_1( callibre ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
-	if( !kernelVersion.isEmpty() || !libreofficeVersion.isEmpty() || !virtualBoxVersion.isEmpty() || !callibre.isEmpty() ){
+	if( updateWindow ){
 		emit updateLogWindow() ;
 	}
 }
 
-void qtUpdateNotifier::showToolTip( QString x,QString y,QStringList& list )
+void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const QStringList& list )
 {
-	Q_UNUSED( y ) ;
+	this->logActivity( y ) ;
 	KStatusNotifierItem::setToolTip( x,tr( "Updates found" ),list.at( 0 ) ) ;
 	this->changeIcon( x ) ;
 }
 
-void qtUpdateNotifier::showToolTip( QString x,QString y,QString z )
+void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const QString& z )
 {
 	KStatusNotifierItem::setToolTip( x,y,z ) ;
 	this->changeIcon( x ) ;
 }
 
-void qtUpdateNotifier::showToolTip( QString x,QString y,int z )
+void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,int z )
 {
 	QString n = tr( "Next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
 	KStatusNotifierItem::setToolTip( x,y,n ) ;
 	this->changeIcon( x ) ;
 }
 
-void qtUpdateNotifier::showToolTip( QString x,QString y )
+void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 {
 	QDateTime d ;
 	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() ) ;

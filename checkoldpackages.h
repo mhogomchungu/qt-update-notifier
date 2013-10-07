@@ -33,7 +33,7 @@ class checkoldpackages : public QObject,public QRunnable
 {
 	Q_OBJECT
 public:
-	explicit checkoldpackages( QByteArray packageList = QByteArray(),QObject * parent = 0 ) ;
+	explicit checkoldpackages( QObject * parent = 0 ) ;
 	~checkoldpackages() ;
 	void start( void ) ;
 signals:
@@ -49,7 +49,6 @@ private:
 	QString m_iv ;
 	QString m_nv ;
 	QStringList m_package ;
-	QByteArray m_packageList ;
 };
 
 #endif // CHECKOLDPACKAGES_H

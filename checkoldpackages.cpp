@@ -19,7 +19,7 @@
 
 #include "checkoldpackages.h"
 
-checkoldpackages::checkoldpackages( QByteArray data,QObject * parent ) : QObject( parent ),m_packageList( data )
+checkoldpackages::checkoldpackages( QObject * parent ) : QObject( parent )
 {
 }
 
@@ -154,6 +154,7 @@ bool checkoldpackages::updateAvailable( QString e )
 				}else{
 					installed_minor_version_number = 0 ;
 				}
+
 				if( iv.size() >= 3 ){
 					installed_patch_version_number = iv.at( 2 ).toInt() ;
 				}else{
@@ -169,6 +170,7 @@ bool checkoldpackages::updateAvailable( QString e )
 				}else{
 					new_minor_version_number = 0 ;
 				}
+
 				if( nv.size() >= 3 ){
 					new_patch_version_number = nv.at( 2 ).toInt() ;
 				}else{

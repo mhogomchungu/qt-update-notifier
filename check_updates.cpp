@@ -148,7 +148,12 @@ void check_updates::reportUpdates()
 		QByteArray output = exe.readAllStandardOutput() ;
 		exe.close() ;
 
-		if( !output.isEmpty() ){
+		if( output.isEmpty() ){
+			list.append( bogusData ) ;
+			QString s = tr( "Warning: apt-get update finished with errors" ) ;
+			list.append( s ) ;
+			emit updateStatus( int( check_updates::undefinedState ),list ) ;
+		}else{
 			if( output.contains( error1 ) || output.contains( error2 ) || output.contains( error3 ) ){
 				list.append( bogusData ) ;
 				if( m_language == QString( "english_US" ) ){
@@ -181,11 +186,6 @@ void check_updates::reportUpdates()
 				list.append( s ) ;
 				emit updateStatus( int( check_updates::noUpdatesFound ),list ) ;
 			}
-		}else{
-			list.append( bogusData ) ;
-			QString s = tr( "Warning: apt-get update finished with errors" ) ;
-			list.append( s ) ;
-			emit updateStatus( int( check_updates::undefinedState ),list ) ;
 		}
 	}else{
 		list.append( bogusData ) ;

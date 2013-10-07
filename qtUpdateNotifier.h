@@ -45,9 +45,6 @@
 #include <cstdio>
 #include <QTranslator>
 #include <QLibraryInfo>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
 
 #include "check_updates.h"
 #include "logwindow.h"
@@ -66,8 +63,8 @@ public:
 	explicit qtUpdateNotifier() ;
 	~qtUpdateNotifier() ;
 	void start( void ) ;
-	void logActivity( QString ) ;
-	void logActivity_1( QString ) ;
+	void logActivity( const QString& ) ;
+	void logActivity_1( const QString& ) ;
 	static bool autoStartEnabled( void ) ;
 	static int instanceAlreadyRunning( void ) ;
 signals:
@@ -105,7 +102,6 @@ private slots:
 	void autoRefreshSynaptic( bool ) ;
 	void autoUpdateResult( int ) ;
 	void autoDownloadPackages( int ) ;
-	void checkForPackageUpdates( QNetworkReply * ) ;
 	void objectGone( QObject * ) ;
 private:
 	void checkForPackageUpdates( void ) ;
@@ -113,17 +109,17 @@ private:
 	void autoUpdatePackages( void ) ;
 	bool autoRefreshSYnaptic( void ) ;
 	void setupTranslationText( void ) ;
-	void printTime( QString,u_int64_t ) ;
-	void saveAptGetLogOutPut( QStringList& ) ;
+	void printTime( const QString&,u_int64_t ) ;
+	void saveAptGetLogOutPut( const QStringList& ) ;
 	u_int64_t getCurrentTime( void ) ;
 	QString getCurrentTime_1( void ) ;
 	u_int64_t nextScheduledUpdateTime( void ) ;
 	void createEnvironment( void ) ;
 	void writeUpdateTimeToConfigFile( u_int64_t ) ;
-	void showToolTip( QString,QString,QStringList& ) ;
-	void showToolTip( QString,QString,QString ) ;
-	void showToolTip( QString,QString,int ) ;
-	void showToolTip( QString,QString ) ;
+	void showToolTip( const QString&,const QString&,const QStringList& ) ;
+	void showToolTip( const QString&,const QString&,const QString& ) ;
+	void showToolTip( const QString&,const QString&,int ) ;
+	void showToolTip( const QString&,const QString& ) ;
 	QString nextUpdateTime( void ) ;
 	QString nextUpdateTime( int ) ;
 	QString logMsg( int ) ;
