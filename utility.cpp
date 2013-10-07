@@ -17,8 +17,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "utility.h"
+
+#include <QObject>
+#include <QDebug>
+#include <QFile>
+#include <QIODevice>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
 class bufferManager{
 public:
@@ -46,8 +57,8 @@ wchar_t * bufferManager::getBuffer()
 
 class fileManager{
 public:
-	explicit fileManager( QString ) ;
-	fileManager( QString,bool ) ;
+	explicit fileManager( const QString& ) ;
+	fileManager( const QString&,bool ) ;
 	int getFd( void ) ;
 	bool fileIsOpened( void ) ;
 	size_t fileSize( void ) ;
@@ -56,17 +67,17 @@ private:
 	int m_fd ;
 };
 
-fileManager::fileManager( QString filepath,bool truncate )
+fileManager::fileManager( const QString& filepath,bool truncate )
 {
 	QByteArray f = filepath.toAscii() ;
 	if( truncate ){
-		m_fd = open( f.constData(),O_CREAT | O_TRUNC | O_WRONLY,S_IRUSR|S_IWUSR ) ;
+		m_fd = open( f.constData(),O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
 	}else{
-		m_fd = open( f.constData(),O_CREAT | O_APPEND | O_WRONLY,S_IRUSR|S_IWUSR ) ;
+		m_fd = open( f.constData(),O_CREAT|O_APPEND|O_WRONLY,S_IRUSR|S_IWUSR ) ;
 	}
 }
 
-fileManager::fileManager( QString filepath )
+fileManager::fileManager( const QString& filepath )
 {
 	QByteArray f = filepath.toAscii() ;
 	m_fd = open( f.constData(),O_RDONLY ) ;
@@ -100,7 +111,7 @@ utility::utility()
 {
 }
 
-void utility::writeToFile( QString filepath,QString content,bool truncate )
+void utility::writeToFile( const QString& filepath,const QString& content,bool truncate )
 {
 	fileManager f( filepath,truncate ) ;
 	if( f.fileIsOpened() ){
@@ -114,7 +125,7 @@ void utility::writeToFile( QString filepath,QString content,bool truncate )
 	}
 }
 
-QString utility::readFromFile( QString filepath )
+QString utility::readFromFile( const QString& filepath )
 {
 	fileManager f( filepath ) ;
 	if( f.fileIsOpened() ){

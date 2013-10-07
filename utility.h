@@ -21,24 +21,13 @@
 #define UTILITY_H
 
 #include <QString>
-#include <QObject>
-#include <QDebug>
-#include <QFile>
-#include <QIODevice>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
 
 class utility
 {
 public:
 	utility() ;
-	static void writeToFile( QString filepath,QString content,bool truncate ) ;
-	static QString readFromFile( QString filepath ) ;
+	static void writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
+	static QString readFromFile( const QString& filepath ) ;
 };
 
 #endif // UTILITY_H
