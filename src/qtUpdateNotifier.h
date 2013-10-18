@@ -1,6 +1,3 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
 /*
  *
  *  Copyright (c) 2013
@@ -19,6 +16,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QFile>
@@ -46,13 +46,11 @@
 #include <QTranslator>
 #include <QLibraryInfo>
 
-#include "check_updates.h"
 #include "logwindow.h"
 #include "instance.h"
 #include "desktop_file.h"
-#include "startsynaptic.h"
+#include "task.h"
 #include "configuredialog.h"
-#include "checkoldpackages.h"
 #include "qt-update-install-path.h"
 #include "utility.h"
 
@@ -77,8 +75,6 @@ private slots:
 	void run( void ) ;
 	void closeApp( int ) ;
 	void closeApp( void ) ;
-	void threadTerminated( void ) ;
-	void threadisFinished( void ) ;
 	void changeIcon( QString ) ;
 	void checkForUpdates( void ) ;
 	void manualCheckForUpdates( void ) ;
@@ -92,9 +88,8 @@ private slots:
 	void enableAutoStart( void ) ;
 	void disableAutoStart( void ) ;
 	void toggleAutoStart( bool ) ;
-	void updaterClosed( void ) ;
 	void openConfigureDialog( void ) ;
-	void checkOldPackages( QStringList ) ;
+	void checkOutDatedPackages( QStringList ) ;
 	void startTimer( void ) ;
 	void startTimer_1( void ) ;
 	void configOptionsChanged( void ) ;
@@ -103,6 +98,8 @@ private slots:
 	void autoUpdateResult( int ) ;
 	void autoDownloadPackages( int ) ;
 	void objectGone( QObject * ) ;
+	void taskFinished( int taskAction,int taskStatus ) ;
+	void synapticStatus( int ) ;
 private:
 	void checkForPackageUpdates( void ) ;
 	void autoDownloadPackages( void ) ;
@@ -128,7 +125,6 @@ private:
 	bool m_threadIsRunning ;
 	bool m_autoStartEnabled ;
 	QStringList m_updatesList ;
-	check_updates * m_updates ;
 	KMenu * m_trayMenu ;
 	QTimer * m_timer ;
 	QString m_configTime ;

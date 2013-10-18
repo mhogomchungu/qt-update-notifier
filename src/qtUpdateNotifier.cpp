@@ -145,18 +145,22 @@ void qtUpdateNotifier::changeIcon( QString icon )
 
 void qtUpdateNotifier::startUpdater()
 {
-	startSynaptic * s = new startSynaptic() ;
-	connect( s,SIGNAL( destroyed() ),this,SLOT( updaterClosed() ) ) ;
+	Task * t = new Task() ;
+
+	connect( t,SIGNAL( taskFinished( int ) ),this,SLOT( synapticStatus( int ) ) ) ;
 
 	if( this->autoRefreshSYnaptic() ){
-		s->start( QString( "--start-synaptic --update-at-startup" ) ) ;
+		t->start( Task::autoRefreshStartSYnaptic ) ;
 	}else{
-		s->start( QString( "--start-synaptic" ) ) ;
+		t->start( Task::startSynaptic ) ;
 	}
 }
 
-void qtUpdateNotifier::updaterClosed()
+void qtUpdateNotifier::synapticStatus( int r )
 {
+	if( r != 0 ){
+		this->logActivity( tr( "starting up synaptic finished with errors" ) ) ;
+	}
 	this->doneUpdating() ;
 }
 
@@ -198,9 +202,9 @@ void qtUpdateNotifier::disableAutoStart()
 	f.close() ;
 }
 
-void qtUpdateNotifier::toggleAutoStart( bool b )
+void qtUpdateNotifier::toggleAutoStart( bool autoStartEnable )
 {
-	if( b ){
+	if( autoStartEnable ){
 		this->enableAutoStart() ;
 	}else{
 		this->disableAutoStart() ;
@@ -481,13 +485,13 @@ void qtUpdateNotifier::checkForUpdates()
 
 		m_threadIsRunning = true ;
 
-		m_updates = new check_updates( m_configPath,m_prefferedLanguage ) ;
-		connect( m_updates,SIGNAL( updateStatus( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
-		connect( m_updates,SIGNAL( terminated() ),this,SLOT( threadTerminated() ) ) ;
-		connect( m_updates,SIGNAL( finished() ),this,SLOT( threadisFinished() ) ) ;
-		connect( m_updates,SIGNAL( finished() ),m_updates,SLOT( deleteLater() ) ) ;
+		Task * t = new Task() ;
 
-		m_updates->start() ;
+		t->setLocalLanguage( m_prefferedLanguage ) ;
+		t->setConfigPath( m_configPath ) ;
+
+		connect( t,SIGNAL( taskFinished( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
+		t->start( Task::checkUpDates ) ;
 	}
 }
 
@@ -521,14 +525,16 @@ void qtUpdateNotifier::autoUpdatePackages()
 {
 	KStandardDirs k ;
 	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/autoUpdatePackages.option" ) ;
+
 	if( QFile::exists( update ) ){
 		QString icon = QString( "qt-update-notifier-updating" ) ;
 		this->showToolTip( icon,tr( "Status" ),tr( "Updating packages" ) ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
-		startSynaptic * s = new startSynaptic() ;
-		connect( s,SIGNAL( result( int ) ),this,SLOT( autoUpdateResult( int ) ) ) ;
-		s->start( QString( "--auto-update" ) ) ;
+
+		Task * t = new Task() ;
+		connect( t,SIGNAL( taskFinished( int ) ),this,SLOT( autoUpdateResult( int ) ) ) ;
+		t->start( Task::updateSystem ) ;
 	}else{
 		this->logActivity( this->logMsg() ) ;
 	}
@@ -565,14 +571,16 @@ void qtUpdateNotifier::autoDownloadPackages()
 {
 	KStandardDirs k ;
 	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/autoDownloadPackages.option" ) ;
+
 	if( QFile::exists( update ) ){
 		QString icon = QString( "qt-update-notifier-updating" ) ;
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
-		startSynaptic * s = new startSynaptic() ;
-		connect( s,SIGNAL( result( int ) ),this,SLOT( autoDownloadPackages( int ) ) ) ;
-		s->start( QString( "--download-packages" ) ) ;
+
+		Task * t = new Task() ;
+		connect( t,SIGNAL( taskFinished( int ) ),this,SLOT( autoDownloadPackages( int ) ) ) ;
+		t->start( Task::downloadPackages ) ;
 	}else{
 		this->autoUpdatePackages() ;
 	}
@@ -586,8 +594,8 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 
 	this->saveAptGetLogOutPut( list ) ;
 
-	switch( check_updates::updateState( r ) ){
-	case check_updates::updatesFound :
+	switch( Task::updateState( r ) ){
+	case Task::updatesFound :
 
 		icon = QString( "qt-update-notifier-updates-are-available" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
@@ -595,7 +603,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		this->autoDownloadPackages() ;
 
 		break ;
-	case check_updates::inconsistentState :
+	case Task::inconsistentState :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
@@ -603,7 +611,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		this->checkForPackageUpdates() ;
 
 		break ;
-	case check_updates::noUpdatesFound :
+	case Task::noUpdatesFound :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
@@ -611,7 +619,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		this->checkForPackageUpdates() ;
 
 		break ;
-	case check_updates::noNetworkConnection :
+	case Task::noNetworkConnection :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
@@ -619,7 +627,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		this->checkForPackageUpdates() ;
 
 		break ;
-	case check_updates::undefinedState :
+	case Task::undefinedState :
 
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
@@ -645,9 +653,9 @@ void qtUpdateNotifier::checkForPackageUpdates()
 	if( QFile::exists( update ) ){
 		;
 	}else{
-		checkoldpackages * c = new checkoldpackages() ;
-		connect( c,SIGNAL( outdatedPackages( QStringList ) ),this,SLOT( checkOldPackages( QStringList ) ) ) ;
-		c->start() ;
+		Task * t = new Task() ;
+		connect( t,SIGNAL( taskFinished( QStringList ) ),this,SLOT( checkOutDatedPackages( QStringList ) ) ) ;
+		t->start( Task::checkOutDatedPackages ) ;
 	}
 }
 
@@ -656,7 +664,13 @@ void qtUpdateNotifier::objectGone( QObject * obj )
 	qDebug() << "destroyed object" << obj->objectName() ;
 }
 
-void qtUpdateNotifier::checkOldPackages( QStringList list )
+void qtUpdateNotifier::taskFinished( int taskAction,int taskStatus )
+{
+	Q_UNUSED( taskAction ) ;
+	Q_UNUSED( taskStatus ) ;
+}
+
+void qtUpdateNotifier::checkOutDatedPackages( QStringList list )
 {
 	QString	icon = QString( "qt-update-notifier-important-info" ) ;
 	bool updateWindow = false ;
@@ -796,20 +810,10 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 	this->showToolTip( x,y,d ) ;
 }
 
-void qtUpdateNotifier::threadTerminated( void )
-{
-	QCoreApplication::exit( 0 ) ;
-}
-
-void qtUpdateNotifier::threadisFinished()
-{
-	m_threadIsRunning = false ;
-}
-
 void qtUpdateNotifier::closeApp()
 {
 	if( m_threadIsRunning ){
-		m_updates->terminate() ;
+		;
 	}else{
 		QCoreApplication::exit( 0 ) ;
 	}
@@ -818,7 +822,7 @@ void qtUpdateNotifier::closeApp()
 void qtUpdateNotifier::closeApp( int st )
 {
 	if( m_threadIsRunning ){
-		m_updates->terminate() ;
+		;
 	}else{
 		QCoreApplication::exit( st ) ;
 	}

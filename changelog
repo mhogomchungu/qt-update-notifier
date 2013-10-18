@@ -64,3 +64,5 @@
 	- fix a crash when checking for calibre version.
 -version 1.4.7
 	- fix a regression,icons color didnt change properly when updates were found
+-version 1.4.8
+	- add ability to turn off check for out dated packages.

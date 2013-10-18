@@ -11,35 +11,30 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = qt-update-notifier
 TEMPLATE = app
 
-SOURCES += main.cpp\
-qtUpdateNotifier.cpp \
-    check_updates.cpp \
-    logwindow.cpp \
-    instance.cpp \
-    startsynaptic.cpp \
-    configuredialog.cpp \
-    checkoldpackages.cpp \
-    utility.cpp \
+SOURCES += src/main.cpp\
+	src/qtUpdateNotifier.cpp \
+	src/logwindow.cpp \
+	src/instance.cpp \
+	src/configuredialog.cpp \
+	src/utility.cpp \
+	src/task.cpp
 
-HEADERS  += qtUpdateNotifier.h \
-    check_updates.h \
-    logwindow.h \
-    instance.h \
-    startsynaptic.h \
-    configuredialog.h \
-    checkoldpackages.h \
-    utility.h \
+HEADERS  += src/qtUpdateNotifier.h \
+	src/logwindow.h \
+	src/instance.h \
+	src/configuredialog.h \
+	src/utility.h \
+	src/task.h
 
-RESOURCES += icons.qrc
-
+RESOURCES += icons/icons.qrc
 
 INCLUDEPATH += /home/local/KDE4/include /usr/include /home/ink/src/build-qt-update-notifier
 
 LIBS += -lkdeui -L/home/local/KDE4/lib -L/usr/lib -lQtNetwork
 
 FORMS += \
-    logwindow.ui \
-    configuredialog.ui
+	src/logwindow.ui \
+	src/configuredialog.ui
 
 TRANSLATIONS += translations.ts/translations.ts
 TRANSLATIONS += translations.ts/dutch_NL.ts

@@ -17,26 +17,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef TASK_H
+#define TASK_H
 
-#ifndef CHECK_UPDATES_H
-#define CHECK_UPDATES_H
-
-#include <QThread>
-
-#include <QString>
+#include <QRunnable>
+#include <QObject>
 #include <QStringList>
-#include <QDir>
-#include <QDebug>
-#include <QProcess>
-#include <QFile>
-#include <QProcessEnvironment>
-#include <QMetaType>
 
-class check_updates : public QThread
+class Task : public QObject,public QRunnable
 {
 	Q_OBJECT
 public:
-	typedef enum {
+	typedef enum{
+		autoRefreshStartSYnaptic,
+		startSynaptic,
+		downloadPackages,
+		updateSystem,
+		checkOutDatedPackages,
+		checkUpDates
+	}action;
+
+	typedef enum{
 		updatesFound = 0,
 		inconsistentState,
 		noUpdatesFound,
@@ -45,21 +46,42 @@ public:
 		aptGetFailed
 	}updateState;
 
-	explicit check_updates( QString configPath,QString language,QObject * parent = 0 ) ;
-	~check_updates() ;
+	Task() ;
+	~Task() ;
+
+	void start( Task::action ) ;
+	void setConfigPath( const QString& path ) ;
+	void setLocalLanguage( const QString& languale ) ;
 signals:
-	void updateList( QStringList ) ;
-	void updateStatus( int,QStringList ) ;
-public slots:
+	void taskFinished( int,QStringList ) ;
+	void taskFinished( int taskStatus ) ;
+	void taskFinished( QStringList ) ;
 private:
+	void run( void ) ;
+
+	void startSynapticTask( void ) ;
+	void checkUpdatesTask( void ) ;
+	void checkOutDatedPackagesTask( void ) ;
+
+	void checkKernelVersion( void ) ;
+	void checkLibreOfficeVersion( void ) ;
+	void checkVirtualBoxVersion( void ) ;
+	void checkCallibeVersion( void ) ;
+	bool updateAvailable( const QString& ) ;
+
+	QString m_iv ;
+	QString m_nv ;
+	QStringList m_package ;
+	Task::action m_action ;
+
 	void processUpdates( QByteArray& output1,QByteArray& output2 ) ;
-	QString m_configPath ;
-	QString m_language ;
 	void reportUpdates( void ) ;
 	bool online( void ) ;
-	void run( void ) ;
+
+	QString m_configPath ;
+	QString m_language ;
 	QString m_aptUpdate ;
 	QString m_aptUpgrade ;
 };
 
-#endif // CHECK_UPDATES_H
+#endif // TASK_H

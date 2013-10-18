@@ -13,14 +13,14 @@ INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-QT4_WRAP_UI( UI logwindow.ui configuredialog.ui )
+QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui )
 
-QT4_WRAP_CPP( MOC check_updates.h qtUpdateNotifier.h logwindow.h instance.h startsynaptic.h configuredialog.h checkoldpackages.h )
+QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/instance.h src/task.h src/configuredialog.h )
 
-QT4_ADD_RESOURCES( ICONS icons.qrc )
+QT4_ADD_RESOURCES( ICONS icons/icons.qrc )
 
-add_executable( qt-update-notifier check_updates.cpp main.cpp qtUpdateNotifier.cpp 
-                logwindow.cpp instance.cpp startsynaptic.cpp configuredialog.cpp checkoldpackages.cpp utility.cpp
+add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp 
+		src/logwindow.cpp src/instance.cpp src/task.cpp src/configuredialog.cpp src/utility.cpp
                 ${MOC} ${UI} ${ICONS} )
 
 TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lkdeui ) 
@@ -28,17 +28,17 @@ TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lkdeui )
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
 
-add_executable( qt-update-notifier-start-synaptic qt-update-notifier-start-synaptic.c process.c )
+add_executable( qt-update-notifier-start-synaptic src/qt-update-notifier-start-synaptic.c src/process.c )
 
 set_target_properties( qt-update-notifier-start-synaptic PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c99" )
 set_target_properties( qt-update-notifier-start-synaptic PROPERTIES LINK_FLAGS "-pie" )
 
 TARGET_LINK_LIBRARIES( qt-update-notifier-start-synaptic -pthread ) 
 
-install ( FILES qt-update-notifier.png DESTINATION share/icons )
-install ( FILES qt-update-notifier-updating.png DESTINATION share/icons )
-install ( FILES qt-update-notifier-updates-are-available.png DESTINATION share/icons )
-install ( FILES qt-update-notifier-important-info.png DESTINATION share/icons )
+install ( FILES icons/qt-update-notifier.png DESTINATION share/icons )
+install ( FILES icons/qt-update-notifier-updating.png DESTINATION share/icons )
+install ( FILES icons/qt-update-notifier-updates-are-available.png DESTINATION share/icons )
+install ( FILES icons/qt-update-notifier-important-info.png DESTINATION share/icons )
 
 file( WRITE "${PROJECT_BINARY_DIR}/qt-update-install-path.h"
 "#define QT_UPDATE_NOTIFIER_TRANSLATION_PATH \"${CMAKE_INSTALL_PREFIX}/share/qt-update-notifier-translations/translations.qm\""
