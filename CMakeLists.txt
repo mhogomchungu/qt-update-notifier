@@ -19,7 +19,7 @@ QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/instance.h src/task
 
 QT4_ADD_RESOURCES( ICONS icons/icons.qrc )
 
-add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp 
+add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp
 		src/logwindow.cpp src/instance.cpp src/task.cpp src/configuredialog.cpp src/utility.cpp
                 ${MOC} ${UI} ${ICONS} )
 

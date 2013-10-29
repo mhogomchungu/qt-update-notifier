@@ -17,6 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "settings.h"
 #include "logwindow.h"
 #include "ui_logwindow.h"
 #include <QDebug>
@@ -38,11 +39,11 @@ logWindow::~logWindow()
 	delete m_ui;
 }
 
-void logWindow::showLogWindow( QString log )
+void logWindow::showLogWindow()
 {
-	m_logFile = log ;
-	m_logPath = log ;
-	m_ui->textEditLogField->setText( utility::readFromFile( log ) ) ;
+	m_logFile = settings::activityLogFilePath() ;
+	m_logPath = m_logFile ;
+	m_ui->textEditLogField->setText( utility::readFromFile( m_logFile ) ) ;
 	m_ui->pbQuit_2->setVisible( false ) ;
 	this->show() ;
 }
@@ -57,9 +58,9 @@ void logWindow::updateLogWindow_1()
 	m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ) ) ;
 }
 
-void logWindow::showAptGetWindow( QString logpath )
+void logWindow::showAptGetWindow()
 {
-	m_logPath = logpath ;
+	m_logPath = settings::aptGetLogFilePath() ;
 	this->updateLogWindow_1() ;
 	m_ui->pbClear->setVisible( false ) ;
 	m_ui->pbQuit->setVisible( false ) ;

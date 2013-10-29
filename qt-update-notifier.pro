@@ -17,14 +17,16 @@ SOURCES += src/main.cpp\
 	src/instance.cpp \
 	src/configuredialog.cpp \
 	src/utility.cpp \
-	src/task.cpp
+	src/task.cpp \
+	src/settings.cpp
 
 HEADERS  += src/qtUpdateNotifier.h \
 	src/logwindow.h \
 	src/instance.h \
 	src/configuredialog.h \
 	src/utility.h \
-	src/task.h
+	src/task.h \
+	src/settings.h
 
 RESOURCES += icons/icons.qrc
 

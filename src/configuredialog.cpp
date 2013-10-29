@@ -17,10 +17,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "settings.h"
 #include "configuredialog.h"
 #include "ui_configuredialog.h"
 
-configureDialog::configureDialog( QStringList list,bool autoStart,bool autoRefresh,QWidget * parent ) :
+configureDialog::configureDialog( bool autoStart,bool autoRefresh,QWidget * parent ) :
 	QDialog( parent ),m_ui( new Ui::configureDialog )
 {
 	m_ui->setupUi( this ) ;
@@ -41,9 +42,6 @@ configureDialog::configureDialog( QStringList list,bool autoStart,bool autoRefre
 	connect( m_ui->gbUpdateIntervalComboBoxMinutes,SIGNAL( currentIndexChanged( int ) ),this,SLOT(labelMinutes( int ) ) ) ;
 	connect( m_ui->checkBoxSynapticAutoRefresh,SIGNAL( toggled( bool ) ),this,SLOT( autoRefreshSynaptic_1( bool ) ) ) ;
 
-	m_CheckDelayOnStartUp = list.at( 0 ) ;
-	m_updateCheckInterval = list.at( 1 ) ;
-
 	m_autoRefreshSynaptic = autoRefresh ;
 }
 
@@ -54,12 +52,11 @@ void configureDialog::autoRefreshSynaptic_1( bool b )
 
 configureDialog::~configureDialog()
 {
-	delete m_ui;
+	delete m_ui ;
 }
 
-void configureDialog::showUI( QString language )
+void configureDialog::showUI()
 {
-	m_prefferedLanguage = language ;
 	this->setIntervalBetweenUpdateChecks() ;
 	this->setDelayTimeAtLogIn() ;
 	this->setupLanguageList() ;
@@ -72,9 +69,9 @@ void configureDialog::closeUI()
 	int hours   = m_ui->gbUpdateIntervalComboBoxHours->currentText().toInt()   * 60 * 60 ;
 	int minutes = m_ui->gbUpdateIntervalComboBoxMinutes->currentText().toInt() * 60 ;
 
-	m_duration = days + hours + minutes ;
+	u_int32_t duration = days + hours + minutes ;
 
-	if( m_duration < 10 * 60 ){
+	if( duration < 10 * 60 ){
 		QMessageBox msg( this ) ;
 		msg.setText( tr( "Update check interval must be at least 10 minutes" ) ) ;
 		msg.exec() ;
@@ -83,23 +80,15 @@ void configureDialog::closeUI()
 
 		this->delayTimeChanged( m_ui->gbDelayStartIntervalComboBox->currentIndex() ) ;
 
-		QFile f( m_updateCheckInterval ) ;
-
-		f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-
-		QString e = QString::number( m_duration ) ;
-
-		f.write( e.toAscii() ) ;
-		f.close() ;
-
-		if( m_duration != m_interval ){
-			emit setUpdateInterval( m_duration * 1000 ) ;
+		if( duration != settings::updateCheckInterval() ){
+			emit setUpdateInterval( duration * 1000 ) ;
 			emit configOptionsChanged() ;
+			settings::setNextUpdateInterval( QString::number( duration ) ) ;
 		}else{
 			;
 		}
 
-		if( m_ui->comboBoxLanguageList->currentText() != m_prefferedLanguage ){
+		if( m_ui->comboBoxLanguageList->currentText() != settings::prefferedLanguage() ){
 			emit localizationLanguage( m_ui->comboBoxLanguageList->currentText() ) ;
 		}
 
@@ -124,9 +113,7 @@ void configureDialog::delayTimeChanged( int index )
 		case  4 : interval = QString( "1800" ) ; break ;
 	}
 
-	QFile f( m_CheckDelayOnStartUp ) ;
-	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-	f.write( interval.toAscii() ) ;
+	settings::setCheckDelayOnStartUp( interval ) ;
 }
 
 void configureDialog::setupLanguageList()
@@ -157,7 +144,7 @@ void configureDialog::setupLanguageList()
 		}
 	}
 
-	index = m_ui->comboBoxLanguageList->findText( m_prefferedLanguage ) ;
+	index = m_ui->comboBoxLanguageList->findText( settings::prefferedLanguage() ) ;
 	if( index == -1 ){
 		m_ui->comboBoxLanguageList->setCurrentIndex( 0 ) ;
 	}else{
@@ -194,35 +181,25 @@ void configureDialog::labelHours( int index )
 
 void configureDialog::setDelayTimeAtLogIn()
 {
-	QFile f( m_CheckDelayOnStartUp ) ;
-	if( f.exists() ){
-		f.open( QIODevice::ReadOnly ) ;
-		int time = QString( f.readAll() ).toInt() ;
-
-		time = time / 60 ;
-
-		switch( time ){
-			case  0  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 0 ) ; break ;
-			case  5  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 1 ) ; break ;
-			case  10 : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 2 ) ; break ;
-			case  15 : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 3 ) ; break ;
-			case  30 : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 4 ) ; break ;
-			default  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 1 ) ; break ;
-		}
+	int time = settings::delayTimeBeforeUpdateCheck() ;
+	time = time / 60 ;
+	switch( time ){
+		case  0  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 0 ) ; break ;
+		case  5  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 1 ) ; break ;
+		case  10 : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 2 ) ; break ;
+		case  15 : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 3 ) ; break ;
+		case  30 : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 4 ) ; break ;
+		default  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 1 ) ; break ;
 	}
 }
 
 void configureDialog::setIntervalBetweenUpdateChecks()
 {
-	QFile f( m_updateCheckInterval ) ;
-	f.open( QIODevice::ReadOnly ) ;
-	QString data = f.readAll() ;
+	u_int32_t interval = settings::updateCheckInterval() / 1000 ;
 
-	m_interval = data.toULongLong() ;
+	u_int32_t days = interval / ( 1 * 24 * 60 * 60 ) ;
 
-	u_int32_t days = m_interval / ( 1 * 24 * 60 * 60 ) ;
-
-	u_int32_t remainer = m_interval % ( 1 * 24 * 60 * 60 ) ;
+	u_int32_t remainer = interval % ( 1 * 24 * 60 * 60 ) ;
 
 	u_int32_t hours = remainer / ( 60 * 60 ) ;
 

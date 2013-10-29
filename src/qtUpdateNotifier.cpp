@@ -18,19 +18,35 @@
  */
 
 #include "qtUpdateNotifier.h"
-#include <cmath>
 
 qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 {
 	m_timer = new QTimer() ;
 	connect( m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
+
 	m_trayMenu = 0 ;
 	m_threadIsRunning = false ;
+
 	QCoreApplication::setApplicationName( QString( "qt-update-notfier" ) ) ;
 	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 	KStatusNotifierItem::setCategory( KStatusNotifierItem::ApplicationStatus ) ;
+
 	this->changeIcon( QString( "qt-update-notifier" ) ) ;
-	this->createEnvironment() ;
+
+	settings::init() ;
+
+	m_sleepDuration  = settings::updateCheckInterval() ;
+
+	QString q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
+	QString z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
+	QString a = QString( "qt-update-notifier" ) ;
+	QString b = tr( "Status" ) ;
+
+	this->showToolTip( a,b,z ) ;
+
+	this->setupTranslationText() ;
+
+	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -38,7 +54,7 @@ void qtUpdateNotifier::logWindowShow()
 	logWindow * w = new logWindow( tr( "Update output log window" ) ) ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) ) ;
 	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow() ) ) ;
-	w->showLogWindow( m_configLog ) ;
+	w->showLogWindow() ;
 }
 
 void qtUpdateNotifier::aptGetLogWindow()
@@ -46,90 +62,7 @@ void qtUpdateNotifier::aptGetLogWindow()
 	logWindow * w = new logWindow( tr( "Apt-get upgrade output log window" ) )  ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow_1() ) ) ;
 	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow_1() ) ) ;
-	w->showAptGetWindow( m_aptGetConfigLog ) ;
-}
-
-void qtUpdateNotifier::createEnvironment()
-{
-	/*
-	 * delete ~/.config/autostart/qt-update-notifier.desktop if present as its no longer necessary
-	 */
-	QFile::remove( QDir::homePath() + QString( "/.config/autostart/qt-update-notifier.desktop" ) ) ;
-
-	KStandardDirs k ;
-	m_configPath = k.localxdgconfdir() + QString( "/qt-update-notifier" ) ;
-
-	m_aptGetConfigLog = k.localxdgconfdir() + QString( "/qt-update-notifier/qt-update-notifier-apt_output.log" ) ;
-
-	QFile e( m_configPath + QString( "/language.option"  ) ) ;
-
-	if( !e.exists() ){
-		e.open( QIODevice::WriteOnly ) ;
-		e.write( "english_US" ) ;
-		e.close() ;
-	}
-
-	e.open( QIODevice::ReadOnly ) ;
-	m_prefferedLanguage = e.readAll() ;
-	e.close() ;
-
-	this->setupTranslationText() ;
-
-	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
-	this->setObjectName( "qtUpdateNotifier" ) ;
-
-	QDir d ;
-	d.mkpath( m_configPath ) ;
-
-	m_configTime = m_configPath + QString( "/qt-update-notifier-next_auto_update.time" ) ;
-	m_configLog = m_configPath  + QString( "/qt-update-notifier-activity.log" ) ;
-
-	m_CheckDelayOnStartUp = m_configPath + QString( "/qt-update-notifier-startup_check_delay.time" ) ;
-
-	QFile w( m_CheckDelayOnStartUp ) ;
-
-	if( !w.exists() ){
-		w.open( QIODevice::WriteOnly ) ;
-		w.write( "300" ) ; // wait for 5 minutes before check for updates on startup
-		w.close() ;
-	}
-
-	w.open( QIODevice::ReadOnly ) ;
-	QString wd = w.readAll() ;
-	w.close() ;
-	m_waitForFirstCheck = 1000 * wd.toInt() ;
-
-	int rr = 60 * 1000 ;
-
-	char buffer[64] ;
-
-	if( fmod( m_waitForFirstCheck,rr ) == 0 ){
-		int ff = m_waitForFirstCheck / rr ;
-		snprintf( buffer,64,"%d",ff ) ;
-	}else{
-		float ff =  static_cast<float>( m_waitForFirstCheck ) / rr ;
-		snprintf( buffer,64,"%.2f",ff ) ;
-	}
-
-	QString z = tr( "Waiting for %1 minutes before checking for updates" ).arg( QString( buffer ) ) ;
-	QString a = QString( "qt-update-notifier" ) ;
-	QString b = tr( "Status" ) ;
-
-	this->showToolTip( a,b,z ) ;
-
-	m_updateCheckInterval = m_configPath + QString( "/qt-update-notifier-interval.time" ) ;
-
-	QFile f( m_updateCheckInterval ) ;
-	if( !f.exists() ){
-		f.open( QIODevice::WriteOnly ) ;
-		f.write( "86400" ) ; // wait for 24 hours before checking for updates
-		f.close() ;
-	}
-
-	f.open( QIODevice::ReadOnly ) ;
-	QString x = f.readAll() ;
-	f.close() ;
-	m_sleepDuration = 1000 * x.toInt() ;
+	w->showAptGetWindow() ;
 }
 
 void qtUpdateNotifier::start()
@@ -179,69 +112,33 @@ void qtUpdateNotifier::doneUpdating()
 
 bool qtUpdateNotifier::autoStartEnabled()
 {
-	KStandardDirs k ;
-	QString configPath = k.localxdgconfdir() + QString( "/qt-update-notifier/doNotAutoStart" ) ;
-	QFile f( configPath ) ;
-	return !f.exists() ;
-}
-
-void qtUpdateNotifier::enableAutoStart()
-{
-	KStandardDirs k ;
-	QString autoStart = k.localxdgconfdir() + QString( "/qt-update-notifier/doNotAutoStart" ) ;
-	QFile f( autoStart ) ;
-	f.remove() ;
-}
-
-void qtUpdateNotifier::disableAutoStart()
-{
-	KStandardDirs k ;
-	QString configPath = k.localxdgconfdir() + QString( "/qt-update-notifier/doNotAutoStart" ) ;
-	QFile f( configPath ) ;
-	f.open( QIODevice::WriteOnly ) ;
-	f.close() ;
+	return settings::autoStartEnabled() ;
 }
 
 void qtUpdateNotifier::toggleAutoStart( bool autoStartEnable )
 {
-	if( autoStartEnable ){
-		this->enableAutoStart() ;
-	}else{
-		this->disableAutoStart() ;
-	}
+	settings::enableAutoStart( autoStartEnable ) ;
 }
 
 void qtUpdateNotifier::openConfigureDialog()
 {
-	QStringList l ;
-	l.append( m_CheckDelayOnStartUp ) ;
-	l.append( m_updateCheckInterval ) ;
-	configureDialog * cfg = new configureDialog( l,qtUpdateNotifier::autoStartEnabled(),this->autoRefreshSYnaptic() ) ;
+	configureDialog * cfg = new configureDialog( qtUpdateNotifier::autoStartEnabled(),this->autoRefreshSYnaptic() ) ;
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
 	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
 	connect( cfg,SIGNAL( localizationLanguage( QString ) ),this,SLOT( localizationLanguage( QString ) ) ) ;
 	connect( cfg,SIGNAL( autoReshreshSynaptic( bool ) ),this,SLOT( autoRefreshSynaptic( bool ) ) ) ;
-	cfg->showUI( m_prefferedLanguage ) ;
+	cfg->showUI() ;
 }
 
 void qtUpdateNotifier::autoRefreshSynaptic( bool b )
 {
-	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.option" ) ;
-	if( b ){
-		QFile f( x ) ;
-		f.open( QIODevice::WriteOnly ) ;
-		f.close() ;
-	}else{
-		QFile::remove( x ) ;
-	}
+	settings::setAutoRefreshSynaptic( b ) ;
 }
 
 bool qtUpdateNotifier::autoRefreshSYnaptic()
 {
-	QString x = m_configPath + QString( "/qt-update-notifier-synaptic_autorefresh.option" ) ;
-	QFile f( x ) ;
-	return f.exists() ;
+	return settings::autoRefreshSynaptic() ;
 }
 
 void qtUpdateNotifier::configOptionsChanged()
@@ -251,31 +148,22 @@ void qtUpdateNotifier::configOptionsChanged()
 
 void qtUpdateNotifier::setupTranslationText()
 {
-	QFile f( m_configPath + QString( "/language.option" ) ) ;
-
-	m_translator = new QTranslator( this ) ;
-
-	f.open( QIODevice::ReadOnly ) ;
-	QByteArray r = f.readAll() ;
-	f.close() ;
-	QByteArray e( "english_US" ) ;
+	QString e = settings::prefferedLanguage() ;
+	QString r( "english_US" ) ;
 	if( e == r ){
 		/*
 		 *english_US language,its the default and hence dont load anything
 		 */
 	}else{
-		m_translator->load( r.constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
+		m_translator = new QTranslator( this ) ;
+		m_translator->load( e.toLatin1().constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
 		QCoreApplication::installTranslator( m_translator ) ;
 	}
 }
 
 void qtUpdateNotifier::localizationLanguage( QString language )
 {
-	m_prefferedLanguage = language ;
-	QFile f( m_configPath + QString( "/language.option" ) ) ;
-	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-	f.write( language.toAscii() ) ;
-	f.close() ;
+	settings::setPrefferedLanguage( language ) ;
 	QCoreApplication::removeTranslator( m_translator ) ;
 	m_translator->deleteLater() ;
 	this->setupTranslationText() ;
@@ -283,16 +171,8 @@ void qtUpdateNotifier::localizationLanguage( QString language )
 
 int qtUpdateNotifier::instanceAlreadyRunning()
 {
-	KStandardDirs k ;
-
-	QFile f( k.localxdgconfdir() + QString( "/qt-update-notifier/language.option" ) ) ;
-
-	QTranslator * translator = new QTranslator() ;
-
-	f.open( QIODevice::ReadOnly ) ;
-	QByteArray r = f.readAll() ;
-	f.close() ;
-	QByteArray e( "english_US" ) ;
+	QString r = settings::prefferedLanguage() ;
+	QString e( "english_US" ) ;
 	if( e == r ){
 		/*
 		 * english_US language,its the default and hence dont load anything
@@ -304,8 +184,8 @@ int qtUpdateNotifier::instanceAlreadyRunning()
 		x[ 1 ] = 0 ;
 		int z = 1 ;
 		QCoreApplication app( z,( char ** ) x ) ;
-
-		translator->load( r.constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
+		QTranslator * translator = new QTranslator() ;
+		translator->load( r.toLatin1().constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
 		app.installTranslator( translator ) ;
 		qDebug() << tr( "Another instance is already running, closing this one" ) ;
 		app.removeTranslator( translator ) ;
@@ -333,7 +213,7 @@ void qtUpdateNotifier::run()
 	t->setSingleShot( true ) ;
 	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
 	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
-	t->start( m_waitForFirstCheck ) ;
+	t->start( settings::delayTimeBeforeUpdateCheck() ) ;
 }
 
 void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
@@ -345,14 +225,7 @@ void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
 
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
-	QFile f( m_configTime ) ;
-	if( !f.open( QIODevice::ReadOnly ) ){
-
-		/*
-		 * create a logfile that records time for the next update.
-		 */
-		//printTime( "kk",this->() + m_sleepDuration ) ;
-
+	if( settings::configTimeOptionDoesNotExist() ){
 		m_timer->stop() ;
 		m_timer->start( m_sleepDuration ) ;
 		this->automaticCheckForUpdates() ;
@@ -426,7 +299,7 @@ void qtUpdateNotifier::logActivity( const QString& msg )
 {
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1:   %2\n").arg( t ).arg( msg ) ;
-	utility::writeToFile( m_configLog,log,false ) ;
+	utility::writeToFile( settings::activityLogFilePath(),log,false ) ;
 	emit updateLogWindow() ;
 }
 
@@ -436,29 +309,18 @@ void qtUpdateNotifier::logActivity_1( const QString& msg )
 	line += QString( "----------------------------------------------------------------" ) ;
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
-	utility::writeToFile( m_configLog,log,false ) ;
+	utility::writeToFile( settings::activityLogFilePath(),log,false ) ;
 	emit updateLogWindow() ;
 }
 
 u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
 {
-	QFile f( m_configTime ) ;
-	if( f.open( QIODevice::ReadOnly ) ){
-		QString x = f.readAll() ;
-		f.close() ;
-		return x.toULongLong() ;
-	}else{
-		return 0 ;
-	}
+	return settings::nextScheduledUpdateTime() ;
 }
 
 void qtUpdateNotifier::writeUpdateTimeToConfigFile( u_int64_t time )
 {
-	QFile f( m_configTime ) ;
-	f.open( QIODevice::WriteOnly | QIODevice::Truncate ) ;
-	QString z = QString::number( time ) ;
-	f.write( z.toAscii() ) ;
-	f.close() ;
+	settings::writeUpdateTimeToConfigFile( time ) ;
 }
 
 void qtUpdateNotifier::manualCheckForUpdates()
@@ -487,8 +349,8 @@ void qtUpdateNotifier::checkForUpdates()
 
 		Task * t = new Task() ;
 
-		t->setLocalLanguage( m_prefferedLanguage ) ;
-		t->setConfigPath( m_configPath ) ;
+		t->setLocalLanguage( settings::prefferedLanguage() ) ;
+		t->setConfigPath( settings::configPath() ) ;
 
 		connect( t,SIGNAL( taskFinished( int,QStringList ) ),this,SLOT( updateStatus( int,QStringList ) ) ) ;
 		t->start( Task::checkUpDates ) ;
@@ -518,15 +380,12 @@ void qtUpdateNotifier::saveAptGetLogOutPut( const QStringList& log )
 	QString msg = tr( "Log entry was created at: " ) ;
 	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
 
-	utility::writeToFile( m_aptGetConfigLog,header + x,true ) ;
+	utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ) ;
 }
 
 void qtUpdateNotifier::autoUpdatePackages()
 {
-	KStandardDirs k ;
-	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/autoUpdatePackages.option" ) ;
-
-	if( QFile::exists( update ) ){
+	if( settings::autoUpdatePackages() ){
 		QString icon = QString( "qt-update-notifier-updating" ) ;
 		this->showToolTip( icon,tr( "Status" ),tr( "Updating packages" ) ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
@@ -569,10 +428,7 @@ void qtUpdateNotifier::autoDownloadPackages( int r )
 
 void qtUpdateNotifier::autoDownloadPackages()
 {
-	KStandardDirs k ;
-	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/autoDownloadPackages.option" ) ;
-
-	if( QFile::exists( update ) ){
+	if( settings::autoDownloadPackages() ){
 		QString icon = QString( "qt-update-notifier-updating" ) ;
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
@@ -648,9 +504,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 
 void qtUpdateNotifier::checkForPackageUpdates()
 {
-	KStandardDirs k ;
-	QString update = k.localxdgconfdir() + QString( "/qt-update-notifier/skipOldPackageCheck.option" ) ;
-	if( QFile::exists( update ) ){
+	if( settings::skipOldPackageCheck() ){
 		;
 	}else{
 		Task * t = new Task() ;

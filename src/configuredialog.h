@@ -42,9 +42,9 @@ class configureDialog : public QDialog
 	Q_OBJECT
 
 public:
-	configureDialog( QStringList list = QStringList(),bool autostart = true,bool autoRefreshSynaptic = false,QWidget * parent = 0 ) ;
+	configureDialog( bool autostart = true,bool autoRefreshSynaptic = false,QWidget * parent = 0 ) ;
 	~configureDialog() ;
-	void showUI( QString ) ;
+	void showUI() ;
 signals:
 	void toggleAutoStart( bool ) ;
 	void setUpdateInterval( int ) ;
@@ -64,12 +64,7 @@ private:
 	void setDelayTimeAtLogIn( void ) ;
 	void setIntervalBetweenUpdateChecks( void ) ;
 	void closeEvent( QCloseEvent * ) ;
-	Ui::configureDialog * m_ui;
-	QString m_CheckDelayOnStartUp ;
-	QString m_updateCheckInterval ;
-	int m_interval ;
-	int m_duration ;
-	QString m_prefferedLanguage ;
+	Ui::configureDialog * m_ui ;
 	bool m_autoRefreshSynaptic ;
 };
 

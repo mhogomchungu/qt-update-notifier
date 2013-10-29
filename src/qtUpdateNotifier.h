@@ -21,10 +21,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QFile>
 #include <QString>
 #include <QStringList>
-#include <QDir>
 #include <QIcon>
 #include <QAction>
 #include <QKeySequence>
@@ -40,7 +38,6 @@
 #include <QDateTime>
 #include <kstatusnotifieritem.h>
 #include <kmenu.h>
-#include <kstandarddirs.h>
 #include <cstdlib>
 #include <cstdio>
 #include <QTranslator>
@@ -53,6 +50,7 @@
 #include "configuredialog.h"
 #include "qt-update-install-path.h"
 #include "utility.h"
+#include "settings.h"
 
 class qtUpdateNotifier : public KStatusNotifierItem
 {
@@ -85,8 +83,6 @@ private slots:
 	void logWindowShow( void ) ;
 	void aptGetLogWindow( void) ;
 	void doneUpdating( void ) ;
-	void enableAutoStart( void ) ;
-	void disableAutoStart( void ) ;
 	void toggleAutoStart( bool ) ;
 	void openConfigureDialog( void ) ;
 	void checkOutDatedPackages( QStringList ) ;
@@ -111,7 +107,6 @@ private:
 	u_int64_t getCurrentTime( void ) ;
 	QString getCurrentTime_1( void ) ;
 	u_int64_t nextScheduledUpdateTime( void ) ;
-	void createEnvironment( void ) ;
 	void writeUpdateTimeToConfigFile( u_int64_t ) ;
 	void showToolTip( const QString&,const QString&,const QStringList& ) ;
 	void showToolTip( const QString&,const QString&,const QString& ) ;
@@ -127,17 +122,9 @@ private:
 	QStringList m_updatesList ;
 	KMenu * m_trayMenu ;
 	QTimer * m_timer ;
-	QString m_configTime ;
-	QString m_configLog ;
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
-	int m_waitForFirstCheck ;
-	QString m_configPath ;
-	QString m_aptGetConfigLog ;
-	QString m_CheckDelayOnStartUp ;
-	QString m_updateCheckInterval ;
 	QTranslator * m_translator ;
-	QString m_prefferedLanguage ;
 };
 
 #endif // MAINWINDOW_H

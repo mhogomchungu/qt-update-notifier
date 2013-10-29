@@ -124,6 +124,9 @@ void Task::checkKernelVersion()
 			;
 		}
 
+		/*
+		 * start warning if a user uses a kernel less than 3.2.18
+		 */
 		int base_kernel_major_version = 3 ;
 		int base_kernel_minor_version = 2 ;
 		int base_kernel_patch_version = 18;
@@ -137,9 +140,6 @@ void Task::checkKernelVersion()
 			update = true ;
 		}
 
-		/*
-		 * start warning if a user uses a kernel less than 3.2.18
-		 */
 		if( update ){
 			m_package.append( tr( "Recommending updating the kernel from version %1 to a more recent version." ).arg( version ) ) ;
 		}else{
@@ -327,7 +327,8 @@ void Task::processUpdates( QByteArray& output1,QByteArray& output2 )
 	QString y = QString::number( replace ) ;
 	QString z = QString::number( New ) ;
 
-	QString updates = tr( "<table><tr><td>%1 to be upgraded</td></tr><tr><td>%2 to be replaced</td></tr><tr><td>%3 to be installed</td></tr></table>" ).arg( x ).arg( y ).arg( z ) ;
+	QString q = tr( "<table><tr><td>%1 to be upgraded</td></tr><tr><td>%2 to be replaced</td></tr><tr><td>%3 to be installed</td></tr></table>" ) ;
+	QString updates = q.arg( x ).arg( y ).arg( z ) ;
 
 	QStringList n ;
 	n.append( updates ) ;

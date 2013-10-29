@@ -38,8 +38,8 @@ class logWindow : public QWidget
 public:
 	explicit logWindow( QString = QString(),QWidget * parent = 0 ) ;
 	~logWindow() ;
-	void showLogWindow( QString ) ;
-	void showAptGetWindow( QString ) ;
+	void showLogWindow( void ) ;
+	void showAptGetWindow( void ) ;
 private slots:
 	void pbClearLog( void ) ;
 	void pbQuit( void ) ;

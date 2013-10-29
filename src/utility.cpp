@@ -92,7 +92,7 @@ fileManager::~fileManager()
 
 int fileManager::getFd()
 {
-	return m_fd;
+	return m_fd ;
 }
 
 bool fileManager::fileIsOpened()
