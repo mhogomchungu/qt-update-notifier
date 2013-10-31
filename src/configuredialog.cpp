@@ -21,16 +21,16 @@
 #include "configuredialog.h"
 #include "ui_configuredialog.h"
 
-configureDialog::configureDialog( bool autoStart,bool autoRefresh,QWidget * parent ) :
+configureDialog::configureDialog( QWidget * parent ) :
 	QDialog( parent ),m_ui( new Ui::configureDialog )
 {
 	m_ui->setupUi( this ) ;
 
 	this->setWindowTitle( tr( "Configuration window" ) ) ;
 
-	m_ui->checkBoxSynapticAutoRefresh->setChecked( autoRefresh ) ;
+	m_ui->checkBoxSynapticAutoRefresh->setChecked( settings::autoRefreshSynaptic() ) ;
 
-	m_ui->checkBoxAutoStart->setChecked( autoStart ) ;
+	m_ui->checkBoxAutoStart->setChecked( settings::autoStartEnabled() ) ;
 
 	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( -1 ) ;
 	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( -1 ) ;
@@ -41,13 +41,11 @@ configureDialog::configureDialog( bool autoStart,bool autoRefresh,QWidget * pare
 	connect( m_ui->gbUpdateIntervalComboBoxHours,SIGNAL( currentIndexChanged( int ) ),this,SLOT( labelHours( int ) ) ) ;
 	connect( m_ui->gbUpdateIntervalComboBoxMinutes,SIGNAL( currentIndexChanged( int ) ),this,SLOT(labelMinutes( int ) ) ) ;
 	connect( m_ui->checkBoxSynapticAutoRefresh,SIGNAL( toggled( bool ) ),this,SLOT( autoRefreshSynaptic_1( bool ) ) ) ;
-
-	m_autoRefreshSynaptic = autoRefresh ;
 }
 
-void configureDialog::autoRefreshSynaptic_1( bool b )
+void configureDialog::autoRefreshSynaptic_1( bool autoRefresh )
 {
-	emit autoReshreshSynaptic( b ) ;
+	emit autoReshreshSynaptic( autoRefresh ) ;
 }
 
 configureDialog::~configureDialog()
@@ -80,7 +78,7 @@ void configureDialog::closeUI()
 
 		this->delayTimeChanged( m_ui->gbDelayStartIntervalComboBox->currentIndex() ) ;
 
-		if( duration != settings::updateCheckInterval() ){
+		if( duration * 1000 != settings::updateCheckInterval() ){
 			emit setUpdateInterval( duration * 1000 ) ;
 			emit configOptionsChanged() ;
 			settings::setNextUpdateInterval( QString::number( duration ) ) ;

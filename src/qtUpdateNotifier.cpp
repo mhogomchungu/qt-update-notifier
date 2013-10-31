@@ -122,7 +122,7 @@ void qtUpdateNotifier::toggleAutoStart( bool autoStartEnable )
 
 void qtUpdateNotifier::openConfigureDialog()
 {
-	configureDialog * cfg = new configureDialog( qtUpdateNotifier::autoStartEnabled(),this->autoRefreshSYnaptic() ) ;
+	configureDialog * cfg = new configureDialog() ;
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
 	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
@@ -225,7 +225,7 @@ void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
 
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
-	if( settings::configTimeOptionDoesNotExist() ){
+	if( settings::firstTimeRun() ){
 		m_timer->stop() ;
 		m_timer->start( m_sleepDuration ) ;
 		this->automaticCheckForUpdates() ;

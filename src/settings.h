@@ -36,7 +36,7 @@ public:
 	static QString delayTimeBeforeUpdateCheck( int ) ;
 	static int delayTimeBeforeUpdateCheck( void ) ;
 	static bool autoRefreshSynaptic( void ) ;
-	static bool configTimeOptionDoesNotExist( void ) ;
+	static bool firstTimeRun( void ) ;
 	static u_int32_t updateCheckInterval( void ) ;
 	static u_int64_t nextScheduledUpdateTime() ;
 	static void writeUpdateTimeToConfigFile( u_int64_t time ) ;

@@ -42,7 +42,7 @@ class configureDialog : public QDialog
 	Q_OBJECT
 
 public:
-	configureDialog( bool autostart = true,bool autoRefreshSynaptic = false,QWidget * parent = 0 ) ;
+	configureDialog( QWidget * parent = 0 ) ;
 	~configureDialog() ;
 	void showUI() ;
 signals:
@@ -65,7 +65,6 @@ private:
 	void setIntervalBetweenUpdateChecks( void ) ;
 	void closeEvent( QCloseEvent * ) ;
 	Ui::configureDialog * m_ui ;
-	bool m_autoRefreshSynaptic ;
 };
 
 #endif // CONFIGUREDIALOG_H
