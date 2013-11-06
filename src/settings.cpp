@@ -160,6 +160,9 @@ void convertOldConfigSystemToNewSystem()
 		opt = QString( "autoStartAtLogin" ) ;
 		settings.setValue( opt,true ) ;
 	}
+
+	opt = QString( "warnOnInconsistentState" ) ;
+	settings.setValue( opt,true ) ;
 }
 
 QString settings::aptGetLogFilePath()
@@ -317,6 +320,13 @@ bool settings::autoStartEnabled()
 	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
 	_setUpSettingsDefaultOptions( settings ) ;
 	return settings.value( QString( "autoStartAtLogin" ) ).toBool() ;
+}
+
+bool settings::warnOnInconsistentState()
+{
+	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
+	_setUpSettingsDefaultOptions( settings ) ;
+	return settings.value( QString( "warnOnInconsistentState" ) ).toBool() ;
 }
 
 void settings::enableAutoStart( bool autoStart )

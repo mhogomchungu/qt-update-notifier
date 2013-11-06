@@ -461,10 +461,15 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		break ;
 	case Task::inconsistentState :
 
-		icon = QString( "qt-update-notifier" ) ;
-		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
+		if( settings::warnOnInconsistentState() ){
+			icon = QString( "qt-update-notifier-inconsistent-state" ) ;
+			KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
+		}else{
+			icon = QString( "qt-update-notifier" ) ;
+			KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
+		}
+
 		this->showToolTip( icon, tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
-		this->checkForPackageUpdates() ;
 
 		break ;
 	case Task::noUpdatesFound :
@@ -480,7 +485,6 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 		this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
-		this->checkForPackageUpdates() ;
 
 		break ;
 	case Task::undefinedState :
@@ -488,7 +492,6 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		icon = QString( "qt-update-notifier" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 		this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
-		this->checkForPackageUpdates() ;
 
 		break ;
 	default:

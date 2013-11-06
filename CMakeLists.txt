@@ -39,6 +39,7 @@ install ( FILES icons/qt-update-notifier.png DESTINATION share/icons )
 install ( FILES icons/qt-update-notifier-updating.png DESTINATION share/icons )
 install ( FILES icons/qt-update-notifier-updates-are-available.png DESTINATION share/icons )
 install ( FILES icons/qt-update-notifier-important-info.png DESTINATION share/icons )
+install ( FILES icons/qt-update-notifier-inconsistent-state.png DESTINATION share/icons )
 
 file( WRITE "${PROJECT_BINARY_DIR}/qt-update-install-path.h"
 "#define QT_UPDATE_NOTIFIER_TRANSLATION_PATH \"${CMAKE_INSTALL_PREFIX}/share/qt-update-notifier-translations/translations.qm\""

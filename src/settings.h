@@ -44,6 +44,7 @@ public:
 	static bool autoDownloadPackages( void ) ;
 	static bool skipOldPackageCheck( void ) ;
 	static bool autoStartEnabled( void ) ;
+	static bool warnOnInconsistentState( void ) ;
 	static void enableAutoStart( bool ) ;
 	static void setAutoRefreshSynaptic( bool ) ;
 	static void setPrefferedLanguage( const QString& ) ;
