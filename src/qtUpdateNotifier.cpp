@@ -359,28 +359,17 @@ void qtUpdateNotifier::checkForUpdates()
 
 void qtUpdateNotifier::saveAptGetLogOutPut( const QStringList& log )
 {
-	int j = log.size() ;
-	if( j == 0 ){
-		/*
-		 * log appear to be empty,dont replace a log file with useful info with an empty one
-		 */
-		return ;
-	}
-
 	QString x = log.at( 1 ) ;
-
 	if( x == tr( "No updates found" ) ){
 		/*
 		 * update log file only when there are new updates
 		 */
-		return ;
+	}else{
+		QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
+		QString msg = tr( "Log entry was created at: " ) ;
+		QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
+		utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ) ;
 	}
-
-	QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
-	QString msg = tr( "Log entry was created at: " ) ;
-	QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
-
-	utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ) ;
 }
 
 void qtUpdateNotifier::autoUpdatePackages()
@@ -462,14 +451,16 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 	case Task::inconsistentState :
 
 		if( settings::warnOnInconsistentState() ){
-			icon = QString( "qt-update-notifier-inconsistent-state" ) ;
-			KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
+			icon = QString( "qt-update-notifier-important-info" ) ;
 		}else{
 			icon = QString( "qt-update-notifier" ) ;
-			KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
 		}
 
 		this->showToolTip( icon, tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
+
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
+
+		this->logActivity_1( list.at( 0 ) ) ;
 
 		break ;
 	case Task::noUpdatesFound :

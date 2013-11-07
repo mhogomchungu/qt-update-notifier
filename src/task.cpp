@@ -369,6 +369,11 @@ void Task::reportUpdates()
 
 	QByteArray bogusData = "xyz" ;
 
+	QString inconsistentState = tr( "\
+Recommending trying again later as the Repository appear to be in an inconsistent state.\
+If the problem persists, run Synaptic and see if it is still possible to update.\
+If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance" ) ;
+
 	if( st == 0 ){
 
 		exe.start( m_aptUpgrade ) ;
@@ -383,7 +388,7 @@ void Task::reportUpdates()
 			emit taskFinished( int( Task::undefinedState ),list ) ;
 		}else{
 			if( output.contains( error1 ) || output.contains( error2 ) || output.contains( error3 ) ){
-				list.append( bogusData ) ;
+				list.append( inconsistentState ) ;
 				if( m_language == QString( "english_US" ) ){
 					list.append( output ) ;
 				}else{
