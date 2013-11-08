@@ -370,9 +370,9 @@ void Task::reportUpdates()
 	QByteArray bogusData = "xyz" ;
 
 	QString inconsistentState = tr( "\
-Recommending trying again later as the Repository appear to be in an inconsistent state.\
-If the problem persists, run Synaptic and see if it is still possible to update.\
-If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance" ) ;
+Recommending trying again later as the Repository appear to be in an inconsistent state.\n\
+If the problem persists, run Synaptic and see if it is still possible to update.\n\
+If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance." ) ;
 
 	if( st == 0 ){
 

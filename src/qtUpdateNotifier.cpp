@@ -92,7 +92,7 @@ void qtUpdateNotifier::startUpdater()
 void qtUpdateNotifier::synapticStatus( int r )
 {
 	if( r != 0 ){
-		this->logActivity( tr( "starting up synaptic finished with errors" ) ) ;
+		this->logActivity( tr( "Synaptic exited with errors" ) ) ;
 	}
 	this->doneUpdating() ;
 }
@@ -450,16 +450,9 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		break ;
 	case Task::inconsistentState :
 
-		if( settings::warnOnInconsistentState() ){
-			icon = QString( "qt-update-notifier-important-info" ) ;
-		}else{
-			icon = QString( "qt-update-notifier" ) ;
-		}
-
-		this->showToolTip( icon, tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
-
+		icon = QString( "qt-update-notifier-important-info" ) ;
 		KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
-
+		this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 		this->logActivity_1( list.at( 0 ) ) ;
 
 		break ;

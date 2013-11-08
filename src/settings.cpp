@@ -58,15 +58,11 @@ void convertOldConfigSystemToNewSystem()
 	if( e.exists() ){
 		e.open( QIODevice::ReadOnly ) ;
 		value = e.readAll() ;
-		opt = QString( "language" ) ;
-		value = QString( "english_US" ) ;
-		settings.setValue( opt,value ) ;
+		settings::setPrefferedLanguage( value ) ;
 		e.close() ;
 		e.remove() ;
 	}else{
-		opt = QString( "language" ) ;
-		value = QString( "english_US" ) ;
-		settings.setValue( opt,value ) ;
+		settings::setPrefferedLanguage( QString( "english_US" ) ) ;
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-startup_check_delay.time" ) ) ;
@@ -96,12 +92,19 @@ void convertOldConfigSystemToNewSystem()
 	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-synaptic_autorefresh.option" ) ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
-		opt = QString( "autoRefreshSynaptic" ) ;
-		settings.setValue( opt,true ) ;
+		settings::setAutoRefreshSynaptic( true ) ;
 		e.remove() ;
 	}else{
-		opt = QString( "autoRefreshSynaptic" ) ;
-		settings.setValue( opt,false ) ;
+		settings::setAutoRefreshSynaptic( false ) ;
+	}
+
+	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "doNotAutoStart" ) ) ;
+	e.setFileName( path ) ;
+	if( e.exists() ){
+		settings::enableAutoStart( false ) ;
+		e.remove() ;
+	}else{
+		settings::enableAutoStart( true ) ;
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-next_auto_update.time" ) ) ;
@@ -149,20 +152,6 @@ void convertOldConfigSystemToNewSystem()
 		opt = QString( "skipOldPackageCheck" ) ;
 		settings.setValue( opt,false ) ;
 	}
-
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "doNotAutoStart" ) ) ;
-	e.setFileName( path ) ;
-	if( e.exists() ){
-		opt = QString( "autoStartAtLogin" ) ;
-		settings.setValue( opt,false ) ;
-		e.remove() ;
-	}else{
-		opt = QString( "autoStartAtLogin" ) ;
-		settings.setValue( opt,true ) ;
-	}
-
-	opt = QString( "warnOnInconsistentState" ) ;
-	settings.setValue( opt,true ) ;
 }
 
 QString settings::aptGetLogFilePath()
