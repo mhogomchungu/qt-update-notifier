@@ -126,7 +126,6 @@ void qtUpdateNotifier::openConfigureDialog()
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
 	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
-	connect( cfg,SIGNAL( localizationLanguage( QString ) ),this,SLOT( localizationLanguage( QString ) ) ) ;
 	connect( cfg,SIGNAL( autoReshreshSynaptic( bool ) ),this,SLOT( autoRefreshSynaptic( bool ) ) ) ;
 	cfg->showUI() ;
 }
@@ -159,14 +158,6 @@ void qtUpdateNotifier::setupTranslationText()
 		m_translator->load( e.toLatin1().constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
 		QCoreApplication::installTranslator( m_translator ) ;
 	}
-}
-
-void qtUpdateNotifier::localizationLanguage( QString language )
-{
-	settings::setPrefferedLanguage( language ) ;
-	QCoreApplication::removeTranslator( m_translator ) ;
-	m_translator->deleteLater() ;
-	this->setupTranslationText() ;
 }
 
 int qtUpdateNotifier::instanceAlreadyRunning()

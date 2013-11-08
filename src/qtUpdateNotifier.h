@@ -89,7 +89,6 @@ private slots:
 	void startTimer( void ) ;
 	void startTimer_1( void ) ;
 	void configOptionsChanged( void ) ;
-	void localizationLanguage( QString ) ;
 	void autoRefreshSynaptic( bool ) ;
 	void autoUpdateResult( int ) ;
 	void autoDownloadPackages( int ) ;

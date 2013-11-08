@@ -86,9 +86,7 @@ void configureDialog::closeUI()
 			;
 		}
 
-		if( m_ui->comboBoxLanguageList->currentText() != settings::prefferedLanguage() ){
-			emit localizationLanguage( m_ui->comboBoxLanguageList->currentText() ) ;
-		}
+		settings::setPrefferedLanguage( m_ui->comboBoxLanguageList->currentText() ) ;
 
 		this->hide() ;
 		this->deleteLater() ;
