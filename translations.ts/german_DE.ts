@@ -47,7 +47,12 @@
         <source>Recommending trying again later as the Repository appear to be in an inconsistent state.
 If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wird empfohlen die Aktualisierung zu einem späteren Zeitpunkt durchzuführen, da das 
+Paketarchiv in einem inkonsistenten Zustand zu sein scheint.
+Falls die Probleme weiterhin bestehen, prüfen Sie mittels Synaptic ob Aktualisierungen verfügbar
+sind.
+Falls mit Synaptic die Probleme nicht gelöst werden können, eröffnen Sie bitte einen Hilfeanfrage
+im Forum.</translation>
     </message>
     <message>
         <location filename="../src/task.cpp" line="386"/>
@@ -854,7 +859,7 @@ network interfaces)</oldsource>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="95"/>
         <source>Synaptic exited with errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Synaptic wurde mit Fehlern beendet</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="619"/>
