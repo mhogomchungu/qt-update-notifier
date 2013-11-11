@@ -32,6 +32,23 @@ logWindow::logWindow( QString title,QWidget * parent ) :QWidget( parent ),m_ui( 
 	connect( m_ui->pbQuit,SIGNAL( clicked() ),this,SLOT( pbQuit() ) ) ;
 	connect( m_ui->pbQuit_2,SIGNAL( clicked() ),this,SLOT( pbQuit() ) ) ;
 	connect( m_ui->pbClear,SIGNAL( clicked() ),this,SLOT( pbClearLog() ) ) ;
+
+	this->installEventFilter( this ) ;
+}
+
+bool logWindow::eventFilter( QObject * watched,QEvent * event )
+{
+	if( watched == this ){
+		if( event->type() == QEvent::KeyPress ){
+			QKeyEvent * keyEvent = static_cast< QKeyEvent* >( event ) ;
+			if( keyEvent->key() == Qt::Key_Escape ){
+				this->pbQuit() ;
+				return true ;
+			}
+		}
+	}
+
+	return false ;
 }
 
 logWindow::~logWindow()

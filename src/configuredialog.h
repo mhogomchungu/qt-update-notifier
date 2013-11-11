@@ -30,6 +30,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDir>
+#include <QEvent>
+#include <QKeyEvent>
 
 #include "qt-update-install-path.h"
 
@@ -63,6 +65,7 @@ private slots:
 private:
 	void setDelayTimeAtLogIn( void ) ;
 	void setIntervalBetweenUpdateChecks( void ) ;
+	bool eventFilter( QObject * watched,QEvent * event ) ;
 	void closeEvent( QCloseEvent * ) ;
 	Ui::configureDialog * m_ui ;
 };

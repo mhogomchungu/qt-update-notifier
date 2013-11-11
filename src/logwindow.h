@@ -25,6 +25,8 @@
 #include <QFile>
 #include <QString>
 #include <QCloseEvent>
+#include <QEvent>
+#include <QKeyEvent>
 
 #include "utility.h"
 
@@ -47,6 +49,7 @@ private slots:
 	void updateLogWindow_1( void ) ;
 private:
 	void closeEvent( QCloseEvent * ) ;
+	bool eventFilter( QObject * watched,QEvent * event ) ;
 	Ui::logWindow * m_ui;
 	QString m_logFile ;
 	QString m_logPath ;

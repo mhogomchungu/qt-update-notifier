@@ -41,6 +41,23 @@ configureDialog::configureDialog( QWidget * parent ) :
 	connect( m_ui->gbUpdateIntervalComboBoxHours,SIGNAL( currentIndexChanged( int ) ),this,SLOT( labelHours( int ) ) ) ;
 	connect( m_ui->gbUpdateIntervalComboBoxMinutes,SIGNAL( currentIndexChanged( int ) ),this,SLOT(labelMinutes( int ) ) ) ;
 	connect( m_ui->checkBoxSynapticAutoRefresh,SIGNAL( toggled( bool ) ),this,SLOT( autoRefreshSynaptic_1( bool ) ) ) ;
+
+	this->installEventFilter( this ) ;
+}
+
+bool configureDialog::eventFilter( QObject * watched,QEvent * event )
+{
+	if( watched == this ){
+		if( event->type() == QEvent::KeyPress ){
+			QKeyEvent * keyEvent = static_cast< QKeyEvent* >( event ) ;
+			if( keyEvent->key() == Qt::Key_Escape ){
+				this->closeUI() ;
+				return true ;
+			}
+		}
+	}
+
+	return false ;
 }
 
 void configureDialog::autoRefreshSynaptic_1( bool autoRefresh )
