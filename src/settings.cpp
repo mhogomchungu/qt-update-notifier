@@ -152,6 +152,8 @@ void convertOldConfigSystemToNewSystem()
 		opt = QString( "skipOldPackageCheck" ) ;
 		settings.setValue( opt,false ) ;
 	}
+
+	settings.sync() ;
 }
 
 QString settings::aptGetLogFilePath()
