@@ -52,7 +52,7 @@ int main( int argc,char * argv[] )
 	KAboutData aboutData( 	"qt-update-notifier",
 				0,
 				ki18n( "qt-update-notifier" ),
-				"1.4.9",
+				"1.5.0",
 				ki18n( "a qt based apt-get package updates checker." ),
 				KAboutData::License_GPL_V2,
 				ki18n( "(c)2013,ink Francis\nemail:mhogomchungu@gmail.com" ),
@@ -69,6 +69,7 @@ int main( int argc,char * argv[] )
 	KUniqueApplication::addCmdLineOptions() ;
 
 	if( KUniqueApplication::start() ){
+		settings::init() ;
 		KUniqueApplication a ;
 		if( KCmdLineArgs::allArguments().contains( "-a" ) ){
 			return autoStart( a ) ;

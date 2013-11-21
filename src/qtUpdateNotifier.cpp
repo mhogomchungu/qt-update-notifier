@@ -33,8 +33,6 @@ qtUpdateNotifier::qtUpdateNotifier() :KStatusNotifierItem( 0 )
 
 	this->changeIcon( QString( "qt-update-notifier" ) ) ;
 
-	settings::init() ;
-
 	m_sleepDuration  = settings::updateCheckInterval() ;
 
 	QString q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
