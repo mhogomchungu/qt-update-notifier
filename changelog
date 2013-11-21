@@ -66,3 +66,7 @@
 	- fix a regression,icons color didnt change properly when updates were found
 -version 1.4.8
 	- add ability to turn off check for out dated packages.
+-version 1.4.9
+	- turn icon color to purple when the repository is found to be in an inconsistent state and all texts in the activity log to explain the problem.
+-version 1.5.0
+	- fix a regression introduced in 1.4.9 that prevented the application from being auto started at login
