@@ -68,8 +68,9 @@ int main( int argc,char * argv[] )
 
 	KUniqueApplication::addCmdLineOptions() ;
 
+	settings::init() ;
+	
 	if( KUniqueApplication::start() ){
-		settings::init() ;
 		KUniqueApplication a ;
 		if( KCmdLineArgs::allArguments().contains( "-a" ) ){
 			return autoStart( a ) ;
