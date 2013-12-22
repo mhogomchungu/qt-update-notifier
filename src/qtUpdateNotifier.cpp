@@ -195,6 +195,10 @@ void qtUpdateNotifier::run()
 	m_trayMenu->addAction( tr( "Open update log window" ),this,SLOT( logWindowShow() ) ) ;
 	m_trayMenu->addAction( tr( "Open apt-get log window" ),this,SLOT( aptGetLogWindow() ) ) ;
 	m_trayMenu->addAction( tr( "Configuration window" ),this,SLOT( openConfigureDialog() ) ) ;
+	m_trayMenu->addAction( tr( "Quit" ),this,SLOT( closeApp() ) ) ;
+
+
+	KStatusNotifierItem::setStandardActionsEnabled( false ) ;
 
 	KStatusNotifierItem::setContextMenu( m_trayMenu ) ;
 

@@ -70,3 +70,5 @@
 	- turn icon color to purple when the repository is found to be in an inconsistent state and all texts in the activity log to explain the problem.
 -version 1.5.0
 	- fix a regression introduced in 1.4.9 that prevented the application from being auto started at login
+-version 1.5.1
+	- maintanance release.
