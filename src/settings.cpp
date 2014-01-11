@@ -320,6 +320,19 @@ bool settings::warnOnInconsistentState()
 	return settings.value( QString( "warnOnInconsistentState" ) ).toBool() ;
 }
 
+bool settings::prefixLogEntries()
+{
+	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
+	_setUpSettingsDefaultOptions( settings ) ;
+	QString opt = QString( "prefixLogEntries" ) ;
+	if( settings.contains( opt ) ){
+		return settings.value( opt ).toBool() ;
+	}else{
+		settings.setValue( opt,true ) ;
+		return true ;
+	}
+}
+
 void settings::enableAutoStart( bool autoStart )
 {
 	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;

@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include "settings.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -111,7 +112,7 @@ utility::utility()
 {
 }
 
-void utility::writeToFile( const QString& filepath,const QString& content,bool truncate )
+static void writeToFile( const QString& filepath,const QString& content,bool truncate )
 {
 	fileManager f( filepath,truncate ) ;
 	if( f.fileIsOpened() ){
@@ -122,6 +123,29 @@ void utility::writeToFile( const QString& filepath,const QString& content,bool t
 			size_t y = content.toWCharArray( x ) ;
 			write( fd,x,y * sizeof( wchar_t ) ) ;
 		}
+	}
+}
+
+void utility::writeToFile( const QString& filepath,const QString& content,bool truncate )
+{
+	if( filepath == settings::activityLogFilePath() ){
+		if( settings::prefixLogEntries() ){
+			/*
+			 * add new entry at the front of the log
+			 */
+			QString data = content + utility::readFromFile( filepath ) ;
+			::writeToFile( filepath,data,true )  ;
+		}else{
+			/*
+			 * add new entries at the back of the log
+			 */
+			::writeToFile( filepath,content,truncate ) ;
+		}
+	}else{
+		/*
+		 * add new entries at the back of the log
+		 */
+		::writeToFile( filepath,content,truncate ) ;
 	}
 }
 

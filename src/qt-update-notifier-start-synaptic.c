@@ -1,5 +1,5 @@
 /*
- * 
+ *
  *  Copyright (c) 2013
  *  name : mhogo mchungu
  *  email: mhogomchungu@gmail.com
@@ -54,7 +54,7 @@ static int userHasPermission( void )
 	uid_t uid = getuid() ;
 
 	struct group * grp ;
-	
+
 	struct passwd * pass ;
 
 	if( uid == 0 ){
@@ -93,7 +93,7 @@ static inline void printOUtPut( const char * e,int debug )
 	if( debug ){
 		printf( "%s",e ) ;
 	}
-	
+
 	if( e ){;}
 }
 
@@ -116,7 +116,7 @@ static int itIsSafeToUpdate( const char * e,int debug )
 	const char * success = "\nThe following packages will be" ;
 
 	const char * noUpdates = "0 upgraded, 0 newly installed, 0 removed and 0 not upgraded." ;
-	
+
 	printOUtPut( e,debug ) ;
 
 	#define stringContains( x,y ) strstr( x,y ) != NULL
@@ -138,7 +138,7 @@ static int itIsSafeToUpdate( const char * e,int debug )
 	if( stringContains( e,noUpdates ) ){
 		return 2 ;
 	}
-	
+
 	return 1 ;
 }
 
@@ -157,9 +157,9 @@ static void printProcessOUtPut( process_t p,int fd,int debug )
 		z = ProcessGetOutPut( p,&e,STDOUT ) ;
 		if( e ){
 			write( fd,e,z ) ;
-			
+
 			printOUtPut( e,debug ) ;
-				
+
 			free( e ) ;
 		}else{
 			break ;
@@ -171,28 +171,28 @@ static int refreshPackageList( int fd,int debug )
 {
 	int r ;
 	process_t p ;
-	
+
 	logStage( fd,"entering refreshPackageList" ) ;
-	
+
 	if( userHasPermission() ){
 		p = Process( "/usr/bin/apt-get" ) ;
-	
+
 		ProcessSetArgumentList( p,"update",ENDLIST ) ;
 		ProcessSetOptionUser( p,0 ) ;
 		ProcessSetOptionPriority( p,PRIORITY ) ;
 		ProcessStart( p ) ;
-	
+
 		printProcessOUtPut( p,fd,debug ) ;
-	
+
 		r = ProcessExitStatus( p ) ;
-		ProcessDelete( &p ) ;	
+		ProcessDelete( &p ) ;
 	}else{
 		printf( "error: insufficent privileges to perform this operation\n" ) ;
 		r = 1 ;
 	}
-	
+
 	logStage( fd,"leaving refreshPackageList" ) ;
-	
+
 	return r ;
 }
 
@@ -200,22 +200,22 @@ static int aptAndSynapticAreRunning( void )
 {
 	int r ;
 	uid_t uid = getuid() ;
-	process_t p = Process( "/bin/pidof" ) ;	
+	process_t p = Process( "/bin/pidof" ) ;
 	ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
 	ProcessSetOptionUser( p,uid ) ;
 	ProcessStart( p ) ;
 	r = ProcessExitStatus( p ) ;
 	ProcessDelete( &p ) ;
-	
+
 	if( r == 1 ){
-		p = Process( "/bin/pidof" ) ;	
+		p = Process( "/bin/pidof" ) ;
 		ProcessSetArgumentList( p,"/usr/bin/apt-get",ENDLIST ) ;
 		ProcessSetOptionUser( p,uid ) ;
 		ProcessStart( p ) ;
 		r = ProcessExitStatus( p ) ;
 		ProcessDelete( &p ) ;
 	}
-	
+
 	return r == 0 ;
 }
 
@@ -225,27 +225,27 @@ char * getProcessOutPut( process_t p,int fd,int debug )
 	char * buffer = NULL ;
 	size_t buffer_size = 0 ;
 	size_t output_size = 0 ;
-	
+
 	while( 1 ){
 		output_size = ProcessGetOutPut( p,&e,STDOUT ) ;
 		if( output_size > 0 ){
-			
+
 			write( fd,e,output_size ) ;
-			
+
 			buffer = realloc( buffer,buffer_size + output_size + 1 ) ;
-			
+
 			strcpy( buffer + buffer_size,e ) ;
-			
+
 			buffer_size += output_size ;
-			
+
 			printOUtPut( e,debug ) ;
-			
+
 			free( e ) ;
 		}else{
 			break ;
 		}
 	}
-	
+
 	return buffer ;
 }
 
@@ -254,9 +254,9 @@ static int autoUpdate( int fd,int debug )
 	process_t p ;
 	int r ;
 	char * buffer ;
-	
+
 	logStage( fd,"entering autoUpdate" ) ;
-	
+
 	if( !userHasPermission() ){
 		printf( "error: insufficent privileges to perform this operation\n" ) ;
 		r = 1 ;
@@ -265,7 +265,7 @@ static int autoUpdate( int fd,int debug )
 			printf( "error: apt and/or synaptic are running\n" ) ;
 			return 3 ;
 		}
-			
+
 		/*
 		 * make sure the output we are going to get is in english regardless of user locale
 		 */
@@ -282,7 +282,7 @@ static int autoUpdate( int fd,int debug )
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessSetOptionPriority( p,PRIORITY ) ;
 			ProcessStart( p ) ;
-			
+
 			buffer = getProcessOutPut( p,fd,debug ) ;
 
 			ProcessExitStatus( p ) ;
@@ -297,35 +297,35 @@ static int autoUpdate( int fd,int debug )
 			}
 
 			if( r == 0 ){
-				
+
 				logStage( fd,"running apt-get dist-upgrade --assume-yes" ) ;
 				/*
 				 * it seem to be safe to update,update
 				 */
 				printf( "updates found\n" ) ;
-				
+
 				p = Process( "/usr/bin/apt-get" ) ;
 				ProcessSetArgumentList( p,"dist-upgrade","--assume-yes",ENDLIST ) ;
 				ProcessSetOptionUser( p,0 ) ;
 				ProcessSetOptionPriority( p,PRIORITY ) ;
 				ProcessStart( p ) ;
-				
+
 				printProcessOUtPut( p,fd,debug ) ;
-				
+
 				r = ProcessExitStatus( p ) ;
-				
+
 				logStage( fd,"done running apt-get dist-upgrade --assume-yes" ) ;
-				
+
 				if( r != 0 ){
 					printf( "error: failed to run dist-upgrade --assume-yes\n" ) ;
 				}
-				
+
 				ProcessDelete( &p ) ;
-				
+
 				logStage( fd,"running apt-get clean" ) ;
-				
+
 				/*
-				 * clear cache 
+				 * clear cache
 				 */
 				p = Process( "/usr/bin/apt-get" ) ;
 				ProcessSetArgumentList( p,"clean",ENDLIST ) ;
@@ -334,9 +334,9 @@ static int autoUpdate( int fd,int debug )
 				ProcessStart( p ) ;
 				ProcessExitStatus( p ) ;
 				ProcessDelete( &p ) ;
-				
+
 				logStage( fd,"done running apt-get clean" ) ;
-				
+
 			}else if( r == 2 ){
 				printf( "There are no updates\n" ) ;
 			}else{
@@ -346,7 +346,7 @@ static int autoUpdate( int fd,int debug )
 			printf( "failed to refresh package list\n" ) ;
 		}
 	}
-	
+
 	logStage( fd,"leaving autoUpdate" ) ;
 	return r ;
 }
@@ -354,11 +354,11 @@ static int autoUpdate( int fd,int debug )
 static int downloadPackages( int fd,int debug )
 {
 	process_t p ;
-	
+
 	int r ;
-	
+
 	logStage( fd,"entering downloadPackages" ) ;
-	
+
 	if( userHasPermission() ){
 		r = refreshPackageList( fd,debug ) ;
 		if( r == 0 ){
@@ -375,9 +375,9 @@ static int downloadPackages( int fd,int debug )
 		printf( "error: insufficent privileges to perform this operation\n" ) ;
 		r = 1 ;
 	}
-	
+
 	logStage( fd,"leaving downloadPackages" ) ;
-	
+
 	return r ;
 }
 
@@ -390,7 +390,7 @@ static const char * getSUExe( void )
 	}else{
 		#define desktopEnvironment( x ) strstr( env,x ) != NULL
 		#define pathExists( x ) stat( x,&statstr ) == 0
-		
+
 		if( desktopEnvironment( "kde" ) || desktopEnvironment( "KDE" ) ){
 			if( pathExists( kdesu ) ){
 				return kdesu ;
@@ -407,27 +407,27 @@ static int startSynaptic( const char * e,int fd )
 {
 	int r ;
 	process_t p ;
-	
+
 	if( 0 && fd && ktsuss ){;}
-	
+
 	if( userHasPermission() ){
 		p = Process( "/usr/sbin/synaptic" ) ;
 		ProcessSetOptionUser( p,0 ) ;
-		
+
 		if( e != NULL ){
 			ProcessSetArgumentList( p,e,ENDLIST ) ;
 		}
 	}else{
 		p = Process( getSUExe() ) ;
 		ProcessSetOptionUser( p,getuid() ) ;
-		
+
 		if( e != NULL ){
 			ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,ENDLIST ) ;
 		}else{
 			ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
 		}
 	}
-		
+
 	ProcessStart( p ) ;
 	r = ProcessExitStatus( p ) ;
 	ProcessDelete( &p ) ;
@@ -449,8 +449,8 @@ argument list:\n\
 	--debug      	this option can be added as the last option to print program output on the terminal.\n\
 			The same printed information will also be  in ~/.config/qt-update-notifier/backEnd.log\n\
 NOTE:\n\
-	\"kdesu\" will be used in kde session and gksu will be used in any other session\n" ; 
-	
+	\"kdesu\" will be used in kde session and gksu will be used in any other session\n" ;
+
 	printf( "%s",options ) ;
 	return 0 ;
 }
@@ -459,48 +459,48 @@ int main( int argc,char * argv[] )
 {
 	const char * e ;
 	const char * f ;
-	
+
 	int fd ;
 	int st ;
-	
+
 	int debug ;
-	
+
 	char logPath[ 1024 ] ;
-	
+
 	struct passwd * pass = getpwuid( getuid() ) ;
-	
+
 	if( pass == NULL ){
 		return 10 ;
 	}
-	
+
 	snprintf( logPath,1024,"/home/%s/.config/qt-update-notifier/backEnd.log",pass->pw_name ) ;
-		
+
 	if( argc < 2 ){
 		return printOptions() ;
 	}
-	
+
 	if( seteuid( getuid() ) == -1 ){
 		return 12 ;
 	}
-	
+
 	fd = open( logPath,O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
-	
+
 	if( seteuid( 0 ) == -1 ){
 		close( fd ) ;
 		return 12 ;
 	}
-	
+
 	if( fd == -1 ){
 		return 11 ;
 	}
-	
+
 	fchmod( fd,S_IRUSR|S_IWUSR|S_IRWXG|S_IRGRP|S_IROTH|S_IWOTH ) ;
-	
+
 	e = argv[ 1 ] ;
 
 	#define x( z ) strcmp( e,z ) == 0
 	#define stringsAreEqual( x,y ) strcmp( x,y ) == 0
-	
+
 	if( argc > 1 ){
 		if( stringsAreEqual( argv[ argc - 1 ],"--debug" ) ){
 			debug = 1 ;
@@ -534,7 +534,7 @@ int main( int argc,char * argv[] )
 			}
 		}
 	}
-		
+
 	close( fd ) ;
 	return st ;
 }
