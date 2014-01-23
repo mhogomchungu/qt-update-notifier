@@ -70,7 +70,7 @@ private:
 
 fileManager::fileManager( const QString& filepath,bool truncate )
 {
-	QByteArray f = filepath.toAscii() ;
+	QByteArray f = filepath.toLatin1() ;
 	if( truncate ){
 		m_fd = open( f.constData(),O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
 	}else{
@@ -80,7 +80,7 @@ fileManager::fileManager( const QString& filepath,bool truncate )
 
 fileManager::fileManager( const QString& filepath )
 {
-	QByteArray f = filepath.toAscii() ;
+	QByteArray f = filepath.toLatin1() ;
 	m_fd = open( f.constData(),O_RDONLY ) ;
 }
 

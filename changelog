@@ -72,3 +72,5 @@
 	- fix a regression introduced in 1.4.9 that prevented the application from being auto started at login
 -version 1.5.1
 	- add a config option to add new log entries at the beginning of the log file.Old behavior can be set through the responsible config option
+-version 1.5.2
+	- fix a bug that reveal itself when a package fail to download.

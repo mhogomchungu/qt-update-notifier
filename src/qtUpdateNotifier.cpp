@@ -383,12 +383,12 @@ void qtUpdateNotifier::autoUpdatePackages()
 
 void qtUpdateNotifier::autoUpdateResult( int r )
 {
-	QString icon = QString( "qt-update-notifier" ) ;
-	switch( r ){
-		case 0 : this->showToolTip( icon,tr( "Automatic package update completed" ) ) ;	 break ;
-		case 1 : this->showToolTip( icon,tr( "Automatic package update failed" ) )    ;	 break ;
-		case 2 : this->showToolTip( icon,tr( "Automatic package update completed" ) ) ;	 break ;
-		case 3 : this->showToolTip( icon,tr( "Automatic package update failed" ) )    ;	 break ;
+	if( r == 0 || r == 2 ){
+		QString icon = QString( "qt-update-notifier" ) ;
+		this->showToolTip( icon,tr( "Automatic package update completed" ) ) ;
+	}else{
+		QString icon = QString( "qt-update-notifier-important-info" ) ;
+		this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
 	}
 
 	KStatusNotifierItem::setStatus( KStatusNotifierItem::Passive ) ;
@@ -400,12 +400,11 @@ void qtUpdateNotifier::autoDownloadPackages( int r )
 
 	if( r == 0 ){
 		this->showToolTip( icon,tr( "Downloading of packages completed" ) ) ;
+		KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
+		this->autoUpdatePackages() ;
 	}else{
 		this->showToolTip( icon,tr( "Downloading of packages failed" ) ) ;
 	}
-
-	KStatusNotifierItem::setStatus( KStatusNotifierItem::NeedsAttention ) ;
-	this->autoUpdatePackages() ;
 }
 
 void qtUpdateNotifier::autoDownloadPackages()

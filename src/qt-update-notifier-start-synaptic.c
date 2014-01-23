@@ -314,29 +314,29 @@ static int autoUpdate( int fd,int debug )
 
 				r = ProcessExitStatus( p ) ;
 
+				ProcessDelete( &p ) ;
+
 				logStage( fd,"done running apt-get dist-upgrade --assume-yes" ) ;
 
 				if( r != 0 ){
 					printf( "error: failed to run dist-upgrade --assume-yes\n" ) ;
+					logStage( fd,"error: failed to run dist-upgrade --assume-yes" ) ;
+				}else{
+					logStage( fd,"running apt-get clean" ) ;
+
+					/*
+					 * clear cache
+					 */
+					p = Process( "/usr/bin/apt-get" ) ;
+					ProcessSetArgumentList( p,"clean",ENDLIST ) ;
+					ProcessSetOptionUser( p,0 ) ;
+					ProcessSetOptionPriority( p,PRIORITY ) ;
+					ProcessStart( p ) ;
+					ProcessExitStatus( p ) ;
+					ProcessDelete( &p ) ;
+
+					logStage( fd,"done running apt-get clean" ) ;
 				}
-
-				ProcessDelete( &p ) ;
-
-				logStage( fd,"running apt-get clean" ) ;
-
-				/*
-				 * clear cache
-				 */
-				p = Process( "/usr/bin/apt-get" ) ;
-				ProcessSetArgumentList( p,"clean",ENDLIST ) ;
-				ProcessSetOptionUser( p,0 ) ;
-				ProcessSetOptionPriority( p,PRIORITY ) ;
-				ProcessStart( p ) ;
-				ProcessExitStatus( p ) ;
-				ProcessDelete( &p ) ;
-
-				logStage( fd,"done running apt-get clean" ) ;
-
 			}else if( r == 2 ){
 				printf( "There are no updates\n" ) ;
 			}else{
