@@ -4,8 +4,8 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/utility.cpp" line="140"/>
-        <location filename="../src/utility.cpp" line="143"/>
+        <location filename="../src/utility.cpp" line="164"/>
+        <location filename="../src/utility.cpp" line="167"/>
         <source>Log is empty</source>
         <translation>Geschiedenis is leeg</translation>
     </message>
@@ -530,44 +530,44 @@ Standaard en aanbevolen interval
 <context>
     <name>qtUpdateNotifier</name>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="47"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="46"/>
         <source>Qt-update-notifier</source>
         <translation>Qt-update-notifier</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="52"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="51"/>
         <source>Update output log window</source>
         <translation>Geschiedenis van bijwerken</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="60"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="59"/>
         <source>Apt-get upgrade output log window</source>
         <translation>Geschiedenis van apt-get</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="39"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="38"/>
         <source>Waiting for %1 minutes before checking for updates</source>
         <translation>Controle op bijwerken is na %1 minuten</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="41"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="106"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="244"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="339"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="372"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="415"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="581"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="40"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="105"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="264"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="359"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="392"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="434"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="599"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="169"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="179"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="168"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="178"/>
         <source>Another instance is already running, closing this one</source>
         <translation>Toepassing is reeds actief, deze wordt afgesloten</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="188"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="187"/>
         <source>Qt-update-notifier started</source>
         <translation>Qt-update-notifier is gestart</translation>
     </message>
@@ -577,171 +577,177 @@ Standaard en aanbevolen interval
         <translation>Synaptic openen</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="193"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="197"/>
         <source>Check for updates</source>
         <translation>Op bijwerken controleren</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="194"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="202"/>
         <source>Done updating</source>
         <translation>Bijwerken is gedaan</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="195"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="207"/>
         <source>Open update log window</source>
         <translation>Geschiedenis bijwerken openen</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="196"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="212"/>
         <source>Open apt-get log window</source>
         <translation>Geschiedenis apt-get openen</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="197"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="217"/>
         <source>Configuration window</source>
         <translation>Configuratiescherm</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="198"/>
         <source>Quit</source>
-        <translation>Verlaten</translation>
+        <translation type="obsolete">Verlaten</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="254"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="327"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="274"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="347"/>
         <source>Automatic check for updates initiated</source>
         <translation>Automatische controle is geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="321"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="341"/>
         <source>Manual check for updates initiated</source>
         <translation>Handmatige controle is geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="335"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="355"/>
         <source>Warning:	attempt to start update check while another one is still in progress</source>
         <translation>Waarschuwing: Er is reeds een controle actief</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="339"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="359"/>
         <source>Checking for updates</source>
         <translation>Op bijwerken controleren</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="362"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="382"/>
         <source>Log entry was created at: </source>
         <translation>Geschiedenisuitvoer aangemaakt op: </translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="372"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="392"/>
         <source>Updating packages</source>
         <translation>Pakketten aan het bijwerken</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="374"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="394"/>
         <source>Automatic package update initiated</source>
         <translation>Automatische pakketbijwerken is geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="388"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="390"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="408"/>
         <source>Automatic package update completed</source>
         <translation>Automatische pakketbijwerken is compleet</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="389"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="391"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="411"/>
         <source>Automatic package update failed</source>
         <translation>Automatische pakketbijwerken is mislukt</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="402"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="422"/>
         <source>Downloading of packages completed</source>
         <translation>Downloaden van pakketten is voltooid</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="404"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="426"/>
         <source>Downloading of packages failed</source>
         <translation>Downloaden van pakketten is mislukt</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="415"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="434"/>
         <source>Downloading packages</source>
         <translation>Pakketten aan het downloaden</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="417"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="436"/>
         <source>Packages downloading initiated</source>
         <translation>Downloaden pakketten is geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="448"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="466"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
         <translation>Controle is voltooid, pakketbron lijkt in een inconsistente status te zijn</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="517"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="524"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="531"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="538"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="535"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="542"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="549"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="556"/>
         <source>Outdated packages found</source>
         <translation>Verouderde pakketten gevonden</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="674"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="689"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Qt-update-notifier afsluiten</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="440"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="458"/>
         <source>There are updates in the repository</source>
         <translation>Er zijn in Synaptic bijwerkingen beschikbaar</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="356"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="456"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="573"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="376"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="474"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="591"/>
         <source>No updates found</source>
         <translation>Geen bijwerkingen gevonden</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="464"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="482"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Controle is overgeslagen, er is geen internetverbinding</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="471"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="480"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="489"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="498"/>
         <source>Update check complete, repository is in an unknown state</source>
         <translation>Controle is gedaan, pakketbron is in een onbekende status</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="549"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="567"/>
         <source>Updates found</source>
         <translation>Updates gevonden</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="103"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="561"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="571"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="102"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="579"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="589"/>
         <source>Next update check will be at %1</source>
         <translation>Volgende controle zal zijn op %1</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="93"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="92"/>
         <source>Synaptic exited with errors</source>
         <translation>Synaptic is met fouten afgesloten</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="605"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="617"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="623"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="635"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation>Volgende geplande controle is na %1 uren op %2</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="629"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="647"/>
         <source>Rescheduling update check</source>
         <translation>Controle opnieuw plannen</translation>
+    </message>
+</context>
+<context>
+    <name>statusicon</name>
+    <message>
+        <location filename="../src/statusicon.cpp" line="144"/>
+        <location filename="../src/statusicon.cpp" line="352"/>
+        <source>Quit</source>
+        <translation>Verlaten</translation>
     </message>
 </context>
 </TS>
