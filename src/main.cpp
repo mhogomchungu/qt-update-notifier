@@ -19,6 +19,8 @@
 
 #include "tray_application_type.h"
 
+#define VERSION "1.5.2"
+
 #if USE_KDE_STATUS_NOTIFIER
 
 #include <QApplication>
@@ -55,7 +57,7 @@ int main( int argc,char * argv[] )
 	KAboutData aboutData( 	"qt-update-notifier",
 				0,
 				ki18n( "qt-update-notifier" ),
-				"1.5.2",
+				VERSION,
 				ki18n( "a qt based apt-get package updates checker." ),
 				KAboutData::License_GPL_V2,
 				ki18n( "(c)2013,ink Francis\nemail:mhogomchungu@gmail.com" ),
@@ -88,6 +90,7 @@ int main( int argc,char * argv[] )
 #else
 #include <QApplication>
 #include "qtUpdateNotifier.h"
+#include <iostream>
 
 int main( int argc,char * argv[] )
 {
@@ -102,6 +105,15 @@ int main( int argc,char * argv[] )
 		}else{
 			return 0 ;
 		}
+	}else if( v.contains( "-h" ) || v.contains( "-v" ) ||
+		  v.contains( "--help" ) || v.contains( "--version" ) ||
+		  v.contains( "-version" ) || v.contains( "-help" ) ){
+		const char * msg = "\
+version  : "VERSION"\n\
+copyright: 2013-2014 Ink Francis,mhogomchungu@gmail.com\n\
+license  : GPLv2+" ;
+		std::cout << msg << std::endl ;
+		return 0 ;
 	}else{
 		qtUpdateNotifier w ;
 		w.start() ;

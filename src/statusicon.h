@@ -79,6 +79,7 @@ public:
 	void setStatus( const statusicon::ItemStatus status ) ;
 	void setToolTip( const QString& iconName,const QString& title,const QString& subTitle ) ;
 	void addAction( QAction * ) ;
+	QAction * getAction( const QString& title = QString() ) ;
 	QString iconName( void ) ;
 	QString toolTipTitle( void ) ;
 	QWidget * widget( void ) ;

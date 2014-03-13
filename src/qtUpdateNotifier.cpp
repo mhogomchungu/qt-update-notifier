@@ -186,37 +186,25 @@ void qtUpdateNotifier::run()
 {
 	this->logActivity( tr( "Qt-update-notifier started" ) ) ;
 
-	QObject * parent = statusicon::statusQObject() ;
+	QAction * ac ;
 
-	QAction * ac = new QAction( parent ) ;
-	ac->setText( tr( "Open synaptic" ) ) ;
+	ac = statusicon::getAction( tr( "Open synaptic" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( startUpdater() ) ) ;
-	statusicon::addAction( ac ) ;
 
-	ac = new QAction( parent ) ;
-	ac->setText( tr( "Check for updates" ) ) ;
+	ac = statusicon::getAction( tr( "Check for updates" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( manualCheckForUpdates() ) ) ;
-	statusicon::addAction( ac ) ;
 
-	ac = new QAction( parent ) ;
-	ac->setText( tr( "Done updating" ) ) ;
+	ac = statusicon::getAction( tr( "Done updating" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( doneUpdating() ) ) ;
-	statusicon::addAction( ac ) ;
 
-	ac = new QAction( parent ) ;
-	ac->setText( tr( "Open update log window" ) ) ;
+	ac = statusicon::getAction( tr( "Open update log window" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( logWindowShow() ) ) ;
-	statusicon::addAction( ac ) ;
 
-	ac = new QAction( parent ) ;
-	ac->setText( tr( "Open apt-get log window" ) ) ;
+	ac = statusicon::getAction( tr( "Open apt-get log window" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( aptGetLogWindow() ) ) ;
-	statusicon::addAction( ac ) ;
 
-	ac = new QAction( parent ) ;
-	ac->setText( tr( "Configuration window" ) ) ;
+	ac = statusicon::getAction( tr( "Configuration window" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( openConfigureDialog() ) ) ;
-	statusicon::addAction( ac ) ;
 
 	statusicon::setStandardActionsEnabled( false ) ;
 
