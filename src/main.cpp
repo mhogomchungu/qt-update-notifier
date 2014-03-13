@@ -19,7 +19,7 @@
 
 #include "tray_application_type.h"
 
-#define VERSION "1.5.2"
+#define VERSION "1.5.3"
 
 #if USE_KDE_STATUS_NOTIFIER
 
