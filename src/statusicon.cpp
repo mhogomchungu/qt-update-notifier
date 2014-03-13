@@ -54,7 +54,6 @@ static QPixmap _icon( const QString& name,int count )
 	return pixmap ;
 }
 
-
 #if USE_KDE_STATUS_NOTIFIER
 
 statusicon::statusicon()
