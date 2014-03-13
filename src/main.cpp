@@ -17,6 +17,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "tray_application_type.h"
+
+#if USE_KDE_STATUS_NOTIFIER
 
 #include <QApplication>
 #include "qtUpdateNotifier.h"
@@ -32,7 +35,7 @@
 int autoStart( KUniqueApplication& a )
 {
 	if( qtUpdateNotifier::autoStartEnabled() ){
-		qtUpdateNotifier w;
+		qtUpdateNotifier w ;
 		w.start() ;
 		return a.exec() ;
 	}else{
@@ -81,3 +84,29 @@ int main( int argc,char * argv[] )
 		return qtUpdateNotifier::instanceAlreadyRunning() ;
 	}
 }
+
+#else
+#include <QApplication>
+#include "qtUpdateNotifier.h"
+
+int main( int argc,char * argv[] )
+{
+	QApplication a( argc,argv ) ;
+	QStringList v = QCoreApplication::arguments() ;
+	settings::init() ;
+	if( v.contains( "-a" ) ){
+		if( qtUpdateNotifier::autoStartEnabled() ){
+			qtUpdateNotifier w ;
+			w.start() ;
+			return a.exec() ;
+		}else{
+			return 0 ;
+		}
+	}else{
+		qtUpdateNotifier w ;
+		w.start() ;
+		return a.exec() ;
+	}
+}
+
+#endif

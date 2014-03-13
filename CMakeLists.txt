@@ -2,11 +2,8 @@
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(SET CMP0017 OLD)
 
-find_package( Qt4 COMPONENTS REQUIRED )
+find_package( Qt4 REQUIRED )
 
-find_package( KDE4 REQUIRED )
-
-add_definitions( -I${KDE4_INCLUDE_DIR} )
 add_definitions( -I${Qt4_INCLUDE_DIR} )
 
 INCLUDE( ${QT_USE_FILE} )
@@ -15,15 +12,23 @@ INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
 QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui )
 
-QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/instance.h src/task.h src/configuredialog.h )
+QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/task.h src/configuredialog.h src/statusicon.h )
 
 QT4_ADD_RESOURCES( ICONS icons/icons.qrc )
 
-add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp
-		src/logwindow.cpp src/instance.cpp src/task.cpp src/configuredialog.cpp src/utility.cpp
+add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
+		src/logwindow.cpp src/task.cpp src/configuredialog.cpp src/utility.cpp
                 ${MOC} ${UI} ${ICONS} )
 
-TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lkdeui ) 
+if( QT_BUILD )
+	file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
+	TARGET_LINK_LIBRARIES( qt-update-notifier -lQtCore -lQtGui )
+else()
+	find_package( KDE4 REQUIRED )
+	add_definitions( -I${KDE4_INCLUDE_DIR} )
+	file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 1\n#define USE_LXQT_PLUGIN 0\n" )
+	TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lQtCore -lQtGui -lkdecore -lkdeui )
+endif()
 
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
@@ -33,7 +38,7 @@ add_executable( qt-update-notifier-start-synaptic src/qt-update-notifier-start-s
 set_target_properties( qt-update-notifier-start-synaptic PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c99" )
 set_target_properties( qt-update-notifier-start-synaptic PROPERTIES LINK_FLAGS "-pie" )
 
-TARGET_LINK_LIBRARIES( qt-update-notifier-start-synaptic -pthread ) 
+TARGET_LINK_LIBRARIES( qt-update-notifier-start-synaptic -pthread )
 
 install ( FILES icons/qt-update-notifier.png DESTINATION share/icons )
 install ( FILES icons/qt-update-notifier-updating.png DESTINATION share/icons )
@@ -67,7 +72,7 @@ install ( FILES translations.qm/slovak_SK.qm DESTINATION ${QM_PATH} )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 
-install( TARGETS qt-update-notifier-start-synaptic RUNTIME DESTINATION bin 
+install( TARGETS qt-update-notifier-start-synaptic RUNTIME DESTINATION bin
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE SETUID
 )
 
@@ -75,12 +80,12 @@ file( WRITE  ${PROJECT_BINARY_DIR}/desktop_file.h "\n#define DESKTOP_FILE_PATH  
 
 file( WRITE  ${PROJECT_BINARY_DIR}/kdesu_path.h "\n#define KDESU_PATH      \"${KDE4_LIB_DIR}/kde4/libexec/kdesu\"\n")
 
-install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier.desktop DESTINATION share/applications 
-	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE 
+install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier.desktop DESTINATION share/applications
+	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
 
 install ( FILES ${PROJECT_BINARY_DIR}/qt-update-notifier-autostart.desktop DESTINATION /etc/xdg/autostart/
-PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE 
+PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
 
 # uninstall target

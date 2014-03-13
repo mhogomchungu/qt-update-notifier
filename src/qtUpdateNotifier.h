@@ -51,8 +51,9 @@
 #include "qt-update-install-path.h"
 #include "utility.h"
 #include "settings.h"
+#include "statusicon.h"
 
-class qtUpdateNotifier : public KStatusNotifierItem
+class qtUpdateNotifier : public statusicon
 {
 	Q_OBJECT
 public:
@@ -119,7 +120,6 @@ private:
 	bool m_threadIsRunning ;
 	bool m_autoStartEnabled ;
 	QStringList m_updatesList ;
-	KMenu * m_trayMenu ;
 	QTimer * m_timer ;
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;

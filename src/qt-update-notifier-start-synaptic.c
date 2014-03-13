@@ -17,13 +17,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include<string.h>
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
+#include <string.h>
 #include <grp.h>
 #include <pwd.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -93,8 +96,6 @@ static inline void printOUtPut( const char * e,int debug )
 	if( debug ){
 		printf( "%s",e ) ;
 	}
-
-	if( e ){;}
 }
 
 static inline void logStage( int fd,const char * msg )
@@ -207,7 +208,7 @@ static int aptAndSynapticAreRunning( void )
 	r = ProcessExitStatus( p ) ;
 	ProcessDelete( &p ) ;
 
-	if( r == 1 ){
+	if( r != 0 ){
 		p = Process( "/bin/pidof" ) ;
 		ProcessSetArgumentList( p,"/usr/bin/apt-get",ENDLIST ) ;
 		ProcessSetOptionUser( p,uid ) ;
@@ -222,6 +223,7 @@ static int aptAndSynapticAreRunning( void )
 char * getProcessOutPut( process_t p,int fd,int debug )
 {
 	char * e = NULL ;
+	char * f = NULL ;
 	char * buffer = NULL ;
 	size_t buffer_size = 0 ;
 	size_t output_size = 0 ;
@@ -232,15 +234,22 @@ char * getProcessOutPut( process_t p,int fd,int debug )
 
 			write( fd,e,output_size ) ;
 
-			buffer = realloc( buffer,buffer_size + output_size + 1 ) ;
+			f = realloc( buffer,buffer_size + output_size + 1 ) ;
 
-			strcpy( buffer + buffer_size,e ) ;
+			if( f != NULL ){
 
-			buffer_size += output_size ;
+				buffer = f ;
 
-			printOUtPut( e,debug ) ;
+				strcpy( buffer + buffer_size,e ) ;
 
-			free( e ) ;
+				buffer_size += output_size ;
+
+				printOUtPut( e,debug ) ;
+				free( e ) ;
+			}else{
+				free( e ) ;
+				break ;
+			}
 		}else{
 			break ;
 		}

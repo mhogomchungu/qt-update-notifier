@@ -17,23 +17,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <kstandarddirs.h>
 #include <QFile>
 #include <QDir>
 #include <QDebug>
 #include <cmath>
 #include <QSettings>
 
+#include "tray_application_type.h"
 #include "settings.h"
-
-static KStandardDirs _k ;
-static QString _configPath ;
 
 #define APP_NAME "qt-update-notifier"
 
+static QString _localxdgconfdir ;
+static QString _configPath ;
+
+#if USE_KDE_STATUS_NOTIFIER
+#include <kstandarddirs.h>
+static QString _localConfigDir( void )
+{
+	KStandardDirs k ;
+	return k.localxdgconfdir() ;
+}
+#else
+static QString _localConfigDir( void )
+{
+	return QString( "%1/%2" ).arg( QDir::homePath() ).arg( "/.config/" ) ;
+}
+#endif
+
 static void _setUpSettingsDefaultOptions( QSettings& settings )
 {
-	settings.setPath( QSettings::IniFormat,QSettings::UserScope,_k.localxdgconfdir() ) ;
+	settings.setPath( QSettings::IniFormat,QSettings::UserScope,_localxdgconfdir ) ;
 }
 
 void convertOldConfigSystemToNewSystem()
@@ -168,12 +182,13 @@ QString settings::activityLogFilePath()
 
 void settings::init()
 {
+	_localxdgconfdir = _localConfigDir() ;
 	/*
 	 * remove all old configuration files and use new one
 	 */
-	QFile::remove( QDir::homePath() + QString( "/.config/autostart/qt-update-notifier.desktop" ) ) ;
+	QFile::remove( _localxdgconfdir + QString( "/autostart/qt-update-notifier.desktop" ) ) ;
 
-	_configPath = _k.localxdgconfdir() + QString( "/qt-update-notifier/" ) ;
+	_configPath = _localxdgconfdir + QString( "/qt-update-notifier/" ) ;
 
 	QDir d ;
 	d.mkpath( _configPath ) ;

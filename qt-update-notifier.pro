@@ -18,7 +18,8 @@ SOURCES += src/main.cpp\
 	src/configuredialog.cpp \
 	src/utility.cpp \
 	src/task.cpp \
-	src/settings.cpp
+	src/settings.cpp \
+	src/statusicon.cpp
 
 HEADERS  += src/qtUpdateNotifier.h \
 	src/logwindow.h \
@@ -26,11 +27,12 @@ HEADERS  += src/qtUpdateNotifier.h \
 	src/configuredialog.h \
 	src/utility.h \
 	src/task.h \
-	src/settings.h
+	src/settings.h \
+	src/statusicon.h
 
 RESOURCES += icons/icons.qrc
 
-INCLUDEPATH += /home/local/KDE4/include /usr/include /home/ink/src/build-qt-update-notifier
+INCLUDEPATH += /usr/include /home/ink/projects/build/qt-update-notifier
 
 LIBS += -lkdeui -L/home/local/KDE4/lib -L/usr/lib -lQtNetwork
 
