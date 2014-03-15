@@ -36,8 +36,6 @@
 #include <QCoreApplication>
 #include <QTimer>
 #include <QDateTime>
-#include <kstatusnotifieritem.h>
-#include <kmenu.h>
 #include <cstdlib>
 #include <cstdio>
 #include <QTranslator>

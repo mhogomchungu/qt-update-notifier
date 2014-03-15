@@ -23,7 +23,6 @@
 #include <QObject>
 #include <QtNetwork/QLocalServer>
 #include <QtNetwork/QLocalSocket>
-#include <kstandarddirs.h>
 #include <QString>
 #include <QFile>
 #include <QDir>
