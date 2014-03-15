@@ -2,9 +2,10 @@
  <!DOCTYPE RCC>
  <RCC version="1.0">
 	 <qresource>
-		 <file>qt-update-notifier.png</file> 
+		 <file>qt-update-notifier.png</file>
 		 <file>qt-update-notifier-updating.png</file>
 		 <file>qt-update-notifier-updates-are-available.png</file>
 		 <file>qt-update-notifier-inconsistent-state.png</file>
+		 <file>qt-update-notifier-important-info.png</file>
 	 </qresource>
  </RCC>
