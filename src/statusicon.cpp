@@ -66,7 +66,7 @@ statusicon::statusicon()
 
 statusicon::~statusicon()
 {
-	m_menu->deleteLater() ;
+	delete m_menu ;
 }
 
 QWidget * statusicon::widget()
@@ -279,7 +279,7 @@ QWidget * statusicon::widget()
 
 statusicon::~statusicon()
 {
-	m_menu->deleteLater() ;
+	delete m_menu ;
 }
 
 void statusicon::setAttentionIcon( const QString& name )
