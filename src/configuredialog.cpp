@@ -25,6 +25,8 @@ configureDialog::configureDialog( QWidget * parent ) :
 	QDialog( parent ),m_ui( new Ui::configureDialog )
 {
 	m_ui->setupUi( this ) ;
+	
+	this->setFixedSize( this->size() ) ;
 
 	this->setWindowTitle( tr( "Configuration window" ) ) ;
 
