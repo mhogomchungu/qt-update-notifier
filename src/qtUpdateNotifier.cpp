@@ -457,9 +457,12 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		break ;
 	case Task::noUpdatesFound :
 
-		icon = QString( "qt-update-notifier" ) ;
 		statusicon::setStatus( statusicon::Passive ) ;
-		this->showToolTip( icon,tr( "No updates found" ) ) ;
+		/*
+		 * below function is called from checkForPackageUpdates() routine
+		 * icon = QString( "qt-update-notifier" ) ;
+		 * this->showToolTip( icon,tr( "No updates found" ) ) ;
+		 */
 		this->checkForPackageUpdates() ;
 
 		break ;
@@ -491,7 +494,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 void qtUpdateNotifier::checkForPackageUpdates()
 {
 	if( settings::skipOldPackageCheck() ){
-		;
+		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
 	}else{
 		Task * t = new Task() ;
 		connect( t,SIGNAL( taskFinished( QStringList ) ),this,SLOT( checkOutDatedPackages( QStringList ) ) ) ;
@@ -513,39 +516,46 @@ void qtUpdateNotifier::taskFinished( int taskAction,int taskStatus )
 void qtUpdateNotifier::checkOutDatedPackages( QStringList list )
 {
 	QString	icon = QString( "qt-update-notifier-important-info" ) ;
-	bool updateWindow = false ;
+	bool updatesFound = false ;
+
+	if( list.size() < 4 ){
+		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
+		return ;
+	}
 
 	QString kernelVersion = list.at( 0 ) ;
 
 	if( !kernelVersion.isEmpty() ){
-		updateWindow = true ;
+		updatesFound = true ;
 		this->logActivity_1( kernelVersion ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
 	QString libreofficeVersion = list.at( 1 ) ;
 	if( !libreofficeVersion.isEmpty() ){
-		updateWindow = true ;
+		updatesFound = true ;
 		this->logActivity_1( libreofficeVersion ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
 	QString virtualBoxVersion = list.at( 2 ) ;
 	if( !virtualBoxVersion.isEmpty() ){
-		updateWindow = true ;
+		updatesFound = true ;
 		this->logActivity_1( virtualBoxVersion ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
 	QString callibre = list.at( 3 ) ;
 	if( !callibre.isEmpty() ){
-		updateWindow = true ;
+		updatesFound = true ;
 		this->logActivity_1( callibre ) ;
 		this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 	}
 
-	if( updateWindow ){
+	if( updatesFound ){
 		emit updateLogWindow() ;
+	}else{
+		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
 	}
 }
 
