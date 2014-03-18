@@ -155,7 +155,7 @@ static void printProcessOUtPut( process_t p,int fd,int debug )
 	int z ;
 	while( 1 ){
 		e = NULL ;
-		z = ProcessGetOutPut( p,&e,STDOUT ) ;
+		z = ProcessGetOutPut( p,&e,ProcessStdOut ) ;
 		if( e ){
 			write( fd,e,z ) ;
 
@@ -229,7 +229,7 @@ char * getProcessOutPut( process_t p,int fd,int debug )
 	size_t output_size = 0 ;
 
 	while( 1 ){
-		output_size = ProcessGetOutPut( p,&e,STDOUT ) ;
+		output_size = ProcessGetOutPut( p,&e,ProcessStdOut ) ;
 		if( output_size > 0 ){
 
 			write( fd,e,output_size ) ;
@@ -294,7 +294,7 @@ static int autoUpdate( int fd,int debug )
 
 			buffer = getProcessOutPut( p,fd,debug ) ;
 
-			ProcessExitStatus( p ) ;
+			ProcessWaitUntilFinished( p ) ;
 			ProcessDelete( &p ) ;
 
 			if( buffer ){
@@ -341,7 +341,7 @@ static int autoUpdate( int fd,int debug )
 					ProcessSetOptionUser( p,0 ) ;
 					ProcessSetOptionPriority( p,PRIORITY ) ;
 					ProcessStart( p ) ;
-					ProcessExitStatus( p ) ;
+					ProcessWaitUntilFinished( p ) ;
 					ProcessDelete( &p ) ;
 
 					logStage( fd,"done running apt-get clean" ) ;
