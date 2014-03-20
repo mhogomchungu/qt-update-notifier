@@ -644,7 +644,7 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 {
 	this->logActivity( tr( "Rescheduling update check" ) ) ;
 
-	m_sleepDuration = interval;
+	m_sleepDuration = interval ;
 
 	this->logActivity( this->logMsg( m_sleepDuration ) ) ;
 
@@ -653,7 +653,8 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 	m_timer->stop() ;
 	m_timer->start( m_sleepDuration ) ;
 
-	QString x = statusicon::iconName() ;
+	//QString x = statusicon::iconName() ;
+	QString x = QString( "qt-update-notifier" ) ;
 	QString y = statusicon::toolTipTitle() ;
 
 	int d = static_cast<int>( m_sleepDuration ) ;
