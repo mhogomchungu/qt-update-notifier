@@ -47,7 +47,7 @@ int autoStart( KUniqueApplication& a )
 
 int start( KUniqueApplication& a )
 {
-	qtUpdateNotifier w;
+	qtUpdateNotifier w ;
 	w.start() ;
 	return a.exec() ;
 }
