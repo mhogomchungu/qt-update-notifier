@@ -10,6 +10,8 @@ INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
+file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.5.4\"" )
+
 QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui )
 
 QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/task.h src/configuredialog.h src/statusicon.h )
@@ -33,12 +35,12 @@ endif()
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic " )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
 
-add_executable( qt-update-notifier-start-synaptic src/qt-update-notifier-start-synaptic.c src/process.c )
+add_executable( qt-update-notifier-cli src/qt-update-notifier-cli.c src/process.c )
 
-set_target_properties( qt-update-notifier-start-synaptic PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c99" )
-set_target_properties( qt-update-notifier-start-synaptic PROPERTIES LINK_FLAGS "-pie" )
+set_target_properties( qt-update-notifier-cli PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c99" )
+set_target_properties( qt-update-notifier-cli PROPERTIES LINK_FLAGS "-pie" )
 
-TARGET_LINK_LIBRARIES( qt-update-notifier-start-synaptic -pthread )
+TARGET_LINK_LIBRARIES( qt-update-notifier-cli -pthread )
 
 install ( FILES icons/qt-update-notifier.png DESTINATION share/icons )
 install ( FILES icons/qt-update-notifier-updating.png DESTINATION share/icons )
@@ -51,7 +53,7 @@ file( WRITE "${PROJECT_BINARY_DIR}/qt-update-install-path.h"
 )
 
 file( WRITE "${PROJECT_BINARY_DIR}/qt-update-synaptic-helper.h"
-"#define QT_UPDATE_NOTIFIER_HELPER_PATH \"${CMAKE_INSTALL_PREFIX}/bin/qt-update-notifier-start-synaptic\""
+"#define QT_UPDATE_NOTIFIER_HELPER_PATH \"${CMAKE_INSTALL_PREFIX}/bin/qt-update-notifier-cli\""
 )
 
 SET( TS_PATH share/qt-update-notifier-translations/translations.ts )
@@ -72,7 +74,7 @@ install ( FILES translations.qm/slovak_SK.qm DESTINATION ${QM_PATH} )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 
-install( TARGETS qt-update-notifier-start-synaptic RUNTIME DESTINATION bin
+install( TARGETS qt-update-notifier-cli RUNTIME DESTINATION bin
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE SETUID
 )
 

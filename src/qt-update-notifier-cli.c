@@ -31,6 +31,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
+#include "version.h"
+
 #include "kdesu_path.h"
 #include "process.h"
 
@@ -446,7 +448,7 @@ static int startSynaptic( const char * e,int fd )
 static int printOptions( void )
 {
 	const char * options = "\
-version  : 1.0.0\n\
+version  : "VERSION"\n\
 copyright: 2013 Ink Francis,mhogomchungu@gmail.com\n\
 license  : GPLv2+\n\
 \n\
