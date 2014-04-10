@@ -116,20 +116,20 @@ void Task::checkKernelVersion()
 
 		int major = ver.at( 0 ).toInt() ;
 		int minor = ver.at( 1 ).toInt() ;
-		int patch = 0 ;
+		int patch ;
 
 		if( ver.size() >= 3 ){
 			patch = ver.at( 2 ).toInt() ;
 		}else{
-			;
+			patch = 0 ;
 		}
 
 		/*
-		 * start warning if a user uses a kernel less than 3.2.18
+		 * start warning if a user uses a kernel less than 3.12.16
 		 */
 		int base_kernel_major_version = 3 ;
-		int base_kernel_minor_version = 2 ;
-		int base_kernel_patch_version = 18;
+		int base_kernel_minor_version = 12 ;
+		int base_kernel_patch_version = 16 ;
 		bool update = false ;
 
 		if( major < base_kernel_major_version ){
@@ -145,6 +145,8 @@ void Task::checkKernelVersion()
 		}else{
 			m_package.append( QString( "" ) ) ;
 		}
+	}else{
+		m_package.append( QString( "" ) ) ;
 	}
 }
 
