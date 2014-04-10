@@ -74,3 +74,8 @@
 	- add a config option to add new log entries at the beginning of the log file.Old behavior can be set through the responsible config option
 -version 1.5.2
 	- fix a bug that reveal itself when a package fail to download.
+-version 1.5.3
+	- add an option to build a pure Qt application along side the default KDE application.
+-version 1.5.4
+	- bump recommended kernel version to atleast version 3.12.16.
+	- change the CLI component name to qt-update-notifier-cli
