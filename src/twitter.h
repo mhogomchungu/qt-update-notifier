@@ -24,6 +24,7 @@
 
 #include <QCloseEvent>
 #include <QString>
+#include <QKeyEvent>
 
 namespace Ui {
 class twitter;
@@ -39,6 +40,7 @@ public:
 private slots:
 	void pbClose( void ) ;
 private:
+	bool eventFilter( QObject * watched,QEvent * event ) ;
 	void closeEvent( QCloseEvent * e ) ;
 
 	Ui::twitter * m_ui ;

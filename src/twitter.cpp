@@ -26,12 +26,29 @@ twitter::twitter( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::twitter )
 	this->setFixedSize( this->size() ) ;
 	this->setWindowIcon( QIcon( QString( ":/qt-update-notifier.png" ) ) ) ;
 	connect( m_ui->pbClose,SIGNAL( clicked() ),this,SLOT( pbClose() ) ) ;
+
+	this->installEventFilter( this ) ;
 }
 
 void twitter::ShowUI( const QString& text )
 {
 	m_ui->textEdit->setText( text ) ;
 	this->show() ;
+}
+
+bool twitter::eventFilter( QObject * watched,QEvent * event )
+{
+	if( watched == this ){
+		if( event->type() == QEvent::KeyPress ){
+			QKeyEvent * keyEvent = static_cast< QKeyEvent* >( event ) ;
+			if( keyEvent->key() == Qt::Key_Escape ){
+				this->pbClose() ;
+				return true ;
+			}
+		}
+	}
+
+	return false ;
 }
 
 twitter::~twitter()
