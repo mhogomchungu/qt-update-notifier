@@ -56,6 +56,11 @@ twitter::~twitter()
 	delete m_ui ;
 }
 
+void twitter::msg( const QString& msg )
+{
+	m_ui->textEdit->setText( msg ) ;
+}
+
 void twitter::pbClose()
 {
 	this->hide() ;

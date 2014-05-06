@@ -68,6 +68,7 @@ public:
 signals:
 	void updateLogWindow( void ) ;
 	void configOptionsChanged_1( void ) ;
+	void msg( QString ) ;
 public slots:
 	void startUpdater( void ) ;
 	void setUpdateInterval( int ) ;

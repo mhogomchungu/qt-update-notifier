@@ -109,11 +109,11 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 	QString e ;
 
-	for( const auto& it : l ){
-		if( it.contains( "rate-limit" ) ){
-			e += it + ":" + r->rawHeader( it ) + "\n" ;
-		}
-	}
+	//for( const auto& it : l ){
+	//	if( it.contains( "rate-limit" ) ){
+	//		e += it + ":" + r->rawHeader( it ) + "\n" ;
+	//	}
+	//}
 
 	QByteArray data = r->readAll() ;
 
@@ -134,9 +134,7 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 		}
 	}
 
-	twitter * t = new twitter() ;
-
-	t->ShowUI( e ) ;
+	emit msg( e ) ;
 }
 
 void qtUpdateNotifier::checkTwitter()
@@ -151,6 +149,12 @@ void qtUpdateNotifier::checkTwitter()
 	rqt.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
 	m_manager->get( rqt ) ;
+
+	twitter * t = new twitter() ;
+
+	connect( this,SIGNAL(msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
+
+	t->ShowUI( tr( "connecting ..." ) ) ;
 }
 
 void qtUpdateNotifier::doneUpdating()
