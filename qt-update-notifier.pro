@@ -19,7 +19,8 @@ SOURCES += src/main.cpp\
 	src/utility.cpp \
 	src/task.cpp \
 	src/settings.cpp \
-	src/statusicon.cpp
+	src/statusicon.cpp \
+    src/twitter.cpp
 
 HEADERS  += src/qtUpdateNotifier.h \
 	src/logwindow.h \
@@ -28,7 +29,8 @@ HEADERS  += src/qtUpdateNotifier.h \
 	src/utility.h \
 	src/task.h \
 	src/settings.h \
-	src/statusicon.h
+	src/statusicon.h \
+    src/twitter.h
 
 RESOURCES += icons/icons.qrc
 
@@ -38,7 +40,8 @@ LIBS += -lkdeui -L/home/local/KDE4/lib -L/usr/lib -lQtNetwork
 
 FORMS += \
 	src/logwindow.ui \
-	src/configuredialog.ui
+	src/configuredialog.ui \
+    src/twitter.ui
 
 TRANSLATIONS += translations.ts/translations.ts
 TRANSLATIONS += translations.ts/dutch_NL.ts

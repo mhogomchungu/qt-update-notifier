@@ -40,6 +40,9 @@
 #include <cstdio>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 
 #include "logwindow.h"
 #include "instance.h"
@@ -94,6 +97,8 @@ private slots:
 	void objectGone( QObject * ) ;
 	void taskFinished( int taskAction,int taskStatus ) ;
 	void synapticStatus( int ) ;
+	void networResponse( QNetworkReply * ) ;
+	void checkTwitter( void ) ;
 private:
 	void checkForPackageUpdates( void ) ;
 	void autoDownloadPackages( void ) ;
@@ -122,6 +127,7 @@ private:
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
 	QTranslator * m_translator ;
+	QNetworkAccessManager * m_manager ;
 };
 
 #endif // MAINWINDOW_H

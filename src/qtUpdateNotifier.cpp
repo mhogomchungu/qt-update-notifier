@@ -18,6 +18,15 @@
  */
 
 #include "qtUpdateNotifier.h"
+#include "twitter.h"
+
+#include <qjson/parser.h>
+
+#include <QCoreApplication>
+
+const char * token = "AAAAAAAAAAAAAAAAAAAAADibXQAAAAAADEVZcGLIBzf8rhjIdxff9P08qIU%3Dxexvyewewzu7i1LH8049xGJWI4kv7rBEnkis2t6HHlkDCSsUgB" ;
+
+const char * url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=iluvpclinuxos&count=10" ;
 
 qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 {
@@ -92,6 +101,56 @@ void qtUpdateNotifier::synapticStatus( int r )
 		this->logActivity( tr( "Synaptic exited with errors" ) ) ;
 	}
 	this->doneUpdating() ;
+}
+
+void qtUpdateNotifier::networResponse( QNetworkReply * r )
+{
+	QList<QByteArray> l = r->rawHeaderList() ;
+
+	QString e ;
+
+	for( const auto& it : l ){
+		if( it.contains( "rate-limit" ) ){
+			e += it + ":" + r->rawHeader( it ) + "\n" ;
+		}
+	}
+
+	QByteArray data = r->readAll() ;
+
+	QJson::Parser parser ;
+
+	bool ok ;
+
+	QVariant rr = parser.parse( data,&ok ) ;
+
+	e += "\n" ;
+
+	if( ok ){
+		QVariantList l = rr.toList() ;
+
+		for( const auto& it : l ){
+			QVariantMap map = it.toMap() ;
+			 e += map[ "text" ].toString() + "\n\n" ;
+		}
+	}
+
+	twitter * t = new twitter() ;
+
+	t->ShowUI( e ) ;
+}
+
+void qtUpdateNotifier::checkTwitter()
+{
+	QUrl u( url ) ;
+
+	QNetworkRequest rqt( u ) ;
+
+	rqt.setRawHeader( "Host","api.twitter.com" ) ;
+	rqt.setRawHeader( "User-Agent","qt-update-notifier" ) ;
+	rqt.setRawHeader( "Authorization",QByteArray( "Bearer " ) + token ) ;
+	rqt.setRawHeader( "Accept-Encoding","text/plain" ) ;
+
+	m_manager->get( rqt ) ;
 }
 
 void qtUpdateNotifier::doneUpdating()
@@ -191,6 +250,9 @@ void qtUpdateNotifier::run()
 	ac = statusicon::getAction( tr( "Open synaptic" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( startUpdater() ) ) ;
 
+	ac = statusicon::getAction( tr( "Check twitter" ) ) ;
+	connect( ac,SIGNAL( triggered() ),this,SLOT( checkTwitter() ) ) ;
+
 	ac = statusicon::getAction( tr( "Check for updates" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( manualCheckForUpdates() ) ) ;
 
@@ -215,6 +277,9 @@ void qtUpdateNotifier::run()
 	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
 	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 	t->start( settings::delayTimeBeforeUpdateCheck() ) ;
+
+	m_manager = new QNetworkAccessManager (this ) ;
+	connect( m_manager,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( networResponse( QNetworkReply * ) ) ) ;
 }
 
 void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )

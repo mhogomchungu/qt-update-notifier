@@ -1,0 +1,52 @@
+/*
+ *
+ *  Copyright (c) 2014
+ *  name : mhogo mchungu
+ *  email: mhogomchungu@gmail.com
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "twitter.h"
+#include "ui_twitter.h"
+
+twitter::twitter( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::twitter )
+{
+	m_ui->setupUi( this ) ;
+	this->setFixedSize( this->size() ) ;
+	this->setWindowIcon( QIcon( QString( ":/qt-update-notifier.png" ) ) ) ;
+	connect( m_ui->pbClose,SIGNAL( clicked() ),this,SLOT( pbClose() ) ) ;
+}
+
+void twitter::ShowUI( const QString& text )
+{
+	m_ui->textEdit->setText( text ) ;
+	this->show() ;
+}
+
+twitter::~twitter()
+{
+	delete m_ui ;
+}
+
+void twitter::pbClose()
+{
+	this->hide() ;
+	this->deleteLater() ;
+}
+
+void twitter::closeEvent( QCloseEvent * e )
+{
+	e->ignore() ;
+	this->pbClose() ;
+}
