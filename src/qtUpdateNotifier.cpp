@@ -130,7 +130,7 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 		for( const auto& it : l ){
 			QVariantMap map = it.toMap() ;
-			 e += map[ "text" ].toString() + "\n\n" ;
+			 e += map[ "created_at" ].toString() + ":\n" + map[ "text" ].toString() + "\n\n" ;
 		}
 	}
 
