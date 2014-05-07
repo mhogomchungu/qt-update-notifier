@@ -565,7 +565,7 @@ im Forum.</translation>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="157"/>
         <source>connecting ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung wird hergestellt ...</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="231"/>
@@ -581,7 +581,7 @@ im Forum.</translation>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="257"/>
         <source>Check twitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Überprüfe Twitter</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="260"/>
@@ -760,12 +760,12 @@ im Forum.</translation>
     <message>
         <location filename="../src/twitter.ui" line="14"/>
         <source>PCLinuxOS twitter handle</source>
-        <translation type="unfinished"></translation>
+        <translation>PCLinuxOS Twitter Nachrichten</translation>
     </message>
     <message>
         <location filename="../src/twitter.ui" line="26"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 </TS>
