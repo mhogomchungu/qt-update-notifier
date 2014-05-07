@@ -28,6 +28,10 @@
 
 #define APP_NAME "qt-update-notifier"
 
+static const char * _secret = "AAAAAAAAAAAAAAAAAAAAADibXQAAAAAADEVZcGLIBzf8rhjIdxff9P08qIU%3Dxexvyewewzu7i1LH8049xGJWI4kv7rBEnkis2t6HHlkDCSsUgB" ;
+
+static const char * _url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=iluvpclinuxos&count=10" ;
+
 static QString _localxdgconfdir ;
 static QString _configPath ;
 
@@ -251,6 +255,27 @@ QString settings::delayTimeBeforeUpdateCheck( int time )
 	}
 
 	return QString( buffer ) ;
+}
+
+QByteArray settings::token()
+{
+	return QByteArray( "Bearer " ) + _secret ;
+}
+
+QString settings::url()
+{
+	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
+	_setUpSettingsDefaultOptions( settings ) ;
+
+	QString opt = QString( "url" ) ;
+
+	if( settings.contains( opt ) ){
+		return settings.value( opt ).toString() ;
+	}else{
+		QString u( _url ) ;
+		settings.setValue( opt,u ) ;
+		return u ;
+	}
 }
 
 void settings::setAutoRefreshSynaptic( bool autoRefresh )

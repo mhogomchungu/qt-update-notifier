@@ -24,10 +24,6 @@
 
 #include <QCoreApplication>
 
-const char * token = "AAAAAAAAAAAAAAAAAAAAADibXQAAAAAADEVZcGLIBzf8rhjIdxff9P08qIU%3Dxexvyewewzu7i1LH8049xGJWI4kv7rBEnkis2t6HHlkDCSsUgB" ;
-
-const char * url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=iluvpclinuxos&count=10" ;
-
 qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 {
 	m_timer = new QTimer() ;
@@ -53,6 +49,9 @@ qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 	this->setupTranslationText() ;
 
 	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
+
+	m_url   = settings::url() ;
+	m_token = settings::token() ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -139,20 +138,20 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 void qtUpdateNotifier::checkTwitter()
 {
-	QUrl u( url ) ;
+	QUrl url( m_url ) ;
 
-	QNetworkRequest rqt( u ) ;
+	QNetworkRequest rqt( url ) ;
 
 	rqt.setRawHeader( "Host","api.twitter.com" ) ;
 	rqt.setRawHeader( "User-Agent","qt-update-notifier" ) ;
-	rqt.setRawHeader( "Authorization",QByteArray( "Bearer " ) + token ) ;
+	rqt.setRawHeader( "Authorization",m_token ) ;
 	rqt.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
 	m_manager->get( rqt ) ;
 
 	twitter * t = new twitter() ;
 
-	connect( this,SIGNAL(msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
+	connect( this,SIGNAL( msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
 
 	t->ShowUI( tr( "connecting ..." ) ) ;
 }

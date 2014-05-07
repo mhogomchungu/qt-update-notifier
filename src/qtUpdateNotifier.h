@@ -124,6 +124,8 @@ private:
 	bool m_threadIsRunning ;
 	bool m_autoStartEnabled ;
 	QStringList m_updatesList ;
+	QString m_url ;
+	QByteArray m_token ;
 	QTimer * m_timer ;
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
