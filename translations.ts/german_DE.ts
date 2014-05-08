@@ -708,7 +708,7 @@ im Forum.</translation>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="448"/>
         <source>Update in progress, do not power down computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Das System wird derzeit aktualisiert, schalten Sie den Computer bitte nicht aus.</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="541"/>
