@@ -445,7 +445,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 {
 	if( settings::autoUpdatePackages() ){
 		QString icon = QString( "qt-update-notifier-updating" ) ;
-		this->showToolTip( icon,tr( "Status" ),tr( "Updating packages" ) ) ;
+		this->showToolTip( icon,tr( "Status" ),tr( "Update in progress, do not power down computer" ) ) ;
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
