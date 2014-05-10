@@ -38,6 +38,7 @@ int autoStart( KUniqueApplication& a )
 {
 	if( qtUpdateNotifier::autoStartEnabled() ){
 		qtUpdateNotifier w ;
+		w.setDebug( KCmdLineArgs::allArguments().contains( "-d" ) ) ;
 		w.start() ;
 		return a.exec() ;
 	}else{
@@ -48,6 +49,7 @@ int autoStart( KUniqueApplication& a )
 int start( KUniqueApplication& a )
 {
 	qtUpdateNotifier w ;
+	w.setDebug( KCmdLineArgs::allArguments().contains( "-d" ) ) ;
 	w.start() ;
 	return a.exec() ;
 }
@@ -69,6 +71,7 @@ int main( int argc,char * argv[] )
 
 	KCmdLineOptions options;
 	options.add( "a",ki18n( "auto start application" ) ) ;
+	options.add( "d",ki18n( "debug application" ) ) ;
 	KCmdLineArgs::addCmdLineOptions( options ) ;
 
 	KUniqueApplication::addCmdLineOptions() ;
@@ -100,6 +103,7 @@ int main( int argc,char * argv[] )
 	if( v.contains( "-a" ) ){
 		if( qtUpdateNotifier::autoStartEnabled() ){
 			qtUpdateNotifier w ;
+			w.setDebug( v.contains( "-d" ) ) ;
 			w.start() ;
 			return a.exec() ;
 		}else{
@@ -109,13 +113,13 @@ int main( int argc,char * argv[] )
 		  v.contains( "--help" ) || v.contains( "--version" ) ||
 		  v.contains( "-version" ) || v.contains( "-help" ) ){
 		const char * msg = "\
-version  : "VERSION"\n\
 copyright: 2013-2014 Ink Francis,mhogomchungu@gmail.com\n\
 license  : GPLv2+" ;
-		std::cout << msg << std::endl ;
+		std::cout << "version  :" << VERSION << "\n" << msg << std::endl ;
 		return 0 ;
 	}else{
 		qtUpdateNotifier w ;
+		w.setDebug( v.contains( "-d" ) ) ;
 		w.start() ;
 		return a.exec() ;
 	}

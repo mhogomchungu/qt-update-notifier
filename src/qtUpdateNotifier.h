@@ -63,6 +63,7 @@ public:
 	void start( void ) ;
 	void logActivity( const QString& ) ;
 	void logActivity_1( const QString& ) ;
+	void setDebug( bool ) ;
 	static bool autoStartEnabled( void ) ;
 	static int instanceAlreadyRunning( void ) ;
 signals:
@@ -131,6 +132,7 @@ private:
 	u_int64_t m_currentTime ;
 	QTranslator * m_translator ;
 	QNetworkAccessManager * m_manager ;
+	bool m_debug ;
 };
 
 #endif // MAINWINDOW_H

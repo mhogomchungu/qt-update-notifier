@@ -109,11 +109,13 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 	QList<QByteArray> l = r->rawHeaderList() ;
 
 	QString e ;
-#if _debug
-	for( const auto& it : l ){
-		e += it + ":" + r->rawHeader( it ) + "\n" ;
+
+	if( m_debug ){
+		for( const auto& it : l ){
+			e += it + ":" + r->rawHeader( it ) + "\n" ;
+		}
 	}
-#endif
+
 	QByteArray data = r->readAll() ;
 
 	QJson::Parser parser ;
@@ -130,7 +132,6 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 		for( const auto& it : l ){
 			QVariantMap map = it.toMap() ;
 			 e += map[ "created_at" ].toString() + ":\n" + map[ "text" ].toString() + "\n\n" ;
-			 //qDebug() << map[ "id_str" ].toString() ;
 		}
 	}
 
@@ -383,6 +384,11 @@ void qtUpdateNotifier::logActivity_1( const QString& msg )
 	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
 	utility::writeToFile( settings::activityLogFilePath(),log,false ) ;
 	emit updateLogWindow() ;
+}
+
+void qtUpdateNotifier::setDebug( bool debug )
+{
+	m_debug = debug ;
 }
 
 u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
