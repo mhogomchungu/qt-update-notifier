@@ -24,6 +24,8 @@
 
 #include <QCoreApplication>
 
+#define _debug 0
+
 qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 {
 	m_timer = new QTimer() ;
@@ -107,13 +109,11 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 	QList<QByteArray> l = r->rawHeaderList() ;
 
 	QString e ;
-
-	//for( const auto& it : l ){
-	//	if( it.contains( "rate-limit" ) ){
-	//		e += it + ":" + r->rawHeader( it ) + "\n" ;
-	//	}
-	//}
-
+#if _debug
+	for( const auto& it : l ){
+		e += it + ":" + r->rawHeader( it ) + "\n" ;
+	}
+#endif
 	QByteArray data = r->readAll() ;
 
 	QJson::Parser parser ;
@@ -130,8 +130,11 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 		for( const auto& it : l ){
 			QVariantMap map = it.toMap() ;
 			 e += map[ "created_at" ].toString() + ":\n" + map[ "text" ].toString() + "\n\n" ;
+			 //qDebug() << map[ "id_str" ].toString() ;
 		}
 	}
+
+	e += "https://twitter.com/iluvpclinuxos" ;
 
 	emit msg( e ) ;
 }

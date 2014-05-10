@@ -711,7 +711,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="448"/>
         <source>Update in progress, do not power down computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met bijwerken, computer nu niet uitschakelen.</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="541"/>
