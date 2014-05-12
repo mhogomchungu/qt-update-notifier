@@ -38,6 +38,8 @@ private:
 	QNetworkReply * m_networkReply ;
 };
 
+#define manageNetworkReply_raii( x ) manageNetworkReply raii_x( x ) ; Q_UNUSED( raii_x )
+
 qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 {
 	m_timer = new QTimer() ;
@@ -118,9 +120,8 @@ void qtUpdateNotifier::synapticStatus( int r )
 
 void qtUpdateNotifier::networResponse( QNetworkReply * r )
 {
-	manageNetworkReply raii( r ) ;
-	Q_UNUSED( raii ) ;
-	
+	manageNetworkReply_raii( r ) ;
+
 	QList<QByteArray> l = r->rawHeaderList() ;
 
 	QString e ;
