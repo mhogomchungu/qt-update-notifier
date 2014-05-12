@@ -36,6 +36,8 @@ public:
 	static QString delayTimeBeforeUpdateCheck( int ) ;
 	static QByteArray token( void ) ;
 	static QString url( void ) ;
+	static QString getLastTwitterUpdate( void ) ;
+	static void setLastTwitterUpdate( const QString& ) ;
 	static int delayTimeBeforeUpdateCheck( void ) ;
 	static bool autoRefreshSynaptic( void ) ;
 	static bool firstTimeRun( void ) ;

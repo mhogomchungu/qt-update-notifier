@@ -32,8 +32,9 @@ static const char * _secret = "AAAAAAAAAAAAAAAAAAAAADibXQAAAAAADEVZcGLIBzf8rhjId
 
 static const char * _url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=iluvpclinuxos&count=50&exclude_replies=true&include_rts=false" ;
 
-static QString _localxdgconfdir ;
 static QString _configPath ;
+
+static QSettings _settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
 
 #if USE_KDE_STATUS_NOTIFIER
 #include <kstandarddirs.h>
@@ -49,16 +50,8 @@ static QString _localConfigDir( void )
 }
 #endif
 
-static void _setUpSettingsDefaultOptions( QSettings& settings )
-{
-	settings.setPath( QSettings::IniFormat,QSettings::UserScope,_localxdgconfdir ) ;
-}
-
 void convertOldConfigSystemToNewSystem()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-
 	QString path ;
 	QFile e ;
 
@@ -131,7 +124,7 @@ void convertOldConfigSystemToNewSystem()
 		e.open( QIODevice::ReadOnly ) ;
 		value = e.readAll() ;
 		opt = QString( "nextUpdateTime" ) ;
-		settings.setValue( opt,value ) ;
+		_settings.setValue( opt,value ) ;
 		e.close() ;
 		e.remove() ;
 	}else{
@@ -142,36 +135,36 @@ void convertOldConfigSystemToNewSystem()
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		opt = QString( "autoUpdatePackages" ) ;
-		settings.setValue( opt,true ) ;
+		_settings.setValue( opt,true ) ;
 		e.remove() ;
 	}else{
 		opt = QString( "autoUpdatePackages" ) ;
-		settings.setValue( opt,false ) ;
+		_settings.setValue( opt,false ) ;
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "autoDownloadPackages.option" ) ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		opt = QString( "autoDownloadPackages" ) ;
-		settings.setValue( opt,true ) ;
+		_settings.setValue( opt,true ) ;
 		e.remove() ;
 	}else{
 		opt = QString( "autoDownloadPackages" ) ;
-		settings.setValue( opt,false ) ;
+		_settings.setValue( opt,false ) ;
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "skipOldPackageCheck.option" ) ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		opt = QString( "skipOldPackageCheck" ) ;
-		settings.setValue( opt,true ) ;
+		_settings.setValue( opt,true ) ;
 		e.remove() ;
 	}else{
 		opt = QString( "skipOldPackageCheck" ) ;
-		settings.setValue( opt,false ) ;
+		_settings.setValue( opt,false ) ;
 	}
 
-	settings.sync() ;
+	_settings.sync() ;
 }
 
 QString settings::aptGetLogFilePath()
@@ -186,13 +179,15 @@ QString settings::activityLogFilePath()
 
 void settings::init()
 {
-	_localxdgconfdir = _localConfigDir() ;
+	QString e = _localConfigDir() ;
 	/*
 	 * remove all old configuration files and use new one
 	 */
-	QFile::remove( _localxdgconfdir + QString( "/autostart/qt-update-notifier.desktop" ) ) ;
+	QFile::remove( QString( "%1/autostart/qt-update-notifier.desktop" ).arg( e ) ) ;
 
-	_configPath = _localxdgconfdir + QString( "/qt-update-notifier/" ) ;
+	_configPath = QString( "%1/qt-update-notifier/" ).arg( e ) ;
+
+	_settings.setPath( QSettings::IniFormat,QSettings::UserScope,e ) ;
 
 	QDir d ;
 	d.mkpath( _configPath ) ;
@@ -207,37 +202,27 @@ QString settings::configPath()
 
 QString settings::prefferedLanguage()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "language" ) ).toString() ;
+	return _settings.value( QString( "language" ) ).toString() ;
 }
 
 void settings::setPrefferedLanguage( const QString& language )
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	settings.setValue( QString( "language" ),language ) ;
+	_settings.setValue( QString( "language" ),language ) ;
 }
 
 void settings::setCheckDelayOnStartUp( const QString& interval )
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	settings.setValue( QString( "startUpDelay" ),interval ) ;
+	_settings.setValue( QString( "startUpDelay" ),interval ) ;
 }
 
 void settings::setNextUpdateInterval( const QString& interval )
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	settings.setValue( QString( "updateCheckInterval" ),interval ) ;
+	_settings.setValue( QString( "updateCheckInterval" ),interval ) ;
 }
 
 int settings::delayTimeBeforeUpdateCheck()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return 1000 * settings.value( QString( "startUpDelay" ) ).toString().toInt() ;
+	return 1000 * _settings.value( QString( "startUpDelay" ) ).toString().toInt() ;
 }
 
 QString settings::delayTimeBeforeUpdateCheck( int time )
@@ -264,119 +249,112 @@ QByteArray settings::token()
 
 QString settings::url()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-
 	QString opt = QString( "url" ) ;
 
-	if( settings.contains( opt ) ){
-		return settings.value( opt ).toString() ;
+	if( _settings.contains( opt ) ){
+		return _settings.value( opt ).toString() ;
 	}else{
 		QString u( _url ) ;
-		settings.setValue( opt,u ) ;
+		_settings.setValue( opt,u ) ;
 		return u ;
 	}
 }
 
+QString settings::getLastTwitterUpdate()
+{
+	QString opt = QString( "lastTwitterUpdate" ) ;
+
+	_settings.sync() ;
+
+	if( _settings.contains( opt ) ){
+		return _settings.value( opt ).toString() ;
+	}else{
+		QString u( "" ) ;
+		_settings.setValue( opt,u ) ;
+		return u ;
+	}
+}
+
+void settings::setLastTwitterUpdate( const QString& t )
+{
+	QString opt = QString( "lastTwitterUpdate" ) ;
+	_settings.setValue( opt,t ) ;
+	_settings.sync() ;
+}
+
 void settings::setAutoRefreshSynaptic( bool autoRefresh )
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
 	QString opt = QString( "autoRefreshSynaptic" ) ;
 	if( autoRefresh ){
-		settings.setValue( opt,true ) ;
+		_settings.setValue( opt,true ) ;
 	}else{
-		settings.setValue( opt,false ) ;
+		_settings.setValue( opt,false ) ;
 	}
 }
 
 bool settings::autoRefreshSynaptic()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "autoRefreshSynaptic" ) ).toBool() ;
+	return _settings.value( QString( "autoRefreshSynaptic" ) ).toBool() ;
 }
 
 bool settings::firstTimeRun()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return !settings.contains( QString( "nextUpdateTime" ) ) ;
+	return !_settings.contains( QString( "nextUpdateTime" ) ) ;
 }
 
 u_int32_t settings::updateCheckInterval()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return 1000 * settings.value( QString( "updateCheckInterval" ) ).toString().toULong() ;
+	return 1000 * _settings.value( QString( "updateCheckInterval" ) ).toString().toULong() ;
 }
 
 u_int64_t settings::nextScheduledUpdateTime()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "nextUpdateTime" ) ).toString().toULongLong() ;
+	return _settings.value( QString( "nextUpdateTime" ) ).toString().toULongLong() ;
 }
 
 void settings::writeUpdateTimeToConfigFile( u_int64_t time )
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	settings.setValue( QString( "nextUpdateTime" ),QString::number( time ) ) ;
+	_settings.setValue( QString( "nextUpdateTime" ),QString::number( time ) ) ;
 }
 
 bool settings::autoUpdatePackages()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "autoUpdatePackages" ) ).toBool() ;
+	return _settings.value( QString( "autoUpdatePackages" ) ).toBool() ;
 }
 
 bool settings::autoDownloadPackages()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "autoDownloadPackages" ) ).toBool() ;
+	return _settings.value( QString( "autoDownloadPackages" ) ).toBool() ;
 }
 
 bool settings::skipOldPackageCheck()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "skipOldPackageCheck" ) ).toBool() ;
+	return _settings.value( QString( "skipOldPackageCheck" ) ).toBool() ;
 }
 
 bool settings::autoStartEnabled()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "autoStartAtLogin" ) ).toBool() ;
+	return _settings.value( QString( "autoStartAtLogin" ) ).toBool() ;
 }
 
 bool settings::warnOnInconsistentState()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
-	return settings.value( QString( "warnOnInconsistentState" ) ).toBool() ;
+	return _settings.value( QString( "warnOnInconsistentState" ) ).toBool() ;
 }
 
 bool settings::prefixLogEntries()
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
 	QString opt = QString( "prefixLogEntries" ) ;
-	if( settings.contains( opt ) ){
-		return settings.value( opt ).toBool() ;
+	if( _settings.contains( opt ) ){
+		return _settings.value( opt ).toBool() ;
 	}else{
-		settings.setValue( opt,true ) ;
+		_settings.setValue( opt,true ) ;
 		return true ;
 	}
 }
 
 void settings::enableAutoStart( bool autoStart )
 {
-	QSettings settings( QString( APP_NAME ),QString( APP_NAME ) ) ;
-	_setUpSettingsDefaultOptions( settings ) ;
 	QString opt = QString( "autoStartAtLogin" ) ;
-	settings.setValue( opt,autoStart ) ;
+	_settings.setValue( opt,autoStart ) ;
 }

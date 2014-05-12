@@ -118,6 +118,12 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 	QByteArray data = r->readAll() ;
 
+	if( data.isEmpty() ){
+		return ;
+	}
+
+	this->checkAnnouncements( data ) ;
+
 	QJson::Parser parser ;
 
 	bool ok ;
@@ -133,14 +139,63 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 			QVariantMap map = it.toMap() ;
 			 e += map[ "created_at" ].toString() + ":\n" + map[ "text" ].toString() + "\n\n" ;
 		}
+
+		e += "https://twitter.com/iluvpclinuxos" ;
+
+		emit msg( e ) ;
 	}
+}
 
-	e += "https://twitter.com/iluvpclinuxos" ;
+void qtUpdateNotifier::checkAnnouncements( const QByteArray& data )
+{
+	QJson::Parser parser ;
 
-	emit msg( e ) ;
+	bool ok ;
+
+	QString e ;
+
+	QVariant rr = parser.parse( data,&ok ) ;
+
+	if( ok ){
+		QVariantList l = rr.toList() ;
+
+		qulonglong s = settings::getLastTwitterUpdate().toULongLong() ;
+
+		QString u = l.first().toMap()[ "id_str" ].toString() ;
+
+		if( !u.isEmpty() ){
+			settings::setLastTwitterUpdate( u ) ;
+		}
+
+		for( const auto& it : l ){
+			QVariantMap map = it.toMap() ;
+			qulonglong z = map[ "id_str" ].toString().toULongLong() ;
+			if( z <= s ){
+				break ;
+			}else{
+				QString a = map[ "text" ].toString() ;
+				if( a.contains( "ANNOUNCEMENT" ) ){
+					this->showToolTip( QString( "qt-update-notifier-important-info" ),
+							   tr( "No updates found" ) ) ;
+					this->logActivity_1( a ) ;
+				}
+			}
+		}
+	}
 }
 
 void qtUpdateNotifier::checkTwitter()
+{
+	this->accessTwitter() ;
+
+	twitter * t = new twitter() ;
+
+	connect( this,SIGNAL( msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
+
+	t->ShowUI( tr( "connecting ..." ) ) ;
+}
+
+void qtUpdateNotifier::accessTwitter()
 {
 	QUrl url( m_url ) ;
 
@@ -152,12 +207,6 @@ void qtUpdateNotifier::checkTwitter()
 	rqt.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
 	m_manager->get( rqt ) ;
-
-	twitter * t = new twitter() ;
-
-	connect( this,SIGNAL( msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
-
-	t->ShowUI( tr( "connecting ..." ) ) ;
 }
 
 void qtUpdateNotifier::doneUpdating()
@@ -634,6 +683,8 @@ void qtUpdateNotifier::checkOutDatedPackages( QStringList list )
 	}else{
 		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
 	}
+
+	this->accessTwitter() ;
 }
 
 void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const QStringList& list )
