@@ -122,57 +122,30 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 		return ;
 	}
 
-	this->checkAnnouncements( data ) ;
-
 	QJson::Parser parser ;
 
 	bool ok ;
 
-	QVariant rr = parser.parse( data,&ok ) ;
-
-	e += "\n" ;
+	QVariant p = parser.parse( data,&ok ) ;
 
 	if( ok ){
-		QVariantList l = rr.toList() ;
 
-		for( const auto& it : l ){
-			QVariantMap map = it.toMap() ;
-			 e += map[ "created_at" ].toString() + ":\n" + map[ "text" ].toString() + "\n\n" ;
-		}
+		e += "\n" ;
 
-		e += "https://twitter.com/iluvpclinuxos" ;
-
-		emit msg( e ) ;
-	}
-}
-
-void qtUpdateNotifier::checkAnnouncements( const QByteArray& data )
-{
-	QJson::Parser parser ;
-
-	bool ok ;
-
-	QString e ;
-
-	QVariant rr = parser.parse( data,&ok ) ;
-
-	if( ok ){
-		QVariantList l = rr.toList() ;
+		QVariantList l = p.toList() ;
 
 		qulonglong s = settings::getLastTwitterUpdate().toULongLong() ;
 
 		QString u = l.first().toMap()[ "id_str" ].toString() ;
 
-		if( !u.isEmpty() ){
-			settings::setLastTwitterUpdate( u ) ;
-		}
+		settings::setLastTwitterUpdate( u ) ;
 
 		for( const auto& it : l ){
+
 			QVariantMap map = it.toMap() ;
 			qulonglong z = map[ "id_str" ].toString().toULongLong() ;
-			if( z <= s ){
-				break ;
-			}else{
+
+			if( z > s ){
 				QString a = map[ "text" ].toString() ;
 				if( a.contains( "ANNOUNCEMENT" ) ){
 					this->showToolTip( QString( "qt-update-notifier-important-info" ),
@@ -180,7 +153,13 @@ void qtUpdateNotifier::checkAnnouncements( const QByteArray& data )
 					this->logActivity_1( a ) ;
 				}
 			}
+
+			 e += map[ "created_at" ].toString() + ":\n" + map[ "text" ].toString() + "\n\n" ;
 		}
+
+		e += "https://twitter.com/iluvpclinuxos" ;
+
+		emit msg( e ) ;
 	}
 }
 

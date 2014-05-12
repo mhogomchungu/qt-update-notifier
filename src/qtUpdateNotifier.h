@@ -102,7 +102,6 @@ private slots:
 	void networResponse( QNetworkReply * ) ;
 	void checkTwitter( void ) ;
 private:
-	void checkAnnouncements( const QByteArray& ) ;
 	void accessTwitter( void ) ;
 	void checkForPackageUpdates( void ) ;
 	void autoDownloadPackages( void ) ;
