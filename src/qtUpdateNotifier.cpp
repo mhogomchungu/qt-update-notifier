@@ -130,8 +130,6 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 	if( ok ){
 
-		e += "\n" ;
-
 		QVariantList l = p.toList() ;
 
 		qulonglong s = settings::getLastTwitterUpdate().toULongLong() ;
@@ -144,20 +142,20 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 			QVariantMap map = it.toMap() ;
 			qulonglong z = map[ "id_str" ].toString().toULongLong() ;
+			QString text = map[ "text" ].toString() ;
 
 			if( z > s ){
-				QString a = map[ "text" ].toString() ;
-				if( a.contains( "ANNOUNCEMENT" ) ){
+				if( text.contains( "ANNOUNCEMENT" ) ){
 					this->showToolTip( QString( "qt-update-notifier-important-info" ),
 							   tr( "No updates found" ) ) ;
-					this->logActivity_1( a ) ;
+					this->logActivity_1( text ) ;
 				}
 			}
 
-			 e += map[ "created_at" ].toString() + ":\n" + map[ "text" ].toString() + "\n\n" ;
+			e += "\n" + map[ "created_at" ].toString() + ":\n" + text + "\n" ;
 		}
 
-		e += "https://twitter.com/iluvpclinuxos" ;
+		e += "\nhttps://twitter.com/iluvpclinuxos" ;
 
 		emit msg( e ) ;
 	}
