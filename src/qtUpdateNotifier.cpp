@@ -24,7 +24,19 @@
 
 #include <QCoreApplication>
 
-#define _debug 0
+class manageNetworkReply
+{
+public:
+	explicit manageNetworkReply( QNetworkReply * n ) : m_networkReply( n )
+	{
+	}
+	~manageNetworkReply()
+	{
+		m_networkReply->deleteLater() ;
+	}
+private:
+	QNetworkReply * m_networkReply ;
+};
 
 qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 {
@@ -106,6 +118,9 @@ void qtUpdateNotifier::synapticStatus( int r )
 
 void qtUpdateNotifier::networResponse( QNetworkReply * r )
 {
+	manageNetworkReply raii( r ) ;
+	Q_UNUSED( raii ) ;
+	
 	QList<QByteArray> l = r->rawHeaderList() ;
 
 	QString e ;
@@ -116,9 +131,17 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 		}
 	}
 
+	QString s = r->rawHeader( "status" ) ;
+
+	if( s != "200 OK" ){
+		emit msg( e ) ;
+		return ;
+	}
+
 	QByteArray data = r->readAll() ;
 
 	if( data.isEmpty() ){
+		emit msg( e ) ;
 		return ;
 	}
 
@@ -157,6 +180,8 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 		e += "\nhttps://twitter.com/iluvpclinuxos" ;
 
+		emit msg( e ) ;
+	}else{
 		emit msg( e ) ;
 	}
 }
