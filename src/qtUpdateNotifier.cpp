@@ -24,21 +24,22 @@
 
 #include <QCoreApplication>
 
-class manageNetworkReply
+template< typename T >
+class QObject_raii
 {
 public:
-	explicit manageNetworkReply( QNetworkReply * n ) : m_networkReply( n )
+	explicit QObject_raii( T t ) : m_qObject( t )
 	{
 	}
-	~manageNetworkReply()
+	~QObject_raii()
 	{
-		m_networkReply->deleteLater() ;
+		m_qObject->deleteLater() ;
 	}
 private:
-	QNetworkReply * m_networkReply ;
+	T m_qObject ;
 };
 
-#define manageNetworkReply_raii( x ) manageNetworkReply raii_x( x ) ; Q_UNUSED( raii_x )
+#define qObject_raii( x ) QObject_raii< decltype( x ) > QObject_raii_x( x ) ; Q_UNUSED( QObject_raii_x )
 
 qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 {
@@ -55,14 +56,14 @@ qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 
 	m_sleepDuration  = settings::updateCheckInterval() ;
 
+	this->setupTranslationText() ;
+
 	QString q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
 	QString z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
 	QString a = QString( "qt-update-notifier" ) ;
 	QString b = tr( "Status" ) ;
 
 	this->showToolTip( a,b,z ) ;
-
-	this->setupTranslationText() ;
 
 	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
 
@@ -120,7 +121,7 @@ void qtUpdateNotifier::synapticStatus( int r )
 
 void qtUpdateNotifier::networResponse( QNetworkReply * r )
 {
-	manageNetworkReply_raii( r ) ;
+	qObject_raii( r ) ;
 
 	QList<QByteArray> l = r->rawHeaderList() ;
 
