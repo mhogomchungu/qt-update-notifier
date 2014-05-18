@@ -151,23 +151,23 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 	bool ok ;
 
-	QVariant p = parser.parse( data,&ok ) ;
+	auto p = parser.parse( data,&ok ) ;
 
 	if( ok ){
 
-		QVariantList l = p.toList() ;
+		auto l = p.toList() ;
 
-		qulonglong s = settings::getLastTwitterUpdate().toULongLong() ;
+		auto s = settings::getLastTwitterUpdate().toULongLong() ;
 
-		QString u = l.first().toMap()[ "id_str" ].toString() ;
+		auto u = l.first().toMap()[ "id_str" ].toString() ;
 
 		settings::setLastTwitterUpdate( u ) ;
 
 		for( const auto& it : l ){
 
-			QVariantMap map = it.toMap() ;
-			qulonglong z = map[ "id_str" ].toString().toULongLong() ;
-			QString text = map[ "text" ].toString() ;
+			auto map  = it.toMap() ;
+			auto z    = map[ "id_str" ].toString().toULongLong() ;
+			auto text = map[ "text" ].toString() ;
 
 			if( z > s ){
 				if( text.contains( "ANNOUNCEMENT" ) ){
