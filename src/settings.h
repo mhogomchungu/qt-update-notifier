@@ -50,6 +50,7 @@ public:
 	static bool autoStartEnabled( void ) ;
 	static bool warnOnInconsistentState( void ) ;
 	static bool prefixLogEntries( void ) ;
+	static bool showIconOnImportantInfo( void ) ;
 	static void enableAutoStart( bool ) ;
 	static void setAutoRefreshSynaptic( bool ) ;
 	static void setPrefferedLanguage( const QString& ) ;

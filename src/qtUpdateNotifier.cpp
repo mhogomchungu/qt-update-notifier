@@ -69,6 +69,8 @@ qtUpdateNotifier::qtUpdateNotifier() :statusicon()
 
 	m_url   = settings::url() ;
 	m_token = settings::token() ;
+
+	m_showIconOnImportantInfo = settings::showIconOnImportantInfo() ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -174,6 +176,7 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 					this->showToolTip( QString( "qt-update-notifier-important-info" ),
 							   tr( "No updates found" ) ) ;
 					this->logActivity_1( text ) ;
+					this->showIconOnImportantInfo() ;
 				}
 			}
 
@@ -197,6 +200,13 @@ void qtUpdateNotifier::checkTwitter()
 	connect( this,SIGNAL( msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
 
 	t->ShowUI( tr( "connecting ..." ) ) ;
+}
+
+void qtUpdateNotifier::showIconOnImportantInfo()
+{
+	if( m_showIconOnImportantInfo ){
+		statusicon::setStatus( statusicon::NeedsAttention ) ;
+	}
 }
 
 void qtUpdateNotifier::accessTwitter()
@@ -527,6 +537,7 @@ void qtUpdateNotifier::autoUpdateResult( int r )
 	}else{
 		QString icon = QString( "qt-update-notifier-important-info" ) ;
 		this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
+		this->showIconOnImportantInfo() ;
 	}
 
 	statusicon::setStatus( statusicon::Passive ) ;
@@ -583,6 +594,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		statusicon::setStatus( statusicon::Passive ) ;
 		this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 		this->logActivity_1( list.at( 0 ) ) ;
+		this->showIconOnImportantInfo() ;
 
 		break ;
 	case Task::noUpdatesFound :
@@ -594,6 +606,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		 * this->showToolTip( icon,tr( "No updates found" ) ) ;
 		 */
 		this->checkForPackageUpdates() ;
+		this->accessTwitter() ;
 
 		break ;
 	case Task::noNetworkConnection :
@@ -684,11 +697,10 @@ void qtUpdateNotifier::checkOutDatedPackages( QStringList list )
 
 	if( updatesFound ){
 		emit updateLogWindow() ;
+		this->showIconOnImportantInfo() ;
 	}else{
 		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
 	}
-
-	this->accessTwitter() ;
 }
 
 void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const QStringList& list )

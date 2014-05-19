@@ -353,6 +353,17 @@ bool settings::prefixLogEntries()
 	}
 }
 
+bool settings::showIconOnImportantInfo()
+{
+	QString opt = QString( "showIconOnImportantInfo" ) ;
+	if( _settings.contains( opt ) ){
+		return _settings.value( opt ).toBool() ;
+	}else{
+		_settings.setValue( opt,true ) ;
+		return true ;
+	}
+}
+
 void settings::enableAutoStart( bool autoStart )
 {
 	QString opt = QString( "autoStartAtLogin" ) ;

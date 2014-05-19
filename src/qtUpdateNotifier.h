@@ -102,6 +102,7 @@ private slots:
 	void networResponse( QNetworkReply * ) ;
 	void checkTwitter( void ) ;
 private:
+	void showIconOnImportantInfo( void ) ;
 	void accessTwitter( void ) ;
 	void checkForPackageUpdates( void ) ;
 	void autoDownloadPackages( void ) ;
@@ -125,6 +126,7 @@ private:
 	bool m_canCloseApplication ;
 	bool m_threadIsRunning ;
 	bool m_autoStartEnabled ;
+	bool m_showIconOnImportantInfo ;
 	QStringList m_updatesList ;
 	QString m_url ;
 	QByteArray m_token ;
