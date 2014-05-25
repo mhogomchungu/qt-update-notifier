@@ -41,8 +41,10 @@ private:
 
 #define qObject_raii( x ) QObject_raii< decltype( x ) > QObject_raii_x( x ) ; Q_UNUSED( QObject_raii_x )
 
-qtUpdateNotifier::qtUpdateNotifier() :statusicon()
+qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 {
+	m_manager = nullptr ;
+
 	m_timer = new QTimer() ;
 	connect( m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
 
@@ -202,6 +204,14 @@ void qtUpdateNotifier::checkTwitter()
 	t->ShowUI( tr( "connecting ..." ) ) ;
 }
 
+void qtUpdateNotifier::startNetworkManager()
+{
+	if( m_manager == nullptr ){
+		m_manager = new QNetworkAccessManager( this ) ;
+		connect( m_manager,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( networResponse( QNetworkReply * ) ) ) ;
+	}
+}
+
 void qtUpdateNotifier::showIconOnImportantInfo()
 {
 	if( m_showIconOnImportantInfo ){
@@ -219,6 +229,8 @@ void qtUpdateNotifier::accessTwitter()
 	rqt.setRawHeader( "User-Agent","qt-update-notifier" ) ;
 	rqt.setRawHeader( "Authorization",m_token ) ;
 	rqt.setRawHeader( "Accept-Encoding","text/plain" ) ;
+
+	this->startNetworkManager() ;
 
 	m_manager->get( rqt ) ;
 }
@@ -347,9 +359,6 @@ void qtUpdateNotifier::run()
 	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
 	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 	t->start( settings::delayTimeBeforeUpdateCheck() ) ;
-
-	m_manager = new QNetworkAccessManager (this ) ;
-	connect( m_manager,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( networResponse( QNetworkReply * ) ) ) ;
 }
 
 void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
@@ -482,6 +491,9 @@ void qtUpdateNotifier::checkForUpdates()
 	if( m_threadIsRunning ){
 		this->logActivity( tr( "Warning:\tattempt to start update check while another one is still in progress" ) ) ;
 	}else{
+
+		this->startNetworkManager() ;
+
 		QString icon = QString( "qt-update-notifier-updating" ) ;
 
 		this->showToolTip( icon,tr( "Status" ),tr( "Checking for updates" ) ) ;
