@@ -73,6 +73,7 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 	m_token = settings::token() ;
 
 	m_showIconOnImportantInfo = settings::showIconOnImportantInfo() ;
+	m_networkConnectivityChecker = settings::networkConnectivityChecker() ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -490,7 +491,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 		m_threadIsRunning = true ;
 
-		Task * t = new Task() ;
+		Task * t = new Task( m_networkConnectivityChecker ) ;
 
 		t->setLocalLanguage( settings::prefferedLanguage() ) ;
 		t->setConfigPath( settings::configPath() ) ;

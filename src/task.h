@@ -46,7 +46,7 @@ public:
 		aptGetFailed
 	}updateState;
 
-	Task() ;
+	Task( QString n = QString()) ;
 	~Task() ;
 
 	void start( Task::action ) ;
@@ -76,12 +76,12 @@ private:
 
 	void processUpdates( QByteArray& output1,QByteArray& output2 ) ;
 	void reportUpdates( void ) ;
-	bool online( void ) ;
 
 	QString m_configPath ;
 	QString m_language ;
 	QString m_aptUpdate ;
 	QString m_aptUpgrade ;
+	QString m_networkConnectivityChecker ;
 };
 
 #endif // TASK_H

@@ -56,6 +56,7 @@ public:
 	static void setPrefferedLanguage( const QString& ) ;
 	static void setCheckDelayOnStartUp( const QString& ) ;
 	static void setNextUpdateInterval( const QString& ) ;
+	static QString networkConnectivityChecker( void ) ;
 };
 
 #endif // SETTINGS_H

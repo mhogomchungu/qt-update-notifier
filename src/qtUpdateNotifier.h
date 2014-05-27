@@ -129,6 +129,7 @@ private:
 	bool m_showIconOnImportantInfo ;
 	QStringList m_updatesList ;
 	QString m_url ;
+	QString m_networkConnectivityChecker ;
 	QByteArray m_token ;
 	QTimer * m_timer ;
 	u_int64_t m_sleepDuration ;

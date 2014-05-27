@@ -220,6 +220,19 @@ void settings::setNextUpdateInterval( const QString& interval )
 	_settings.setValue( QString( "updateCheckInterval" ),interval ) ;
 }
 
+QString settings::networkConnectivityChecker()
+{
+	QString opt = QString( "networkConnectivityChecker" ) ;
+
+	if( _settings.contains( opt ) ){
+		return _settings.value( opt ).toString() ;
+	}else{
+		QString s = "ping -c 1 8.8.8.8" ;
+		_settings.setValue( opt,s ) ;
+		return s ;
+	}
+}
+
 int settings::delayTimeBeforeUpdateCheck()
 {
 	return 1000 * _settings.value( QString( "startUpDelay" ) ).toString().toInt() ;

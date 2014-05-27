@@ -11,7 +11,7 @@
 #include <QFile>
 #include <QProcessEnvironment>
 
-Task::Task()
+Task::Task( QString n ) : m_networkConnectivityChecker( n )
 {
 }
 
@@ -89,7 +89,17 @@ void Task::checkOutDatedPackagesTask()
 
 void Task::checkUpdatesTask()
 {
-	if( this->online() ){
+	auto _online = [&](){
+		QProcess exe ;
+		exe.start( m_networkConnectivityChecker ) ;
+		if( exe.waitForFinished() ){
+			return exe.exitCode() == 0 ;
+		}else{
+			return false ;
+		}
+	} ;
+
+	if( _online() ){
 		this->reportUpdates() ;
 	}else{
 		QStringList l ;
@@ -265,16 +275,6 @@ bool Task::updateAvailable( const QString& e )
 			return false ;
 		}
 	}
-}
-
-bool Task::online()
-{
-	QProcess exe ;
-	exe.start( QString( "ping -c 1 8.8.8.8" ) ) ;
-	exe.waitForFinished() ;
-	int st = exe.exitCode() ;
-	exe.close() ;
-	return st == 0 ;
 }
 
 void Task::processUpdates( QByteArray& output1,QByteArray& output2 )
