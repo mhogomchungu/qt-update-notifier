@@ -83,3 +83,5 @@
 	- add twitter client to monitor pclinuxos twitter account.
 -version 1.5.6
 	- update translations.
+-version 1.5.7
+	- add a configuration option to change what command to run to check for network connectivity

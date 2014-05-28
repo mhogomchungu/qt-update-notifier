@@ -115,7 +115,7 @@ int main( int argc,char * argv[] )
 		const char * msg = "\
 copyright: 2013-2014 Ink Francis,mhogomchungu@gmail.com\n\
 license  : GPLv2+" ;
-		std::cout << "version  :" << VERSION << "\n" << msg << std::endl ;
+		std::cout << "version  : " << VERSION << "\n" << msg << std::endl ;
 		return 0 ;
 	}else{
 		qtUpdateNotifier w ;
