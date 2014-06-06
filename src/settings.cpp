@@ -255,6 +255,19 @@ QString settings::delayTimeBeforeUpdateCheck( int time )
 	return QString( buffer ) ;
 }
 
+QString settings::defaultIcon()
+{
+	QString opt = "defaultIcon" ;
+
+	if( _settings.contains( opt ) ){
+		return _settings.value( opt ).toString() + ".png" ;
+	}else{
+		QString u = "qt-update-notifier" ;
+		_settings.setValue( opt,u ) ;
+		return u + ".png" ;
+	}
+}
+
 QByteArray settings::token()
 {
 	return QByteArray( "Bearer " ) + _secret ;

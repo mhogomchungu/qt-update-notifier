@@ -34,6 +34,7 @@ public:
 	static QString checkDelayOnStartUplogFile( void ) ;
 	static QString updateCheckIntervalLogFile( void ) ;
 	static QString delayTimeBeforeUpdateCheck( int ) ;
+	static QString defaultIcon( void ) ;
 	static QByteArray token( void ) ;
 	static QString url( void ) ;
 	static QString getLastTwitterUpdate( void ) ;

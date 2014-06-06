@@ -7,5 +7,6 @@
 		 <file>qt-update-notifier-updates-are-available.png</file>
 		 <file>qt-update-notifier-inconsistent-state.png</file>
 		 <file>qt-update-notifier-important-info.png</file>
+		 <file>ob-qt-update-notifier.png</file>
 	 </qresource>
  </RCC>

@@ -130,6 +130,7 @@ private:
 	QStringList m_updatesList ;
 	QString m_url ;
 	QString m_networkConnectivityChecker ;
+	QString m_defaulticon ;
 	QByteArray m_token ;
 	QTimer * m_timer ;
 	u_int64_t m_sleepDuration ;

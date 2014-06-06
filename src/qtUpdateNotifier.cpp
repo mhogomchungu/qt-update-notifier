@@ -54,7 +54,9 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 	statusicon::setStatus( statusicon::Passive ) ;
 	statusicon::setCategory( statusicon::ApplicationStatus ) ;
 
-	this->changeIcon( QString( "qt-update-notifier" ) ) ;
+	m_defaulticon = settings::defaultIcon() ;
+
+	this->changeIcon( m_defaulticon ) ;
 
 	m_sleepDuration  = settings::updateCheckInterval() ;
 
@@ -62,7 +64,7 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 
 	QString q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
 	QString z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
-	QString a = QString( "qt-update-notifier" ) ;
+	QString a = m_defaulticon ;
 	QString b = tr( "Status" ) ;
 
 	this->showToolTip( a,b,z ) ;
@@ -233,9 +235,8 @@ void qtUpdateNotifier::doneUpdating()
 
 	QString n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
 
-	QString y = QString( "qt-update-notifier" ) ;
 	QString z = tr( "Status" ) ;
-	this->showToolTip( y,z,n ) ;
+	this->showToolTip( m_defaulticon,z,n ) ;
 	statusicon::setStatus( statusicon::Passive ) ;
 }
 
@@ -300,8 +301,8 @@ int qtUpdateNotifier::instanceAlreadyRunning()
 		qDebug() << tr( "Another instance is already running, closing this one" ) ;
 	}else{
 		const char * x[ 2 ] ;
-		x[ 0 ] = "qt-update-notifier" ;
-		x[ 1 ] = 0 ;
+		*( x + 0 ) = "qt-update-notifier" ;
+		*( x + 1 ) = nullptr ;
 		int z = 1 ;
 		QCoreApplication app( z,( char ** ) x ) ;
 		QTranslator * translator = new QTranslator() ;
@@ -387,7 +388,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
 			t->start( interval ) ;
 
-			this->showToolTip( QString( "qt-update-notifier" ),tr( "Status" ),interval ) ;
+			this->showToolTip( m_defaulticon,tr( "Status" ),interval ) ;
 
 			this->logActivity( this->logMsg() ) ;
 		}else{
@@ -535,8 +536,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 void qtUpdateNotifier::autoUpdateResult( int r )
 {
 	if( r == 0 || r == 2 ){
-		QString icon = QString( "qt-update-notifier" ) ;
-		this->showToolTip( icon,tr( "Automatic package update completed" ) ) ;
+		this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
 	}else{
 		QString icon = QString( "qt-update-notifier-important-info" ) ;
 		this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
@@ -605,8 +605,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		statusicon::setStatus( statusicon::Passive ) ;
 		/*
 		 * below function is called from checkForPackageUpdates() routine
-		 * icon = QString( "qt-update-notifier" ) ;
-		 * this->showToolTip( icon,tr( "No updates found" ) ) ;
+		 * this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 		 */
 		this->checkForPackageUpdates() ;
 		this->accessTwitter() ;
@@ -614,14 +613,14 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		break ;
 	case Task::noNetworkConnection :
 
-		icon = QString( "qt-update-notifier" ) ;
+		icon = m_defaulticon ;
 		statusicon::setStatus( statusicon::Passive ) ;
 		this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
 
 		break ;
 	case Task::undefinedState :
 
-		icon = QString( "qt-update-notifier" ) ;
+		icon = m_defaulticon ;
 		statusicon::setStatus( statusicon::Passive ) ;
 		this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 
@@ -630,7 +629,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 		/*
 		 * currently,we dont get here,added for completeness' sake
 		 */
-		icon = QString( "qt-update-notifier" ) ;
+		icon = m_defaulticon ;
 		statusicon::setStatus( statusicon::Passive ) ;
 		this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 		this->checkForPackageUpdates() ;
@@ -640,7 +639,7 @@ void qtUpdateNotifier::updateStatus( int r,QStringList list )
 void qtUpdateNotifier::checkForPackageUpdates()
 {
 	if( settings::skipOldPackageCheck() ){
-		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
+		this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 	}else{
 		Task * t = new Task() ;
 		connect( t,SIGNAL( taskFinished( QStringList ) ),this,SLOT( checkOutDatedPackages( QStringList ) ) ) ;
@@ -665,7 +664,7 @@ void qtUpdateNotifier::checkOutDatedPackages( QStringList list )
 	bool updatesFound = false ;
 
 	if( list.size() < 4 ){
-		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
+		this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 		return ;
 	}
 
@@ -702,7 +701,7 @@ void qtUpdateNotifier::checkOutDatedPackages( QStringList list )
 		emit updateLogWindow() ;
 		this->showIconOnImportantInfo() ;
 	}else{
-		this->showToolTip( QString( "qt-update-notifier" ),tr( "No updates found" ) ) ;
+		this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 	}
 }
 
@@ -801,7 +800,7 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 	m_timer->start( m_sleepDuration ) ;
 
 	//QString x = statusicon::iconName() ;
-	QString x = QString( "qt-update-notifier" ) ;
+	QString x = m_defaulticon ;
 	QString y = statusicon::toolTipTitle() ;
 
 	int d = static_cast<int>( m_sleepDuration ) ;
