@@ -85,3 +85,5 @@
 	- update translations.
 -version 1.5.7
 	- add a configuration option to change what command to run to check for network connectivity
+-version 1.5.8
+	- add an alternative optional icon to show there are no updates.The icon can be acticated by changing a config file setting to "defaultIcon=ob-qt-update-notifier.png"

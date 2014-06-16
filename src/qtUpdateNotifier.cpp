@@ -198,13 +198,13 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 void qtUpdateNotifier::checkTwitter()
 {
-	this->accessTwitter() ;
-
 	twitter * t = new twitter() ;
 
 	connect( this,SIGNAL( msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
 
 	t->ShowUI( tr( "connecting ..." ) ) ;
+
+	this->accessTwitter() ;
 }
 
 void qtUpdateNotifier::showIconOnImportantInfo()
