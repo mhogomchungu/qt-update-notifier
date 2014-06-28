@@ -83,22 +83,16 @@ private slots:
 	void automaticCheckForUpdates( void ) ;
 	void checkForUpdatesOnStartUp( void ) ;
 	void scheduleUpdates( int ) ;
-	void updateStatus( int,QStringList ) ;
 	void logWindowShow( void ) ;
 	void aptGetLogWindow( void) ;
 	void doneUpdating( void ) ;
 	void toggleAutoStart( bool ) ;
 	void openConfigureDialog( void ) ;
-	void checkOutDatedPackages( QStringList ) ;
 	void startTimer( void ) ;
 	void startTimer_1( void ) ;
 	void configOptionsChanged( void ) ;
 	void autoRefreshSynaptic( bool ) ;
-	void autoUpdateResult( int ) ;
-	void autoDownloadPackages( int ) ;
 	void objectGone( QObject * ) ;
-	void taskFinished( int taskAction,int taskStatus ) ;
-	void synapticStatus( int ) ;
 	void networResponse( QNetworkReply * ) ;
 	void checkTwitter( void ) ;
 private:
@@ -107,7 +101,6 @@ private:
 	void checkForPackageUpdates( void ) ;
 	void autoDownloadPackages( void ) ;
 	void autoUpdatePackages( void ) ;
-	bool autoRefreshSYnaptic( void ) ;
 	void setupTranslationText( void ) ;
 	void printTime( const QString&,u_int64_t ) ;
 	void saveAptGetLogOutPut( const QStringList& ) ;
@@ -137,6 +130,7 @@ private:
 	u_int64_t m_currentTime ;
 	QTranslator * m_translator ;
 	QNetworkAccessManager * m_manager ;
+	result m_result ;
 	bool m_debug ;
 };
 

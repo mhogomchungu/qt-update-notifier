@@ -20,68 +20,64 @@
 #ifndef TASK_H
 #define TASK_H
 
-#include <QRunnable>
-#include <QObject>
-#include <QStringList>
+#include <functional>
 
-class Task : public QObject,public QRunnable
+typedef std::function< void( void ) > function_t ;
+
+class continuation
 {
-	Q_OBJECT
 public:
-	typedef enum{
-		autoRefreshStartSYnaptic,
-		startSynaptic,
-		downloadPackages,
-		updateSystem,
-		checkOutDatedPackages,
-		checkUpDates
-	}action;
-
-	typedef enum{
-		updatesFound = 0,
-		inconsistentState,
-		noUpdatesFound,
-		noNetworkConnection,
-		undefinedState,
-		aptGetFailed
-	}updateState;
-
-	Task( QString n = QString()) ;
-	~Task() ;
-
-	void start( Task::action ) ;
-	void setConfigPath( const QString& path ) ;
-	void setLocalLanguage( const QString& languale ) ;
-signals:
-	void taskFinished( int,QStringList ) ;
-	void taskFinished( int taskStatus ) ;
-	void taskFinished( QStringList ) ;
-private:
+	explicit continuation( function_t ) ;
+	void then( function_t ) ;
+	void start( void ) ;
 	void run( void ) ;
-
-	void startSynapticTask( void ) ;
-	void checkUpdatesTask( void ) ;
-	void checkOutDatedPackagesTask( void ) ;
-
-	void checkKernelVersion( void ) ;
-	void checkLibreOfficeVersion( void ) ;
-	void checkVirtualBoxVersion( void ) ;
-	void checkCallibeVersion( void ) ;
-	bool updateAvailable( const QString& ) ;
-
-	QString m_iv ;
-	QString m_nv ;
-	QStringList m_package ;
-	Task::action m_action ;
-
-	void processUpdates( QByteArray& output1,QByteArray& output2 ) ;
-	void reportUpdates( void ) ;
-
-	QString m_configPath ;
-	QString m_language ;
-	QString m_aptUpdate ;
-	QString m_aptUpgrade ;
-	QString m_networkConnectivityChecker ;
+private:
+	function_t m_function = [](){} ;
+	function_t m_start ;
 };
+
+namespace Task
+{
+	/*
+	 * This API runs two tasks,the first one will be run in a different thread and
+	 * the second one will be run on the original thread after the completion of the
+	 * first one.
+	 *
+	 * Sample use case below
+	 */
+	continuation& run( function_t ) ;
+
+	/*
+	 * if no continuation,run only one task on a separate thread.
+	 */
+	void exec( function_t ) ;
+}
+
+#if 0
+
+auto _a = [](){
+	/*
+	 * task _a does what task _a does here.
+	 *
+	 * This function body will run on a different thread
+	 */
+}
+
+auto _b = [](){
+	/*
+	 * task _b does what task _b does here.
+	 *
+	 * This function body will run on the original thread
+	 */
+}
+
+Task::run( _a ).then( _b ) ;
+
+/*
+ * if no continuation
+ */
+Task::exec( _a ) ;
+
+#endif
 
 #endif // TASK_H

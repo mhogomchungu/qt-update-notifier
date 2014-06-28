@@ -21,13 +21,36 @@
 #define UTILITY_H
 
 #include <QString>
+#include <QStringList>
 
-class utility
+struct result
 {
-public:
-	utility() ;
-	static void writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
-	static QString readFromFile( const QString& filepath ) ;
+	typedef enum{
+		undefinedState,
+		inconsistentState,
+		noUpdatesFound,
+		updatesFound,
+		noNetworkConnection
+	}repoState ;
+	bool passed()
+	{
+		return taskStatus == 0 ;
+	}
+	int taskStatus ;
+	result::repoState repositoryState ;
+	QStringList taskOutput ;
 };
+
+namespace utility
+{
+	void writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
+	QString readFromFile( const QString& filepath ) ;
+	result reportUpdates( void ) ;
+	result autoDownloadPackages( void ) ;
+	result autoUpdatePackages( void ) ;
+	result checkForPackageUpdates( void ) ;
+	result autoRefreshStartSYnaptic( void ) ;
+	result startSynaptic( void ) ;
+}
 
 #endif // UTILITY_H
