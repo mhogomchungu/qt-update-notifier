@@ -32,7 +32,7 @@ struct result
 		updatesFound,
 		noNetworkConnection
 	}repoState ;
-	bool passed()
+	bool passed() const
 	{
 		return taskStatus == 0 ;
 	}

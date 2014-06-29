@@ -130,7 +130,6 @@ private:
 	u_int64_t m_currentTime ;
 	QTranslator * m_translator ;
 	QNetworkAccessManager * m_manager ;
-	result m_result ;
 	bool m_debug ;
 };
 
