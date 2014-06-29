@@ -21,10 +21,11 @@
 
 void Task::exec( std::function< void( void ) > function )
 {
-	auto _a = [&](){
-		function() ;
-		return 0 ;
-	} ;
+	Task::run( function ).start() ;
+}
 
-	Task::run<int>( _a ).start() ;
+continuation_1& Task::run( std::function< void( void ) > function )
+{
+	auto t = new thread_1( function ) ;
+	return t->taskContinuation() ;
 }

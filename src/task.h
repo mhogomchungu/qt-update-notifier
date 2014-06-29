@@ -77,6 +77,57 @@ private:
 	T m_cargo ;
 };
 
+class continuation_1
+{
+public:
+	explicit continuation_1( std::function< void( void ) > function ) :
+		m_function( [](){} ),m_start( function )
+	{
+	}
+	void then( std::function< void( void ) > function )
+	{
+		m_function = function ;
+		m_start() ;
+	}
+	void start()
+	{
+		m_start() ;
+	}
+	void run()
+	{
+		m_function() ;
+	}
+private:
+	std::function< void( void ) > m_function ;
+	std::function< void( void ) > m_start ;
+};
+
+class thread_1 : public QThread
+{
+public:
+	thread_1( std::function< void ( void ) > function ) :
+		m_function( function ),
+		m_continuation( [&](){ this->start() ; } )
+	{
+		connect( this,SIGNAL( finished() ),this,SLOT( deleteLater() ) ) ;
+	}
+	continuation_1& taskContinuation( void )
+	{
+		return m_continuation ;
+	}
+private:
+	~thread_1()
+	{
+		m_continuation.run() ;
+	}
+	void run( void )
+	{
+		m_function() ;
+	}
+	std::function< void ( void ) > m_function ;
+	continuation_1 m_continuation ;
+};
+
 namespace Task
 {
 	/*
@@ -93,11 +144,16 @@ namespace Task
 		return t->taskContinuation() ;
 	}
 
+	continuation_1& run( std::function< void( void ) > function ) ;
+
 	void exec( std::function< void( void ) > function ) ;
 }
 
 #if 0
 
+/*
+ * templated version that passes a return value of one function to another function
+ */
 auto _a = [](){
 	/*
 	 * task _a does what task _a does here.
@@ -108,6 +164,29 @@ auto _a = [](){
 }
 
 auto _b = []( const int& r ){
+	/*
+	 * task _b does what task _b does here.
+	 *
+	 * r is a const reference to a value returned by _a
+	 *
+	 * This function body will run on the original thread
+	 */
+}
+
+Task::run<int>( _a ).then( _b ) ;
+
+/*
+ * Non templated version that does not pass around return value
+ */
+auto _a = [](){
+	/*
+	 * task _a does what task _a does here.
+	 *
+	 * This function body will run on a different thread
+	 */
+}
+
+auto _b = [](){
 	/*
 	 * task _b does what task _b does here.
 	 *
