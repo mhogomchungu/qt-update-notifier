@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (c) 2013
+ *  Copyright (c) 2014
  *  name : mhogo mchungu
  *  email: mhogomchungu@gmail.com
  *  This program is free software: you can redistribute it and/or modify
@@ -23,12 +23,40 @@
 #include <functional>
 #include <QThread>
 
+namespace LxQt{
+
+namespace Wallet{
+
+/*
+ * Apparently,one can not have signal-slots in templated classes.
+ * google says i can work around the limitation by having signal-slot in one class
+ * and inherit it from templated class and thats what we are doing here
+ */
+
+class Thread : public QThread
+{
+	Q_OBJECT
+public:
+	Thread()
+	{
+		connect( this,SIGNAL( finished() ),this,SLOT( deleteLater() ) ) ;
+	}
+protected:
+	virtual ~Thread()
+	{
+	}
+private:
+	virtual void run( void )
+	{
+	}
+};
+
 template< typename T >
 class continuation
 {
 public:
 	explicit continuation( std::function< void( void ) > function ) :
-		m_function( []( const T& t ){ Q_UNUSED( t ) ; } ),m_start( function )
+	m_function( []( const T& t ){ Q_UNUSED( t ) ; } ),m_start( function )
 	{
 	}
 	void then( std::function< void( const T& ) > function )
@@ -50,21 +78,20 @@ private:
 };
 
 template< typename T >
-class thread : public QThread
+class ThreadHelper : public Thread
 {
 public:
-	thread( std::function< T ( void ) > function ) :
-		m_function( function ),
-		m_continuation( [&](){ this->start() ; } )
+	ThreadHelper( std::function< T ( void ) > function ) :
+	m_function( function ),
+	m_continuation( [&](){ this->start() ; } )
 	{
-		connect( this,SIGNAL( finished() ),this,SLOT( deleteLater() ) ) ;
 	}
 	continuation<T>& taskContinuation( void )
 	{
 		return m_continuation ;
 	}
 private:
-	~thread()
+	~ThreadHelper()
 	{
 		m_continuation.run( m_cargo ) ;
 	}
@@ -102,21 +129,20 @@ private:
 	std::function< void( void ) > m_start ;
 };
 
-class thread_1 : public QThread
+class ThreadHelper_1 : public Thread
 {
 public:
-	thread_1( std::function< void ( void ) > function ) :
+	ThreadHelper_1( std::function< void ( void ) > function ) :
 		m_function( function ),
 		m_continuation( [&](){ this->start() ; } )
 	{
-		connect( this,SIGNAL( finished() ),this,SLOT( deleteLater() ) ) ;
 	}
 	continuation_1& taskContinuation( void )
 	{
 		return m_continuation ;
 	}
 private:
-	~thread_1()
+	~ThreadHelper_1()
 	{
 		m_continuation.run() ;
 	}
@@ -140,13 +166,17 @@ namespace Task
 	template< typename T >
 	continuation<T>& run( std::function< T ( void ) > function )
 	{
-		auto t = new thread<T>( function ) ;
+		auto t = new ThreadHelper<T>( function ) ;
 		return t->taskContinuation() ;
 	}
 
 	continuation_1& run( std::function< void( void ) > function ) ;
 
 	void exec( std::function< void( void ) > function ) ;
+}
+
+}
+
 }
 
 #if 0

@@ -16,7 +16,7 @@ file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.5.8\"" )
 
 QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
 
-QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h )
+QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
 
 QT4_ADD_RESOURCES( ICONS icons/icons.qrc )
 

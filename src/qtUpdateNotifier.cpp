@@ -24,6 +24,8 @@
 
 #include <QCoreApplication>
 
+namespace Task = LxQt::Wallet::Task ;
+
 template< typename T >
 class QObject_raii
 {
