@@ -118,7 +118,7 @@ void qtUpdateNotifier::startUpdater()
 		}
 	} ;
 
-	auto _b = [&]( const bool& passed ){
+	auto _b = [&]( bool passed ){
 
 		if( !passed ){
 			this->logActivity( tr( "Synaptic exited with errors" ) ) ;
@@ -586,7 +586,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 
 		auto _a = [](){
 
-			return utility::autoDownloadPackages() ;
+			return utility::autoUpdatePackages() ;
 		} ;
 
 		auto _b = [&]( const result& r ){
