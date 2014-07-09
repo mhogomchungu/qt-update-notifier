@@ -23,16 +23,6 @@
 #include <functional>
 #include <QThread>
 
-namespace LxQt{
-
-namespace Wallet{
-
-/*
- * Apparently,one can not have signal-slots in templated classes.
- * google says i can work around the limitation by having signal-slot in one class
- * and inherit it from templated class and thats what we are doing here
- */
-
 class Thread : public QThread
 {
 	Q_OBJECT
@@ -170,13 +160,16 @@ namespace Task
 		return t->taskContinuation() ;
 	}
 
-	continuation_1& run( std::function< void( void ) > function ) ;
+	static inline continuation_1& run( std::function< void( void ) > function )
+	{
+		auto t = new ThreadHelper_1( function ) ;
+		return t->taskContinuation() ;
+	}
 
-	void exec( std::function< void( void ) > function ) ;
-}
-
-}
-
+	static inline void exec( std::function< void( void ) > function )
+	{
+		Task::run( function ).start() ;
+	}
 }
 
 #if 0
