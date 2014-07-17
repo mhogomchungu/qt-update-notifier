@@ -47,7 +47,6 @@
 #include "logwindow.h"
 #include "instance.h"
 #include "desktop_file.h"
-#include "task.h"
 #include "configuredialog.h"
 #include "qt-update-install-path.h"
 #include "utility.h"

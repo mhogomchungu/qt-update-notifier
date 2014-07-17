@@ -22,6 +22,7 @@
 
 #include <QString>
 #include <QStringList>
+#include "task.h"
 
 struct result
 {
@@ -45,12 +46,12 @@ namespace utility
 {
 	void writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
 	QString readFromFile( const QString& filepath ) ;
-	result reportUpdates( void ) ;
-	result autoDownloadPackages( void ) ;
-	result autoUpdatePackages( void ) ;
-	result checkForPackageUpdates( void ) ;
-	result autoRefreshStartSYnaptic( void ) ;
-	result startSynaptic( void ) ;
+	Task::future< result >& reportUpdates( void ) ;
+	Task::future< result >& autoUpdatePackages( void ) ;
+	Task::future< result >& checkForPackageUpdates( void ) ;
+	Task::future< bool >& autoDownloadPackages( void ) ;
+	Task::future< bool >& autoRefreshStartSYnaptic( void ) ;
+	Task::future< bool >& startSynaptic( void ) ;
 }
 
 #endif // UTILITY_H

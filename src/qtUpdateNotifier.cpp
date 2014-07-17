@@ -107,24 +107,22 @@ void qtUpdateNotifier::changeIcon( QString icon )
 
 void qtUpdateNotifier::startUpdater()
 {
-	auto _a = [](){
+	auto _startSynaptic = [](){
 
 		if( settings::autoRefreshSynaptic() ){
-			return utility::autoRefreshStartSYnaptic().passed() ;
+			return utility::autoRefreshStartSYnaptic() ;
 		}else{
-			return utility::startSynaptic().passed() ;
+			return utility::startSynaptic() ;
 		}
 	} ;
 
-	auto _b = [&]( bool passed ){
+	_startSynaptic().then( [ this ]( bool failed ){
 
-		if( !passed ){
+		if( failed ){
 			this->logActivity( tr( "Synaptic exited with errors" ) ) ;
 		}
 		this->doneUpdating() ;
-	} ;
-
-	Task::run<bool>( _a ).then( _b ) ;
+	} ) ;
 }
 
 void qtUpdateNotifier::networResponse( QNetworkReply * r )
@@ -488,12 +486,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 		m_threadIsRunning = true ;
 
-		auto _a = [](){
-
-			return utility::reportUpdates() ;
-		} ;
-
-		auto _b = [&]( const result& r ){
+		utility::reportUpdates().then( [ = ]( const result& r ){
 
 			m_threadIsRunning = false ;
 			QString icon ;
@@ -552,9 +545,7 @@ void qtUpdateNotifier::checkForUpdates()
 				this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 				this->checkForPackageUpdates() ;
 			}
-		} ;
-
-		Task::run<result>( _a ).then( _b ) ;
+		} ) ;
 	}
 }
 
@@ -582,12 +573,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
-		auto _a = [](){
-
-			return utility::autoUpdatePackages() ;
-		} ;
-
-		auto _b = [&]( const result& r ){
+		utility::autoUpdatePackages().then( [ = ]( const result& r ){
 
 			if( r.taskStatus == 0 || r.taskStatus == 2 ){
 				this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
@@ -598,9 +584,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 			}
 
 			statusicon::setStatus( statusicon::Passive ) ;
-		} ;
-
-		Task::run<result>( _a ).then( _b ) ;
+		} ) ;
 	}else{
 		this->logActivity( this->logMsg() ) ;
 	}
@@ -615,14 +599,9 @@ void qtUpdateNotifier::autoDownloadPackages()
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
 
-		auto _a = [](){
+		utility::autoDownloadPackages().then( [ = ]( bool passed ){
 
-			return utility::autoDownloadPackages() ;
-		} ;
-
-		auto _b = [&]( const result& r ){
-
-			if( r.passed() ){
+			if( passed ){
 
 				this->showToolTip( icon,tr( "Downloading of packages completed" ) ) ;
 				statusicon::setStatus( statusicon::NeedsAttention ) ;
@@ -630,9 +609,7 @@ void qtUpdateNotifier::autoDownloadPackages()
 			}else{
 				this->showToolTip( icon,tr( "Downloading of packages failed" ) ) ;
 			}
-		} ;
-
-		Task::run<result>( _a ).then( _b ) ;
+		} ) ;
 	}else{
 		this->autoUpdatePackages() ;
 	}
@@ -644,59 +621,50 @@ void qtUpdateNotifier::checkForPackageUpdates()
 
 		this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 	}else{
-		auto _a = [](){
-
-			return utility::checkForPackageUpdates() ;
-		} ;
-
-		auto _b = [&]( const result& r ){
-
-			QString	icon = QString( "qt-update-notifier-important-info" ) ;
-			bool updatesFound = false ;
+		return utility::checkForPackageUpdates().then( [ = ]( const result& r ){
 
 			if( r.taskOutput.size() < 4 ){
 				this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 				return ;
 			}
 
+			QString	icon = QString( "qt-update-notifier-important-info" ) ;
+			QString z ;
+
 			const QString& kernelVersion = r.taskOutput.at( 0 ) ;
 
 			if( !kernelVersion.isEmpty() ){
-				updatesFound = true ;
-				this->logActivity_1( kernelVersion ) ;
+				z = "\n" + kernelVersion ;
 				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
 			const QString& libreofficeVersion = r.taskOutput.at( 1 ) ;
 			if( !libreofficeVersion.isEmpty() ){
-				updatesFound = true ;
-				this->logActivity_1( libreofficeVersion ) ;
+				z += "\n" + libreofficeVersion ;
 				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
 			const QString& virtualBoxVersion = r.taskOutput.at( 2 ) ;
 			if( !virtualBoxVersion.isEmpty() ){
-				updatesFound = true ;
-				this->logActivity_1( virtualBoxVersion ) ;
+				z += "\n" + virtualBoxVersion ;
 				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
 			const QString& callibre = r.taskOutput.at( 3 ) ;
 			if( !callibre.isEmpty() ){
-				updatesFound = true ;
-				this->logActivity_1( callibre ) ;
+				z += "\n" + callibre ;
 				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
-			if( updatesFound ){
-				emit updateLogWindow() ;
-				this->showIconOnImportantInfo() ;
-			}else{
-				this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
-			}
-		} ;
+			if( z.isEmpty() ){
 
-		Task::run<result>( _a ).then( _b ) ;
+				this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
+			}else{
+				emit updateLogWindow() ;
+				this->logActivity_1( z ) ;
+				this->showIconOnImportantInfo() ;
+			}
+		} ) ;
 	}
 }
 

@@ -170,7 +170,7 @@ QString readFromFile( const QString& filepath )
 	}
 }
 
-result processUpdates( QByteArray& output1,QByteArray& output2 )
+static result _processUpdates( QByteArray& output1,QByteArray& output2 )
 {
 	QStringList l = QString( output1 ).split( "\n" ) ;
 
@@ -233,31 +233,7 @@ result processUpdates( QByteArray& output1,QByteArray& output2 )
 	return r ;
 }
 
-result startSynaptic()
-{
-	QProcess exe ;
-
-	exe.start( QString( "%1 --start-synaptic" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ;
-	exe.waitForFinished( -1 ) ;
-
-	result r ;
-	r.taskStatus = exe.exitCode() ;
-	return r ;
-}
-
-result autoRefreshStartSYnaptic()
-{
-	QProcess exe ;
-
-	exe.start( QString( "%1 --start-synaptic --update-at-startup" ).arg( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ) ;
-	exe.waitForFinished( -1 ) ;
-
-	result r ;
-	r.taskStatus = exe.exitCode() ;
-	return r ;
-}
-
-result reportUpdates()
+result _reportUpdates()
 {
 	auto _not_online = [&](){
 		QProcess exe ;
@@ -355,7 +331,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 				return r ;
 			}else if( output.contains( success ) ){
 				if( language == "english_US" ){
-					return processUpdates( output,output ) ;
+					return _processUpdates( output,output ) ;
 				}else{
 					QByteArray output1 ;
 					QProcess e ;
@@ -363,7 +339,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 					e.waitForFinished( -1 ) ;
 					output1 = e.readAllStandardOutput() ;
 					e.close() ;
-					return processUpdates( output,output1 ) ;
+					return _processUpdates( output,output1 ) ;
 				}
 			}else{
 				list.append( bogusData ) ;
@@ -388,11 +364,18 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 	}
 }
 
-result autoDownloadPackages()
+Task::future< result >& reportUpdates()
+{
+	return Task::run< result >( [](){
+		return _reportUpdates() ;
+	} ) ;
+}
+
+static result _task( const char * arg )
 {
 	QProcess exe ;
 
-	exe.start( QString( "%1 --download-packages" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ;
+	exe.start( QString( "%1 %2" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH,arg ) ) ;
 	exe.waitForFinished( -1 ) ;
 
 	result r ;
@@ -400,16 +383,32 @@ result autoDownloadPackages()
 	return r ;
 }
 
-result autoUpdatePackages()
+Task::future< bool >& startSynaptic()
 {
-	QProcess exe ;
+	return Task::run< bool >( [](){
+		return _task( "--start-synaptic" ).taskStatus != 0 ;
+	} ) ;
+}
 
-	exe.start( QString( "%1 --auto-update" ).arg( QString( QT_UPDATE_NOTIFIER_HELPER_PATH ) ) ) ;
-	exe.waitForFinished( -1 ) ;
+Task::future< bool >& autoRefreshStartSYnaptic()
+{
+	return Task::run< bool >( [](){
+		return _task( "---start-synaptic --update-at-startup" ).taskStatus != 0 ;
+	} ) ;
+}
 
-	result r ;
-	r.taskStatus = exe.exitCode() ;
-	return r ;
+Task::future< bool >& autoDownloadPackages()
+{
+	return Task::run< bool >( [](){
+		return _task( "--download-packages" ).passed() ;
+	} ) ;
+}
+
+Task::future< result >& autoUpdatePackages()
+{
+	return Task::run< result >( [](){
+		return _task( "--auto-update" ) ;
+	} ) ;
 }
 
 QString checkKernelVersion()
@@ -589,16 +588,18 @@ QString checkCallibeVersion()
 	}
 }
 
-result checkForPackageUpdates()
+Task::future< result >& checkForPackageUpdates()
 {
-	result r ;
+	return Task::run< result >( [](){
+		result r ;
 
-	r.taskOutput.append( checkKernelVersion() ) ;
-	r.taskOutput.append( checkLibreOfficeVersion() ) ;
-	r.taskOutput.append( checkVirtualBoxVersion() ) ;
-	r.taskOutput.append( checkCallibeVersion() ) ;
+		r.taskOutput.append( checkKernelVersion() ) ;
+		r.taskOutput.append( checkLibreOfficeVersion() ) ;
+		r.taskOutput.append( checkVirtualBoxVersion() ) ;
+		r.taskOutput.append( checkCallibeVersion() ) ;
 
-	return r ;
+		return r ;
+	} ) ;
 }
 
 }
