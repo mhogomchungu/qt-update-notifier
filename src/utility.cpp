@@ -111,7 +111,7 @@ size_t fileManager::fileSize()
 	return st.st_size ;
 }
 
-void writeToFile_1( const QString& filepath,const QString& content,bool truncate )
+static void _writeToFile( const QString& filepath,const QString& content,bool truncate )
 {
 	fileManager f( filepath,truncate ) ;
 	if( f.fileIsOpened() ){
@@ -136,18 +136,18 @@ void writeToFile( const QString& filepath,const QString& content,bool truncate )
 			 * add new entry at the front of the log
 			 */
 			QString data = content + utility::readFromFile( filepath ) ;
-			writeToFile_1( filepath,data,true )  ;
+			_writeToFile( filepath,data,true )  ;
 		}else{
 			/*
 			 * add new entries at the back of the log
 			 */
-			writeToFile_1( filepath,content,truncate ) ;
+			_writeToFile( filepath,content,truncate ) ;
 		}
 	}else{
 		/*
 		 * add new entries at the back of the log
 		 */
-		writeToFile_1( filepath,content,truncate ) ;
+		_writeToFile( filepath,content,truncate ) ;
 	}
 }
 
@@ -233,7 +233,7 @@ static result _processUpdates( QByteArray& output1,QByteArray& output2 )
 	return r ;
 }
 
-result _reportUpdates()
+static result _reportUpdates()
 {
 	auto _not_online = [&](){
 		QProcess exe ;
@@ -367,6 +367,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 Task::future< result >& reportUpdates()
 {
 	return Task::run< result >( [](){
+
 		return _reportUpdates() ;
 	} ) ;
 }
@@ -386,32 +387,37 @@ static result _task( const char * arg )
 Task::future< bool >& startSynaptic()
 {
 	return Task::run< bool >( [](){
-		return _task( "--start-synaptic" ).taskStatus != 0 ;
-	} ) ;
-}
 
-Task::future< bool >& autoRefreshStartSYnaptic()
-{
-	return Task::run< bool >( [](){
-		return _task( "---start-synaptic --update-at-startup" ).taskStatus != 0 ;
+		const char * e ;
+
+		if( settings::autoRefreshSynaptic() ){
+
+			e = "--start-synaptic --update-at-startup" ;
+		}else{
+			e = "--start-synaptic" ;
+		}
+
+		return _task( e ).taskStatus != 0 ;
 	} ) ;
 }
 
 Task::future< bool >& autoDownloadPackages()
 {
 	return Task::run< bool >( [](){
+
 		return _task( "--download-packages" ).passed() ;
 	} ) ;
 }
 
-Task::future< result >& autoUpdatePackages()
+Task::future< int >& autoUpdatePackages()
 {
-	return Task::run< result >( [](){
-		return _task( "--auto-update" ) ;
+	return Task::run< int >( [](){
+
+		return _task( "--auto-update" ).taskStatus ;
 	} ) ;
 }
 
-QString checkKernelVersion()
+static QString _checkKernelVersion()
 {
 	QProcess exe ;
 	exe.start( QString( "uname -r" ) ) ;
@@ -462,7 +468,7 @@ QString checkKernelVersion()
 	}
 }
 
-bool updateAvailable( const QString& e,QString * newVersion,QString * installedVersion )
+static bool _updateAvailable( const QString& e,QString * newVersion,QString * installedVersion )
 {
 	QProcess exe ;
 	exe.start( e ) ;
@@ -552,36 +558,36 @@ bool updateAvailable( const QString& e,QString * newVersion,QString * installedV
 	}
 }
 
-QString checkLibreOfficeVersion()
+static QString _checkLibreOfficeVersion()
 {
 	QString iv ;
 	QString nv ;
 
-	if( utility::updateAvailable( "lomanager --vinfo",&nv,&iv ) ){
+	if( _updateAvailable( "lomanager --vinfo",&nv,&iv ) ){
 		return QObject::tr( "Updating Libreoffice from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 	}else{
 		return QString() ;
 	}
 }
 
-QString checkVirtualBoxVersion()
+static QString _checkVirtualBoxVersion()
 {
 	QString iv ;
 	QString nv ;
 
-	if( utility::updateAvailable( "getvirtualbox --vinfo",&nv,&iv ) ){
+	if( _updateAvailable( "getvirtualbox --vinfo",&nv,&iv ) ){
 		return QObject::tr( "Updating VirtualBox from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 	}else{
 		return QString() ;
 	}
 }
 
-QString checkCallibeVersion()
+static QString _checkCallibeVersion()
 {
 	QString iv ;
 	QString nv ;
 
-	if( utility::updateAvailable( "calibre-manager --vinfo",&nv,&iv ) ){
+	if( _updateAvailable( "calibre-manager --vinfo",&nv,&iv ) ){
 		return QObject::tr( "Updating Calibre from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 	}else{
 		return QString() ;
@@ -591,12 +597,13 @@ QString checkCallibeVersion()
 Task::future< result >& checkForPackageUpdates()
 {
 	return Task::run< result >( [](){
+
 		result r ;
 
-		r.taskOutput.append( checkKernelVersion() ) ;
-		r.taskOutput.append( checkLibreOfficeVersion() ) ;
-		r.taskOutput.append( checkVirtualBoxVersion() ) ;
-		r.taskOutput.append( checkCallibeVersion() ) ;
+		r.taskOutput.append( _checkKernelVersion() ) ;
+		r.taskOutput.append( _checkLibreOfficeVersion() ) ;
+		r.taskOutput.append( _checkVirtualBoxVersion() ) ;
+		r.taskOutput.append( _checkCallibeVersion() ) ;
 
 		return r ;
 	} ) ;

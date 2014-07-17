@@ -45,12 +45,15 @@ struct result
 namespace utility
 {
 	void writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
+
 	QString readFromFile( const QString& filepath ) ;
+
 	Task::future< result >& reportUpdates( void ) ;
-	Task::future< result >& autoUpdatePackages( void ) ;
 	Task::future< result >& checkForPackageUpdates( void ) ;
+
+	Task::future< int >& autoUpdatePackages( void ) ;
+
 	Task::future< bool >& autoDownloadPackages( void ) ;
-	Task::future< bool >& autoRefreshStartSYnaptic( void ) ;
 	Task::future< bool >& startSynaptic( void ) ;
 }
 

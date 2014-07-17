@@ -107,16 +107,7 @@ void qtUpdateNotifier::changeIcon( QString icon )
 
 void qtUpdateNotifier::startUpdater()
 {
-	auto _startSynaptic = [](){
-
-		if( settings::autoRefreshSynaptic() ){
-			return utility::autoRefreshStartSYnaptic() ;
-		}else{
-			return utility::startSynaptic() ;
-		}
-	} ;
-
-	_startSynaptic().then( [ this ]( bool failed ){
+	utility::startSynaptic().then( [ this ]( bool failed ){
 
 		if( failed ){
 			this->logActivity( tr( "Synaptic exited with errors" ) ) ;
@@ -573,9 +564,9 @@ void qtUpdateNotifier::autoUpdatePackages()
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
-		utility::autoUpdatePackages().then( [ = ]( const result& r ){
+		utility::autoUpdatePackages().then( [ = ]( int r ){
 
-			if( r.taskStatus == 0 || r.taskStatus == 2 ){
+			if( r == 0 || r == 2 ){
 				this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
 			}else{
 				QString icon = "qt-update-notifier-important-info" ;
@@ -635,34 +626,31 @@ void qtUpdateNotifier::checkForPackageUpdates()
 
 			if( !kernelVersion.isEmpty() ){
 				z = "\n" + kernelVersion ;
-				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
 			const QString& libreofficeVersion = r.taskOutput.at( 1 ) ;
 			if( !libreofficeVersion.isEmpty() ){
 				z += "\n" + libreofficeVersion ;
-				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
 			const QString& virtualBoxVersion = r.taskOutput.at( 2 ) ;
 			if( !virtualBoxVersion.isEmpty() ){
 				z += "\n" + virtualBoxVersion ;
-				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
 			const QString& callibre = r.taskOutput.at( 3 ) ;
 			if( !callibre.isEmpty() ){
 				z += "\n" + callibre ;
-				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			}
 
 			if( z.isEmpty() ){
 
 				this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 			}else{
-				emit updateLogWindow() ;
+				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 				this->logActivity_1( z ) ;
 				this->showIconOnImportantInfo() ;
+				emit updateLogWindow() ;
 			}
 		} ) ;
 	}
