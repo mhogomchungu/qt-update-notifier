@@ -612,7 +612,7 @@ void qtUpdateNotifier::checkForPackageUpdates()
 
 		this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 	}else{
-		return utility::checkForPackageUpdates().then( [ = ]( const result& r ){
+		utility::checkForPackageUpdates().then( [ = ]( const result& r ){
 
 			if( r.taskOutput.size() < 4 ){
 				this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
