@@ -24,6 +24,8 @@
 
 #include <QCoreApplication>
 
+#include <utility>
+
 template< typename T >
 class QObject_raii
 {
