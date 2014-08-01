@@ -27,6 +27,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QIODevice>
+#include <QVector>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -35,93 +37,33 @@
 #include <unistd.h>
 #include <stdio.h>
 
-class bufferManager{
-public:
-	explicit bufferManager( size_t size ) ;
-	wchar_t * getBuffer( void ) ;
-	~bufferManager() ;
-private:
-	wchar_t * m_buffer ;
-};
-
-bufferManager::bufferManager( size_t size )
+static int _openFile( const QString& filePath,bool truncate )
 {
-	m_buffer = new wchar_t[ size ] ;
-}
-
-bufferManager::~bufferManager()
-{
-	delete[] m_buffer ;
-}
-
-wchar_t * bufferManager::getBuffer()
-{
-	return m_buffer ;
-}
-
-class fileManager{
-public:
-	explicit fileManager( const QString& ) ;
-	fileManager( const QString&,bool ) ;
-	int getFd( void ) ;
-	bool fileIsOpened( void ) ;
-	size_t fileSize( void ) ;
-	~fileManager() ;
-private:
-	int m_fd ;
-};
-
-fileManager::fileManager( const QString& filepath,bool truncate )
-{
-	QByteArray f = filepath.toLatin1() ;
 	if( truncate ){
-		m_fd = open( f.constData(),O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
+		return open( filePath.toLatin1().constData(),O_CREAT|O_TRUNC|O_WRONLY,S_IRUSR|S_IWUSR ) ;
 	}else{
-		m_fd = open( f.constData(),O_CREAT|O_APPEND|O_WRONLY,S_IRUSR|S_IWUSR ) ;
+		return open( filePath.toLatin1().constData(),O_CREAT|O_APPEND|O_WRONLY,S_IRUSR|S_IWUSR ) ;
 	}
 }
 
-fileManager::fileManager( const QString& filepath )
+static int _openFile( const QString& filePath )
 {
-	QByteArray f = filepath.toLatin1() ;
-	m_fd = open( f.constData(),O_RDONLY ) ;
-}
-
-fileManager::~fileManager()
-{
-	if( m_fd != -1 ){
-		close( m_fd ) ;
-	}
-}
-
-int fileManager::getFd()
-{
-	return m_fd ;
-}
-
-bool fileManager::fileIsOpened()
-{
-	return m_fd != -1 ;
-}
-
-size_t fileManager::fileSize()
-{
-	struct stat st ;
-	fstat( m_fd,&st ) ;
-	return st.st_size ;
+	return open( filePath.toLatin1().constData(),O_RDONLY ) ;
 }
 
 static void _writeToFile( const QString& filepath,const QString& content,bool truncate )
 {
-	fileManager f( filepath,truncate ) ;
-	if( f.fileIsOpened() ){
-		int fd = f.getFd() ;
-		bufferManager buffer( content.size() ) ;
-		wchar_t * x = buffer.getBuffer() ;
-		if( x ){
-			size_t y = content.toWCharArray( x ) ;
-			write( fd,x,y * sizeof( wchar_t ) ) ;
-		}
+	int fd = _openFile( filepath,truncate ) ;
+
+	if( fd != -1 ){
+
+		QVector< wchar_t > buffer( content.size() ) ;
+		auto x = buffer.data() ;
+
+		size_t y = content.toWCharArray( x ) ;
+		write( fd,x,y * sizeof( wchar_t ) ) ;
+
+		close( fd ) ;
 	}
 }
 
@@ -153,18 +95,23 @@ void writeToFile( const QString& filepath,const QString& content,bool truncate )
 
 QString readFromFile( const QString& filepath )
 {
-	fileManager f( filepath ) ;
-	if( f.fileIsOpened() ){
-		size_t n = f.fileSize() ;
-		int fd = f.getFd() ;
-		bufferManager buffer( n ) ;
-		wchar_t * x = buffer.getBuffer() ;
-		if( x ){
-			size_t z = read( fd,x,n ) ;
-			return QString::fromWCharArray( x,z / sizeof( wchar_t ) ) ;
-		}else{
-			return QObject::tr( "Log is empty" ) ;
-		}
+	int fd =_openFile( filepath ) ;
+
+	if( fd != -1 ){
+
+		const int e = sizeof( wchar_t ) ;
+		struct stat st ;
+
+		fstat( fd,&st ) ;
+
+		QVector< wchar_t > buffer( st.st_size ) ;
+		auto x = buffer.data() ;
+
+		auto z = read( fd,x,st.st_size ) ;
+
+		close( fd ) ;
+
+		return QString::fromWCharArray( x,z / e ) ;
 	}else{
 		return QObject::tr( "Log is empty" ) ;
 	}
@@ -366,10 +313,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 
 Task::future< result >& reportUpdates()
 {
-	return Task::run< result >( [](){
-
-		return _reportUpdates() ;
-	} ) ;
+	return Task::run< result >( [](){ return _reportUpdates() ; } ) ;
 }
 
 static result _task( const char * arg )
@@ -403,18 +347,12 @@ Task::future< bool >& startSynaptic()
 
 Task::future< bool >& autoDownloadPackages()
 {
-	return Task::run< bool >( [](){
-
-		return _task( "--download-packages" ).passed() ;
-	} ) ;
+	return Task::run< bool >( [](){	return _task( "--download-packages" ).passed() ; } ) ;
 }
 
 Task::future< int >& autoUpdatePackages()
 {
-	return Task::run< int >( [](){
-
-		return _task( "--auto-update" ).taskStatus ;
-	} ) ;
+	return Task::run< int >( [](){ return _task( "--auto-update" ).taskStatus ; } ) ;
 }
 
 static QString _checkKernelVersion()
