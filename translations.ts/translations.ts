@@ -14,45 +14,45 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="200"/>
+        <location filename="../src/utility.cpp" line="250"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="239"/>
+        <location filename="../src/utility.cpp" line="273"/>
         <source>Recommending trying again later as the Repository appear to be in an inconsistent state.
 If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="253"/>
-        <location filename="../src/utility.cpp" line="304"/>
+        <location filename="../src/utility.cpp" line="284"/>
+        <location filename="../src/utility.cpp" line="322"/>
         <source>Warning: apt-get update finished with errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="293"/>
+        <location filename="../src/utility.cpp" line="312"/>
         <source>No updates found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="400"/>
+        <location filename="../src/utility.cpp" line="430"/>
         <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="505"/>
+        <location filename="../src/utility.cpp" line="533"/>
         <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="517"/>
+        <location filename="../src/utility.cpp" line="545"/>
         <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="529"/>
+        <location filename="../src/utility.cpp" line="557"/>
         <source>Updating Calibre from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation type="unfinished"></translation>
     </message>

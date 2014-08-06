@@ -60,7 +60,7 @@ static void _writeToFile( const QString& filepath,const QString& content,bool tr
 		QVector< wchar_t > buffer( content.size() ) ;
 		auto x = buffer.data() ;
 
-		size_t y = content.toWCharArray( x ) ;
+		auto y = content.toWCharArray( x ) ;
 		write( fd,x,y * sizeof( wchar_t ) ) ;
 
 		close( fd ) ;
@@ -95,7 +95,7 @@ void writeToFile( const QString& filepath,const QString& content,bool truncate )
 
 QString readFromFile( const QString& filepath )
 {
-	int fd =_openFile( filepath ) ;
+	int fd = _openFile( filepath ) ;
 
 	if( fd != -1 ){
 
@@ -117,7 +117,7 @@ QString readFromFile( const QString& filepath )
 	}
 }
 
-static result _processUpdates( QByteArray& output1,QByteArray& output2 )
+static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 {
 	QStringList l = QString( output1 ).split( "\n" ) ;
 
@@ -180,6 +180,56 @@ static result _processUpdates( QByteArray& output1,QByteArray& output2 )
 	return r ;
 }
 
+static QByteArray _upgrade_0( const QString& configPath,bool setEnglishLanguage )
+{
+	QProcess exe ;
+
+	QString e = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( configPath ) ;
+
+	if( setEnglishLanguage ){
+
+		QProcessEnvironment env ;
+
+		env.insert( QString( "LANG" ),QString( "en_US.UTF-8" ) ) ;
+		env.insert( QString( "LANGUAGE" ),QString( "en_US.UTF-8:en_US:en" ) ) ;
+
+		exe.setProcessEnvironment( env ) ;
+	}
+
+	exe.start( e ) ;
+	exe.waitForFinished( -1 ) ;
+	return exe.readAllStandardOutput() ;
+}
+
+static QByteArray _upgrade( const QString& configPath )
+{
+	return _upgrade_0( configPath,true ) ;
+}
+
+static QByteArray _upgrade_1( const QString& configPath )
+{
+	return _upgrade_0( configPath,false ) ;
+}
+
+static int _update( const QString& configPath )
+{
+	QProcess exe ;
+
+	QProcessEnvironment env ;
+
+	env.insert( QString( "LANG" ),QString( "en_US.UTF-8" ) ) ;
+	env.insert( QString( "LANGUAGE" ),QString( "en_US.UTF-8:en_US:en" ) ) ;
+
+	exe.setProcessEnvironment( env ) ;
+
+	QString e = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( configPath ) ;
+
+	exe.start( e ) ;
+	exe.waitForFinished( -1 ) ;
+
+	return exe.exitStatus() == 0 ;
+}
+
 static result _reportUpdates()
 {
 	auto _not_online = [&](){
@@ -204,14 +254,11 @@ static result _reportUpdates()
 	QString language = settings::prefferedLanguage() ;
 	QString configPath = settings::configPath() ;
 
-	QString aptUpdate = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( configPath ) ;
-	QString aptUpgrade = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( configPath ) ;
-
 	QDir dir ;
 
-	dir.mkdir( configPath + QString( "/apt" ) ) ;
-	dir.mkdir( configPath + QString( "/apt/lists" ) ) ;
-	dir.mkdir( configPath + QString( "/apt/lists/partial" ) ) ;
+	dir.mkdir( configPath + "/apt"  ) ;
+	dir.mkdir( configPath + "/apt/lists" ) ;
+	dir.mkdir( configPath + "/apt/lists/partial" ) ;
 
 	const char * error1 = "The following packages have unmet dependencies" ;
 	const char * error2 = "E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages." ;
@@ -220,19 +267,6 @@ static result _reportUpdates()
 	const char * success = "\nThe following packages will be" ;
 
 	QStringList list ;
-	QProcess exe ;
-
-	QProcessEnvironment env ;
-	env.insert( QString( "LANG" ),QString( "en_US.UTF-8" ) ) ;
-	env.insert( QString( "LANGUAGE" ),QString( "en_US.UTF-8:en_US:en" ) ) ;
-
-	exe.setProcessEnvironment( env ) ;
-
-	exe.start( aptUpdate ) ;
-	exe.waitForFinished( -1 ) ;
-
-	int st = exe.exitCode() ;
-	exe.close() ;
 
 	QByteArray bogusData = "xyz" ;
 
@@ -241,12 +275,9 @@ Recommending trying again later as the Repository appear to be in an inconsisten
 If the problem persists, run Synaptic and see if it is still possible to update.\n\
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance." ) ;
 
-	if( st == 0 ){
+	if( _update( configPath ) ){
 
-		exe.start( aptUpgrade ) ;
-		exe.waitForFinished( -1 ) ;
-		QByteArray output = exe.readAllStandardOutput() ;
-		exe.close() ;
+		QByteArray output = _upgrade( configPath ) ;
 
 		if( output.isEmpty() ){
 			list.append( bogusData ) ;
@@ -263,13 +294,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 				if( language == "english_US" ){
 					list.append( output ) ;
 				}else{
-					QByteArray output1 ;
-					QProcess e ;
-					e.start( aptUpgrade ) ;
-					e.waitForFinished( -1 ) ;
-					output1 = e.readAllStandardOutput() ;
-					e.close() ;
-					list.append( output1 ) ;
+					list.append( _upgrade_1( configPath ) ) ;
 				}
 				result r ;
 				r.taskStatus = 1 ;
@@ -280,18 +305,11 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 				if( language == "english_US" ){
 					return _processUpdates( output,output ) ;
 				}else{
-					QByteArray output1 ;
-					QProcess e ;
-					e.start( aptUpgrade ) ;
-					e.waitForFinished( -1 ) ;
-					output1 = e.readAllStandardOutput() ;
-					e.close() ;
-					return _processUpdates( output,output1 ) ;
+					return _processUpdates( output,_upgrade_1( configPath ) ) ;
 				}
 			}else{
 				list.append( bogusData ) ;
-				QString s = QObject::tr( "No updates found" ) ;
-				list.append( s ) ;
+				list.append( QObject::tr( "No updates found" ) ) ;
 				result r ;
 				r.taskStatus = 0 ;
 				r.repositoryState = result::noUpdatesFound ;
@@ -301,8 +319,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 		}
 	}else{
 		list.append( bogusData ) ;
-		QString s = QObject::tr( "Warning: apt-get update finished with errors" ) ;
-		list.append( s ) ;
+		list.append( QObject::tr( "Warning: apt-get update finished with errors" ) ) ;
 		result r ;
 		r.taskStatus = 1 ;
 		r.repositoryState = result::undefinedState ;
@@ -347,7 +364,7 @@ Task::future< bool >& startSynaptic()
 
 Task::future< bool >& autoDownloadPackages()
 {
-	return Task::run< bool >( [](){	return _task( "--download-packages" ).passed() ; } ) ;
+	return Task::run< bool >( [](){ return _task( "--download-packages" ).passed() ; } ) ;
 }
 
 Task::future< int >& autoUpdatePackages()
@@ -370,33 +387,46 @@ static QString _checkKernelVersion()
 
 		QStringList ver = version.split( "." ) ;
 
+		if( ver.size() < 2 ){
+			return QString() ;
+		}
+
 		int major = ver.at( 0 ).toInt() ;
 		int minor = ver.at( 1 ).toInt() ;
 		int patch ;
 
-		if( ver.size() >= 3 ){
+		if( ver.size() > 2 ){
 			patch = ver.at( 2 ).toInt() ;
 		}else{
 			patch = 0 ;
 		}
 
-		/*
-		 * start warning if a user uses a kernel less than 3.12.16
-		 */
-		int base_kernel_major_version = 3 ;
-		int base_kernel_minor_version = 12 ;
-		int base_kernel_patch_version = 16 ;
-		bool update = false ;
+		auto _update = [&](){
+			/*
+			 * start warning if a user uses a kernel less than 3.12.16
+			 */
+			int base_kernel_major_version = 3 ;
+			int base_kernel_minor_version = 12 ;
+			int base_kernel_patch_version = 16 ;
 
-		if( major < base_kernel_major_version ){
-			update = true ;
-		}else if( minor < base_kernel_minor_version && major <= base_kernel_major_version ){
-			update = true ;
-		}else if( patch < base_kernel_patch_version && major <= base_kernel_major_version && minor <= base_kernel_minor_version ){
-			update = true ;
-		}
+			if( major < base_kernel_major_version ){
 
-		if( update ){
+				return true ;
+			}else if( minor < base_kernel_minor_version &&
+				  major <= base_kernel_major_version ){
+
+				return true ;
+			}else if( patch < base_kernel_patch_version &&
+				  major <= base_kernel_major_version &&
+				  minor <= base_kernel_minor_version ){
+
+				return true ;
+			}
+
+			return false ;
+		} ;
+
+		if( _update() ){
 			return QObject::tr( "Recommending updating the kernel from version %1 to a more recent version." ).arg( version ) ;
 		}else{
 			return QString() ;
@@ -466,29 +496,27 @@ static bool _updateAvailable( const QString& e,QString * newVersion,QString * in
 					new_patch_version_number = 0 ;
 				}
 
-				bool update = false ;
-
 				if( installed_major_version_number < new_major_version_number ){
 					/*
 					 * installed major version number is less than new major version number
 					 */
-					update = true ;
+					return true ;
 				}else if( installed_minor_version_number < new_minor_version_number &&
 					  installed_major_version_number <= new_major_version_number ){
 					/*
 					 * installed minor version number is less than new minor version number
 					 */
-					update = true ;
+					return true ;
 				}else if( installed_patch_version_number < new_patch_version_number &&
 					  installed_major_version_number <= new_major_version_number &&
 					  installed_minor_version_number <= new_minor_version_number ){
 					/*
 					 * installed path version number is less than new path version number
 					 */
-					update = true ;
+					return true ;
+				}else{
+					return false ;
 				}
-
-				return update ;
 			}
 		}else{
 			return false ;

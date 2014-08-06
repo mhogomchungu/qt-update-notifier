@@ -14,12 +14,12 @@
         <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;bijwerken %1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;vervangen %2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;installeren %3&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="200"/>
+        <location filename="../src/utility.cpp" line="250"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Controle is overgeslagen, er is geen internetverbinding</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="239"/>
+        <location filename="../src/utility.cpp" line="273"/>
         <source>Recommending trying again later as the Repository appear to be in an inconsistent state.
 If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
@@ -28,33 +28,33 @@ Indien het probleem blijft bestaan, open Synaptic en probeer of het bijwerken mo
 Indien het probleem blijft bestaan en het bijwerken in Synaptic niet mogelijk is, meldt het probleem dan op het forum door het aanmaken van een topic.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="253"/>
-        <location filename="../src/utility.cpp" line="304"/>
+        <location filename="../src/utility.cpp" line="284"/>
+        <location filename="../src/utility.cpp" line="322"/>
         <source>Warning: apt-get update finished with errors</source>
         <translation>Waarschuwing: apt-get update is met fouten beëindigd</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="293"/>
+        <location filename="../src/utility.cpp" line="312"/>
         <source>No updates found</source>
         <translation>Geen bijwerkingen gevonden</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="400"/>
+        <location filename="../src/utility.cpp" line="430"/>
         <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation>Bijwerken van kernel versie &quot;%1&quot; naar een meer recentere versie wordt aanbevolen.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="505"/>
+        <location filename="../src/utility.cpp" line="533"/>
         <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Bijwerken van LibreOffice versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="517"/>
+        <location filename="../src/utility.cpp" line="545"/>
         <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Bijwerken van VirtualBox versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="529"/>
+        <location filename="../src/utility.cpp" line="557"/>
         <source>Updating Calibre from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Bijwerken van Calibre versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>

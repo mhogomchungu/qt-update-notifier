@@ -14,12 +14,12 @@
         <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 bude aktualizované&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 bude prepísané&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 bude nainštalované&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="200"/>
+        <location filename="../src/utility.cpp" line="250"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Kontrola preskočená, užívateľ nie je pripojený k internetu</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="239"/>
+        <location filename="../src/utility.cpp" line="273"/>
         <source>Recommending trying again later as the Repository appear to be in an inconsistent state.
 If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
@@ -28,33 +28,33 @@ Ak problém pretrváva, spustite Synaptic a uvidíte, či je možné aktualizova
 Ak problém pretrváva, a Synaptic nie je schopný ho vyriešiť, potom požiadajte o pomoc na fóre</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="253"/>
-        <location filename="../src/utility.cpp" line="304"/>
+        <location filename="../src/utility.cpp" line="284"/>
+        <location filename="../src/utility.cpp" line="322"/>
         <source>Warning: apt-get update finished with errors</source>
         <translation>Varovanie: apt-get update bol ukončený s chybami</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="293"/>
+        <location filename="../src/utility.cpp" line="312"/>
         <source>No updates found</source>
         <translation>Aktualizácie nie sú k dispozícii</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="400"/>
+        <location filename="../src/utility.cpp" line="430"/>
         <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation>Doporučujeme aktualizovať jadro %1 na novšiu verziu.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="505"/>
+        <location filename="../src/utility.cpp" line="533"/>
         <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Doporučujeme aktualizovať LibreOffice &quot;%1&quot; na novší &quot;%2&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="517"/>
+        <location filename="../src/utility.cpp" line="545"/>
         <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Doporučujeme aktualizovanie VirtualBoxu &quot;%1&quot; na novšiu verziu &quot;%2&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="529"/>
+        <location filename="../src/utility.cpp" line="557"/>
         <source>Updating Calibre from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Doporučujeme aktualizovať Calibre &quot;%1&quot; na novší &quot;%2&quot;.</translation>
     </message>

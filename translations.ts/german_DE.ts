@@ -14,12 +14,12 @@
         <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 werden aktualisiert&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 werden ersetzt&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 werden neu installiert&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="200"/>
+        <location filename="../src/utility.cpp" line="250"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Suche übersprungen, Sie sind nicht mit dem Internet verbunden.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="239"/>
+        <location filename="../src/utility.cpp" line="273"/>
         <source>Recommending trying again later as the Repository appear to be in an inconsistent state.
 If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
@@ -31,33 +31,33 @@ Falls mit Synaptic die Probleme nicht gelöst werden können, eröffnen Sie bitt
 im Forum.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="253"/>
-        <location filename="../src/utility.cpp" line="304"/>
+        <location filename="../src/utility.cpp" line="284"/>
+        <location filename="../src/utility.cpp" line="322"/>
         <source>Warning: apt-get update finished with errors</source>
         <translation>Warnung: apt-get update wurde wegen des Auftretens von Fehlern beendet.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="293"/>
+        <location filename="../src/utility.cpp" line="312"/>
         <source>No updates found</source>
         <translation>Es wurden keine Aktualisierungen gefunden.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="400"/>
+        <location filename="../src/utility.cpp" line="430"/>
         <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation>Es wird empfohlen den Kernel von Version %1 auf eine aktuellere Version zu aktuallisieren.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="505"/>
+        <location filename="../src/utility.cpp" line="533"/>
         <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Es wird empfohlen Libre Office von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="517"/>
+        <location filename="../src/utility.cpp" line="545"/>
         <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Es wird empfohlen VirtualBox von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="529"/>
+        <location filename="../src/utility.cpp" line="557"/>
         <source>Updating Calibre from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Es wird empfohlen Calibre von Version &quot;%1&quot; auf die verfügbare Version &quot;%2&quot; zu aktuallisieren.</translation>
     </message>
