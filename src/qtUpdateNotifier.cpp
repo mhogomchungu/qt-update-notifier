@@ -109,13 +109,12 @@ void qtUpdateNotifier::changeIcon( QString icon )
 
 void qtUpdateNotifier::startUpdater()
 {
-	utility::startSynaptic().then( [ this ]( bool failed ){
+	if( Task::await< bool >( utility::startSynaptic() ) ){
 
-		if( failed ){
-			this->logActivity( tr( "Synaptic exited with errors" ) ) ;
-		}
-		this->doneUpdating() ;
-	} ) ;
+		this->logActivity( tr( "Synaptic exited with errors" ) ) ;
+	}
+
+	this->doneUpdating() ;
 }
 
 void qtUpdateNotifier::networResponse( QNetworkReply * r )
@@ -244,7 +243,7 @@ void qtUpdateNotifier::toggleAutoStart( bool autoStartEnable )
 
 void qtUpdateNotifier::openConfigureDialog()
 {
-	configureDialog * cfg = new configureDialog() ;
+	auto cfg = new configureDialog() ;
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
 	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
@@ -369,7 +368,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			 * the wait interval has not passed,wait for the remainder of the interval before
 			 * checking for updates
 			 */
-			QTimer * t = new QTimer() ;
+			auto t = new QTimer() ;
 			t->setSingleShot( true ) ;
 			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
@@ -479,66 +478,64 @@ void qtUpdateNotifier::checkForUpdates()
 
 		m_threadIsRunning = true ;
 
-		utility::reportUpdates().then( [ = ]( const result& r ){
+		auto r = Task::await< result >( utility::reportUpdates() ) ;
 
-			m_threadIsRunning = false ;
-			QString icon ;
+		m_threadIsRunning = false ;
 
-			this->saveAptGetLogOutPut( r.taskOutput ) ;
+		this->saveAptGetLogOutPut( r.taskOutput ) ;
 
-			switch( r.repositoryState ){
-			case result::updatesFound :
+		switch( r.repositoryState ){
+		case result::updatesFound :
 
-				icon = QString( "qt-update-notifier-updates-are-available" ) ;
-				statusicon::setStatus( statusicon::NeedsAttention ) ;
-				this->showToolTip( icon,tr( "There are updates in the repository" ),r.taskOutput ) ;
-				this->autoDownloadPackages() ;
+			icon = QString( "qt-update-notifier-updates-are-available" ) ;
+			statusicon::setStatus( statusicon::NeedsAttention ) ;
+			this->showToolTip( icon,tr( "There are updates in the repository" ),r.taskOutput ) ;
+			this->autoDownloadPackages() ;
 
-				break ;
-			case result::inconsistentState :
+			break ;
+		case result::inconsistentState :
 
-				icon = QString( "qt-update-notifier-important-info" ) ;
-				statusicon::setStatus( statusicon::Passive ) ;
-				this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
-				this->logActivity_1( r.taskOutput.first() ) ;
-				this->showIconOnImportantInfo() ;
+			icon = QString( "qt-update-notifier-important-info" ) ;
+			statusicon::setStatus( statusicon::Passive ) ;
+			this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
+			this->logActivity_1( r.taskOutput.first() ) ;
+			this->showIconOnImportantInfo() ;
 
-				break ;
-			case result::noUpdatesFound :
+			break ;
+		case result::noUpdatesFound :
 
-				statusicon::setStatus( statusicon::Passive ) ;
-				/*
-				 * below function is called from checkForPackageUpdates() routine
-				 * this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
-				 */
-				this->checkForPackageUpdates() ;
-				this->accessTwitter() ;
+			statusicon::setStatus( statusicon::Passive ) ;
+			/*
+			 * below function is called from checkForPackageUpdates() routine
+			 * this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
+			 */
+			this->checkForPackageUpdates() ;
+			this->accessTwitter() ;
 
-				break ;
-			case result::noNetworkConnection :
+			break ;
+		case result::noNetworkConnection :
 
-				icon = m_defaulticon ;
-				statusicon::setStatus( statusicon::Passive ) ;
-				this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
+			icon = m_defaulticon ;
+			statusicon::setStatus( statusicon::Passive ) ;
+			this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
 
-				break ;
-			case result::undefinedState :
+			break ;
+		case result::undefinedState :
 
-				icon = m_defaulticon ;
-				statusicon::setStatus( statusicon::Passive ) ;
-				this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
+			icon = m_defaulticon ;
+			statusicon::setStatus( statusicon::Passive ) ;
+			this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 
-				break ;
-			default:
-				/*
-				 * currently,we dont get here,added for completeness' sake
-				 */
-				icon = m_defaulticon ;
-				statusicon::setStatus( statusicon::Passive ) ;
-				this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
-				this->checkForPackageUpdates() ;
-			}
-		} ) ;
+			break ;
+		default:
+			/*
+			 * currently,we dont get here,added for completeness' sake
+			 */
+			icon = m_defaulticon ;
+			statusicon::setStatus( statusicon::Passive ) ;
+			this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
+			this->checkForPackageUpdates() ;
+		}
 	}
 }
 
@@ -566,18 +563,17 @@ void qtUpdateNotifier::autoUpdatePackages()
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
-		utility::autoUpdatePackages().then( [ = ]( int r ){
+		auto r = Task::await< int >( utility::autoUpdatePackages() ) ;
 
-			if( r == 0 || r == 2 ){
-				this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
-			}else{
-				QString icon = "qt-update-notifier-important-info" ;
-				this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
-				this->showIconOnImportantInfo() ;
-			}
+		if( r == 0 || r == 2 ){
+			this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
+		}else{
+			QString icon = "qt-update-notifier-important-info" ;
+			this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
+			this->showIconOnImportantInfo() ;
+		}
 
-			statusicon::setStatus( statusicon::Passive ) ;
-		} ) ;
+		statusicon::setStatus( statusicon::Passive ) ;
 	}else{
 		this->logActivity( this->logMsg() ) ;
 	}
@@ -592,17 +588,14 @@ void qtUpdateNotifier::autoDownloadPackages()
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
 
-		utility::autoDownloadPackages().then( [ = ]( bool passed ){
+		if( Task::await< bool >( utility::autoDownloadPackages() ) ){
 
-			if( passed ){
-
-				this->showToolTip( icon,tr( "Downloading of packages completed" ) ) ;
-				statusicon::setStatus( statusicon::NeedsAttention ) ;
-				this->autoUpdatePackages() ;
-			}else{
-				this->showToolTip( icon,tr( "Downloading of packages failed" ) ) ;
-			}
-		} ) ;
+			this->showToolTip( icon,tr( "Downloading of packages completed" ) ) ;
+			statusicon::setStatus( statusicon::NeedsAttention ) ;
+			this->autoUpdatePackages() ;
+		}else{
+			this->showToolTip( icon,tr( "Downloading of packages failed" ) ) ;
+		}
 	}else{
 		this->autoUpdatePackages() ;
 	}
@@ -614,47 +607,18 @@ void qtUpdateNotifier::checkForPackageUpdates()
 
 		this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 	}else{
-		utility::checkForPackageUpdates().then( [ = ]( const result& r ){
+		auto r = Task::await< QString >( utility::checkForPackageUpdates() ) ;
 
-			if( r.taskOutput.size() < 4 ){
-				this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
-				return ;
-			}
+		if( r.isEmpty() ){
 
+			this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
+		}else{
 			QString	icon = QString( "qt-update-notifier-important-info" ) ;
-			QString z ;
-
-			const QString& kernelVersion = r.taskOutput.at( 0 ) ;
-
-			if( !kernelVersion.isEmpty() ){
-				z = "\n" + kernelVersion ;
-			}
-
-			const QString& libreofficeVersion = r.taskOutput.at( 1 ) ;
-			if( !libreofficeVersion.isEmpty() ){
-				z += "\n" + libreofficeVersion ;
-			}
-
-			const QString& virtualBoxVersion = r.taskOutput.at( 2 ) ;
-			if( !virtualBoxVersion.isEmpty() ){
-				z += "\n" + virtualBoxVersion ;
-			}
-
-			const QString& callibre = r.taskOutput.at( 3 ) ;
-			if( !callibre.isEmpty() ){
-				z += "\n" + callibre ;
-			}
-
-			if( z.isEmpty() ){
-
-				this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
-			}else{
-				this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
-				this->logActivity_1( z ) ;
-				this->showIconOnImportantInfo() ;
-				emit updateLogWindow() ;
-			}
-		} ) ;
+			this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
+			this->logActivity_1( r ) ;
+			this->showIconOnImportantInfo() ;
+			emit updateLogWindow() ;
+		}
 	}
 }
 

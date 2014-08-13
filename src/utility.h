@@ -49,7 +49,7 @@ namespace utility
 	QString readFromFile( const QString& filepath ) ;
 
 	Task::future< result >& reportUpdates( void ) ;
-	Task::future< result >& checkForPackageUpdates( void ) ;
+	Task::future< QString >& checkForPackageUpdates( void ) ;
 
 	Task::future< int >& autoUpdatePackages( void ) ;
 

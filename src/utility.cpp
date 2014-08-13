@@ -232,7 +232,7 @@ static int _update( const QString& configPath )
 
 static result _reportUpdates()
 {
-	auto _not_online = [&](){
+	auto _not_online = [](){
 		QProcess exe ;
 		exe.start( settings::networkConnectivityChecker() ) ;
 		if( exe.waitForFinished() ){
@@ -333,16 +333,14 @@ Task::future< result >& reportUpdates()
 	return Task::run< result >( [](){ return _reportUpdates() ; } ) ;
 }
 
-static result _task( const char * arg )
+static int _task( const char * arg )
 {
 	QProcess exe ;
 
 	exe.start( QString( "%1 %2" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH,arg ) ) ;
 	exe.waitForFinished( -1 ) ;
 
-	result r ;
-	r.taskStatus = exe.exitCode() ;
-	return r ;
+	return exe.exitCode() ;
 }
 
 Task::future< bool >& startSynaptic()
@@ -358,24 +356,24 @@ Task::future< bool >& startSynaptic()
 			e = "--start-synaptic" ;
 		}
 
-		return _task( e ).taskStatus != 0 ;
+		return _task( e ) != 0 ;
 	} ) ;
 }
 
 Task::future< bool >& autoDownloadPackages()
 {
-	return Task::run< bool >( [](){ return _task( "--download-packages" ).passed() ; } ) ;
+	return Task::run< bool >( [](){ return _task( "--download-packages" ) == 0 ; } ) ;
 }
 
 Task::future< int >& autoUpdatePackages()
 {
-	return Task::run< int >( [](){ return _task( "--auto-update" ).taskStatus ; } ) ;
+	return Task::run< int >( [](){ return _task( "--auto-update" ) ; } ) ;
 }
 
 static QString _checkKernelVersion()
 {
 	QProcess exe ;
-	exe.start( QString( "uname -r" ) ) ;
+	exe.start( "uname -r" ) ;
 	exe.waitForFinished( -1 ) ;
 	QString version = exe.readAll() ;
 	exe.close() ;
@@ -560,16 +558,35 @@ static QString _checkCallibeVersion()
 	}
 }
 
-Task::future< result >& checkForPackageUpdates()
+Task::future< QString >& checkForPackageUpdates()
 {
-	return Task::run< result >( [](){
+	return Task::run< QString >( [](){
 
-		result r ;
+		QString r ;
 
-		r.taskOutput.append( _checkKernelVersion() ) ;
-		r.taskOutput.append( _checkLibreOfficeVersion() ) ;
-		r.taskOutput.append( _checkVirtualBoxVersion() ) ;
-		r.taskOutput.append( _checkCallibeVersion() ) ;
+		QString e = _checkKernelVersion() ;
+
+		if( !e.isEmpty() ){
+			r += "\n" + e ;
+		}
+
+		e = _checkLibreOfficeVersion() ;
+
+		if( !e.isEmpty() ){
+			r += "\n" + e ;
+		}
+
+		e = _checkVirtualBoxVersion() ;
+
+		if( !e.isEmpty() ){
+			r += "\n" + e ;
+		}
+
+		e = _checkCallibeVersion() ;
+
+		if( !e.isEmpty() ){
+			r += "\n" + e ;
+		}
 
 		return r ;
 	} ) ;
