@@ -211,7 +211,7 @@ static QByteArray _upgrade_1( const QString& configPath )
 	return _upgrade_0( configPath,false ) ;
 }
 
-static int _update( const QString& configPath )
+static bool _update( const QString& configPath )
 {
 	QProcess exe ;
 
