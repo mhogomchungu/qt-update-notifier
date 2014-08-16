@@ -82,7 +82,7 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 
 void qtUpdateNotifier::logWindowShow()
 {
-	logWindow * w = new logWindow( tr( "Update output log window" ) ) ;
+	auto w = new logWindow( tr( "Update output log window" ) ) ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow() ) ) ;
 	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow() ) ) ;
 	w->showLogWindow() ;
@@ -90,7 +90,7 @@ void qtUpdateNotifier::logWindowShow()
 
 void qtUpdateNotifier::aptGetLogWindow()
 {
-	logWindow * w = new logWindow( tr( "Apt-get upgrade output log window" ) )  ;
+	auto w = new logWindow( tr( "Apt-get upgrade output log window" ) )  ;
 	connect( this,SIGNAL( updateLogWindow() ),w,SLOT( updateLogWindow_1() ) ) ;
 	connect( this,SIGNAL( configOptionsChanged_1() ),w,SLOT( updateLogWindow_1() ) ) ;
 	w->showAptGetWindow() ;
