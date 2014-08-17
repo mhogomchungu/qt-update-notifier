@@ -88,4 +88,4 @@
 -version 1.5.8
 	- add an alternative optional icon to show there are no updates.The icon can be acticated by changing a config file setting to "defaultIcon=ob-qt-update-notifier.png"
 -version 1.5.9
-	- maintance release
+	- maintenance release
