@@ -686,32 +686,39 @@ QString qtUpdateNotifier::nextUpdateTime( void )
 	return this->nextUpdateTime( m_sleepDuration ) ;
 }
 
-QString qtUpdateNotifier::nextUpdateTime( int interval )
+QString qtUpdateNotifier::nextUpdateTime( u_int64_t interval )
 {
 	QDateTime d ;
-	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + interval ) ;
+	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + qint64( interval ) ) ;
 	return d.toString( Qt::TextDate ) ;
 }
 
-QString qtUpdateNotifier::logMsg( int interval )
+QString qtUpdateNotifier::logMsg( u_int64_t interval )
 {
+	QString n = this->nextUpdateTime( interval ) ;
 	char num[ 64 ] ;
 	float f = static_cast<float>( interval ) ;
-	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
-	QString n = this->nextUpdateTime( interval ) ;
-	return tr( "Scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+	f = f / ( 1000 * 60 * 60 ) ;
+	if( f < 10000 ){
+		/*
+		 * f represents a value that holds hours,getting too large of a number implies an error
+		 * somewhere
+		 */
+		snprintf( num,64,"%.2f",f ) ;
+		return tr( "Scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+	}else{
+		/*
+		 * There is an error somewhere
+		 */
+		return tr( "Next update check will be at %1" ).arg( n ) ;
+	}
 }
 
 QString qtUpdateNotifier::logMsg( void )
 {
 	u_int64_t x = this->getCurrentTime() ;
 	u_int64_t y = this->nextScheduledUpdateTime() ;
-	u_int64_t e = y - x ;
-	char num[ 64 ] ;
-	float f = static_cast<float>( e ) ;
-	snprintf( num,64,"%.2f",f / ( 1000 * 60 * 60 ) ) ;
-	QString n = this->nextUpdateTime( e ) ;
-	return tr( "Scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+	return this->logMsg( y - x ) ;
 }
 
 void qtUpdateNotifier::scheduleUpdates( int interval )
