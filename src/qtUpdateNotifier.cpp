@@ -61,6 +61,7 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 	this->changeIcon( m_defaulticon ) ;
 
 	m_sleepDuration  = settings::updateCheckInterval() ;
+	m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
 
 	this->setupTranslationText() ;
 
@@ -446,11 +447,12 @@ void qtUpdateNotifier::setDebug( bool debug )
 
 u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
 {
-	return settings::nextScheduledUpdateTime() ;
+	return m_nextScheduledUpdateTime ;
 }
 
 void qtUpdateNotifier::writeUpdateTimeToConfigFile( u_int64_t time )
 {
+	m_nextScheduledUpdateTime = time ;
 	settings::writeUpdateTimeToConfigFile( time ) ;
 }
 

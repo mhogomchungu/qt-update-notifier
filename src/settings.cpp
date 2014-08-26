@@ -335,14 +335,14 @@ u_int32_t settings::updateCheckInterval()
 
 u_int64_t settings::nextScheduledUpdateTime()
 {
-	_settings.sync();
+	_settings.sync() ;
 	return _settings.value( QString( "nextUpdateTime" ) ).toString().toULongLong() ;
 }
 
 void settings::writeUpdateTimeToConfigFile( u_int64_t time )
 {
 	_settings.setValue( QString( "nextUpdateTime" ),QString::number( time ) ) ;
-	_settings.sync();
+	_settings.sync() ;
 }
 
 bool settings::autoUpdatePackages()

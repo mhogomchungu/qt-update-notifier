@@ -127,6 +127,7 @@ private:
 	QTimer * m_timer ;
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
+	u_int64_t m_nextScheduledUpdateTime ;
 	QTranslator * m_translator ;
 	QNetworkAccessManager * m_manager ;
 	bool m_debug ;
