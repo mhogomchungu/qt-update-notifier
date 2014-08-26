@@ -79,6 +79,8 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 
 	m_showIconOnImportantInfo = settings::showIconOnImportantInfo() ;
 	m_networkConnectivityChecker = settings::networkConnectivityChecker() ;
+
+	m_lastTwitterUpdate = settings::getLastTwitterUpdate() ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -110,12 +112,23 @@ void qtUpdateNotifier::changeIcon( QString icon )
 
 void qtUpdateNotifier::startUpdater()
 {
-	if( Task::await< bool >( utility::startSynaptic() ) ){
+	if( utility::startSynaptic().await() ){
 
 		this->logActivity( tr( "Synaptic exited with errors" ) ) ;
 	}
 
 	this->doneUpdating() ;
+}
+
+QString qtUpdateNotifier::getLastTwitterUpdate()
+{
+	return m_lastTwitterUpdate ;
+}
+
+void qtUpdateNotifier::setLastTwitterUpdate( const QString& e )
+{
+	m_lastTwitterUpdate = e ;
+	settings::setLastTwitterUpdate( e ) ;
 }
 
 void qtUpdateNotifier::networResponse( QNetworkReply * r )
@@ -156,11 +169,9 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 		QList<QVariant> l = p.toList() ;
 
-		auto s = settings::getLastTwitterUpdate().toULongLong() ;
+		auto s = this->getLastTwitterUpdate().toULongLong() ;
 
-		auto u = l.first().toMap()[ "id_str" ].toString() ;
-
-		settings::setLastTwitterUpdate( u ) ;
+		this->setLastTwitterUpdate( l.first().toMap()[ "id_str" ].toString() ) ;
 
 		for( const auto& it : l ){
 
@@ -480,7 +491,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 		m_threadIsRunning = true ;
 
-		auto r = Task::await< result >( utility::reportUpdates() ) ;
+		auto r = utility::reportUpdates().await() ;
 
 		m_threadIsRunning = false ;
 
@@ -565,7 +576,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
-		auto r = Task::await< int >( utility::autoUpdatePackages() ) ;
+		auto r = utility::autoUpdatePackages().await() ;
 
 		if( r == 0 || r == 2 ){
 			this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
@@ -590,7 +601,7 @@ void qtUpdateNotifier::autoDownloadPackages()
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
 
-		if( Task::await< bool >( utility::autoDownloadPackages() ) ){
+		if( utility::autoDownloadPackages().await() ){
 
 			this->showToolTip( icon,tr( "Downloading of packages completed" ) ) ;
 			statusicon::setStatus( statusicon::NeedsAttention ) ;
@@ -609,7 +620,7 @@ void qtUpdateNotifier::checkForPackageUpdates()
 
 		this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 	}else{
-		auto r = Task::await< QString >( utility::checkForPackageUpdates() ) ;
+		auto r = utility::checkForPackageUpdates().await() ;
 
 		if( r.isEmpty() ){
 

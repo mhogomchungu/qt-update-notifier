@@ -95,6 +95,8 @@ private slots:
 	void networResponse( QNetworkReply * ) ;
 	void checkTwitter( void ) ;
 private:
+	QString getLastTwitterUpdate( void ) ;
+	void setLastTwitterUpdate( const QString& ) ;
 	void showIconOnImportantInfo( void ) ;
 	void accessTwitter( void ) ;
 	void checkForPackageUpdates( void ) ;
@@ -123,6 +125,7 @@ private:
 	QString m_url ;
 	QString m_networkConnectivityChecker ;
 	QString m_defaulticon ;
+	QString m_lastTwitterUpdate ;
 	QByteArray m_token ;
 	QTimer * m_timer ;
 	u_int64_t m_sleepDuration ;
