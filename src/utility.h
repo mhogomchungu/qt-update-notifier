@@ -44,9 +44,11 @@ struct result
 
 namespace utility
 {
-	void writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
+	void waitForTwoSeconds( void ) ;
 
-	QString readFromFile( const QString& filepath ) ;
+	Task::future< bool >& writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
+
+	Task::future< QString >& readFromFile( const QString& filepath ) ;
 
 	Task::future< result >& reportUpdates( void ) ;
 	Task::future< QString >& checkForPackageUpdates( void ) ;

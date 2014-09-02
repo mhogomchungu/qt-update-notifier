@@ -437,7 +437,7 @@ void qtUpdateNotifier::logActivity( const QString& msg )
 {
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1:   %2\n").arg( t ).arg( msg ) ;
-	utility::writeToFile( settings::activityLogFilePath(),log,false ) ;
+	utility::writeToFile( settings::activityLogFilePath(),log,false ).await(); ;
 	emit updateLogWindow() ;
 }
 
@@ -447,7 +447,7 @@ void qtUpdateNotifier::logActivity_1( const QString& msg )
 	line += QString( "----------------------------------------------------------------" ) ;
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
-	utility::writeToFile( settings::activityLogFilePath(),log,false ) ;
+	utility::writeToFile( settings::activityLogFilePath(),log,false ).await() ;
 	emit updateLogWindow() ;
 }
 
@@ -563,7 +563,7 @@ void qtUpdateNotifier::saveAptGetLogOutPut( const QStringList& log )
 		QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
 		QString msg = tr( "Log entry was created at: " ) ;
 		QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
-		utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ) ;
+		utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ).await() ;
 	}
 }
 
@@ -662,10 +662,7 @@ void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,int z )
 
 void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 {
-	QDateTime d ;
-	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() ) ;
-
-	QString n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
+	QString n = tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
 
 	if( y == tr( "No updates found" ) ){
 		this->logActivity( y ) ;
@@ -693,32 +690,65 @@ QString qtUpdateNotifier::nextUpdateTime( u_int64_t interval )
 	return d.toString( Qt::TextDate ) ;
 }
 
+QString qtUpdateNotifier::nextAutoUpdateTime()
+{
+	QDateTime d ;
+	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() ) ;
+	return d.toString( Qt::TextDate ) ;
+}
+
 QString qtUpdateNotifier::logMsg( u_int64_t interval )
 {
-	QString n = this->nextUpdateTime( interval ) ;
-	char num[ 64 ] ;
-	float f = static_cast<float>( interval ) ;
-	f = f / ( 1000 * 60 * 60 ) ;
-	if( f < 10000 ){
-		/*
-		 * f represents a value that holds hours,getting too large of a number implies an error
-		 * somewhere
-		 */
+	if( int64_t( interval ) != -1 ){
+
+		QString n = this->nextUpdateTime( interval ) ;
+
+		char num[ 64 ] ;
+		float f = static_cast<float>( interval ) ;
+		f = f / ( 1000 * 60 * 60 ) ;
+
 		snprintf( num,64,"%.2f",f ) ;
 		return tr( "Scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
 	}else{
-		/*
-		 * There is an error somewhere
-		 */
-		return tr( "Next update check will be at %1" ).arg( n ) ;
+		return tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
 	}
 }
 
+/*
+ * For reasons currently unknown to me, sometimes
+ *
+ * this->nextScheduledUpdateTime() - this->getCurrentTime()
+ *
+ * produces a negative value and this functions tries to calculate the
+ * above multiple times hopefully until a positive value is obtained.
+ */
 QString qtUpdateNotifier::logMsg( void )
 {
-	u_int64_t x = this->getCurrentTime() ;
-	u_int64_t y = this->nextScheduledUpdateTime() ;
-	return this->logMsg( y - x ) ;
+	u_int64_t r = Task::await<u_int64_t>( [ this ](){
+
+		auto _interval = [ this ](){
+
+			return this->nextScheduledUpdateTime() - this->getCurrentTime() ;
+		} ;
+
+		for( int i = 0 ; i < 10 ; i++ ){
+
+			u_int64_t r = _interval() ;
+
+			if( int64_t( r ) > 0 ){
+				return r ;
+			}else{
+				utility::waitForTwoSeconds() ;
+			}
+		}
+
+		/*
+		 * hopefully,we dont get here
+		 */
+		return u_int64_t( -1 ) ;
+	} ) ;
+
+	return this->logMsg( r ) ;
 }
 
 void qtUpdateNotifier::scheduleUpdates( int interval )

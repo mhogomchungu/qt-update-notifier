@@ -114,6 +114,7 @@ private:
 	void showToolTip( const QString&,const QString&,int ) ;
 	void showToolTip( const QString&,const QString& ) ;
 	QString nextUpdateTime( void ) ;
+	QString nextAutoUpdateTime( void ) ;
 	QString nextUpdateTime( u_int64_t ) ;
 	QString logMsg( u_int64_t ) ;
 	QString logMsg( void ) ;

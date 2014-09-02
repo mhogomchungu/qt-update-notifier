@@ -51,7 +51,7 @@ static int _openFile( const QString& filePath )
 	return open( filePath.toLatin1().constData(),O_RDONLY ) ;
 }
 
-static void _writeToFile( const QString& filepath,const QString& content,bool truncate )
+static bool _writeToFile( const QString& filepath,const QString& content,bool truncate )
 {
 	int fd = _openFile( filepath,truncate ) ;
 
@@ -61,60 +61,76 @@ static void _writeToFile( const QString& filepath,const QString& content,bool tr
 		auto x = buffer.data() ;
 
 		auto y = content.toWCharArray( x ) ;
-		write( fd,x,y * sizeof( wchar_t ) ) ;
+		auto r = write( fd,x,y * sizeof( wchar_t ) ) ;
 
 		close( fd ) ;
+
+		return r > 0 ;
+	}else{
+		return false ;
 	}
 }
 
 namespace utility
 {
 
-void writeToFile( const QString& filepath,const QString& content,bool truncate )
+void waitForTwoSeconds()
 {
-	if( filepath == settings::activityLogFilePath() ){
-		if( settings::prefixLogEntries() ){
-			/*
-			 * add new entry at the front of the log
-			 */
-			QString data = content + utility::readFromFile( filepath ) ;
-			_writeToFile( filepath,data,true )  ;
+	::sleep( 2 ) ;
+}
+
+Task::future< bool >& writeToFile( const QString& filepath,const QString& content,bool truncate )
+{
+	return Task::run< bool >( [ filepath,content,truncate ](){
+
+		if( filepath == settings::activityLogFilePath() ){
+
+			if( settings::prefixLogEntries() ){
+				/*
+				 * add new entry at the front of the log
+				 */
+				QString data = content + utility::readFromFile( filepath ).get() ;
+				return _writeToFile( filepath,data,true )  ;
+			}else{
+				/*
+				 * add new entries at the back of the log
+				 */
+				return _writeToFile( filepath,content,truncate ) ;
+			}
 		}else{
 			/*
 			 * add new entries at the back of the log
 			 */
-			_writeToFile( filepath,content,truncate ) ;
+			return _writeToFile( filepath,content,truncate ) ;
 		}
-	}else{
-		/*
-		 * add new entries at the back of the log
-		 */
-		_writeToFile( filepath,content,truncate ) ;
-	}
+	} ) ;
 }
 
-QString readFromFile( const QString& filepath )
+Task::future< QString >& readFromFile( const QString& filepath )
 {
-	int fd = _openFile( filepath ) ;
+	return Task::run< QString >( [ filepath ](){
 
-	if( fd != -1 ){
+		int fd = _openFile( filepath ) ;
 
-		const int e = sizeof( wchar_t ) ;
-		struct stat st ;
+		if( fd != -1 ){
 
-		fstat( fd,&st ) ;
+			const int e = sizeof( wchar_t ) ;
+			struct stat st ;
 
-		QVector< wchar_t > buffer( st.st_size ) ;
-		auto x = buffer.data() ;
+			fstat( fd,&st ) ;
 
-		auto z = read( fd,x,st.st_size ) ;
+			QVector< wchar_t > buffer( st.st_size ) ;
+			auto x = buffer.data() ;
 
-		close( fd ) ;
+			auto z = read( fd,x,st.st_size ) ;
 
-		return QString::fromWCharArray( x,z / e ) ;
-	}else{
-		return QObject::tr( "Log is empty" ) ;
-	}
+			close( fd ) ;
+
+			return QString::fromWCharArray( x,z / e ) ;
+		}else{
+			return QObject::tr( "Log is empty" ) ;
+		}
+	} ) ;
 }
 
 static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
