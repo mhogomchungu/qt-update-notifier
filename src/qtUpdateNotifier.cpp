@@ -475,9 +475,9 @@ void qtUpdateNotifier::manualCheckForUpdates()
 
 void qtUpdateNotifier::automaticCheckForUpdates()
 {
+	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
 	this->logActivity( tr( "Automatic check for updates initiated" ) ) ;
 	this->checkForUpdates() ;
-	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
 }
 
 void qtUpdateNotifier::checkForUpdates()
@@ -699,7 +699,7 @@ QString qtUpdateNotifier::nextAutoUpdateTime()
 
 QString qtUpdateNotifier::logMsg( u_int64_t interval )
 {
-	if( int64_t( interval ) != -1 ){
+	if( int64_t( interval ) > 0 ){
 
 		QString n = this->nextUpdateTime( interval ) ;
 
@@ -714,41 +714,9 @@ QString qtUpdateNotifier::logMsg( u_int64_t interval )
 	}
 }
 
-/*
- * For reasons currently unknown to me, sometimes
- *
- * this->nextScheduledUpdateTime() - this->getCurrentTime()
- *
- * produces a negative value and this functions tries to calculate the
- * above multiple times hopefully until a positive value is obtained.
- */
 QString qtUpdateNotifier::logMsg( void )
 {
-	u_int64_t r = Task::await<u_int64_t>( [ this ](){
-
-		auto _interval = [ this ](){
-
-			return this->nextScheduledUpdateTime() - this->getCurrentTime() ;
-		} ;
-
-		for( int i = 0 ; i < 10 ; i++ ){
-
-			u_int64_t r = _interval() ;
-
-			if( int64_t( r ) > 0 ){
-				return r ;
-			}else{
-				utility::waitForTwoSeconds() ;
-			}
-		}
-
-		/*
-		 * hopefully,we dont get here
-		 */
-		return u_int64_t( -1 ) ;
-	} ) ;
-
-	return this->logMsg( r ) ;
+	return this->logMsg( this->nextScheduledUpdateTime() - this->getCurrentTime() ) ;
 }
 
 void qtUpdateNotifier::scheduleUpdates( int interval )
