@@ -475,7 +475,10 @@ void qtUpdateNotifier::manualCheckForUpdates()
 
 void qtUpdateNotifier::automaticCheckForUpdates()
 {
-	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
+	/*
+	 * since we are doing an automatic update,m_nextScheduledUpdateTime will have the same value as this->getCurrentTime()
+	 */
+	this->writeUpdateTimeToConfigFile( m_nextScheduledUpdateTime + m_sleepDuration ) ;
 	this->logActivity( tr( "Automatic check for updates initiated" ) ) ;
 	this->checkForUpdates() ;
 }
