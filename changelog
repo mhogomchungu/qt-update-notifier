@@ -91,3 +91,5 @@
 	- maintenance release
 -version 1.6.0
 	- maintenance release
+-version 1.6.1
+	- fix a bug: synaptic did not start when set to auto refresh when started with gtksu

@@ -49,6 +49,8 @@ static const char * ktsuss = "/usr/bin/ktsuss" ;
 
 static const char * groupName = "qtupdatenotifier" ;
 
+#define stringsAreEqual( x,y ) strcmp( x,y ) == 0
+
 static int userHasPermission( void )
 {
 	int st = 0 ;
@@ -180,7 +182,7 @@ static int refreshPackageList( int fd,int debug )
 	if( userHasPermission() ){
 		p = Process( "/usr/bin/apt-get" ) ;
 
-		ProcessSetArgumentList( p,"update",ENDLIST ) ;
+		ProcessSetArgumentList( p,"update",NULL ) ;
 		ProcessSetOptionUser( p,0 ) ;
 		ProcessSetOptionPriority( p,PRIORITY ) ;
 		ProcessStart( p ) ;
@@ -204,7 +206,7 @@ static int aptAndSynapticAreRunning( void )
 	int r ;
 	uid_t uid = getuid() ;
 	process_t p = Process( "/bin/pidof" ) ;
-	ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
+	ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
 	ProcessSetOptionUser( p,uid ) ;
 	ProcessStart( p ) ;
 	r = ProcessExitStatus( p ) ;
@@ -212,7 +214,7 @@ static int aptAndSynapticAreRunning( void )
 
 	if( r != 0 ){
 		p = Process( "/bin/pidof" ) ;
-		ProcessSetArgumentList( p,"/usr/bin/apt-get",ENDLIST ) ;
+		ProcessSetArgumentList( p,"/usr/bin/apt-get",NULL ) ;
 		ProcessSetOptionUser( p,uid ) ;
 		ProcessStart( p ) ;
 		r = ProcessExitStatus( p ) ;
@@ -289,7 +291,7 @@ static int autoUpdate( int fd,int debug )
 			 * check if its safe to update
 			 */
 			p = Process( "/usr/bin/apt-get" ) ;
-			ProcessSetArgumentList( p,"dist-upgrade","--simulate",ENDLIST ) ;
+			ProcessSetArgumentList( p,"dist-upgrade","--simulate",NULL ) ;
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessSetOptionPriority( p,PRIORITY ) ;
 			ProcessStart( p ) ;
@@ -316,7 +318,7 @@ static int autoUpdate( int fd,int debug )
 				printf( "updates found\n" ) ;
 
 				p = Process( "/usr/bin/apt-get" ) ;
-				ProcessSetArgumentList( p,"dist-upgrade","--assume-yes",ENDLIST ) ;
+				ProcessSetArgumentList( p,"dist-upgrade","--assume-yes",NULL ) ;
 				ProcessSetOptionUser( p,0 ) ;
 				ProcessSetOptionPriority( p,PRIORITY ) ;
 				ProcessStart( p ) ;
@@ -339,7 +341,7 @@ static int autoUpdate( int fd,int debug )
 					 * clear cache
 					 */
 					p = Process( "/usr/bin/apt-get" ) ;
-					ProcessSetArgumentList( p,"clean",ENDLIST ) ;
+					ProcessSetArgumentList( p,"clean",NULL ) ;
 					ProcessSetOptionUser( p,0 ) ;
 					ProcessSetOptionPriority( p,PRIORITY ) ;
 					ProcessStart( p ) ;
@@ -374,7 +376,7 @@ static int downloadPackages( int fd,int debug )
 		r = refreshPackageList( fd,debug ) ;
 		if( r == 0 ){
 			p = Process( "/usr/bin/apt-get" ) ;
-			ProcessSetArgumentList( p,"dist-upgrade","--download-only","--assume-yes",ENDLIST ) ;
+			ProcessSetArgumentList( p,"dist-upgrade","--download-only","--assume-yes",NULL ) ;
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessSetOptionPriority( p,PRIORITY ) ;
 			ProcessStart( p ) ;
@@ -419,6 +421,8 @@ static int startSynaptic( const char * e,int fd )
 	int r ;
 	process_t p ;
 
+	const char * exe ;
+
 	if( 0 && fd && ktsuss ){;}
 
 	if( userHasPermission() ){
@@ -426,16 +430,26 @@ static int startSynaptic( const char * e,int fd )
 		ProcessSetOptionUser( p,0 ) ;
 
 		if( e != NULL ){
-			ProcessSetArgumentList( p,e,ENDLIST ) ;
+			ProcessSetArgumentList( p,e,NULL ) ;
 		}
 	}else{
-		p = Process( getSUExe() ) ;
+		exe = getSUExe() ;
+
+		p = Process( exe ) ;
 		ProcessSetOptionUser( p,getuid() ) ;
 
-		if( e != NULL ){
-			ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,ENDLIST ) ;
+		if( stringsAreEqual( exe,gksu ) ){
+			if( e != NULL ){
+				ProcessSetArgumentList( p,"/usr/sbin/synaptic --update-at-startup",NULL ) ;
+			}else{
+				ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
+			}
 		}else{
-			ProcessSetArgumentList( p,"/usr/sbin/synaptic",ENDLIST ) ;
+			if( e != NULL ){
+				ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,NULL ) ;
+			}else{
+				ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
+			}
 		}
 	}
 
@@ -464,6 +478,12 @@ NOTE:\n\
 
 	printf( "%s",options ) ;
 	return 0 ;
+}
+
+static int _help( const char * e )
+{
+	#define x( z ) strcmp( e,z ) == 0
+	return x( "--help" ) || x( "-help" ) || x( "-h" ) || x( "-version" ) || x( "--version" ) || x( "-v" ) ;
 }
 
 int main( int argc,char * argv[] )
@@ -507,24 +527,22 @@ int main( int argc,char * argv[] )
 
 	fchmod( fd,S_IRUSR|S_IWUSR|S_IRWXG|S_IRGRP|S_IROTH|S_IWOTH ) ;
 
-	e = argv[ 1 ] ;
-
-	#define x( z ) strcmp( e,z ) == 0
-	#define stringsAreEqual( x,y ) strcmp( x,y ) == 0
+	e = *( argv + 1 ) ;
 
 	if( argc > 1 ){
-		if( stringsAreEqual( argv[ argc - 1 ],"--debug" ) ){
+		if( stringsAreEqual( *( argv + argc - 1 ),"--debug" ) ){
 			debug = 1 ;
 		}else{
 			debug = 0 ;
 		}
 	}
-	if( x( "--help" ) || x( "-help" ) || x( "-h" ) || x( "-version" ) || x( "--version" ) || x( "-v" ) ){
+
+	if( _help( e ) ){
 		st = printOptions() ;
 	}else{
 		if( stringsAreEqual( e,"--start-synaptic" ) ){
 			if( argc == 3 ){
-				f = argv[ 2 ] ;
+				f = *( argv + 2 ) ;
 				if( stringsAreEqual( f,"--update-at-startup" ) ){
 					st = startSynaptic( f,fd ) ;
 				}else{
