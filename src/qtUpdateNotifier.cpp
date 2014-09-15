@@ -498,11 +498,10 @@ void qtUpdateNotifier::checkForUpdates()
 
 		m_threadIsRunning = false ;
 
-		this->saveAptGetLogOutPut( r.taskOutput ) ;
-
 		switch( r.repositoryState ){
 		case result::updatesFound :
 
+			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = QString( "qt-update-notifier-updates-are-available" ) ;
 			statusicon::setStatus( statusicon::NeedsAttention ) ;
 			this->showToolTip( icon,tr( "There are updates in the repository" ),r.taskOutput ) ;
@@ -511,6 +510,7 @@ void qtUpdateNotifier::checkForUpdates()
 			break ;
 		case result::inconsistentState :
 
+			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = QString( "qt-update-notifier-important-info" ) ;
 			statusicon::setStatus( statusicon::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
