@@ -77,7 +77,7 @@ ProcessStructure * ProcessArgumentStructure( process_t p )
 	}
 }
 
-void ProcessSetEnvironmentalVariable( process_t p,const char * const * env )
+void ProcessSetEnvironmentalVariable( process_t p,char * const * env )
 {
 	if( p != ProcessVoid ){
 		p->str.env = env ;
@@ -177,7 +177,7 @@ void ProcessSetArgumentList( process_t p,... )
 
 	p->args      = args ;
 	p->args[ 0 ] = p->exe ;
-	p->str.args  = ( const char * const * ) args ;
+	p->str.args  = args ;
 }
 
 process_t Process( const char * path,... )
@@ -232,7 +232,7 @@ process_t Process( const char * path,... )
 
 	p->args      = args ;
 	p->args[ 0 ] = p->exe ;
-	p->str.args  = ( const char * const * ) args ;
+	p->str.args  = args ;
 
 	return p ;
 }
@@ -270,6 +270,8 @@ void ProcessSetOptionPriority( process_t p,int priority )
 
 pid_t ProcessStart( process_t p )
 {
+	const char * exe ;
+
 	if( pipe( p->fd_0 ) == -1 ){
 		return -1 ;
 	}
@@ -309,13 +311,12 @@ pid_t ProcessStart( process_t p )
 			setpriority( PRIO_PROCESS,0,p->str.priority ) ;
 		}
 
-		#define _cast( x ) ( char * const * )x
-		#define _exe p->str.args[ 0 ]
+		exe = p->str.args[ 0 ] ;
 
 		if( p->str.env != NULL ){
-			execve( _exe,_cast( p->str.args ),_cast( p->str.env ) ) ;
+			execve( exe,p->str.args,p->str.env ) ;
 		}else{
-			execv( _exe,_cast( p->str.args ) ) ;
+			execv( exe,p->str.args ) ;
 		}
 
 		/*
@@ -583,7 +584,7 @@ void ProcessWait( process_t p )
 	ProcessExitStatus( p ) ;
 }
 
-void ProcessSetArguments( process_t p,const char * const s[] )
+void ProcessSetArguments( process_t p,char * const s[] )
 {
 	if( p != ProcessVoid ){
 		p->str.args = s ;
