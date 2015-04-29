@@ -84,58 +84,6 @@ void ProcessSetEnvironmentalVariable( process_t p,const char * const * env )
 	}
 }
 
-void ProcessSetArgumentList( process_t p,... )
-{
-	char * entry ;
-	char ** args  ;
-	char ** e ;
-	size_t size = sizeof( char * ) ;
-	int index = 0 ;
-	va_list list ;
-
-	if( p == ProcessVoid ){
-		return ;
-	}
-
-	args = malloc( size ) ;
-
-	if( args == NULL ){
-		_ProcessError() ;
-		return ;
-	}
-
-	*( args + index ) = p->exe ;
-	index++ ;
-
-	va_start( list,p ) ;
-
-	while( 1 ){
-		entry = va_arg( list,char * ) ;
-		e = realloc( args,( 1 + index ) * size ) ;
-
-		if( e == NULL ){
-			free( args ) ;
-			va_end( list ) ;
-			_ProcessError() ;
-			return ;
-		}else{
-			args = e ;
-		}
-
-		if( entry == NULL ){
-			*( args + index ) = NULL ;
-			break ;
-		}else{
-			*( args + index ) = entry ;
-			index++ ;
-		}
-	}
-
-	va_end( list ) ;
-	p->args = args ;
-	p->str.args = ( const char * const * ) args ;
-}
-
 static process_t _process( const char * path )
 {
 	process_t p  ;
@@ -156,6 +104,10 @@ static process_t _process( const char * path )
 
 	if( len == 0 ){
 		p->exe = malloc( sizeof( char ) ) ;
+		if( p->exe == NULL ){
+			free( p ) ;
+			return _ProcessError() ;
+		}
 		p->exe[ 0 ] = '\0' ;
 	}else{
 		p->exe = malloc( sizeof( char ) * ( len + 1 ) ) ;
@@ -181,25 +133,65 @@ static process_t _process( const char * path )
 	return p ;
 }
 
+void ProcessSetArgumentList( process_t p,... )
+{
+	char * entry ;
+	char ** args  ;
+	char ** e ;
+	size_t size = sizeof( char * ) ;
+	int index = 1 ;
+	va_list list ;
+
+	if( p == ProcessVoid ){
+		return ;
+	}
+
+	args = p->args ;
+
+	va_start( list,p ) ;
+
+	while( 1 ){
+
+		entry = va_arg( list,char * ) ;
+		e = realloc( args,( 1 + index ) * size ) ;
+
+		if( e == NULL ){
+			free( args ) ;
+			va_end( list ) ;
+			_ProcessError() ;
+			return ;
+		}else{
+			args = e ;
+		}
+
+		if( entry == NULL ){
+			*( args + index ) = NULL ;
+			break ;
+		}else{
+			*( args + index ) = entry ;
+			index++ ;
+		}
+	}
+
+	va_end( list ) ;
+
+	p->args      = args ;
+	p->args[ 0 ] = p->exe ;
+	p->str.args  = ( const char * const * ) args ;
+}
+
 process_t Process( const char * path,... )
 {
 	char * entry ;
 	char ** args  ;
 	char ** e ;
 	size_t size = sizeof( char * ) ;
-	int index = 0 ;
+	int index = 1 ;
 	va_list list ;
 	process_t p ;
 
 	if( path == NULL ){
 		return _process( NULL ) ;
-	}
-
-	args = malloc( size ) ;
-
-	if( args == NULL ){
-		_ProcessError() ;
-		return ProcessVoid ;
 	}
 
 	p = _process( path ) ;
@@ -208,12 +200,12 @@ process_t Process( const char * path,... )
 		return ProcessVoid ;
 	}
 
-	*( args + index ) = p->exe ;
-	index++ ;
+	args = p->args ;
 
 	va_start( list,path ) ;
 
 	while( 1 ){
+
 		entry = va_arg( list,char * ) ;
 		e = realloc( args,( 1 + index ) * size ) ;
 
@@ -237,8 +229,10 @@ process_t Process( const char * path,... )
 	}
 
 	va_end( list ) ;
-	p->args = args ;
-	p->str.args = ( const char * const * ) args ;
+
+	p->args      = args ;
+	p->args[ 0 ] = p->exe ;
+	p->str.args  = ( const char * const * ) args ;
 
 	return p ;
 }
@@ -315,21 +309,15 @@ pid_t ProcessStart( process_t p )
 			setpriority( PRIO_PROCESS,0,p->str.priority ) ;
 		}
 
-		if( p->str.args == NULL ){
-			#define _null ( void * )0
-			if( p->str.env != NULL ){
-				execle( p->exe,p->exe,_null,p->str.env ) ;
-			}else{
-				execl( p->exe,p->exe,_null ) ;
-			}
+		#define _cast( x ) ( char * const * )x
+		#define _exe p->str.args[ 0 ]
+
+		if( p->str.env != NULL ){
+			execve( _exe,_cast( p->str.args ),_cast( p->str.env ) ) ;
 		}else{
-			#define _cast( x ) ( char * const * )x
-			if( p->str.env != NULL ){
-				execve( p->str.args[ 0 ],_cast( p->str.args ),_cast( p->str.env ) ) ;
-			}else{
-				execv( p->str.args[ 0 ],_cast( p->str.args ) ) ;
-			}
+			execv( _exe,_cast( p->str.args ) ) ;
 		}
+
 		/*
 		 * execv has failed :-(
 		 */

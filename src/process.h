@@ -249,7 +249,7 @@ int main( void )
 int main( void )
 {
 	const char * argv[ 3 ] ;
-	process_t p = Process( NULL ) ;
+	process_t p = Process( NULL,NULL ) ;
 	argv[ 0 ] = "/bin/ls" ;
 	argv[ 1 ] = "-l" ;
 	argv[ 2 ] = NULL ;
@@ -285,7 +285,7 @@ int main( void )
 int main( void )
 {
 	const char * argv[ 3 ] ;
-	process_t p = Process( NULL ) ;
+	process_t p = Process( NULL,NULL ) ;
 	argv[ 0 ] = "/bin/ls" ;
 	argv[ 1 ] = "-l" ;
 	argv[ 2 ] = NULL ;
