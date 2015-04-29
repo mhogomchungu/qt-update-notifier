@@ -46,7 +46,7 @@ static QString _localConfigDir( void )
 #else
 static QString _localConfigDir( void )
 {
-	return QString( "%1/%2" ).arg( QDir::homePath() ).arg( "/.config/" ) ;
+	return QString( "%1/%2" ).arg( QDir::homePath(),"/.config/" ) ;
 }
 #endif
 
@@ -55,7 +55,7 @@ void convertOldConfigSystemToNewSystem()
 	QString path ;
 	QFile e ;
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier.conf" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier.conf" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		return ;
@@ -64,7 +64,7 @@ void convertOldConfigSystemToNewSystem()
 	QString opt ;
 	QString value ;
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "language.option" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"language.option" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		e.open( QIODevice::ReadOnly ) ;
@@ -73,10 +73,10 @@ void convertOldConfigSystemToNewSystem()
 		e.close() ;
 		e.remove() ;
 	}else{
-		settings::setPrefferedLanguage( QString( "english_US" ) ) ;
+		settings::setPrefferedLanguage( "english_US" ) ;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-startup_check_delay.time" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-startup_check_delay.time" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		e.open( QIODevice::ReadOnly ) ;
@@ -85,10 +85,10 @@ void convertOldConfigSystemToNewSystem()
 		e.close() ;
 		e.remove() ;
 	}else{
-		settings::setCheckDelayOnStartUp( QString( "300" ) ) ;
+		settings::setCheckDelayOnStartUp( "300" ) ;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-interval.time" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-interval.time" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		e.open( QIODevice::ReadOnly ) ;
@@ -97,10 +97,10 @@ void convertOldConfigSystemToNewSystem()
 		e.close() ;
 		e.remove() ;
 	}else{
-		settings::setNextUpdateInterval( QString( "86400" ) ) ;
+		settings::setNextUpdateInterval( "86400" ) ;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-synaptic_autorefresh.option" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-synaptic_autorefresh.option" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		settings::setAutoRefreshSynaptic( true ) ;
@@ -109,7 +109,7 @@ void convertOldConfigSystemToNewSystem()
 		settings::setAutoRefreshSynaptic( false ) ;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "doNotAutoStart" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"doNotAutoStart" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		settings::enableAutoStart( false ) ;
@@ -118,12 +118,12 @@ void convertOldConfigSystemToNewSystem()
 		settings::enableAutoStart( true ) ;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-next_auto_update.time" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-next_auto_update.time" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		e.open( QIODevice::ReadOnly ) ;
 		value = e.readAll() ;
-		opt = QString( "nextUpdateTime" ) ;
+		opt = "nextUpdateTime" ;
 		_settings.setValue( opt,value ) ;
 		e.close() ;
 		e.remove() ;
@@ -131,7 +131,7 @@ void convertOldConfigSystemToNewSystem()
 		;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "autoUpdatePackages.option" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"autoUpdatePackages.option" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		opt = QString( "autoUpdatePackages" ) ;
@@ -142,7 +142,7 @@ void convertOldConfigSystemToNewSystem()
 		_settings.setValue( opt,false ) ;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "autoDownloadPackages.option" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"autoDownloadPackages.option" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
 		opt = QString( "autoDownloadPackages" ) ;
@@ -153,14 +153,14 @@ void convertOldConfigSystemToNewSystem()
 		_settings.setValue( opt,false ) ;
 	}
 
-	path = QString( "%1/%2" ).arg( _configPath ).arg( QString( "skipOldPackageCheck.option" ) ) ;
+	path = QString( "%1/%2" ).arg( _configPath,"skipOldPackageCheck.option" ) ;
 	e.setFileName( path ) ;
 	if( e.exists() ){
-		opt = QString( "skipOldPackageCheck" ) ;
+		opt = "skipOldPackageCheck" ;
 		_settings.setValue( opt,true ) ;
 		e.remove() ;
 	}else{
-		opt = QString( "skipOldPackageCheck" ) ;
+		opt = "skipOldPackageCheck" ;
 		_settings.setValue( opt,false ) ;
 	}
 
@@ -169,12 +169,12 @@ void convertOldConfigSystemToNewSystem()
 
 QString settings::aptGetLogFilePath()
 {
-	return QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-apt_output.log" ) ) ;
+	return QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-apt_output.log" ) ;
 }
 
 QString settings::activityLogFilePath()
 {
-	return QString( "%1/%2" ).arg( _configPath ).arg( QString( "qt-update-notifier-activity.log" ) ) ;
+	return QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-activity.log" ) ;
 }
 
 void settings::init()
@@ -202,32 +202,32 @@ QString settings::configPath()
 
 QString settings::prefferedLanguage()
 {
-	return _settings.value( QString( "language" ) ).toString() ;
+	return _settings.value( "language" ).toString() ;
 }
 
 void settings::setPrefferedLanguage( const QString& language )
 {
-	_settings.setValue( QString( "language" ),language ) ;
+	_settings.setValue( "language",language ) ;
 }
 
 void settings::setCheckDelayOnStartUp( const QString& interval )
 {
-	_settings.setValue( QString( "startUpDelay" ),interval ) ;
+	_settings.setValue( "startUpDelay",interval ) ;
 }
 
 void settings::setNextUpdateInterval( const QString& interval )
 {
-	_settings.setValue( QString( "updateCheckInterval" ),interval ) ;
+	_settings.setValue( "updateCheckInterval",interval ) ;
 }
 
 QString settings::networkConnectivityChecker()
 {
-	QString opt = QString( "networkConnectivityChecker" ) ;
+	QString opt( "networkConnectivityChecker" ) ;
 
 	if( _settings.contains( opt ) ){
 		return _settings.value( opt ).toString() ;
 	}else{
-		QString s = "ping -c 1 8.8.8.8" ;
+		QString s( "ping -c 1 8.8.8.8" ) ;
 		_settings.setValue( opt,s ) ;
 		return s ;
 	}
@@ -235,7 +235,7 @@ QString settings::networkConnectivityChecker()
 
 int settings::delayTimeBeforeUpdateCheck()
 {
-	return 1000 * _settings.value( QString( "startUpDelay" ) ).toString().toInt() ;
+	return 1000 * _settings.value( "startUpDelay" ).toString().toInt() ;
 }
 
 QString settings::delayTimeBeforeUpdateCheck( int time )
@@ -257,12 +257,12 @@ QString settings::delayTimeBeforeUpdateCheck( int time )
 
 QString settings::defaultIcon()
 {
-	QString opt = "defaultIcon" ;
+	QString opt( "defaultIcon" ) ;
 
 	if( _settings.contains( opt ) ){
 		return _settings.value( opt ).toString() + ".png" ;
 	}else{
-		QString u = "qt-update-notifier" ;
+		QString u( "qt-update-notifier" ) ;
 		_settings.setValue( opt,u ) ;
 		return u + ".png" ;
 	}
@@ -288,7 +288,7 @@ QString settings::url()
 
 QString settings::getLastTwitterUpdate()
 {
-	QString opt = QString( "lastTwitterUpdate" ) ;
+	QString opt( "lastTwitterUpdate" ) ;
 
 	_settings.sync() ;
 
@@ -303,14 +303,14 @@ QString settings::getLastTwitterUpdate()
 
 void settings::setLastTwitterUpdate( const QString& t )
 {
-	QString opt = QString( "lastTwitterUpdate" ) ;
+	QString opt( "lastTwitterUpdate" ) ;
 	_settings.setValue( opt,t ) ;
 	_settings.sync() ;
 }
 
 void settings::setAutoRefreshSynaptic( bool autoRefresh )
 {
-	QString opt = QString( "autoRefreshSynaptic" ) ;
+	QString opt( "autoRefreshSynaptic" ) ;
 	if( autoRefresh ){
 		_settings.setValue( opt,true ) ;
 	}else{
@@ -320,59 +320,59 @@ void settings::setAutoRefreshSynaptic( bool autoRefresh )
 
 bool settings::autoRefreshSynaptic()
 {
-	return _settings.value( QString( "autoRefreshSynaptic" ) ).toBool() ;
+	return _settings.value( "autoRefreshSynaptic" ).toBool() ;
 }
 
 bool settings::firstTimeRun()
 {
-	return !_settings.contains( QString( "nextUpdateTime" ) ) ;
+	return !_settings.contains( "nextUpdateTime" ) ;
 }
 
 u_int32_t settings::updateCheckInterval()
 {
-	return 1000 * _settings.value( QString( "updateCheckInterval" ) ).toString().toULong() ;
+	return 1000 * _settings.value( "updateCheckInterval" ).toString().toULong() ;
 }
 
 u_int64_t settings::nextScheduledUpdateTime()
 {
 	_settings.sync() ;
-	return _settings.value( QString( "nextUpdateTime" ) ).toString().toULongLong() ;
+	return _settings.value( "nextUpdateTime" ).toString().toULongLong() ;
 }
 
 void settings::writeUpdateTimeToConfigFile( u_int64_t time )
 {
-	_settings.setValue( QString( "nextUpdateTime" ),QString::number( time ) ) ;
+	_settings.setValue( "nextUpdateTime",QString::number( time ) ) ;
 	_settings.sync() ;
 }
 
 bool settings::autoUpdatePackages()
 {
-	return _settings.value( QString( "autoUpdatePackages" ) ).toBool() ;
+	return _settings.value( "autoUpdatePackages" ).toBool() ;
 }
 
 bool settings::autoDownloadPackages()
 {
-	return _settings.value( QString( "autoDownloadPackages" ) ).toBool() ;
+	return _settings.value( "autoDownloadPackages" ).toBool() ;
 }
 
 bool settings::skipOldPackageCheck()
 {
-	return _settings.value( QString( "skipOldPackageCheck" ) ).toBool() ;
+	return _settings.value( "skipOldPackageCheck" ).toBool() ;
 }
 
 bool settings::autoStartEnabled()
 {
-	return _settings.value( QString( "autoStartAtLogin" ) ).toBool() ;
+	return _settings.value( "autoStartAtLogin" ).toBool() ;
 }
 
 bool settings::warnOnInconsistentState()
 {
-	return _settings.value( QString( "warnOnInconsistentState" ) ).toBool() ;
+	return _settings.value( "warnOnInconsistentState" ).toBool() ;
 }
 
 bool settings::prefixLogEntries()
 {
-	QString opt = QString( "prefixLogEntries" ) ;
+	QString opt( "prefixLogEntries" ) ;
 	if( _settings.contains( opt ) ){
 		return _settings.value( opt ).toBool() ;
 	}else{
@@ -383,7 +383,7 @@ bool settings::prefixLogEntries()
 
 bool settings::showIconOnImportantInfo()
 {
-	QString opt = QString( "showIconOnImportantInfo" ) ;
+	QString opt( "showIconOnImportantInfo" ) ;
 	if( _settings.contains( opt ) ){
 		return _settings.value( opt ).toBool() ;
 	}else{
@@ -394,6 +394,6 @@ bool settings::showIconOnImportantInfo()
 
 void settings::enableAutoStart( bool autoStart )
 {
-	QString opt = QString( "autoStartAtLogin" ) ;
+	QString opt( "autoStartAtLogin" ) ;
 	_settings.setValue( opt,autoStart ) ;
 }

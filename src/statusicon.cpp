@@ -23,7 +23,7 @@
 
 static QPixmap _icon( const QString& name,int count )
 {
-	QIcon icon( QString( ":/" ) + name ) ;
+	QIcon icon( ":/" + name ) ;
 	QPixmap pixmap = icon.pixmap( QSize( 152,152 ),QIcon::Normal,QIcon::On ) ;
 	int size = pixmap.height() * 0.01 * 60 ; //configurationoptionsdialog::fontSize() ;
 	QPainter paint( &pixmap ) ;
@@ -76,7 +76,7 @@ QWidget * statusicon::widget()
 
 void statusicon::setAttentionIcon( const QString& name )
 {
-	KStatusNotifierItem::setAttentionIconByPixmap( QIcon( QString( ":/" ) + name ) ) ;
+	KStatusNotifierItem::setAttentionIconByPixmap( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setCategory( const statusicon::ItemCategory category )
@@ -86,7 +86,7 @@ void statusicon::setCategory( const statusicon::ItemCategory category )
 
 void statusicon::setIcon( const QString& name )
 {
-	KStatusNotifierItem::setIconByPixmap( QIcon( QString( ":/" ) + name ) ) ;
+	KStatusNotifierItem::setIconByPixmap( QIcon( ":/" + name ) ) ;
 	statusicon::setAttentionIcon( name ) ;
 }
 
@@ -104,7 +104,7 @@ void statusicon::setIconByName( const QString& name )
 
 void statusicon::setOverlayIcon( const QString& name )
 {
-	KStatusNotifierItem::setOverlayIconByPixmap( QIcon( QString( ":/" ) + name ) ) ;
+	KStatusNotifierItem::setOverlayIconByPixmap( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setStatus( const statusicon::ItemStatus status )
@@ -114,8 +114,8 @@ void statusicon::setStatus( const statusicon::ItemStatus status )
 
 void statusicon::setToolTip( const QString& iconName,const QString& title,const QString& subTitle )
 {
-	KStatusNotifierItem::setToolTip( QString( "" ),title,subTitle ) ;
-	KStatusNotifierItem::setToolTipIconByPixmap( QIcon( QString( ":/" ) + iconName ) ) ;
+	KStatusNotifierItem::setToolTip( QString(),title,subTitle ) ;
+	KStatusNotifierItem::setToolTipIconByPixmap( QIcon( ":/" + iconName ) ) ;
 }
 
 void statusicon::addAction( QAction * ac )
@@ -203,7 +203,7 @@ void statusicon::quit()
 
 void statusicon::setIcon( const QString& name )
 {
-	m_toolButton.setIcon( QIcon( QString( ":/" ) + name ) ) ;
+	m_toolButton.setIcon( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setIcon( const QString& name,int count )
@@ -226,7 +226,7 @@ void statusicon::setToolTip( const QString& iconName,const QString& title,const 
 {
 	Q_UNUSED( iconName ) ;
 	Q_UNUSED( title ) ;
-	QString r = QString( "<table><tr><td><b>%1</b></td></tr><tr><td>%2</td></tr></table>" ).arg( title ).arg( subTitle ) ;
+	QString r = QString( "<table><tr><td><b>%1</b></td></tr><tr><td>%2</td></tr></table>" ).arg( title,subTitle ) ;
 	m_toolButton.setToolTip( r ) ;
 }
 
@@ -284,7 +284,7 @@ statusicon::~statusicon()
 
 void statusicon::setAttentionIcon( const QString& name )
 {
-	m_trayIcon->setIcon( QIcon( QString( ":/" ) + name ) ) ;
+	m_trayIcon->setIcon( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setCategory( const statusicon::ItemCategory category )
@@ -294,7 +294,7 @@ void statusicon::setCategory( const statusicon::ItemCategory category )
 
 void statusicon::setIconByName( const QString& name )
 {
-	m_trayIcon->setIcon( QIcon( QString( ":/" ) + name ) ) ;
+	m_trayIcon->setIcon( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setIcon( const QString& name )
@@ -336,7 +336,7 @@ void statusicon::setStatus( const statusicon::ItemStatus status )
 void statusicon::setToolTip( const QString& iconName,const QString& title,const QString& subTitle )
 {
 	Q_UNUSED( iconName ) ;
-	QString r = QString( "<table><tr><td><b>%1</b></td></tr><tr><td>%2</td></tr></table>" ).arg( title ).arg( subTitle ) ;
+	QString r = QString( "<table><tr><td><b>%1</b></td></tr><tr><td>%2</td></tr></table>" ).arg( title,subTitle ) ;
 	m_trayIcon->setToolTip( r ) ;
 }
 

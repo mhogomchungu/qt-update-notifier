@@ -52,7 +52,7 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 
 	m_threadIsRunning = false ;
 
-	QCoreApplication::setApplicationName( QString( "qt-update-notfier" ) ) ;
+	QCoreApplication::setApplicationName( "qt-update-notfier" ) ;
 	statusicon::setStatus( statusicon::Passive ) ;
 	statusicon::setCategory( statusicon::ApplicationStatus ) ;
 
@@ -181,8 +181,7 @@ void qtUpdateNotifier::networResponse( QNetworkReply * r )
 
 			if( z > s ){
 				if( text.contains( "ANNOUNCEMENT" ) ){
-					this->showToolTip( QString( "qt-update-notifier-important-info" ),
-							   tr( "No updates found" ) ) ;
+					this->showToolTip( "qt-update-notifier-important-info",tr( "No updates found" ) ) ;
 					this->logActivity_1( text ) ;
 					this->showIconOnImportantInfo() ;
 				}
@@ -298,15 +297,17 @@ int qtUpdateNotifier::instanceAlreadyRunning()
 		 */
 		qDebug() << tr( "Another instance is already running, closing this one" ) ;
 	}else{
-		const char * x[ 2 ] ;
-		*( x + 0 ) = "qt-update-notifier" ;
-		*( x + 1 ) = nullptr ;
+		const char * x[ 2 ] = { "qt-update-notifier",nullptr } ;
+
 		int z = 1 ;
+
 		QCoreApplication app( z,const_cast< char ** >( x ) ) ;
 		QTranslator * translator = new QTranslator() ;
-		translator->load( r.toLatin1().constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
+		translator->load( r.toLatin1().constData(),QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ;
 		app.installTranslator( translator ) ;
+
 		qDebug() << tr( "Another instance is already running, closing this one" ) ;
+
 		app.removeTranslator( translator ) ;
 		translator->deleteLater() ;
 	}
@@ -435,18 +436,17 @@ QString qtUpdateNotifier::getCurrentTime_1()
 
 void qtUpdateNotifier::logActivity( const QString& msg )
 {
-	QString t = this->getCurrentTime_1() ;
-	QString log = QString( "%1:   %2\n").arg( t ).arg( msg ) ;
+	QString log = QString( "%1:   %2\n").arg( this->getCurrentTime_1(),msg ) ;
 	utility::writeToFile( settings::activityLogFilePath(),log,false ).await(); ;
 	emit updateLogWindow() ;
 }
 
 void qtUpdateNotifier::logActivity_1( const QString& msg )
 {
-	QString line = QString( "------------------------------------------------------" ) ;
-	line += QString( "----------------------------------------------------------------" ) ;
+	QString line( "------------------------------------------------------" ) ;
+	line += "----------------------------------------------------------------" ;
 	QString t = this->getCurrentTime_1() ;
-	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line ).arg( t ).arg( msg ).arg( line )  ;
+	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line,t,msg,line )  ;
 	utility::writeToFile( settings::activityLogFilePath(),log,false ).await() ;
 	emit updateLogWindow() ;
 }
@@ -488,7 +488,7 @@ void qtUpdateNotifier::checkForUpdates()
 	if( m_threadIsRunning ){
 		this->logActivity( tr( "Warning:\tattempt to start update check while another one is still in progress" ) ) ;
 	}else{
-		QString icon = QString( "qt-update-notifier-updating" ) ;
+		QString icon( "qt-update-notifier-updating" ) ;
 
 		this->showToolTip( icon,tr( "Status" ),tr( "Checking for updates" ) ) ;
 
@@ -502,7 +502,7 @@ void qtUpdateNotifier::checkForUpdates()
 		case result::updatesFound :
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
-			icon = QString( "qt-update-notifier-updates-are-available" ) ;
+			icon = "qt-update-notifier-updates-are-available" ;
 			statusicon::setStatus( statusicon::NeedsAttention ) ;
 			this->showToolTip( icon,tr( "There are updates in the repository" ),r.taskOutput ) ;
 			this->autoDownloadPackages() ;
@@ -511,7 +511,7 @@ void qtUpdateNotifier::checkForUpdates()
 		case result::inconsistentState :
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
-			icon = QString( "qt-update-notifier-important-info" ) ;
+			icon = "qt-update-notifier-important-info" ;
 			statusicon::setStatus( statusicon::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 			this->logActivity_1( r.taskOutput.first() ) ;
@@ -563,9 +563,9 @@ void qtUpdateNotifier::saveAptGetLogOutPut( const QStringList& log )
 		 * update log file only when there are new updates
 		 */
 	}else{
-		QString line = QString( "-------------------------------------------------------------------------------\n" ) ;
+		QString line( "-------------------------------------------------------------------------------\n" ) ;
 		QString msg = tr( "Log entry was created at: " ) ;
-		QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + QString( "\n" ) + line ;
+		QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + "\n" + line ;
 		utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ).await() ;
 	}
 }
@@ -574,7 +574,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 {
 	if( settings::autoUpdatePackages() ){
 
-		QString icon = QString( "qt-update-notifier-updating" ) ;
+		QString icon( "qt-update-notifier-updating" ) ;
 		this->showToolTip( icon,tr( "Status" ),tr( "Update in progress, do not power down computer" ) ) ;
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
@@ -584,7 +584,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 		if( r == 0 || r == 2 ){
 			this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
 		}else{
-			QString icon = "qt-update-notifier-important-info" ;
+			QString icon( "qt-update-notifier-important-info" ) ;
 			this->showToolTip( icon,tr( "Automatic package update failed" ) ) ;
 			this->showIconOnImportantInfo() ;
 		}
@@ -599,7 +599,7 @@ void qtUpdateNotifier::autoDownloadPackages()
 {
 	if( settings::autoDownloadPackages() ){
 
-		QString icon = QString( "qt-update-notifier-updating" ) ;
+		QString icon( "qt-update-notifier-updating" ) ;
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) ) ;
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
@@ -629,7 +629,7 @@ void qtUpdateNotifier::checkForPackageUpdates()
 
 			this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 		}else{
-			QString	icon = QString( "qt-update-notifier-important-info" ) ;
+			QString	icon( "qt-update-notifier-important-info" ) ;
 			this->showToolTip( icon,tr( "Outdated packages found" ) ) ;
 			this->logActivity_1( r ) ;
 			this->showIconOnImportantInfo() ;
@@ -672,7 +672,7 @@ void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 		this->logActivity( this->logMsg() ) ;
 		statusicon::setToolTip( x,y,n ) ;
 	}else{
-		QString msg = QString( "<table><tr><td><b>%1</b></tr></td><tr><td>%2</tr></td></table>" ).arg( y ).arg( n ) ;
+		QString msg = QString( "<table><tr><td><b>%1</b></tr></td><tr><td>%2</tr></td></table>" ).arg( y,n ) ;
 		this->logActivity( y ) ;
 		this->logActivity( this->logMsg() ) ;
 		statusicon::setToolTip( x,tr( "Status" ),msg ) ;
@@ -711,7 +711,7 @@ QString qtUpdateNotifier::logMsg( u_int64_t interval )
 		f = f / ( 1000 * 60 * 60 ) ;
 
 		snprintf( num,64,"%.2f",f ) ;
-		return tr( "Scheduled next check to be in %1 hours at %2" ).arg( QString( num ) ).arg( n ) ;
+		return tr( "Scheduled next check to be in %1 hours at %2" ).arg( num,n ) ;
 	}else{
 		return tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
 	}

@@ -59,12 +59,6 @@ typedef struct ProcessType_t * process_t ;
 #define ProcessVoid ( ( process_t ) 0 )
 
 /*
- * use this variable to terminate variadic functions
- * we dont use NULL here because NULL is defined simply as 0 and things break in C++
- */
-#define ENDLIST ( ( const char * ) 0 )
-
-/*
  * Examples on how to use the library are at the end of this header file
  */
 
@@ -80,7 +74,7 @@ void ProcessExitOnMemoryExaustion( void (*)( void ) ) ;
  * create a handle to a process that will be started.
  * Path to executable to be started must be in full path format
  */
-process_t Process( const char * path ) ;
+process_t Process( const char * path,... )  __attribute__ ( ( sentinel ) ) ;
 
 /*
  * This structure can be used an an alternative way to set various options.
@@ -105,11 +99,6 @@ size_t ProcessWrite( process_t p,const char * data,size_t len ) ;
  * blocks waiting for more data in its std in until EOF is received.
  */
 void ProcessCloseStdWrite( process_t p ) ;
-
-/*
- * remember to clean after yourself
- */
-void ProcessDelete( process_t * ) ;
 
 /*
  * send a forked process sigterm to terminate it.
@@ -140,7 +129,7 @@ void ProcessSetArguments( process_t p,const char * const argv[] ) ;
 /*
  * look at the example at the end of this header file for info on how to use the API
  */
-void ProcessSetArgumentList( process_t p,... ) ;
+void ProcessSetArgumentList( process_t p,... )  __attribute__ ( ( sentinel ) ) ;
 
 /*
  * set the child process to start with the given enviromental variables
@@ -166,19 +155,30 @@ ProcessStatus ProcessState( process_t p ) ;
 void ProcessSetOptionTimeout( process_t p,int timeout,int signal ) ;
 
 /*
- * waitpid() for forked process to exit and get its exit status.
- * If the exit status is not waiter for,waitpid() with WNOHANG argument will be called when calling ProcessDelete
- * to make sure the forked process doesnt turn to a zombie.
+ * block waiting for the forked process to exit and then get its exit status.
  */
 int ProcessExitStatus( process_t ) ;
 
 /*
- * block until the forked process exits
+ * block waiting for the forked process to exit.
  */
-static inline void ProcessWaitUntilFinished( process_t p )
-{
-	ProcessExitStatus( p ) ;
-}
+void ProcessWait( process_t ) ;
+
+/*
+ * block waiting for the forked process to exit and then get its exit status and then clean up
+ * used resources.
+ *
+ * Use this function if you have to wait for the forked process to finish so that you can
+ * get its exit status.
+ */
+int ProcessWaitUntilFinished( process_t * ) ;
+
+/*
+ * clean up used resources and dont wait for the forked process.
+ * Use this function if you dont want to wait for the exit status or if the forked
+ * process is meant to live past the life of the parent process.
+ */
+void ProcessCleanUp( process_t * ) ;
 
 /*
  * get contents of std out/std error from the process.
@@ -218,8 +218,7 @@ ssize_t ProcessGetOutPut_1( process_t,char * buffer,int size,ProcessIO ) ;
 
 int main( void )
 {
-	process_t p = Process( "/bin/ls" ) ;
-	ProcessSetArgumentList( p,"-l",NULL ) ;
+	process_t p = Process( "/bin/ls","-l",NULL ) ;
 	ProcessStart( p ) ;
 	char * c = NULL ;
 	while( 1 ){
@@ -232,8 +231,7 @@ int main( void )
 			break ;
 		}
 	}
-	ProcessWaitUntilFinished( p ) ;
-	ProcessDelete( &p ) ;
+	ProcessWaitUntilFinished( &p ) ;
 	return 0 ;
 }
 
@@ -251,7 +249,7 @@ int main( void )
 int main( void )
 {
 	const char * argv[ 3 ] ;
-	process_t p = Process( "" ) ;
+	process_t p = Process( NULL ) ;
 	argv[ 0 ] = "/bin/ls" ;
 	argv[ 1 ] = "-l" ;
 	argv[ 2 ] = NULL ;
@@ -268,8 +266,7 @@ int main( void )
 			break ;
 		}
 	}
-	ProcessWaitUntilFinished( p ) ;
-	ProcessDelete( &p ) ;
+	ProcessWaitUntilFinished( &p ) ;
 	return 0 ;
 }
 
@@ -288,7 +285,7 @@ int main( void )
 int main( void )
 {
 	const char * argv[ 3 ] ;
-	process_t p = Process( "" ) ;
+	process_t p = Process( NULL ) ;
 	argv[ 0 ] = "/bin/ls" ;
 	argv[ 1 ] = "-l" ;
 	argv[ 2 ] = NULL ;
@@ -306,8 +303,7 @@ int main( void )
 			break ;
 		}
 	}
-	ProcessWaitUntilFinished( p ) ;
-	ProcessDelete( &p ) ;
+	ProcessWaitUntilFinished( &p ) ;
 	return 0 ;
 }
 

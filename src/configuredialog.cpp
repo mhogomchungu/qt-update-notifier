@@ -25,7 +25,7 @@ configureDialog::configureDialog( QWidget * parent ) :
 	QDialog( parent ),m_ui( new Ui::configureDialog )
 {
 	m_ui->setupUi( this ) ;
-	
+
 	this->setFixedSize( this->size() ) ;
 
 	this->setWindowTitle( tr( "Configuration window" ) ) ;
@@ -121,11 +121,11 @@ void configureDialog::delayTimeChanged( int index )
 {
 	QString interval ;
 	switch( index ){
-		case  0 : interval = QString( "0" )   ; break ;
-		case  1 : interval = QString( "300" ) ; break ;
-		case  2 : interval = QString( "600" ) ; break ;
-		case  3 : interval = QString( "900" ) ; break ;
-		case  4 : interval = QString( "1800" ) ; break ;
+		case  0 : interval = "0"    ; break ;
+		case  1 : interval = "300"  ; break ;
+		case  2 : interval = "600"  ; break ;
+		case  3 : interval = "900"  ; break ;
+		case  4 : interval = "1800" ; break ;
 	}
 
 	settings::setCheckDelayOnStartUp( interval ) ;
@@ -141,7 +141,7 @@ void configureDialog::setupLanguageList()
 	list.removeOne( ".." ) ;
 	list.removeOne( "translations.ts" ) ;
 
-	m_ui->comboBoxLanguageList->addItem( QString( "english_US" ) ) ;
+	m_ui->comboBoxLanguageList->addItem( "english_US" ) ;
 
 	QString e ;
 	int index ;

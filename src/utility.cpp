@@ -137,7 +137,7 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 {
 	QStringList l = QString( output1 ).split( "\n" ) ;
 
-	int index = l.indexOf( QString( "The following packages will be upgraded" ) ) ;
+	int index = l.indexOf( "The following packages will be upgraded" ) ;
 
 	const char * threeSpaceCharacters = "   " ;
 
@@ -153,7 +153,7 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 		}
 	}
 
-	index = l.indexOf( QString( "The following packages will be REPLACED:" ) ) ;
+	index = l.indexOf( "The following packages will be REPLACED:" ) ;
 
 	int replace = 0 ;
 	if( index != -1 ){
@@ -167,7 +167,7 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 		}
 	}
 
-	index = l.indexOf( QString( "The following NEW packages will be installed:" ) ) ;
+	index = l.indexOf( "The following NEW packages will be installed:" ) ;
 
 	int New = 0 ;
 	if( index != -1 ){
@@ -206,8 +206,8 @@ static QByteArray _upgrade_0( const QString& configPath,bool setEnglishLanguage 
 
 		QProcessEnvironment env ;
 
-		env.insert( QString( "LANG" ),QString( "en_US.UTF-8" ) ) ;
-		env.insert( QString( "LANGUAGE" ),QString( "en_US.UTF-8:en_US:en" ) ) ;
+		env.insert( "LANG","en_US.UTF-8" ) ;
+		env.insert( "LANGUAGE","en_US.UTF-8:en_US:en" ) ;
 
 		exe.setProcessEnvironment( env ) ;
 	}
@@ -233,8 +233,8 @@ static bool _update( const QString& configPath )
 
 	QProcessEnvironment env ;
 
-	env.insert( QString( "LANG" ),QString( "en_US.UTF-8" ) ) ;
-	env.insert( QString( "LANGUAGE" ),QString( "en_US.UTF-8:en_US:en" ) ) ;
+	env.insert( "LANG","en_US.UTF-8" ) ;
+	env.insert( "LANGUAGE","en_US.UTF-8:en_US:en" ) ;
 
 	exe.setProcessEnvironment( env ) ;
 
@@ -394,7 +394,7 @@ static QString _checkKernelVersion()
 	QString version = exe.readAll() ;
 	exe.close() ;
 
-	int index = version.indexOf( QString( "-" ) ) ;
+	int index = version.indexOf( "-" ) ;
 	if( index != -1 ){
 
 		version.truncate( index ) ;
@@ -417,11 +417,11 @@ static QString _checkKernelVersion()
 
 		auto _update = [&](){
 			/*
-			 * start warning if a user uses a kernel less than 3.12.16
+			 * start warning if a user uses a kernel less than 3.15.9
 			 */
 			int base_kernel_major_version = 3 ;
-			int base_kernel_minor_version = 12 ;
-			int base_kernel_patch_version = 16 ;
+			int base_kernel_minor_version = 15 ;
+			int base_kernel_patch_version = 9 ;
 
 			if( major < base_kernel_major_version ){
 

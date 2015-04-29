@@ -51,11 +51,21 @@ struct ProcessType_t{
 	ProcessStructure str ;
 };
 
-static void ( *_fcn_ )( void )  = NULL ;
+static void _f( void )
+{
+}
+
+static void ( *_memory_error )( void ) = _f ;
 
 void ProcessExitOnMemoryExaustion( void ( *f )( void ) )
 {
-	_fcn_ = f ;
+	_memory_error = f ;
+}
+
+static void * _ProcessError( void )
+{
+	_memory_error() ;
+	return NULL ;
 }
 
 ProcessStructure * ProcessArgumentStructure( process_t p )
@@ -74,14 +84,6 @@ void ProcessSetEnvironmentalVariable( process_t p,const char * const * env )
 	}
 }
 
-static process_t _ProcessError( void )
-{
-	if( _fcn_ != NULL ){
-		( *_fcn_ )() ;
-	}
-	return ProcessVoid ;
-}
-
 void ProcessSetArgumentList( process_t p,... )
 {
 	char * entry ;
@@ -95,36 +97,36 @@ void ProcessSetArgumentList( process_t p,... )
 		return ;
 	}
 
-	args = ( char ** )malloc( size ) ;
+	args = malloc( size ) ;
 
 	if( args == NULL ){
 		_ProcessError() ;
 		return ;
 	}
 
-	args[ index ] = p->exe ;
+	*( args + index ) = p->exe ;
 	index++ ;
 
 	va_start( list,p ) ;
 
 	while( 1 ){
 		entry = va_arg( list,char * ) ;
-		e = ( char ** )realloc( args,( 1 + index ) * size ) ;
+		e = realloc( args,( 1 + index ) * size ) ;
 
 		if( e == NULL ){
 			free( args ) ;
-			_ProcessError() ;
 			va_end( list ) ;
+			_ProcessError() ;
 			return ;
 		}else{
 			args = e ;
 		}
 
-		if( entry == ENDLIST ){
-			args[ index ] = NULL ;
+		if( entry == NULL ){
+			*( args + index ) = NULL ;
 			break ;
 		}else{
-			args[ index ] = entry ;
+			*( args + index ) = entry ;
 			index++ ;
 		}
 	}
@@ -134,9 +136,116 @@ void ProcessSetArgumentList( process_t p,... )
 	p->str.args = ( const char * const * ) args ;
 }
 
+static process_t _process( const char * path )
+{
+	process_t p  ;
+
+	size_t len ;
+
+	if( path == NULL ){
+		len = 0 ;
+	}else{
+		len = strlen( path ) ;
+	}
+
+	p = malloc( sizeof( struct ProcessType_t ) ) ;
+
+	if( p == NULL ){
+		return _ProcessError() ;
+	}
+
+	if( len == 0 ){
+		p->exe = malloc( sizeof( char ) ) ;
+		p->exe[ 0 ] = '\0' ;
+	}else{
+		p->exe = malloc( sizeof( char ) * ( len + 1 ) ) ;
+		if( p->exe == NULL ){
+			free( p ) ;
+			return _ProcessError() ;
+		}
+		memcpy( p->exe,path,len + 1 ) ;
+	}
+
+	p->std_io = 0       ;
+	p->wait_status = -1 ;
+	p->thread = NULL    ;
+	p->fd_0[ 0 ] = -1   ;
+	p->args     = NULL  ;
+	p->str.args = NULL  ;
+	p->str.timeout = -1 ;
+	p->str.env = NULL   ;
+	p->str.user_id = -1 ;
+	p->str.priority = 0 ;
+	p->str.signal = SIGTERM ;
+	p->state = ProcessHasNotStarted ;
+	return p ;
+}
+
+process_t Process( const char * path,... )
+{
+	char * entry ;
+	char ** args  ;
+	char ** e ;
+	size_t size = sizeof( char * ) ;
+	int index = 0 ;
+	va_list list ;
+	process_t p ;
+
+	if( path == NULL ){
+		return _process( NULL ) ;
+	}
+
+	args = malloc( size ) ;
+
+	if( args == NULL ){
+		_ProcessError() ;
+		return ProcessVoid ;
+	}
+
+	p = _process( path ) ;
+
+	if( p == ProcessVoid ){
+		return ProcessVoid ;
+	}
+
+	*( args + index ) = p->exe ;
+	index++ ;
+
+	va_start( list,path ) ;
+
+	while( 1 ){
+		entry = va_arg( list,char * ) ;
+		e = realloc( args,( 1 + index ) * size ) ;
+
+		if( e == NULL ){
+			ProcessCleanUp( &p ) ;
+			free( args ) ;
+			va_end( list ) ;
+			_ProcessError() ;
+			return ProcessVoid ;
+		}else{
+			args = e ;
+		}
+
+		if( entry == NULL ){
+			*( args + index ) = NULL ;
+			break ;
+		}else{
+			*( args + index ) = entry ;
+			index++ ;
+		}
+	}
+
+	va_end( list ) ;
+	p->args = args ;
+	p->str.args = ( const char * const * ) args ;
+
+	return p ;
+}
+
 static void * __timer( void * x )
 {
-	process_t  p = ( process_t ) x ;
+	process_t p = x ;
 
 	sleep( p->str.timeout ) ;
 
@@ -144,17 +253,17 @@ static void * __timer( void * x )
 
 	p->state = ProcessCancelled ;
 
-	return ( void * ) 0 ;
+	return NULL ;
 }
 
 static void __ProcessStartTimer( process_t p )
 {
-	p->thread = ( pthread_t * ) malloc( sizeof( pthread_t ) ) ;
+	p->thread = malloc( sizeof( pthread_t ) ) ;
 
 	if( p->thread == NULL ){
 		_ProcessError()  ;
 	}else{
-		pthread_create( p->thread,NULL,__timer,( void * ) p );
+		pthread_create( p->thread,NULL,__timer,p ) ;
 	}
 }
 
@@ -252,7 +361,7 @@ static inline char * __bufferExpandMemory( char * buffer,size_t new_size,size_t 
 	char * e ;
 	if( new_size >= *buffer_size ) {
 		*buffer_size = new_size * FACTOR ;
-		e = ( char * )realloc( buffer,*buffer_size ) ;
+		e = realloc( buffer,*buffer_size ) ;
 		if( e == NULL ){
 			free( buffer )  ;
 			_ProcessError() ;
@@ -282,7 +391,7 @@ size_t ProcessGetOutPut( process_t p,char ** data,ProcessIO std_io )
 		return 0 ;
 	}
 
-	buffer = ( char * ) malloc( sizeof( char ) * BUFFER_SIZE ) ;
+	buffer = malloc( sizeof( char ) * BUFFER_SIZE ) ;
 
 	if( buffer == NULL ){
 		_ProcessError() ;
@@ -300,6 +409,7 @@ size_t ProcessGetOutPut( process_t p,char ** data,ProcessIO std_io )
 		buffer = __bufferExpandMemory( buffer,size + count,&buffer_size ) ;
 
 		if( buffer == NULL ){
+			_ProcessError() ;
 			return 0 ;
 		}else{
 			memcpy( buffer + size,buff,count ) ;
@@ -319,7 +429,7 @@ size_t ProcessGetOutPut( process_t p,char ** data,ProcessIO std_io )
 			_ProcessError() ;
 			return 0 ;
 		}else{
-			e[ size ] = '\0' ;
+			*( e + size ) = '\0' ;
 			*data = e ;
 		}
 	}
@@ -364,50 +474,6 @@ void ProcessCloseStdWrite( process_t p )
 	p->fd_0[ 0 ] = -1 ;
 }
 
-process_t Process( const char * path )
-{
-	process_t p  ;
-
-	size_t len ;
-
-	if( path == NULL ){
-		return ProcessVoid ;
-	}
-
-	len = strlen( path ) ;
-
-	p = ( process_t ) malloc( sizeof( struct ProcessType_t ) ) ;
-
-	if( p == NULL ){
-		return _ProcessError() ;
-	}
-
-	if( len == 0 ){
-		p->exe = NULL ;
-	}else{
-		p->exe = ( char * ) malloc( sizeof( char ) * ( len + 1 ) ) ;
-		if( p->exe == NULL ){
-			free( p ) ;
-			return _ProcessError() ;
-		}
-		memcpy( p->exe,path,len + 1 ) ;
-	}
-
-	p->std_io = 0       ;
-	p->wait_status = -1 ;
-	p->thread = NULL    ;
-	p->fd_0[ 0 ] = -1   ;
-	p->args     = NULL  ;
-	p->str.args = NULL  ;
-	p->str.timeout = -1 ;
-	p->str.env = NULL   ;
-	p->str.user_id = -1 ;
-	p->str.priority = 0 ;
-	p->str.signal = SIGTERM ;
-	p->state = ProcessHasNotStarted ;
-	return p ;
-}
-
 void ProcessSetOptionTimeout( process_t p,int timeout,int signal )
 {
 	if( p != ProcessVoid ){
@@ -416,19 +482,10 @@ void ProcessSetOptionTimeout( process_t p,int timeout,int signal )
 	}
 }
 
-void ProcessDelete( process_t * p )
+static void _ProcessDelete( process_t px )
 {
-	process_t px ;
-
-	if( p == NULL || *p == ProcessVoid ){
-		return ;
-	}
-
-	px = *p ;
-	*p = ProcessVoid ;
-
 	if( px->thread != NULL ){
-		pthread_cancel( *(px)->thread ) ;
+		pthread_cancel( *( px->thread ) ) ;
 		free( px->thread ) ;
 	}
 
@@ -441,13 +498,20 @@ void ProcessDelete( process_t * p )
 	if( px->wait_status == -1 ){
 		waitpid( px->pid,0,WNOHANG ) ;
 	}
-	if( px->args != NULL ){
-		free( px->args ) ;
-	}
-	if( px->exe != NULL ){
-		free( px->exe ) ;
-	}
+
+	free( px->args ) ;
+
+	free( px->exe ) ;
+
 	free( px ) ;
+}
+
+void ProcessCleanUp( process_t * p )
+{
+	if( p != NULL && *p != ProcessVoid ){
+		_ProcessDelete( *p ) ;
+		*p = ProcessVoid ;
+	}
 }
 
 int ProcessTerminate( process_t p )
@@ -486,22 +550,49 @@ int ProcessKill( process_t p )
 	}
 }
 
+int ProcessWaitUntilFinished( process_t * e )
+{
+	int s ;
+
+	process_t p ;
+
+	if( e == NULL || *e == ProcessVoid ){
+		return -1 ;
+	}else{
+		p = *e ;
+		*e = ProcessVoid ;
+
+		s = ProcessExitStatus( p ) ;
+
+		_ProcessDelete( p ) ;
+
+		return s ;
+	}
+}
+
 int ProcessExitStatus( process_t p )
 {
-	int status ;
+	int s ;
 
 	if( p == ProcessVoid ){
 		return -1 ;
 	}else{
-		waitpid( p->pid,&status,0 ) ;
+		waitpid( p->pid,&s,0 ) ;
+
 		p->state = ProcessCompleted ;
 		p->wait_status = 1 ;
-		if( WIFEXITED( status ) == 0 ){
+
+		if( WIFEXITED( s ) == 0 ){
 			return -1 ;
 		}else{
-			return WEXITSTATUS( status ) ;
+			return WEXITSTATUS( s ) ;
 		}
 	}
+}
+
+void ProcessWait( process_t p )
+{
+	ProcessExitStatus( p ) ;
 }
 
 void ProcessSetArguments( process_t p,const char * const s[] )

@@ -53,8 +53,6 @@ static const char * groupName = "qtupdatenotifier" ;
 
 static int userHasPermission( void )
 {
-	int st = 0 ;
-
 	const char ** entry ;
 	const char * name   ;
 
@@ -84,20 +82,27 @@ static int userHasPermission( void )
 	entry = ( const char ** )grp->gr_mem ;
 
 	while( *entry != NULL ){
+
 		if( strcmp( *entry,name ) == 0 ){
-			st = 1 ;
-			break ;
+
+			return 1 ;
 		}else{
 			entry++ ;
 		}
 	}
 
-	return st ;
+	return 0 ;
+}
+
+static int userHasNoPermission( void )
+{
+	return userHasPermission() == 0 ;
 }
 
 static inline void printOUtPut( const char * e,int debug )
 {
 	if( debug ){
+
 		printf( "%s",e ) ;
 	}
 }
@@ -105,8 +110,11 @@ static inline void printOUtPut( const char * e,int debug )
 static inline void logStage( int fd,const char * msg )
 {
 	const char * e = "\n-------------------------------------------\n" ;
+
 	size_t s = strlen( e ) ;
+
 	printf( "%s\n",msg ) ;
+
 	write( fd,e,s ) ;
 	write( fd,msg,strlen( msg ) ) ;
 	write( fd,e,s ) ;
@@ -125,6 +133,7 @@ static int itIsSafeToUpdate( const char * e,int debug )
 	printOUtPut( e,debug ) ;
 
 	#define stringContains( x,y ) strstr( x,y ) != NULL
+
 	if( e == NULL){
 		return 1 ;
 	}
@@ -157,10 +166,15 @@ static void printProcessOUtPut( process_t p,int fd,int debug )
 {
 	char * e ;
 	int z ;
+
 	while( 1 ){
+
 		e = NULL ;
+
 		z = ProcessGetOutPut( p,&e,ProcessStdOut ) ;
+
 		if( e ){
+
 			write( fd,e,z ) ;
 
 			printOUtPut( e,debug ) ;
@@ -175,22 +189,23 @@ static void printProcessOUtPut( process_t p,int fd,int debug )
 static int refreshPackageList( int fd,int debug )
 {
 	int r ;
+
 	process_t p ;
 
 	logStage( fd,"entering refreshPackageList" ) ;
 
 	if( userHasPermission() ){
-		p = Process( "/usr/bin/apt-get" ) ;
 
-		ProcessSetArgumentList( p,"update",NULL ) ;
+		p = Process( "/usr/bin/apt-get","update",NULL ) ;
+
 		ProcessSetOptionUser( p,0 ) ;
 		ProcessSetOptionPriority( p,PRIORITY ) ;
+
 		ProcessStart( p ) ;
 
 		printProcessOUtPut( p,fd,debug ) ;
 
-		r = ProcessExitStatus( p ) ;
-		ProcessDelete( &p ) ;
+		r = ProcessWaitUntilFinished( &p ) ;
 	}else{
 		printf( "error: insufficent privileges to perform this operation\n" ) ;
 		r = 1 ;
@@ -204,21 +219,24 @@ static int refreshPackageList( int fd,int debug )
 static int aptAndSynapticAreRunning( void )
 {
 	int r ;
+
 	uid_t uid = getuid() ;
-	process_t p = Process( "/bin/pidof" ) ;
-	ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
+
+	process_t p = Process( "/bin/pidof","/usr/sbin/synaptic",NULL ) ;
+
 	ProcessSetOptionUser( p,uid ) ;
 	ProcessStart( p ) ;
-	r = ProcessExitStatus( p ) ;
-	ProcessDelete( &p ) ;
+
+	r = ProcessWaitUntilFinished( &p ) ;
 
 	if( r != 0 ){
-		p = Process( "/bin/pidof" ) ;
-		ProcessSetArgumentList( p,"/usr/bin/apt-get",NULL ) ;
+
+		p = Process( "/bin/pidof","/usr/bin/apt-get",NULL ) ;
 		ProcessSetOptionUser( p,uid ) ;
+
 		ProcessStart( p ) ;
-		r = ProcessExitStatus( p ) ;
-		ProcessDelete( &p ) ;
+
+		r = ProcessWaitUntilFinished( &p ) ;
 	}
 
 	return r == 0 ;
@@ -226,14 +244,17 @@ static int aptAndSynapticAreRunning( void )
 
 char * getProcessOutPut( process_t p,int fd,int debug )
 {
-	char * e = NULL ;
-	char * f = NULL ;
+	char * e      = NULL ;
+	char * f      = NULL ;
 	char * buffer = NULL ;
+
 	size_t buffer_size = 0 ;
 	size_t output_size = 0 ;
 
 	while( 1 ){
+
 		output_size = ProcessGetOutPut( p,&e,ProcessStdOut ) ;
+
 		if( output_size > 0 ){
 
 			write( fd,e,output_size ) ;
@@ -265,17 +286,23 @@ char * getProcessOutPut( process_t p,int fd,int debug )
 static int autoUpdate( int fd,int debug )
 {
 	process_t p ;
+
 	int r ;
+
 	char * buffer ;
 
 	logStage( fd,"entering autoUpdate" ) ;
 
-	if( !userHasPermission() ){
+	if( userHasNoPermission() ){
+
 		printf( "error: insufficent privileges to perform this operation\n" ) ;
+
 		r = 1 ;
 	}else{
 		if( aptAndSynapticAreRunning() ){
+
 			printf( "error: apt and/or synaptic are running\n" ) ;
+
 			return 3 ;
 		}
 
@@ -287,22 +314,26 @@ static int autoUpdate( int fd,int debug )
 		r = refreshPackageList( fd,debug ) ;
 
 		if( r == 0 ){
+
 			/*
 			 * check if its safe to update
 			 */
-			p = Process( "/usr/bin/apt-get" ) ;
-			ProcessSetArgumentList( p,"dist-upgrade","--simulate",NULL ) ;
+
+			p = Process( "/usr/bin/apt-get","dist-upgrade","--simulate",NULL ) ;
+
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessSetOptionPriority( p,PRIORITY ) ;
+
 			ProcessStart( p ) ;
 
 			buffer = getProcessOutPut( p,fd,debug ) ;
 
-			ProcessWaitUntilFinished( p ) ;
-			ProcessDelete( &p ) ;
+			ProcessWaitUntilFinished( &p ) ;
 
 			if( buffer ){
+
 				r = itIsSafeToUpdate( buffer,debug ) ;
+
 				free( buffer ) ;
 			}else{
 				printf( "IT IS NOT SAFE TO UPDATE,apt-get gave no output\n" ) ;
@@ -317,21 +348,21 @@ static int autoUpdate( int fd,int debug )
 				 */
 				printf( "updates found\n" ) ;
 
-				p = Process( "/usr/bin/apt-get" ) ;
-				ProcessSetArgumentList( p,"dist-upgrade","--assume-yes",NULL ) ;
+				p = Process( "/usr/bin/apt-get","dist-upgrade","--assume-yes",NULL ) ;
+
 				ProcessSetOptionUser( p,0 ) ;
 				ProcessSetOptionPriority( p,PRIORITY ) ;
+
 				ProcessStart( p ) ;
 
 				printProcessOUtPut( p,fd,debug ) ;
 
-				r = ProcessExitStatus( p ) ;
-
-				ProcessDelete( &p ) ;
+				r = ProcessWaitUntilFinished( &p ) ;
 
 				logStage( fd,"done running apt-get dist-upgrade --assume-yes" ) ;
 
 				if( r != 0 ){
+
 					printf( "error: failed to run dist-upgrade --assume-yes\n" ) ;
 					logStage( fd,"error: failed to run dist-upgrade --assume-yes" ) ;
 				}else{
@@ -340,17 +371,20 @@ static int autoUpdate( int fd,int debug )
 					/*
 					 * clear cache
 					 */
-					p = Process( "/usr/bin/apt-get" ) ;
-					ProcessSetArgumentList( p,"clean",NULL ) ;
+					p = Process( "/usr/bin/apt-get","clean",NULL ) ;
+
 					ProcessSetOptionUser( p,0 ) ;
 					ProcessSetOptionPriority( p,PRIORITY ) ;
+
 					ProcessStart( p ) ;
-					ProcessWaitUntilFinished( p ) ;
-					ProcessDelete( &p ) ;
+
+					ProcessWaitUntilFinished( &p ) ;
 
 					logStage( fd,"done running apt-get clean" ) ;
 				}
+
 			}else if( r == 2 ){
+
 				printf( "There are no updates\n" ) ;
 			}else{
 				printf( "IT IS NOT SAFE TO UPDATE\n" ) ;
@@ -373,16 +407,21 @@ static int downloadPackages( int fd,int debug )
 	logStage( fd,"entering downloadPackages" ) ;
 
 	if( userHasPermission() ){
+
 		r = refreshPackageList( fd,debug ) ;
+
 		if( r == 0 ){
-			p = Process( "/usr/bin/apt-get" ) ;
-			ProcessSetArgumentList( p,"dist-upgrade","--download-only","--assume-yes",NULL ) ;
+
+			p = Process( "/usr/bin/apt-get","dist-upgrade","--download-only","--assume-yes",NULL ) ;
+
 			ProcessSetOptionUser( p,0 ) ;
 			ProcessSetOptionPriority( p,PRIORITY ) ;
+
 			ProcessStart( p ) ;
+
 			printProcessOUtPut( p,fd,debug ) ;
-			r = ProcessExitStatus( p ) ;
-			ProcessDelete( &p ) ;
+
+			r = ProcessWaitUntilFinished( &p ) ;
 		}
 	}else{
 		printf( "error: insufficent privileges to perform this operation\n" ) ;
@@ -397,15 +436,20 @@ static int downloadPackages( int fd,int debug )
 static const char * getSUExe( void )
 {
 	struct stat statstr ;
+
 	const char * env = getenv( "DESKTOP_SESSION" ) ;
+
 	if( env == NULL ){
+
 		return gksu ;
 	}else{
 		#define desktopEnvironment( x ) strstr( env,x ) != NULL
 		#define pathExists( x ) stat( x,&statstr ) == 0
 
 		if( desktopEnvironment( "kde" ) || desktopEnvironment( "KDE" ) ){
+
 			if( pathExists( kdesu ) ){
+
 				return kdesu ;
 			}else{
 				return gksu ;
@@ -418,7 +462,6 @@ static const char * getSUExe( void )
 
 static int startSynaptic( const char * e,int fd )
 {
-	int r ;
 	process_t p ;
 
 	const char * exe ;
@@ -426,26 +469,32 @@ static int startSynaptic( const char * e,int fd )
 	if( 0 && fd && ktsuss ){;}
 
 	if( userHasPermission() ){
-		p = Process( "/usr/sbin/synaptic" ) ;
+
+		p = Process( "/usr/sbin/synaptic",NULL ) ;
+
 		ProcessSetOptionUser( p,0 ) ;
 
 		if( e != NULL ){
+
 			ProcessSetArgumentList( p,e,NULL ) ;
 		}
 	}else{
 		exe = getSUExe() ;
 
-		p = Process( exe ) ;
+		p = Process( exe,NULL ) ;
 		ProcessSetOptionUser( p,getuid() ) ;
 
 		if( stringsAreEqual( exe,gksu ) ){
+
 			if( e != NULL ){
+
 				ProcessSetArgumentList( p,"/usr/sbin/synaptic --update-at-startup",NULL ) ;
 			}else{
 				ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
 			}
 		}else{
 			if( e != NULL ){
+
 				ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,NULL ) ;
 			}else{
 				ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
@@ -454,9 +503,8 @@ static int startSynaptic( const char * e,int fd )
 	}
 
 	ProcessStart( p ) ;
-	r = ProcessExitStatus( p ) ;
-	ProcessDelete( &p ) ;
-	return r ;
+
+	return ProcessWaitUntilFinished( &p ) ;
 }
 
 static int printOptions( void )
@@ -530,7 +578,9 @@ int main( int argc,char * argv[] )
 	e = *( argv + 1 ) ;
 
 	if( argc > 1 ){
+
 		if( stringsAreEqual( *( argv + argc - 1 ),"--debug" ) ){
+
 			debug = 1 ;
 		}else{
 			debug = 0 ;
@@ -538,12 +588,17 @@ int main( int argc,char * argv[] )
 	}
 
 	if( _help( e ) ){
+
 		st = printOptions() ;
 	}else{
 		if( stringsAreEqual( e,"--start-synaptic" ) ){
+
 			if( argc == 3 ){
+
 				f = *( argv + 2 ) ;
+
 				if( stringsAreEqual( f,"--update-at-startup" ) ){
+
 					st = startSynaptic( f,fd ) ;
 				}else{
 					printf( "error: unrecognized or invalid synaptic option\n" ) ;
@@ -554,9 +609,13 @@ int main( int argc,char * argv[] )
 			}
 		}else{
 			if( stringsAreEqual( e,"--auto-update" ) ){
+
 				st = autoUpdate( fd,debug ) ;
+
 			}else if( stringsAreEqual( e,"--download-packages" ) ){
+
 				st = downloadPackages( fd,debug ) ;
+
 			}else{
 				printf( "error: unrecognized or invalid option\n" ) ;
 				st = 1 ;
