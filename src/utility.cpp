@@ -186,7 +186,7 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 	QString z = QString::number( New ) ;
 
 	QString q = QObject::tr( "<table><tr><td>%1 to be upgraded</td></tr><tr><td>%2 to be replaced</td></tr><tr><td>%3 to be installed</td></tr></table>" ) ;
-	QString updates = q.arg( x ).arg( y ).arg( z ) ;
+	QString updates = q.arg( x,y,z ) ;
 
 	result r ;
 	r.taskStatus = 0 ;

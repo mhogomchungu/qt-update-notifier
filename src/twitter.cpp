@@ -24,7 +24,7 @@ twitter::twitter( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::twitter )
 {
 	m_ui->setupUi( this ) ;
 	this->setFixedSize( this->size() ) ;
-	this->setWindowIcon( QIcon( QString( ":/qt-update-notifier.png" ) ) ) ;
+	this->setWindowIcon( QIcon( ":/qt-update-notifier.png" ) ) ;
 	connect( m_ui->pbClose,SIGNAL( clicked() ),this,SLOT( pbClose() ) ) ;
 
 	this->installEventFilter( this ) ;

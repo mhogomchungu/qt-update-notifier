@@ -275,7 +275,7 @@ QByteArray settings::token()
 
 QString settings::url()
 {
-	QString opt = QString( "url" ) ;
+	QString opt( "url" ) ;
 
 	if( _settings.contains( opt ) ){
 		return _settings.value( opt ).toString() ;
@@ -295,7 +295,7 @@ QString settings::getLastTwitterUpdate()
 	if( _settings.contains( opt ) ){
 		return _settings.value( opt ).toString() ;
 	}else{
-		QString u( "" ) ;
+		QString u ;
 		_settings.setValue( opt,u ) ;
 		return u ;
 	}
