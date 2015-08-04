@@ -74,6 +74,7 @@ install ( FILES translations.qm/dutch_NL.qm DESTINATION  ${QM_PATH} )
 install ( FILES translations.qm/german_DE.qm DESTINATION ${QM_PATH} )
 install ( FILES translations.qm/czech_CS.qm DESTINATION  ${QM_PATH} )
 install ( FILES translations.qm/slovak_SK.qm DESTINATION ${QM_PATH} )
+install ( FILES translations.qm/polish_PL.qm DESTINATION ${QM_PATH} )
 
 install( TARGETS qt-update-notifier RUNTIME DESTINATION bin )
 

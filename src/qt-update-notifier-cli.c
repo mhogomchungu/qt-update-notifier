@@ -50,11 +50,12 @@ static const char * ktsuss = "/usr/bin/ktsuss" ;
 static const char * groupName = "qtupdatenotifier" ;
 
 #define stringsAreEqual( x,y ) strcmp( x,y ) == 0
+#define stringContains( x,y ) strstr( x,y ) != NULL
 
 static int userHasPermission( void )
 {
-	const char ** entry ;
-	const char * name   ;
+	char ** entry ;
+	char * name   ;
 
 	uid_t uid = getuid() ;
 
@@ -78,12 +79,12 @@ static int userHasPermission( void )
 		return 0 ;
 	}
 
-	name  = ( const char * )pass->pw_name ;
-	entry = ( const char ** )grp->gr_mem ;
+	name  = pass->pw_name ;
+	entry = grp->gr_mem ;
 
 	while( *entry != NULL ){
 
-		if( strcmp( *entry,name ) == 0 ){
+		if( stringsAreEqual( *entry,name ) ){
 
 			return 1 ;
 		}else{
@@ -131,8 +132,6 @@ static int itIsSafeToUpdate( const char * e,int debug )
 	const char * noUpdates = "0 upgraded, 0 newly installed, 0 removed and 0 not upgraded." ;
 
 	printOUtPut( e,debug ) ;
-
-	#define stringContains( x,y ) strstr( x,y ) != NULL
 
 	if( e == NULL){
 		return 1 ;
