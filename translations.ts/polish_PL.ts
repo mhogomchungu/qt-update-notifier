@@ -694,7 +694,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="117"/>
         <source>Synaptic exited with errors</source>
-        <translation>Synaptic zakoźczył działanie z błędami.</translation>
+        <translation>Synaptic zakończył działanie z błędami.</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="578"/>
