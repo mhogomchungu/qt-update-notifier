@@ -397,3 +397,14 @@ void settings::enableAutoStart( bool autoStart )
 	QString opt( "autoStartAtLogin" ) ;
 	_settings.setValue( opt,autoStart ) ;
 }
+
+bool settings::checkNewerKernels()
+{
+	QString opt( "checkNewerKernels" ) ;
+	if( _settings.contains( opt ) ){
+		return _settings.value( opt ).toBool() ;
+	}else{
+		_settings.setValue( opt,false ) ;
+		return false ;
+	}
+}

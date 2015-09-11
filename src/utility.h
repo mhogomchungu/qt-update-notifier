@@ -57,6 +57,8 @@ namespace utility
 
 	Task::future< bool >& autoDownloadPackages( void ) ;
 	Task::future< bool >& startSynaptic( void ) ;
+
+	Task::future< QString >& checkKernelVersions( void ) ;
 }
 
 #endif // UTILITY_H

@@ -22,42 +22,42 @@
 
 #include<QString>
 
-class settings
+namespace settings
 {
-public:
-	static void init( void) ;
-	static QString configPath( void ) ;
-	static QString aptGetLogFilePath( void ) ;
-	static QString activityLogFilePath( void ) ;
-	static QString prefferedLanguage( void ) ;
-	static QString nextTimeToCheckForUpdatesLogFile( void ) ;
-	static QString checkDelayOnStartUplogFile( void ) ;
-	static QString updateCheckIntervalLogFile( void ) ;
-	static QString delayTimeBeforeUpdateCheck( int ) ;
-	static QString defaultIcon( void ) ;
-	static QByteArray token( void ) ;
-	static QString url( void ) ;
-	static QString getLastTwitterUpdate( void ) ;
-	static void setLastTwitterUpdate( const QString& ) ;
-	static int delayTimeBeforeUpdateCheck( void ) ;
-	static bool autoRefreshSynaptic( void ) ;
-	static bool firstTimeRun( void ) ;
-	static u_int32_t updateCheckInterval( void ) ;
-	static u_int64_t nextScheduledUpdateTime() ;
-	static void writeUpdateTimeToConfigFile( u_int64_t time ) ;
-	static bool autoUpdatePackages( void ) ;
-	static bool autoDownloadPackages( void ) ;
-	static bool skipOldPackageCheck( void ) ;
-	static bool autoStartEnabled( void ) ;
-	static bool warnOnInconsistentState( void ) ;
-	static bool prefixLogEntries( void ) ;
-	static bool showIconOnImportantInfo( void ) ;
-	static void enableAutoStart( bool ) ;
-	static void setAutoRefreshSynaptic( bool ) ;
-	static void setPrefferedLanguage( const QString& ) ;
-	static void setCheckDelayOnStartUp( const QString& ) ;
-	static void setNextUpdateInterval( const QString& ) ;
-	static QString networkConnectivityChecker( void ) ;
-};
+	void init( void) ;
+	QString configPath( void ) ;
+	QString aptGetLogFilePath( void ) ;
+	QString activityLogFilePath( void ) ;
+	QString prefferedLanguage( void ) ;
+	QString nextTimeToCheckForUpdatesLogFile( void ) ;
+	QString checkDelayOnStartUplogFile( void ) ;
+	QString updateCheckIntervalLogFile( void ) ;
+	QString delayTimeBeforeUpdateCheck( int ) ;
+	QString defaultIcon( void ) ;
+	QByteArray token( void ) ;
+	QString url( void ) ;
+	QString getLastTwitterUpdate( void ) ;
+	void setLastTwitterUpdate( const QString& ) ;
+	int delayTimeBeforeUpdateCheck( void ) ;
+	bool autoRefreshSynaptic( void ) ;
+	bool firstTimeRun( void ) ;
+	u_int32_t updateCheckInterval( void ) ;
+	u_int64_t nextScheduledUpdateTime() ;
+	void writeUpdateTimeToConfigFile( u_int64_t time ) ;
+	bool autoUpdatePackages( void ) ;
+	bool autoDownloadPackages( void ) ;
+	bool skipOldPackageCheck( void ) ;
+	bool autoStartEnabled( void ) ;
+	bool warnOnInconsistentState( void ) ;
+	bool prefixLogEntries( void ) ;
+	bool showIconOnImportantInfo( void ) ;
+	void enableAutoStart( bool ) ;
+	void setAutoRefreshSynaptic( bool ) ;
+	void setPrefferedLanguage( const QString& ) ;
+	void setCheckDelayOnStartUp( const QString& ) ;
+	void setNextUpdateInterval( const QString& ) ;
+	QString networkConnectivityChecker( void ) ;
+	bool checkNewerKernels( void ) ;
+}
 
 #endif // SETTINGS_H

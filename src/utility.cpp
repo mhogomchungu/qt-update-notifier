@@ -608,4 +608,52 @@ Task::future< QString >& checkForPackageUpdates()
 	} ) ;
 }
 
+Task::future<QString>& checkKernelVersions()
+{
+	return Task::run<QString>( [](){
+
+		auto _getOutPut = []( const char * e  ){
+
+			QProcess exe ;
+
+			exe.start( e ) ;
+
+			exe.waitForFinished( -1 ) ;
+
+			QStringList l ;
+
+			for( const auto& it : exe.readAll().split( '\n' ) ){
+
+				if( it.startsWith( "kernel-" ) ){
+
+					if( isdigit( it.at( 7 ) ) ){
+
+						l.append( it ) ;
+					}
+				}
+			}
+
+			if( l.size() > 0 ){
+
+				l.sort() ;
+
+				return l.last() ;
+			}else{
+				return QString() ;
+			}
+		} ;
+
+		QString e = _getOutPut( "apt-cache pkgnames" ) ;
+
+		QString f = _getOutPut( "rpm -qa --queryformat \"%{name}\n\"" ) ;
+
+		if( e != f ){
+
+			return e ;
+		}else{
+			return QString() ;
+		}
+	} ) ;
+}
+
 }

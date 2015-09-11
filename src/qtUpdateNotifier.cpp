@@ -27,21 +27,44 @@
 #include <utility>
 
 template< typename T >
-class QObject_raii
+class qObject_unique_ptr
 {
 public:
-	explicit QObject_raii( T t ) : m_qObject( t )
+	explicit qObject_unique_ptr( T * t ) : m_qObject( t )
 	{
 	}
-	~QObject_raii()
+
+	qObject_unique_ptr( const qObject_unique_ptr& ) = delete ;
+
+	qObject_unique_ptr( qObject_unique_ptr&& other )
 	{
-		m_qObject->deleteLater() ;
+		this->deleteHandle() ;
+		m_qObject = other.m_qObject ;
+		other.m_qObject = nullptr ;
+	}
+
+	void operator =( const qObject_unique_ptr& ) = delete ;
+
+	T * operator->()
+	{
+		return m_qObject ;
+	}
+
+	~qObject_unique_ptr()
+	{
+		this->deleteHandle() ;
 	}
 private:
-	T m_qObject ;
-};
+	void deleteHandle()
+	{
+		if( m_qObject ){
 
-#define qObject_raii( x ) QObject_raii< decltype( x ) > QObject_raii_x( x ) ; Q_UNUSED( QObject_raii_x )
+			m_qObject->deleteLater() ;
+		}
+	}
+
+	T * m_qObject = nullptr ;
+};
 
 qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 {
@@ -131,9 +154,9 @@ void qtUpdateNotifier::setLastTwitterUpdate( const QString& e )
 	settings::setLastTwitterUpdate( e ) ;
 }
 
-void qtUpdateNotifier::networResponse( QNetworkReply * r )
+void qtUpdateNotifier::networResponse( QNetworkReply * k )
 {
-	qObject_raii( r ) ;
+	qObject_unique_ptr< QNetworkReply > r( k ) ;
 
 	QList<QByteArray> l = r->rawHeaderList() ;
 
@@ -444,7 +467,7 @@ void qtUpdateNotifier::logActivity( const QString& msg )
 void qtUpdateNotifier::logActivity_1( const QString& msg )
 {
 	QString line( "------------------------------------------------------" ) ;
-	line += "----------------------------------------------------------------" ;
+	line += "--------------------------------------------------" ;
 	QString t = this->getCurrentTime_1() ;
 	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line,t,msg,line )  ;
 	utility::writeToFile( settings::activityLogFilePath(),log,false ).await() ;
@@ -526,7 +549,11 @@ void qtUpdateNotifier::checkForUpdates()
 			 * this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 			 */
 			this->checkForPackageUpdates() ;
-			this->accessTwitter() ;
+
+			/*
+			 * disabling this functionality since it doesnt appear to be in use
+			 */
+			//this->accessTwitter() ;
 
 			break ;
 		case result::noNetworkConnection :
@@ -634,6 +661,16 @@ void qtUpdateNotifier::checkForPackageUpdates()
 			this->logActivity_1( r ) ;
 			this->showIconOnImportantInfo() ;
 			emit updateLogWindow() ;
+		}
+	}
+
+	if( settings::checkNewerKernels() ){
+
+		const auto& e = utility::checkKernelVersions().await() ;
+
+		if( !e.isEmpty() ){
+
+			this->logActivity_1( tr( "Kernel version \"%1\" is available" ).arg( e ) ) ;
 		}
 	}
 }
