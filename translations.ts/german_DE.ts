@@ -668,7 +668,7 @@ im Forum.</translation>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="673"/>
         <source>Kernel version &quot;%1&quot; is available</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernel in Version &quot;%1&quot; verfügbar</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="814"/>
