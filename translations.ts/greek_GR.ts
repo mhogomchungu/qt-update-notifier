@@ -681,7 +681,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="673"/>
         <source>Kernel version &quot;%1&quot; is available</source>
-        <translation type="unfinished"></translation>
+        <translation>Η έκδοση kernel &quot;%1&quot; είναι διαθέσιμη</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="814"/>

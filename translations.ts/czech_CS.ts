@@ -660,7 +660,7 @@ Pokud problém přetrvává, a Synaptic není schopen ho vyřešit, pak požáde
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="605"/>
         <source>Update in progress, do not power down computer</source>
-        <translation></translation>
+        <translation>Probíhá aktualizace, nevypínejte počítač</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="660"/>
@@ -670,7 +670,7 @@ Pokud problém přetrvává, a Synaptic není schopen ho vyřešit, pak požáde
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="673"/>
         <source>Kernel version &quot;%1&quot; is available</source>
-        <translation type="unfinished"></translation>
+        <translation>Je dostupné jádro ve verzi &quot;%1&quot; </translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="814"/>

@@ -49,4 +49,4 @@ TRANSLATIONS += translations.ts/greek_GR.ts
 TRANSLATIONS += translations.ts/german_DE.ts
 TRANSLATIONS += translations.ts/czech_CS.ts
 TRANSLATIONS += translations.ts/slovak_SK.ts
-
+TRANSLATIONS += translations.ts/polish_PL.ts

@@ -36,27 +36,27 @@ Indien het probleem blijft bestaan en het bijwerken in Synaptic niet mogelijk is
     <message>
         <location filename="../src/utility.cpp" line="328"/>
         <source>No updates found</source>
-        <translation>Geen bijwerkingen gevonden</translation>
+        <translation>Geen updates gevonden</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="444"/>
         <source>Recommending updating the kernel from version %1 to a more recent version.</source>
-        <translation>Bijwerken van kernel versie &quot;%1&quot; naar een meer recentere versie wordt aanbevolen.</translation>
+        <translation>Updaten van kernel versie &quot;%1&quot; naar een meer recentere versie wordt aanbevolen.</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="547"/>
         <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation>Bijwerken van LibreOffice versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
+        <translation>Updaten van LibreOffice versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="559"/>
         <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation>Bijwerken van VirtualBox versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
+        <translation>Updaten van VirtualBox versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="571"/>
         <source>Updating Calibre from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
-        <translation>Bijwerken van Calibre versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
+        <translation>Updaten van Calibre versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
 </context>
 <context>
@@ -69,7 +69,7 @@ Indien het probleem blijft bestaan en het bijwerken in Synaptic niet mogelijk is
     <message>
         <location filename="../src/configuredialog.ui" line="38"/>
         <source>Set the time interval btw updates.Default and recommended interval is 1 day, 0 hours, 0 minutes</source>
-        <translation>Tijdinterval tussen bijwerken
+        <translation>Tijdinterval tussen updates
 
 Standaard en aanbevolen interval
      1 dag, 0 uren, 0 minuten</translation>
@@ -471,7 +471,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/configuredialog.cpp" line="93"/>
         <source>Update check interval must be at least 10 minutes</source>
-        <translation>Interval voor bijwerken dient tenminste 10 minuten te zijn</translation>
+        <translation>Interval voor updates dient tenminste 10 minuten te zijn</translation>
     </message>
     <message>
         <location filename="../src/configuredialog.cpp" line="173"/>
@@ -533,7 +533,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="111"/>
         <source>Update output log window</source>
-        <translation>Geschiedenis van bijwerken</translation>
+        <translation>Geschiedenis van updates</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="119"/>
@@ -543,7 +543,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="92"/>
         <source>Waiting for %1 minutes before checking for updates</source>
-        <translation>Controle op bijwerken is na %1 minuten</translation>
+        <translation>Controle op updates is na %1 minuten</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="94"/>
@@ -585,17 +585,17 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="352"/>
         <source>Check for updates</source>
-        <translation>Op bijwerken controleren</translation>
+        <translation>Op updates controleren</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="355"/>
         <source>Done updating</source>
-        <translation>Bijwerken is gedaan</translation>
+        <translation>Het updaten is gedaan</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="358"/>
         <source>Open update log window</source>
-        <translation>Geschiedenis bijwerken openen</translation>
+        <translation>Geschiedenis van updates openen</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="361"/>
@@ -626,7 +626,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="516"/>
         <source>Checking for updates</source>
-        <translation>Op bijwerken controleren</translation>
+        <translation>Op updates controleren</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="594"/>
@@ -636,17 +636,17 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="607"/>
         <source>Automatic package update initiated</source>
-        <translation>Automatische pakketbijwerken is geïnitialiseerd</translation>
+        <translation>Automatisch updaten van pakket is gestart</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="612"/>
         <source>Automatic package update completed</source>
-        <translation>Automatische pakketbijwerken is compleet</translation>
+        <translation>Automatisch updaten van pakket is compleet</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="615"/>
         <source>Automatic package update failed</source>
-        <translation>Automatische pakketbijwerken is mislukt</translation>
+        <translation>Automatisch updaten van pakket is mislukt</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="636"/>
@@ -686,7 +686,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="530"/>
         <source>There are updates in the repository</source>
-        <translation>Er zijn in Synaptic bijwerkingen beschikbaar</translation>
+        <translation>Er zijn in Synaptic updates beschikbaar</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="207"/>
@@ -695,12 +695,12 @@ Standaard en aanbevolen interval
         <location filename="../src/qtUpdateNotifier.cpp" line="657"/>
         <location filename="../src/qtUpdateNotifier.cpp" line="707"/>
         <source>No updates found</source>
-        <translation>Geen bijwerkingen gevonden</translation>
+        <translation>Geen updates gevonden</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="605"/>
         <source>Update in progress, do not power down computer</source>
-        <translation>Bezig met bijwerken, computer nu niet uitschakelen.</translation>
+        <translation>Bezig met updaten, computer nu NIET UITSCHAKELEN.</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="563"/>
@@ -734,7 +734,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="673"/>
         <source>Kernel version &quot;%1&quot; is available</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernel versie ”%1” is beschikbaar</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="751"/>

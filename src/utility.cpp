@@ -612,7 +612,7 @@ Task::future<QString>& checkKernelVersions()
 {
 	return Task::run<QString>( [](){
 
-		auto _getOutPut = []( const char * e  ){
+		auto _getOutPut = []( const char * e ){
 
 			QProcess exe ;
 
