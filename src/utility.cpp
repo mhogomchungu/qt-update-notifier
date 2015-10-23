@@ -386,6 +386,66 @@ Task::future< int >& autoUpdatePackages()
 	return Task::run< int >( [](){ return _task( "--auto-update" ) ; } ) ;
 }
 
+static bool _check_version( const QString& e,const QString& f )
+{
+	QStringList nv = e.split( "." ) ;
+	QStringList iv = f.split( "." ) ;
+
+	int installed_major_version_number = iv.at( 0 ).toInt() ;
+	int installed_minor_version_number ;
+	int installed_patch_version_number ;
+
+	if( iv.size() >= 2 ){
+		installed_minor_version_number = iv.at( 1 ).toInt() ;
+	}else{
+		installed_minor_version_number = 0 ;
+	}
+
+	if( iv.size() >= 3 ){
+		installed_patch_version_number = iv.at( 2 ).toInt() ;
+	}else{
+		installed_patch_version_number = 0 ;
+	}
+
+	int new_major_version_number = nv.at( 0 ).toInt() ;
+	int new_minor_version_number ;
+	int new_patch_version_number  ;
+
+	if( nv.size() >= 2 ){
+		new_minor_version_number = nv.at( 1 ).toInt() ;
+	}else{
+		new_minor_version_number = 0 ;
+	}
+
+	if( nv.size() >= 3 ){
+		new_patch_version_number = nv.at( 2 ).toInt() ;
+	}else{
+		new_patch_version_number = 0 ;
+	}
+
+	if( installed_major_version_number < new_major_version_number ){
+		/*
+		 * installed major version number is less than new major version number
+		 */
+		return true ;
+	}else if( installed_minor_version_number < new_minor_version_number &&
+		  installed_major_version_number <= new_major_version_number ){
+		/*
+		 * installed minor version number is less than new minor version number
+		 */
+		return true ;
+	}else if( installed_patch_version_number < new_patch_version_number &&
+		  installed_major_version_number <= new_major_version_number &&
+		  installed_minor_version_number <= new_minor_version_number ){
+		/*
+		 * installed path version number is less than new path version number
+		 */
+		return true ;
+	}else{
+		return false ;
+	}
+}
+
 static QString _checkKernelVersion()
 {
 	QProcess exe ;
@@ -475,62 +535,7 @@ static bool _updateAvailable( const QString& e,QString * newVersion,QString * in
 				*/
 				return false ;
 			}else{
-				QStringList nv = m_nv.split( "." ) ;
-				QStringList iv = m_iv.split( "." ) ;
-
-				int installed_major_version_number = iv.at( 0 ).toInt() ;
-				int installed_minor_version_number ;
-				int installed_patch_version_number ;
-
-				if( iv.size() >= 2 ){
-					installed_minor_version_number = iv.at( 1 ).toInt() ;
-				}else{
-					installed_minor_version_number = 0 ;
-				}
-
-				if( iv.size() >= 3 ){
-					installed_patch_version_number = iv.at( 2 ).toInt() ;
-				}else{
-					installed_patch_version_number = 0 ;
-				}
-
-				int new_major_version_number = nv.at( 0 ).toInt() ;
-				int new_minor_version_number ;
-				int new_patch_version_number  ;
-
-				if( nv.size() >= 2 ){
-					new_minor_version_number = nv.at( 1 ).toInt() ;
-				}else{
-					new_minor_version_number = 0 ;
-				}
-
-				if( nv.size() >= 3 ){
-					new_patch_version_number = nv.at( 2 ).toInt() ;
-				}else{
-					new_patch_version_number = 0 ;
-				}
-
-				if( installed_major_version_number < new_major_version_number ){
-					/*
-					 * installed major version number is less than new major version number
-					 */
-					return true ;
-				}else if( installed_minor_version_number < new_minor_version_number &&
-					  installed_major_version_number <= new_major_version_number ){
-					/*
-					 * installed minor version number is less than new minor version number
-					 */
-					return true ;
-				}else if( installed_patch_version_number < new_patch_version_number &&
-					  installed_major_version_number <= new_major_version_number &&
-					  installed_minor_version_number <= new_minor_version_number ){
-					/*
-					 * installed path version number is less than new path version number
-					 */
-					return true ;
-				}else{
-					return false ;
-				}
+				return _check_version( m_nv,m_iv ) ;
 			}
 		}else{
 			return false ;
@@ -608,51 +613,52 @@ Task::future< QString >& checkForPackageUpdates()
 	} ) ;
 }
 
+static const auto e = R"R(
+#!/bin/sh
+
+a="$(apt-cache pkgnames | grep kernel-[0-9] | sort -Vr | head -n 1)"
+b="$(rpm -qa --queryformat '%{name}\n' | grep kernel-[0-9] | sort -Vr | head -n 1)"
+
+if [ "$a" != "$b" ]; then
+	echo -n "$a"
+else
+	echo -n ""
+fi
+
+)R" ;
+
 Task::future<QString>& checkKernelVersions()
 {
 	return Task::run<QString>( [](){
 
-		auto _getOutPut = []( const char * e ){
+		auto s = settings::configPath() + "/tmp" ;
 
-			QProcess exe ;
+		QDir d ;
 
-			exe.start( e ) ;
+		d.mkpath( s ) ;
 
-			exe.waitForFinished( -1 ) ;
+		auto exe = s + "/checkKernelUpdate" ;
 
-			QStringList l ;
+		QFile f( exe ) ;
 
-			for( const auto& it : exe.readAll().split( '\n' ) ){
+		if( !f.exists() ){
 
-				if( it.startsWith( "kernel-" ) ){
+			f.open( QIODevice::WriteOnly ) ;
 
-					if( isdigit( it.at( 7 ) ) ){
+			f.write( e ) ;
 
-						l.append( it ) ;
-					}
-				}
-			}
-
-			if( l.size() > 0 ){
-
-				l.sort() ;
-
-				return l.last() ;
-			}else{
-				return QString() ;
-			}
-		} ;
-
-		QString e = _getOutPut( "apt-cache pkgnames" ) ;
-
-		QString f = _getOutPut( "rpm -qa --queryformat \"%{name}\n\"" ) ;
-
-		if( e != f ){
-
-			return e ;
-		}else{
-			return QString() ;
+			f.close() ;
 		}
+
+		f.setPermissions( QFile::ReadOwner | QFile::ExeOwner ) ;
+
+		QProcess p ;
+
+		p.start( exe ) ;
+
+		p.waitForFinished( -1 ) ;
+
+		return p.readAll() ;
 	} ) ;
 }
 

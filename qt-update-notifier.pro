@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = qt-update-notifier
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -std=c++11
+
 SOURCES += src/main.cpp\
 	src/qtUpdateNotifier.cpp \
 	src/logwindow.cpp \

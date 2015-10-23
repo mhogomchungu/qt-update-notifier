@@ -12,7 +12,7 @@ INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.3\"\n" )
+file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.4\"\n" )
 
 QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
 

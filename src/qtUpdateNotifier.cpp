@@ -35,6 +35,7 @@ public:
 	}
 
 	qObject_unique_ptr( const qObject_unique_ptr& ) = delete ;
+	qObject_unique_ptr& operator=( const qObject_unique_ptr& ) = delete ;
 
 	qObject_unique_ptr( qObject_unique_ptr&& other )
 	{
@@ -42,8 +43,6 @@ public:
 		m_qObject = other.m_qObject ;
 		other.m_qObject = nullptr ;
 	}
-
-	void operator =( const qObject_unique_ptr& ) = delete ;
 
 	T * operator->()
 	{
