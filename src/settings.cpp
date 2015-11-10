@@ -28,9 +28,9 @@
 
 #define APP_NAME "qt-update-notifier"
 
-static const char * _secret = "AAAAAAAAAAAAAAAAAAAAADibXQAAAAAADEVZcGLIBzf8rhjIdxff9P08qIU%3Dxexvyewewzu7i1LH8049xGJWI4kv7rBEnkis2t6HHlkDCSsUgB" ;
+static const auto _secret = "AAAAAAAAAAAAAAAAAAAAADibXQAAAAAADEVZcGLIBzf8rhjIdxff9P08qIU%3Dxexvyewewzu7i1LH8049xGJWI4kv7rBEnkis2t6HHlkDCSsUgB" ;
 
-static const char * _url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=iluvpclinuxos&count=50&exclude_replies=true&include_rts=false" ;
+static const auto _url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=iluvpclinuxos&count=50&exclude_replies=true&include_rts=false" ;
 
 static QString _configPath ;
 
@@ -56,8 +56,11 @@ void convertOldConfigSystemToNewSystem()
 	QFile e ;
 
 	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier.conf" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		return ;
 	}
 
@@ -65,8 +68,11 @@ void convertOldConfigSystemToNewSystem()
 	QString value ;
 
 	path = QString( "%1/%2" ).arg( _configPath,"language.option" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		e.open( QIODevice::ReadOnly ) ;
 		value = e.readAll() ;
 		settings::setPrefferedLanguage( value ) ;
@@ -77,8 +83,11 @@ void convertOldConfigSystemToNewSystem()
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-startup_check_delay.time" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		e.open( QIODevice::ReadOnly ) ;
 		value = e.readAll() ;
 		settings::setCheckDelayOnStartUp( value ) ;
@@ -88,9 +97,13 @@ void convertOldConfigSystemToNewSystem()
 		settings::setCheckDelayOnStartUp( "300" ) ;
 	}
 
+
 	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-interval.time" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		e.open( QIODevice::ReadOnly ) ;
 		value = e.readAll() ;
 		settings::setNextUpdateInterval( value ) ;
@@ -101,8 +114,11 @@ void convertOldConfigSystemToNewSystem()
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-synaptic_autorefresh.option" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		settings::setAutoRefreshSynaptic( true ) ;
 		e.remove() ;
 	}else{
@@ -110,8 +126,11 @@ void convertOldConfigSystemToNewSystem()
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath,"doNotAutoStart" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		settings::enableAutoStart( false ) ;
 		e.remove() ;
 	}else{
@@ -119,8 +138,11 @@ void convertOldConfigSystemToNewSystem()
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath,"qt-update-notifier-next_auto_update.time" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		e.open( QIODevice::ReadOnly ) ;
 		value = e.readAll() ;
 		opt = "nextUpdateTime" ;
@@ -132,8 +154,11 @@ void convertOldConfigSystemToNewSystem()
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath,"autoUpdatePackages.option" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		opt = QString( "autoUpdatePackages" ) ;
 		_settings.setValue( opt,true ) ;
 		e.remove() ;
@@ -143,8 +168,11 @@ void convertOldConfigSystemToNewSystem()
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath,"autoDownloadPackages.option" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		opt = QString( "autoDownloadPackages" ) ;
 		_settings.setValue( opt,true ) ;
 		e.remove() ;
@@ -154,8 +182,11 @@ void convertOldConfigSystemToNewSystem()
 	}
 
 	path = QString( "%1/%2" ).arg( _configPath,"skipOldPackageCheck.option" ) ;
+
 	e.setFileName( path ) ;
+
 	if( e.exists() ){
+
 		opt = "skipOldPackageCheck" ;
 		_settings.setValue( opt,true ) ;
 		e.remove() ;
@@ -225,6 +256,7 @@ QString settings::networkConnectivityChecker()
 	QString opt( "networkConnectivityChecker" ) ;
 
 	if( _settings.contains( opt ) ){
+
 		return _settings.value( opt ).toString() ;
 	}else{
 		QString s( "ping -c 1 8.8.8.8" ) ;
@@ -245,6 +277,7 @@ QString settings::delayTimeBeforeUpdateCheck( int time )
 	char buffer[64] ;
 
 	if( fmod( time,rr ) == 0 ){
+
 		int ff = time / rr ;
 		snprintf( buffer,64,"%d",ff ) ;
 	}else{
@@ -260,6 +293,7 @@ QString settings::defaultIcon()
 	QString opt( "defaultIcon" ) ;
 
 	if( _settings.contains( opt ) ){
+
 		return _settings.value( opt ).toString() + ".png" ;
 	}else{
 		QString u( "qt-update-notifier" ) ;
@@ -278,6 +312,7 @@ QString settings::url()
 	QString opt( "url" ) ;
 
 	if( _settings.contains( opt ) ){
+
 		return _settings.value( opt ).toString() ;
 	}else{
 		QString u( _url ) ;
@@ -293,6 +328,7 @@ QString settings::getLastTwitterUpdate()
 	_settings.sync() ;
 
 	if( _settings.contains( opt ) ){
+
 		return _settings.value( opt ).toString() ;
 	}else{
 		QString u ;
@@ -311,7 +347,9 @@ void settings::setLastTwitterUpdate( const QString& t )
 void settings::setAutoRefreshSynaptic( bool autoRefresh )
 {
 	QString opt( "autoRefreshSynaptic" ) ;
+
 	if( autoRefresh ){
+
 		_settings.setValue( opt,true ) ;
 	}else{
 		_settings.setValue( opt,false ) ;
@@ -373,10 +411,13 @@ bool settings::warnOnInconsistentState()
 bool settings::prefixLogEntries()
 {
 	QString opt( "prefixLogEntries" ) ;
+
 	if( _settings.contains( opt ) ){
+
 		return _settings.value( opt ).toBool() ;
 	}else{
 		_settings.setValue( opt,true ) ;
+
 		return true ;
 	}
 }
@@ -384,7 +425,9 @@ bool settings::prefixLogEntries()
 bool settings::showIconOnImportantInfo()
 {
 	QString opt( "showIconOnImportantInfo" ) ;
+
 	if( _settings.contains( opt ) ){
+
 		return _settings.value( opt ).toBool() ;
 	}else{
 		_settings.setValue( opt,true ) ;
@@ -401,7 +444,9 @@ void settings::enableAutoStart( bool autoStart )
 bool settings::checkNewerKernels()
 {
 	QString opt( "checkNewerKernels" ) ;
+
 	if( _settings.contains( opt ) ){
+
 		return _settings.value( opt ).toBool() ;
 	}else{
 		_settings.setValue( opt,false ) ;

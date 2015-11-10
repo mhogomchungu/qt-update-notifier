@@ -2,6 +2,8 @@
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(SET CMP0017 OLD)
 
+project(qt-update-notifier)
+
 find_package( Qt4 REQUIRED )
 
 find_package( QJSON REQUIRED )

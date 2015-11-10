@@ -22,24 +22,31 @@
 
 #include <QString>
 #include <QStringList>
+#include <array>
+
 #include "task.h"
 
 struct result
 {
-	typedef enum{
+	using array_t = std::array< QString,2 > ;
+
+	enum class repoState{
+
 		undefinedState,
 		inconsistentState,
 		noUpdatesFound,
 		updatesFound,
 		noNetworkConnection
-	}repoState ;
+	} ;
+
 	bool passed() const
 	{
 		return taskStatus == 0 ;
 	}
+
 	int taskStatus ;
 	result::repoState repositoryState ;
-	QStringList taskOutput ;
+	result::array_t taskOutput ;
 };
 
 namespace utility

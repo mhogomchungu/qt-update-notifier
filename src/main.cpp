@@ -37,9 +37,13 @@
 int autoStart( KUniqueApplication& a )
 {
 	if( qtUpdateNotifier::autoStartEnabled() ){
+
 		qtUpdateNotifier w ;
+
 		w.setDebug( KCmdLineArgs::allArguments().contains( "-d" ) ) ;
+
 		w.start() ;
+
 		return a.exec() ;
 	}else{
 		return 0 ;
@@ -49,8 +53,11 @@ int autoStart( KUniqueApplication& a )
 int start( KUniqueApplication& a )
 {
 	qtUpdateNotifier w ;
+
 	w.setDebug( KCmdLineArgs::allArguments().contains( "-d" ) ) ;
+
 	w.start() ;
+
 	return a.exec() ;
 }
 
@@ -62,7 +69,7 @@ int main( int argc,char * argv[] )
 				VERSION,
 				ki18n( "a qt based apt-get package updates checker." ),
 				KAboutData::License_GPL_V2,
-				ki18n( "(c)2013,ink Francis\nemail:mhogomchungu@gmail.com" ),
+				ki18n( "(c)2013-2015,Francis Banyikwa\nemail:mhogomchungu@gmail.com" ),
 				ki18n( "mhogomchungu@gmail.com" ),
 				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html",
 				"http://www.pclinuxos.com/forum/index.php/topic,112999.0/topicseen.html" ) ;
@@ -70,8 +77,10 @@ int main( int argc,char * argv[] )
 	KCmdLineArgs::init( argc,argv,&aboutData ) ;
 
 	KCmdLineOptions options;
+
 	options.add( "a",ki18n( "auto start application" ) ) ;
 	options.add( "d",ki18n( "debug application" ) ) ;
+
 	KCmdLineArgs::addCmdLineOptions( options ) ;
 
 	KUniqueApplication::addCmdLineOptions() ;
@@ -79,8 +88,11 @@ int main( int argc,char * argv[] )
 	settings::init() ;
 
 	if( KUniqueApplication::start() ){
+
 		KUniqueApplication a ;
+
 		if( KCmdLineArgs::allArguments().contains( "-a" ) ){
+
 			return autoStart( a ) ;
 		}else{
 			return start( a ) ;
@@ -98,13 +110,21 @@ int main( int argc,char * argv[] )
 int main( int argc,char * argv[] )
 {
 	QApplication a( argc,argv ) ;
-	QStringList v = QCoreApplication::arguments() ;
+
+	auto v = QCoreApplication::arguments() ;
+
 	settings::init() ;
+
 	if( v.contains( "-a" ) ){
+
 		if( qtUpdateNotifier::autoStartEnabled() ){
+
 			qtUpdateNotifier w ;
+
 			w.setDebug( v.contains( "-d" ) ) ;
+
 			w.start() ;
+
 			return a.exec() ;
 		}else{
 			return 0 ;
@@ -113,14 +133,18 @@ int main( int argc,char * argv[] )
 		  v.contains( "--help" ) || v.contains( "--version" ) ||
 		  v.contains( "-version" ) || v.contains( "-help" ) ){
 		const char * msg = "\
-copyright: 2013-2014 Ink Francis,mhogomchungu@gmail.com\n\
+copyright: 2013-2015 Francis Banyikwa,mhogomchungu@gmail.com\n\
 license  : GPLv2+" ;
 		std::cout << "version  : " << VERSION << "\n" << msg << std::endl ;
+
 		return 0 ;
 	}else{
 		qtUpdateNotifier w ;
+
 		w.setDebug( v.contains( "-d" ) ) ;
+
 		w.start() ;
+
 		return a.exec() ;
 	}
 }

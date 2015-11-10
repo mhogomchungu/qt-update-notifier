@@ -104,12 +104,12 @@ private:
 	void autoUpdatePackages( void ) ;
 	void setupTranslationText( void ) ;
 	void printTime( const QString&,u_int64_t ) ;
-	void saveAptGetLogOutPut( const QStringList& ) ;
+	void saveAptGetLogOutPut( const result::array_t& ) ;
 	u_int64_t getCurrentTime( void ) ;
 	QString getCurrentTime_1( void ) ;
 	u_int64_t nextScheduledUpdateTime( void ) ;
 	void writeUpdateTimeToConfigFile( u_int64_t ) ;
-	void showToolTip( const QString&,const QString&,const QStringList& ) ;
+	void showToolTip( const QString&,const QString&,const result::array_t& ) ;
 	void showToolTip( const QString&,const QString&,const QString& ) ;
 	void showToolTip( const QString&,const QString&,int ) ;
 	void showToolTip( const QString&,const QString& ) ;
@@ -128,7 +128,7 @@ private:
 	QString m_defaulticon ;
 	QString m_lastTwitterUpdate ;
 	QByteArray m_token ;
-	QTimer * m_timer ;
+	QTimer m_timer ;
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
 	u_int64_t m_nextScheduledUpdateTime ;

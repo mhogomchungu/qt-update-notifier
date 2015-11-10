@@ -39,10 +39,15 @@ logWindow::logWindow( QString title,QWidget * parent ) :QWidget( parent ),m_ui( 
 bool logWindow::eventFilter( QObject * watched,QEvent * event )
 {
 	if( watched == this ){
+
 		if( event->type() == QEvent::KeyPress ){
-			QKeyEvent * keyEvent = static_cast< QKeyEvent* >( event ) ;
+
+			auto keyEvent = static_cast< QKeyEvent* >( event ) ;
+
 			if( keyEvent->key() == Qt::Key_Escape ){
+
 				this->pbQuit() ;
+
 				return true ;
 			}
 		}

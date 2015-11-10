@@ -23,8 +23,10 @@
 twitter::twitter( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::twitter )
 {
 	m_ui->setupUi( this ) ;
+
 	this->setFixedSize( this->size() ) ;
 	this->setWindowIcon( QIcon( ":/qt-update-notifier.png" ) ) ;
+
 	connect( m_ui->pbClose,SIGNAL( clicked() ),this,SLOT( pbClose() ) ) ;
 
 	this->installEventFilter( this ) ;
@@ -33,16 +35,22 @@ twitter::twitter( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::twitter )
 void twitter::ShowUI( const QString& text )
 {
 	m_ui->textEdit->setText( text ) ;
+
 	this->show() ;
 }
 
 bool twitter::eventFilter( QObject * watched,QEvent * event )
 {
 	if( watched == this ){
+
 		if( event->type() == QEvent::KeyPress ){
+
 			QKeyEvent * keyEvent = static_cast< QKeyEvent* >( event ) ;
+
 			if( keyEvent->key() == Qt::Key_Escape ){
+
 				this->pbClose() ;
+
 				return true ;
 			}
 		}
@@ -64,11 +72,13 @@ void twitter::msg( const QString& msg )
 void twitter::pbClose()
 {
 	this->hide() ;
+
 	this->deleteLater() ;
 }
 
 void twitter::closeEvent( QCloseEvent * e )
 {
 	e->ignore() ;
+
 	this->pbClose() ;
 }

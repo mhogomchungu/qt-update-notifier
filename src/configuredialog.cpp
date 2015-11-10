@@ -50,9 +50,13 @@ configureDialog::configureDialog( QWidget * parent ) :
 bool configureDialog::eventFilter( QObject * watched,QEvent * event )
 {
 	if( watched == this ){
+
 		if( event->type() == QEvent::KeyPress ){
-			QKeyEvent * keyEvent = static_cast< QKeyEvent* >( event ) ;
+
+			auto keyEvent = static_cast< QKeyEvent* >( event ) ;
+
 			if( keyEvent->key() == Qt::Key_Escape ){
+
 				this->closeUI() ;
 				return true ;
 			}
@@ -89,6 +93,7 @@ void configureDialog::closeUI()
 	u_int32_t duration = days + hours + minutes ;
 
 	if( duration < 10 * 60 ){
+
 		QMessageBox msg( this ) ;
 		msg.setText( tr( "Update check interval must be at least 10 minutes" ) ) ;
 		msg.exec() ;
@@ -98,6 +103,7 @@ void configureDialog::closeUI()
 		this->delayTimeChanged( m_ui->gbDelayStartIntervalComboBox->currentIndex() ) ;
 
 		if( duration * 1000 != settings::updateCheckInterval() ){
+
 			emit setUpdateInterval( duration * 1000 ) ;
 			emit configOptionsChanged() ;
 			settings::setNextUpdateInterval( QString::number( duration ) ) ;
@@ -120,7 +126,9 @@ void configureDialog::autoStartToggled( bool b )
 void configureDialog::delayTimeChanged( int index )
 {
 	QString interval ;
+
 	switch( index ){
+
 		case  0 : interval = "0"    ; break ;
 		case  1 : interval = "300"  ; break ;
 		case  2 : interval = "600"  ; break ;
@@ -149,9 +157,13 @@ void configureDialog::setupLanguageList()
 	QChar c( '.' ) ;
 
 	for( int i = 0 ; i < j ; i++ ){
+
 		e = list.at( i ) ;
+
 		index = e.indexOf( c ) ;
+
 		if( index == -1 ){
+
 			m_ui->comboBoxLanguageList->addItem( e ) ;
 		}else{
 			e.truncate( index ) ;
@@ -160,6 +172,7 @@ void configureDialog::setupLanguageList()
 	}
 
 	index = m_ui->comboBoxLanguageList->findText( settings::prefferedLanguage() ) ;
+
 	if( index == -1 ){
 		m_ui->comboBoxLanguageList->setCurrentIndex( 0 ) ;
 	}else{
@@ -170,6 +183,7 @@ void configureDialog::setupLanguageList()
 void configureDialog::labelDays( int index )
 {
 	if( index == 1 ){
+
 		m_ui->labelDays->setText( tr( "Day" ) ) ;
 	}else{
 		m_ui->labelDays->setText( tr( "Days" ) ) ;
@@ -179,6 +193,7 @@ void configureDialog::labelDays( int index )
 void configureDialog::labelMinutes( int index )
 {
 	if( index == 1 ){
+
 		m_ui->labelMinutes->setText( tr( "Minute" ) ) ;
 	}else{
 		m_ui->labelMinutes->setText( tr( "Minutes") ) ;
@@ -188,6 +203,7 @@ void configureDialog::labelMinutes( int index )
 void configureDialog::labelHours( int index )
 {
 	if( index == 1 ){
+
 		m_ui->labelHours->setText( tr( "Hour" ) ) ;
 	}else{
 		m_ui->labelHours->setText( tr( "Hours") ) ;
@@ -197,8 +213,11 @@ void configureDialog::labelHours( int index )
 void configureDialog::setDelayTimeAtLogIn()
 {
 	int time = settings::delayTimeBeforeUpdateCheck() ;
+
 	time = time / 60 ;
+
 	switch( time ){
+
 		case  0  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 0 ) ; break ;
 		case  5  : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 1 ) ; break ;
 		case  10 : m_ui->gbDelayStartIntervalComboBox->setCurrentIndex( 2 ) ; break ;

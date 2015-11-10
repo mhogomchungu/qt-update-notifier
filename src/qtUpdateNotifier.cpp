@@ -69,8 +69,7 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 {
 	m_manager = nullptr ;
 
-	m_timer = new QTimer() ;
-	connect( m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
+	connect( &m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
 
 	m_threadIsRunning = false ;
 
@@ -162,7 +161,9 @@ void qtUpdateNotifier::networResponse( QNetworkReply * k )
 	QString e ;
 
 	if( m_debug ){
+
 		for( const auto& it : l ){
+
 			e += it + ":" + r->rawHeader( it ) + "\n" ;
 		}
 	}
@@ -170,6 +171,7 @@ void qtUpdateNotifier::networResponse( QNetworkReply * k )
 	QString s = r->rawHeader( "status" ) ;
 
 	if( s != "200 OK" ){
+
 		emit msg( e ) ;
 		return ;
 	}
@@ -177,6 +179,7 @@ void qtUpdateNotifier::networResponse( QNetworkReply * k )
 	QByteArray data = r->readAll() ;
 
 	if( data.isEmpty() ){
+
 		emit msg( e ) ;
 		return ;
 	}
@@ -202,7 +205,9 @@ void qtUpdateNotifier::networResponse( QNetworkReply * k )
 			auto text = map[ "text" ].toString() ;
 
 			if( z > s ){
+
 				if( text.contains( "ANNOUNCEMENT" ) ){
+
 					this->showToolTip( "qt-update-notifier-important-info",tr( "No updates found" ) ) ;
 					this->logActivity_1( text ) ;
 					this->showIconOnImportantInfo() ;
@@ -257,9 +262,10 @@ void qtUpdateNotifier::doneUpdating()
 	QDateTime d ;
 	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() ) ;
 
-	QString n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
+	auto n = tr( "Next update check will be at %1" ).arg( d.toString( Qt::TextDate ) ) ;
 
-	QString z = tr( "Status" ) ;
+	auto z = tr( "Status" ) ;
+
 	this->showToolTip( m_defaulticon,z,n ) ;
 	statusicon::setStatus( statusicon::Passive ) ;
 }
@@ -277,10 +283,12 @@ void qtUpdateNotifier::toggleAutoStart( bool autoStartEnable )
 void qtUpdateNotifier::openConfigureDialog()
 {
 	auto cfg = new configureDialog() ;
+
 	connect( cfg,SIGNAL( toggleAutoStart( bool ) ),this,SLOT( toggleAutoStart( bool ) ) ) ;
 	connect( cfg,SIGNAL( setUpdateInterval( int ) ),this,SLOT( setUpdateInterval( int ) ) ) ;
 	connect( cfg,SIGNAL( configOptionsChanged() ),this,SLOT( configOptionsChanged() ) ) ;
 	connect( cfg,SIGNAL( autoReshreshSynaptic( bool ) ),this,SLOT( autoRefreshSynaptic( bool ) ) ) ;
+
 	cfg->showUI() ;
 }
 
@@ -296,9 +304,10 @@ void qtUpdateNotifier::configOptionsChanged()
 
 void qtUpdateNotifier::setupTranslationText()
 {
-	QString e = settings::prefferedLanguage() ;
-	QString r( "english_US" ) ;
-	if( e == r ){
+	auto e = settings::prefferedLanguage() ;
+
+	if( e == "english_US" ){
+
 		/*
 		 *english_US language,its the default and hence dont load anything
 		 */
@@ -311,9 +320,10 @@ void qtUpdateNotifier::setupTranslationText()
 
 int qtUpdateNotifier::instanceAlreadyRunning()
 {
-	QString r = settings::prefferedLanguage() ;
-	QString e( "english_US" ) ;
-	if( e == r ){
+	auto r = settings::prefferedLanguage() ;
+
+	if( r == "english_US" ){
+
 		/*
 		 * english_US language,its the default and hence dont load anything
 		 */
@@ -324,7 +334,9 @@ int qtUpdateNotifier::instanceAlreadyRunning()
 		int z = 1 ;
 
 		QCoreApplication app( z,const_cast< char ** >( x ) ) ;
-		QTranslator * translator = new QTranslator() ;
+
+		auto translator = new QTranslator() ;
+
 		translator->load( r.toLatin1().constData(),QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ;
 		app.installTranslator( translator ) ;
 
@@ -333,6 +345,7 @@ int qtUpdateNotifier::instanceAlreadyRunning()
 		app.removeTranslator( translator ) ;
 		translator->deleteLater() ;
 	}
+
 	return 1 ;
 }
 
@@ -368,12 +381,16 @@ void qtUpdateNotifier::run()
 	statusicon::addQuitAction() ;
 
 	auto t = new QTimer() ;
+
 	t->setSingleShot( true ) ;
+
 	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
 	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
+
 	t->start( settings::delayTimeBeforeUpdateCheck() ) ;
 
 	m_manager = new QNetworkAccessManager( this ) ;
+
 	connect( m_manager,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( networResponse( QNetworkReply * ) ) ) ;
 }
 
@@ -387,33 +404,42 @@ void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
 	if( settings::firstTimeRun() ){
-		m_timer->stop() ;
-		m_timer->start( m_sleepDuration ) ;
+
+		m_timer.stop() ;
+		m_timer.start( m_sleepDuration ) ;
+
 		this->automaticCheckForUpdates() ;
 	}else{
 		m_currentTime = this->getCurrentTime() ;
-		u_int64_t x = m_currentTime ;
-		u_int64_t y = this->nextScheduledUpdateTime() ;
-		u_int64_t z = m_sleepDuration ;
 
-		int64_t interval = y - x ;
+		auto x = m_currentTime ;
+		auto y = this->nextScheduledUpdateTime() ;
+		auto z = m_sleepDuration ;
+
+		auto interval = static_cast< int64_t >( y - x ) ;
 
 		if( interval >= 0 ){
+
 			/*
 			 * the wait interval has not passed,wait for the remainder of the interval before
 			 * checking for updates
 			 */
+
 			auto t = new QTimer() ;
+
 			t->setSingleShot( true ) ;
+
 			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
+
 			t->start( interval ) ;
 
 			this->showToolTip( m_defaulticon,tr( "Status" ),interval ) ;
 
 			this->logActivity( this->logMsg() ) ;
 		}else{
-			u_int64_t e = ( x - y ) / z ;
+			auto e = ( x - y ) / z ;
+
 			e = e + 1 ;
 			z = z * e ;
 
@@ -424,9 +450,12 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			this->checkForUpdates() ;
 
 			auto t = new QTimer() ;
+
 			t->setSingleShot( true ) ;
+
 			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer_1() ) ) ;
+
 			t->start( y + z - x ) ;
 		}
 	}
@@ -434,15 +463,15 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 
 void qtUpdateNotifier::startTimer()
 {
-	m_timer->stop() ;
-	m_timer->start( m_sleepDuration ) ;
+	m_timer.stop() ;
+	m_timer.start( m_sleepDuration ) ;
 	this->automaticCheckForUpdates() ;
 }
 
 void qtUpdateNotifier::startTimer_1()
 {
-	m_timer->stop() ;
-	m_timer->start( m_sleepDuration ) ;
+	m_timer.stop() ;
+	m_timer.start( m_sleepDuration ) ;
 	this->automaticCheckForUpdates() ;
 }
 
@@ -467,9 +496,12 @@ void qtUpdateNotifier::logActivity_1( const QString& msg )
 {
 	QString line( "------------------------------------------------------" ) ;
 	line += "--------------------------------------------------" ;
-	QString t = this->getCurrentTime_1() ;
-	QString log = QString( "%1\n%2:   %3\n%4\n" ).arg( line,t,msg,line )  ;
+
+	auto t = this->getCurrentTime_1() ;
+	auto log = QString( "%1\n%2:   %3\n%4\n" ).arg( line,t,msg,line )  ;
+
 	utility::writeToFile( settings::activityLogFilePath(),log,false ).await() ;
+
 	emit updateLogWindow() ;
 }
 
@@ -500,6 +532,7 @@ void qtUpdateNotifier::automaticCheckForUpdates()
 	/*
 	 * since we are doing an automatic update,m_nextScheduledUpdateTime will have the same value as this->getCurrentTime()
 	 */
+
 	this->writeUpdateTimeToConfigFile( m_nextScheduledUpdateTime + m_sleepDuration ) ;
 	this->logActivity( tr( "Automatic check for updates initiated" ) ) ;
 	this->checkForUpdates() ;
@@ -508,6 +541,7 @@ void qtUpdateNotifier::automaticCheckForUpdates()
 void qtUpdateNotifier::checkForUpdates()
 {
 	if( m_threadIsRunning ){
+
 		this->logActivity( tr( "Warning:\tattempt to start update check while another one is still in progress" ) ) ;
 	}else{
 		QString icon( "qt-update-notifier-updating" ) ;
@@ -521,7 +555,7 @@ void qtUpdateNotifier::checkForUpdates()
 		m_threadIsRunning = false ;
 
 		switch( r.repositoryState ){
-		case result::updatesFound :
+		case result::repoState::updatesFound :
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = "qt-update-notifier-updates-are-available" ;
@@ -530,23 +564,25 @@ void qtUpdateNotifier::checkForUpdates()
 			this->autoDownloadPackages() ;
 
 			break ;
-		case result::inconsistentState :
+		case result::repoState::inconsistentState :
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = "qt-update-notifier-important-info" ;
 			statusicon::setStatus( statusicon::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
-			this->logActivity_1( r.taskOutput.first() ) ;
+			this->logActivity_1( r.taskOutput.at( 0 ) ) ;
 			this->showIconOnImportantInfo() ;
 
 			break ;
-		case result::noUpdatesFound :
+		case result::repoState::noUpdatesFound :
 
 			statusicon::setStatus( statusicon::Passive ) ;
+
 			/*
 			 * below function is called from checkForPackageUpdates() routine
 			 * this->showToolTip( m_defaulticon,tr( "No updates found" ) ) ;
 			 */
+
 			this->checkForPackageUpdates() ;
 
 			/*
@@ -555,14 +591,14 @@ void qtUpdateNotifier::checkForUpdates()
 			//this->accessTwitter() ;
 
 			break ;
-		case result::noNetworkConnection :
+		case result::repoState::noNetworkConnection :
 
 			icon = m_defaulticon ;
 			statusicon::setStatus( statusicon::Passive ) ;
 			this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
 
 			break ;
-		case result::undefinedState :
+		case result::repoState::undefinedState :
 
 			icon = m_defaulticon ;
 			statusicon::setStatus( statusicon::Passive ) ;
@@ -573,6 +609,7 @@ void qtUpdateNotifier::checkForUpdates()
 			/*
 			 * currently,we dont get here,added for completeness' sake
 			 */
+
 			icon = m_defaulticon ;
 			statusicon::setStatus( statusicon::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
@@ -581,17 +618,21 @@ void qtUpdateNotifier::checkForUpdates()
 	}
 }
 
-void qtUpdateNotifier::saveAptGetLogOutPut( const QStringList& log )
+void qtUpdateNotifier::saveAptGetLogOutPut( const result::array_t& l )
 {
-	QString x = log.at( 1 ) ;
+	auto x = l.at( 1 ) ;
+
 	if( x == tr( "No updates found" ) ){
+
 		/*
 		 * update log file only when there are new updates
 		 */
 	}else{
 		QString line( "-------------------------------------------------------------------------------\n" ) ;
-		QString msg = tr( "Log entry was created at: " ) ;
-		QString header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + "\n" + line ;
+
+		auto msg = tr( "Log entry was created at: " ) ;
+		auto header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + "\n" + line ;
+
 		utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ).await() ;
 	}
 }
@@ -601,13 +642,17 @@ void qtUpdateNotifier::autoUpdatePackages()
 	if( settings::autoUpdatePackages() ){
 
 		QString icon( "qt-update-notifier-updating" ) ;
+
 		this->showToolTip( icon,tr( "Status" ),tr( "Update in progress, do not power down computer" ) ) ;
+
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
+
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
 		auto r = utility::autoUpdatePackages().await() ;
 
 		if( r == 0 || r == 2 ){
+
 			this->showToolTip( m_defaulticon,tr( "Automatic package update completed" ) ) ;
 		}else{
 			QString icon( "qt-update-notifier-important-info" ) ;
@@ -626,8 +671,11 @@ void qtUpdateNotifier::autoDownloadPackages()
 	if( settings::autoDownloadPackages() ){
 
 		QString icon( "qt-update-notifier-updating" ) ;
+
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) ) ;
+
 		statusicon::setStatus( statusicon::NeedsAttention ) ;
+
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
 
 		if( utility::autoDownloadPackages().await() ){
@@ -679,10 +727,10 @@ void qtUpdateNotifier::objectGone( QObject * obj )
 	qDebug() << "destroyed object" << obj->objectName() ;
 }
 
-void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const QStringList& list )
+void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const result::array_t& l )
 {
 	this->logActivity( y ) ;
-	statusicon::setToolTip( x,tr( "Updates found" ),list.at( 0 ) ) ;
+	statusicon::setToolTip( x,tr( "Updates found" ),l.at( 0 ) ) ;
 	this->changeIcon( x ) ;
 }
 
@@ -704,13 +752,19 @@ void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 	QString n = tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
 
 	if( y == tr( "No updates found" ) ){
+
 		this->logActivity( y ) ;
+
 		this->logActivity( this->logMsg() ) ;
+
 		statusicon::setToolTip( x,y,n ) ;
 	}else{
-		QString msg = QString( "<table><tr><td><b>%1</b></tr></td><tr><td>%2</tr></td></table>" ).arg( y,n ) ;
+		auto msg = QString( "<table><tr><td><b>%1</b></tr></td><tr><td>%2</tr></td></table>" ).arg( y,n ) ;
+
 		this->logActivity( y ) ;
+
 		this->logActivity( this->logMsg() ) ;
+
 		statusicon::setToolTip( x,tr( "Status" ),msg ) ;
 	}
 
@@ -740,7 +794,7 @@ QString qtUpdateNotifier::logMsg( u_int64_t interval )
 {
 	if( int64_t( interval ) > 0 ){
 
-		QString n = this->nextUpdateTime( interval ) ;
+		auto n = this->nextUpdateTime( interval ) ;
 
 		char num[ 64 ] ;
 		float f = static_cast<float>( interval ) ;
@@ -761,8 +815,8 @@ QString qtUpdateNotifier::logMsg( void )
 void qtUpdateNotifier::scheduleUpdates( int interval )
 {
 	this->logActivity( this->logMsg( interval ) ) ;
-	m_timer->stop() ;
-	m_timer->start( interval ) ;
+	m_timer.stop() ;
+	m_timer.start( interval ) ;
 }
 
 void qtUpdateNotifier::setUpdateInterval( int interval )
@@ -775,12 +829,11 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 
 	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
 
-	m_timer->stop() ;
-	m_timer->start( m_sleepDuration ) ;
+	m_timer.stop() ;
+	m_timer.start( m_sleepDuration ) ;
 
-	//QString x = statusicon::iconName() ;
-	QString x = m_defaulticon ;
-	QString y = statusicon::toolTipTitle() ;
+	auto x = m_defaulticon ;
+	auto y = statusicon::toolTipTitle() ;
 
 	int d = static_cast<int>( m_sleepDuration ) ;
 	this->showToolTip( x,y,d ) ;
@@ -788,27 +841,21 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 
 void qtUpdateNotifier::closeApp()
 {
-	if( m_threadIsRunning ){
-		;
-	}else{
+	if( !m_threadIsRunning ){
+
 		QCoreApplication::exit( 0 ) ;
 	}
 }
 
 void qtUpdateNotifier::closeApp( int st )
 {
-	if( m_threadIsRunning ){
-		;
-	}else{
+	if( !m_threadIsRunning ){
+
 		QCoreApplication::exit( st ) ;
 	}
 }
 
 qtUpdateNotifier::~qtUpdateNotifier()
-{
-	if( m_timer ){
-		m_timer->stop() ;
-		m_timer->deleteLater() ;
-	}
+{	
 	this->logActivity( tr( "Qt-update-notifier quitting" ) ) ;
 }
