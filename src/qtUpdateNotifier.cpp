@@ -86,10 +86,10 @@ qtUpdateNotifier::qtUpdateNotifier() : statusicon()
 
 	this->setupTranslationText() ;
 
-	QString q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
-	QString z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
-	QString a = m_defaulticon ;
-	QString b = tr( "Status" ) ;
+	auto q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
+	auto z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
+	auto a = m_defaulticon ;
+	auto b = tr( "Status" ) ;
 
 	this->showToolTip( a,b,z ) ;
 
@@ -192,7 +192,7 @@ void qtUpdateNotifier::networResponse( QNetworkReply * k )
 
 	if( ok ){
 
-		QList<QVariant> l = p.toList() ;
+		auto l = p.toList() ;
 
 		auto s = this->getLastTwitterUpdate().toULongLong() ;
 
@@ -749,7 +749,7 @@ void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,int z )
 
 void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 {
-	QString n = tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
+	auto n = tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
 
 	if( y == tr( "No updates found" ) ){
 
@@ -797,10 +797,13 @@ QString qtUpdateNotifier::logMsg( u_int64_t interval )
 		auto n = this->nextUpdateTime( interval ) ;
 
 		char num[ 64 ] ;
-		float f = static_cast<float>( interval ) ;
+
+		auto f = static_cast<float>( interval ) ;
+
 		f = f / ( 1000 * 60 * 60 ) ;
 
 		snprintf( num,64,"%.2f",f ) ;
+
 		return tr( "Scheduled next check to be in %1 hours at %2" ).arg( num,n ) ;
 	}else{
 		return tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
@@ -835,7 +838,8 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 	auto x = m_defaulticon ;
 	auto y = statusicon::toolTipTitle() ;
 
-	int d = static_cast<int>( m_sleepDuration ) ;
+	auto d = static_cast<int>( m_sleepDuration ) ;
+
 	this->showToolTip( x,y,d ) ;
 }
 
@@ -856,6 +860,6 @@ void qtUpdateNotifier::closeApp( int st )
 }
 
 qtUpdateNotifier::~qtUpdateNotifier()
-{	
+{
 	this->logActivity( tr( "Qt-update-notifier quitting" ) ) ;
 }

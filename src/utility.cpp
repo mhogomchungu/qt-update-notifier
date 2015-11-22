@@ -90,7 +90,7 @@ Task::future< bool >& writeToFile( const QString& filepath,const QString& conten
 				/*
 				 * add new entry at the front of the log
 				 */
-				QString data = content + utility::readFromFile( filepath ).get() ;
+				auto data = content + utility::readFromFile( filepath ).get() ;
 				return _writeToFile( filepath,data,true )  ;
 			}else{
 				/*

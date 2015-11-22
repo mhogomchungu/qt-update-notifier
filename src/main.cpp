@@ -113,6 +113,26 @@ int main( int argc,char * argv[] )
 
 	auto v = QCoreApplication::arguments() ;
 
+	auto _help = [ & ](){
+
+		return  v.contains( "-h" )        ||
+			v.contains( "-v" )        ||
+			v.contains( "--help" )    ||
+			v.contains( "--version" ) ||
+			v.contains( "-version" )  ||
+			v.contains( "-help" ) ;
+	} ;
+
+	auto _info = [](){
+
+		const char * msg = "\
+copyright: 2013-2015 Francis Banyikwa,mhogomchungu@gmail.com\n\
+license  : GPLv2+" ;
+		std::cout << "version  : " << VERSION << "\n" << msg << std::endl ;
+
+		return 0 ;
+	} ;
+
 	settings::init() ;
 
 	if( v.contains( "-a" ) ){
@@ -129,15 +149,10 @@ int main( int argc,char * argv[] )
 		}else{
 			return 0 ;
 		}
-	}else if( v.contains( "-h" ) || v.contains( "-v" ) ||
-		  v.contains( "--help" ) || v.contains( "--version" ) ||
-		  v.contains( "-version" ) || v.contains( "-help" ) ){
-		const char * msg = "\
-copyright: 2013-2015 Francis Banyikwa,mhogomchungu@gmail.com\n\
-license  : GPLv2+" ;
-		std::cout << "version  : " << VERSION << "\n" << msg << std::endl ;
 
-		return 0 ;
+	}else if( _help() ){
+
+		return _info() ;
 	}else{
 		qtUpdateNotifier w ;
 
