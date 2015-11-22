@@ -107,6 +107,21 @@ int main( int argc,char * argv[] )
 #include "qtUpdateNotifier.h"
 #include <iostream>
 
+static const auto _msg = R"R(
+copyright: 2013-2015 Francis Banyikwa,mhogomchungu@gmail.com
+license  : GPLv2+
+
+options:
+
+-a       Usable with desktop environment's auto start feature at login.
+	 When the application is started with this option,it will
+	 continue to run only if "auto start at login" checkbox is set
+	 in the application's configuration window.
+
+	 The application's configuration window can be activated through
+	 tray icon -> right click -> configuration window.
+)R" ;
+
 int main( int argc,char * argv[] )
 {
 	QApplication a( argc,argv ) ;
@@ -123,14 +138,15 @@ int main( int argc,char * argv[] )
 			v.contains( "-help" ) ;
 	} ;
 
-	auto _info = [](){
+	auto _start = [ & ](){
 
-		const char * msg = "\
-copyright: 2013-2015 Francis Banyikwa,mhogomchungu@gmail.com\n\
-license  : GPLv2+" ;
-		std::cout << "version  : " << VERSION << "\n" << msg << std::endl ;
+		qtUpdateNotifier w ;
 
-		return 0 ;
+		w.setDebug( v.contains( "-d" ) ) ;
+
+		w.start() ;
+
+		return a.exec() ;
 	} ;
 
 	settings::init() ;
@@ -139,28 +155,18 @@ license  : GPLv2+" ;
 
 		if( qtUpdateNotifier::autoStartEnabled() ){
 
-			qtUpdateNotifier w ;
-
-			w.setDebug( v.contains( "-d" ) ) ;
-
-			w.start() ;
-
-			return a.exec() ;
+			return _start() ;
 		}else{
 			return 0 ;
 		}
 
 	}else if( _help() ){
 
-		return _info() ;
+		std::cout << "\nversion  : " << VERSION << _msg << std::endl ;
+
+		return 0 ;
 	}else{
-		qtUpdateNotifier w ;
-
-		w.setDebug( v.contains( "-d" ) ) ;
-
-		w.start() ;
-
-		return a.exec() ;
+		return _start() ;
 	}
 }
 
