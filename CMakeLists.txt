@@ -9,7 +9,7 @@ find_package( QJSON REQUIRED )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.4\"\n" )
+file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.5\"\n" )
 
 if( NOT DEFINED QT5 )
     set( QT5 "true" )
