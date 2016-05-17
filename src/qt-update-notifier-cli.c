@@ -423,7 +423,7 @@ static int downloadPackages( int fd,int debug )
 			r = ProcessWaitUntilFinished( &p ) ;
 		}
 	}else{
-		printf( "error: insufficent privileges to perform this operation\n" ) ;
+		logStage( fd,"error: insufficent privileges to perform this operation\n" ) ;
 		r = 1 ;
 	}
 

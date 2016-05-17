@@ -1,39 +1,71 @@
 
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(SET CMP0017 OLD)
+set_property(GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS ON)
 
 project(qt-update-notifier)
 
-find_package( Qt4 REQUIRED )
-
 find_package( QJSON REQUIRED )
-
-add_definitions( -I${Qt4_INCLUDE_DIR} )
-
-INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
 file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.4\"\n" )
 
-QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
+if( NOT DEFINED QT5 )
+    set( QT5 "true" )
+endif()
 
-QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
+if( QT5 )
+	find_package( Qt5Widgets REQUIRED )
+	find_package( Qt5Core REQUIRED )
+	find_package( Qt5Network REQUIRED )
 
-QT4_ADD_RESOURCES( ICONS icons/icons.qrc )
+	set( CMAKE_INCLUDE_CURRENT_DIR ON )
+	include_directories( ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Network_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} )
 
-add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
+	add_definitions( ${Qt5Widgets_DEFINITIONS} )
+	add_definitions( ${Qt5Network_DEFINITIONS} )
+	add_definitions( ${Qt5Core_DEFINITIONS} )
+
+	Qt5_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
+
+	Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
+
+	Qt5_ADD_RESOURCES( ICONS icons/icons.qrc )
+
+	add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
 		src/logwindow.cpp src/configuredialog.cpp src/utility.cpp src/twitter.cpp
                 ${MOC} ${UI} ${ICONS} )
 
-if( QT_BUILD )
 	file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
-	TARGET_LINK_LIBRARIES( qt-update-notifier -lQtCore -lQtGui -lQtNetwork -lqjson )
+
+	TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} -lqjson )
 else()
-	find_package( KDE4 REQUIRED )
-	add_definitions( -I${KDE4_INCLUDE_DIR} )
-	file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 1\n#define USE_LXQT_PLUGIN 0\n" )
-	TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lQtCore -lQtGui -lkdecore -lkdeui -lQtNetwork -lqjson )
+	find_package( Qt4 REQUIRED )
+
+	add_definitions( -I${Qt4_INCLUDE_DIR} )
+
+	INCLUDE( ${QT_USE_FILE} )
+
+	QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
+
+	QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
+
+	QT4_ADD_RESOURCES( ICONS icons/icons.qrc )
+
+	add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
+		src/logwindow.cpp src/configuredialog.cpp src/utility.cpp src/twitter.cpp
+                ${MOC} ${UI} ${ICONS} )
+
+	if( QT_BUILD )
+		file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
+		TARGET_LINK_LIBRARIES( qt-update-notifier -lQtCore -lQtGui -lQtNetwork -lqjson )
+	else()
+		find_package( KDE4 REQUIRED )
+		add_definitions( -I${KDE4_INCLUDE_DIR} )
+		file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 1\n#define USE_LXQT_PLUGIN 0\n" )
+		TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lQtCore -lQtGui -lkdecore -lkdeui -lQtNetwork -lqjson )
+	endif()
 endif()
 
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c++11" )
@@ -102,8 +134,8 @@ configure_file(
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
     IMMEDIATE @ONLY )
 
-add_custom_target( uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake )
+#add_custom_target( uninstall
+#    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake )
 
 # desktop file section
 file( WRITE "${PROJECT_BINARY_DIR}/qt-update-notifier.desktop"

@@ -1,11 +1,11 @@
 
-Two versions of this project can be build.
+Three versions of this project can be build.
 
-1. A KDE tray application
+1. A KDE4 tray application
 
 To build this project as a KDE tray application,you need the following packages and their development versions installed
 KDE4
-QT4
+Qt4
 g++
 gcc
 cmake
@@ -16,12 +16,12 @@ mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`  -DCMAKE_BUILD_TYPE=release  ..
 make
-make install ( or sudo make install )
+make install
 
-2. A Qt tray application
+2. A Qt4 tray application
 
 To build this project as a Qt tray application,you need the following packages and their development versions installed
-QT4
+Qt4
 g++
 gcc
 cmake
@@ -32,7 +32,19 @@ mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT_BUILD=true -DCMAKE_BUILD_TYPE=release  ..
 make
-make install ( or sudo make install )
-To uninstall,run
+make install
 
-make uninstall( or sudo make uninstall )
+3. Qt5 application
+To build this project as a Qt tray application,you need the following packages and their development versions installed
+Qt5
+g++
+gcc
+cmake
+
+To build,run the following commands in the source folder
+
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT5=true -DCMAKE_BUILD_TYPE=release  ..
+make
+make install

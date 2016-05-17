@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
-    <height>497</height>
+    <width>702</width>
+    <height>492</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <rect>
      <x>20</x>
      <y>10</y>
-     <width>511</width>
+     <width>661</width>
      <height>131</height>
     </rect>
    </property>
@@ -29,9 +29,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
-      <width>301</width>
-      <height>101</height>
+      <y>20</y>
+      <width>461</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="text">
@@ -44,8 +44,8 @@
    <widget class="QComboBox" name="gbUpdateIntervalComboBoxDays">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>10</y>
+      <x>480</x>
+      <y>30</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -94,8 +94,8 @@
    <widget class="QComboBox" name="gbUpdateIntervalComboBoxHours">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>40</y>
+      <x>480</x>
+      <y>60</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -229,8 +229,8 @@
    <widget class="QComboBox" name="gbUpdateIntervalComboBoxMinutes">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>70</y>
+      <x>480</x>
+      <y>90</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -544,8 +544,8 @@
    <widget class="QLabel" name="labelDays">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>10</y>
+      <x>560</x>
+      <y>30</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -557,8 +557,8 @@
    <widget class="QLabel" name="labelHours">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>40</y>
+      <x>560</x>
+      <y>60</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -570,8 +570,8 @@
    <widget class="QLabel" name="labelMinutes">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>70</y>
+      <x>560</x>
+      <y>90</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -586,7 +586,7 @@
     <rect>
      <x>20</x>
      <y>140</y>
-     <width>511</width>
+     <width>661</width>
      <height>101</height>
     </rect>
    </property>
@@ -610,9 +610,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>0</y>
-      <width>301</width>
-      <height>101</height>
+      <y>20</y>
+      <width>461</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
@@ -625,8 +625,8 @@
    <widget class="QComboBox" name="gbDelayStartIntervalComboBox">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>20</y>
+      <x>480</x>
+      <y>40</y>
       <width>71</width>
       <height>41</height>
      </rect>
@@ -663,7 +663,7 @@
     <rect>
      <x>20</x>
      <y>410</y>
-     <width>511</width>
+     <width>661</width>
      <height>51</height>
     </rect>
    </property>
@@ -674,9 +674,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>0</y>
-      <width>301</width>
-      <height>51</height>
+      <y>20</y>
+      <width>461</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -689,9 +689,9 @@
    <widget class="QComboBox" name="comboBoxLanguageList">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>10</y>
-      <width>161</width>
+      <x>480</x>
+      <y>20</y>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -700,9 +700,9 @@
   <widget class="QPushButton" name="pbClose">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>300</x>
      <y>460</y>
-     <width>91</width>
+     <width>101</width>
      <height>31</height>
     </rect>
    </property>
@@ -715,7 +715,7 @@
     <rect>
      <x>20</x>
      <y>340</y>
-     <width>511</width>
+     <width>661</width>
      <height>71</height>
     </rect>
    </property>
@@ -739,9 +739,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>0</y>
-      <width>291</width>
-      <height>71</height>
+      <y>20</y>
+      <width>461</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="text">
@@ -754,10 +754,10 @@
    <widget class="QCheckBox" name="checkBoxAutoStart">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>0</y>
-      <width>191</width>
-      <height>71</height>
+      <x>480</x>
+      <y>20</y>
+      <width>181</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="text">
@@ -770,7 +770,7 @@
     <rect>
      <x>20</x>
      <y>240</y>
-     <width>511</width>
+     <width>661</width>
      <height>101</height>
     </rect>
    </property>
@@ -781,9 +781,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>0</y>
-      <width>301</width>
-      <height>101</height>
+      <y>20</y>
+      <width>461</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
@@ -796,10 +796,10 @@
    <widget class="QCheckBox" name="checkBoxSynapticAutoRefresh">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>0</y>
-      <width>181</width>
-      <height>101</height>
+      <x>480</x>
+      <y>20</y>
+      <width>171</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
