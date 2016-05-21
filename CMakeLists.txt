@@ -5,8 +5,6 @@ set_property(GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS ON)
 
 project(qt-update-notifier)
 
-find_package( QJSON REQUIRED )
-
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
 file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.5\"\n" )
@@ -39,9 +37,10 @@ if( QT5 )
 
 	file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
 
-	TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} -lqjson )
+	TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} )
 else()
 	find_package( Qt4 REQUIRED )
+	find_package( QJSON REQUIRED )
 
 	add_definitions( -I${Qt4_INCLUDE_DIR} )
 

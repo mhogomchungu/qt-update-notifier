@@ -14,7 +14,7 @@ To build,run the following commands in the source folder
 
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`  -DCMAKE_BUILD_TYPE=release  ..
+cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` -DQT_BUILD=false -DQT5=false -DCMAKE_BUILD_TYPE=release  ..
 make
 make install
 
@@ -30,7 +30,7 @@ To build,run the following commands in the source folder
 
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT_BUILD=true -DCMAKE_BUILD_TYPE=release  ..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT_BUILD=true -DQT5=false -DCMAKE_BUILD_TYPE=release  ..
 make
 make install
 

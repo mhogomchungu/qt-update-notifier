@@ -20,11 +20,55 @@
 #include "qtUpdateNotifier.h"
 #include "twitter.h"
 
-#include <qjson/parser.h>
-
 #include <QCoreApplication>
 
 #include <utility>
+
+struct jsonResult
+{
+	bool ok ;
+	QList<QVariant> value ;
+} ;
+
+#if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
+
+#include <qjson/parser.h>
+
+jsonResult _parseJSON( const QByteArray& e )
+{
+	QJson::Parser parser ;
+
+	bool ok ;
+
+	auto p = parser.parse( e,&ok ) ;
+
+	if( ok ){
+
+		return { true,p.toList() } ;
+	}else{
+		return { false,QList< QVariant >() } ;
+	}
+}
+
+#else
+
+#include <QJsonDocument>
+
+jsonResult _parseJSON( const QByteArray& e )
+{
+	QJsonParseError error ;
+
+	auto r = QJsonDocument::fromJson( e,&error ) ;
+
+	if( error.error == QJsonParseError::NoError ){
+
+		return { true,r.toVariant().toList() } ;
+	}else{
+		return { false,QList< QVariant >() } ;
+	}
+}
+
+#endif
 
 template< typename T >
 class qObject_unique_ptr
@@ -184,15 +228,11 @@ void qtUpdateNotifier::networResponse( QNetworkReply * k )
 		return ;
 	}
 
-	QJson::Parser parser ;
+	auto j = _parseJSON( data ) ;
 
-	bool ok ;
+	if( j.ok ){
 
-	auto p = parser.parse( data,&ok ) ;
-
-	if( ok ){
-
-		auto l = p.toList() ;
+		const auto& l = j.value ;
 
 		auto s = this->getLastTwitterUpdate().toULongLong() ;
 
