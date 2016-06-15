@@ -53,9 +53,9 @@ namespace utility
 {
 	void waitForTwoSeconds( void ) ;
 
-	Task::future< bool >& writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
+        bool writeToFile( const QString& filepath,const QString& content,bool truncate ) ;
 
-	Task::future< QString >& readFromFile( const QString& filepath ) ;
+        QString readFromFile( const QString& filepath ) ;
 
 	Task::future< result >& reportUpdates( void ) ;
 	Task::future< QString >& checkForPackageUpdates( void ) ;

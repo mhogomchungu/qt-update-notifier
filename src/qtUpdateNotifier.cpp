@@ -21,6 +21,7 @@
 #include "twitter.h"
 
 #include <QCoreApplication>
+#include <QJsonDocument>
 
 #include <utility>
 
@@ -29,30 +30,6 @@ struct jsonResult
 	bool ok ;
 	QList<QVariant> value ;
 } ;
-
-#if QT_VERSION < QT_VERSION_CHECK( 5,0,0 )
-
-#include <qjson/parser.h>
-
-jsonResult _parseJSON( const QByteArray& e )
-{
-	QJson::Parser parser ;
-
-	bool ok ;
-
-	auto p = parser.parse( e,&ok ) ;
-
-	if( ok ){
-
-		return { true,p.toList() } ;
-	}else{
-		return { false,QList< QVariant >() } ;
-	}
-}
-
-#else
-
-#include <QJsonDocument>
 
 jsonResult _parseJSON( const QByteArray& e )
 {
@@ -68,84 +45,8 @@ jsonResult _parseJSON( const QByteArray& e )
 	}
 }
 
-#endif
-
-template< typename T >
-class qObject_unique_ptr
-{
-public:
-	explicit qObject_unique_ptr( T * t ) : m_qObject( t )
-	{
-	}
-
-	qObject_unique_ptr( const qObject_unique_ptr& ) = delete ;
-	qObject_unique_ptr& operator=( const qObject_unique_ptr& ) = delete ;
-
-	qObject_unique_ptr( qObject_unique_ptr&& other )
-	{
-		this->deleteHandle() ;
-		m_qObject = other.m_qObject ;
-		other.m_qObject = nullptr ;
-	}
-
-	T * operator->()
-	{
-		return m_qObject ;
-	}
-
-	~qObject_unique_ptr()
-	{
-		this->deleteHandle() ;
-	}
-private:
-	void deleteHandle()
-	{
-		if( m_qObject ){
-
-			m_qObject->deleteLater() ;
-		}
-	}
-
-	T * m_qObject = nullptr ;
-};
-
-qtUpdateNotifier::qtUpdateNotifier() : statusicon()
-{
-	m_manager = nullptr ;
-
-	connect( &m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
-
-	m_threadIsRunning = false ;
-
-	QCoreApplication::setApplicationName( "qt-update-notfier" ) ;
-	statusicon::setStatus( statusicon::Passive ) ;
-	statusicon::setCategory( statusicon::ApplicationStatus ) ;
-
-	m_defaulticon = settings::defaultIcon() ;
-
-	this->changeIcon( m_defaulticon ) ;
-
-	m_sleepDuration  = settings::updateCheckInterval() ;
-	m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
-
-	this->setupTranslationText() ;
-
-	auto q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
-	auto z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
-	auto a = m_defaulticon ;
-	auto b = tr( "Status" ) ;
-
-	this->showToolTip( a,b,z ) ;
-
-	QCoreApplication::setApplicationName( tr( "Qt-update-notifier" ) ) ;
-
-	m_url   = settings::url() ;
-	m_token = settings::token() ;
-
-	m_showIconOnImportantInfo = settings::showIconOnImportantInfo() ;
-	m_networkConnectivityChecker = settings::networkConnectivityChecker() ;
-
-	m_lastTwitterUpdate = settings::getLastTwitterUpdate() ;
+qtUpdateNotifier::qtUpdateNotifier( bool e ) : m_autoStart( e )
+{	
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -171,8 +72,8 @@ void qtUpdateNotifier::start()
 
 void qtUpdateNotifier::changeIcon( QString icon )
 {
-	statusicon::setIconByName( icon ) ;
-	statusicon::setAttentionIconByName( icon ) ;
+        m_statusicon->setIconByName( icon ) ;
+        m_statusicon->setAttentionIconByName( icon ) ;
 }
 
 void qtUpdateNotifier::startUpdater()
@@ -198,7 +99,9 @@ void qtUpdateNotifier::setLastTwitterUpdate( const QString& e )
 
 void qtUpdateNotifier::networResponse( QNetworkReply * k )
 {
-	qObject_unique_ptr< QNetworkReply > r( k ) ;
+        using smart_ptr = std::unique_ptr< QNetworkReply,std::function< void( QNetworkReply * ) > > ;
+
+        smart_ptr r( k,[]( QNetworkReply * e ){ e->deleteLater() ; } ) ;
 
 	QList<QByteArray> l = r->rawHeaderList() ;
 
@@ -279,7 +182,7 @@ void qtUpdateNotifier::checkTwitter()
 void qtUpdateNotifier::showIconOnImportantInfo()
 {
 	if( m_showIconOnImportantInfo ){
-		statusicon::setStatus( statusicon::NeedsAttention ) ;
+                m_statusicon->setStatus( ItemStatus::NeedsAttention ) ;
 	}
 }
 
@@ -307,7 +210,7 @@ void qtUpdateNotifier::doneUpdating()
 	auto z = tr( "Status" ) ;
 
 	this->showToolTip( m_defaulticon,z,n ) ;
-	statusicon::setStatus( statusicon::Passive ) ;
+        m_statusicon->setStatus( ItemStatus::Passive ) ;
 }
 
 bool qtUpdateNotifier::autoStartEnabled()
@@ -352,9 +255,9 @@ void qtUpdateNotifier::setupTranslationText()
 		 *english_US language,its the default and hence dont load anything
 		 */
 	}else{
-		m_translator = new QTranslator( this ) ;
-		m_translator->load( e.toLatin1().constData(),QString( QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ) ;
-		QCoreApplication::installTranslator( m_translator ) ;
+                auto q = new QTranslator( this ) ;
+                q->load( e.toLatin1().constData(),QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ;
+                QCoreApplication::installTranslator( q ) ;
 	}
 }
 
@@ -389,49 +292,98 @@ int qtUpdateNotifier::instanceAlreadyRunning()
 	return 1 ;
 }
 
+void qtUpdateNotifier::buildGUI()
+{
+        m_statusicon = new statusicon( this ) ;
+
+        connect( &m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
+
+        m_threadIsRunning = false ;
+
+        //QCoreApplication::setApplicationName( "qt-update-notfier" ) ;
+        m_statusicon->setStatus( ItemStatus::Passive ) ;
+        m_statusicon->setCategory( ItemCategory::ApplicationStatus ) ;
+
+        m_defaulticon = settings::defaultIcon() ;
+
+        this->changeIcon( m_defaulticon ) ;
+
+        m_sleepDuration  = settings::updateCheckInterval() ;
+        m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
+
+        this->setupTranslationText() ;
+
+        auto q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
+        auto z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
+        auto a = m_defaulticon ;
+        auto b = tr( "Status" ) ;
+
+        this->showToolTip( a,b,z ) ;
+
+        m_url   = settings::url() ;
+        m_token = settings::token() ;
+
+        m_showIconOnImportantInfo = settings::showIconOnImportantInfo() ;
+        m_networkConnectivityChecker = settings::networkConnectivityChecker() ;
+
+        m_lastTwitterUpdate = settings::getLastTwitterUpdate() ;
+}
+
 void qtUpdateNotifier::run()
 {
-	this->logActivity( tr( "Qt-update-notifier started" ) ) ;
+        m_settings.reset( new QSettings( "qt-update-notifier","qt-update-notifier" ) ) ;
 
-	QAction * ac ;
+        settings::init( m_settings.get() ) ;
 
-	ac = statusicon::getAction( tr( "Open synaptic" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( startUpdater() ) ) ;
+        if( m_autoStart && !qtUpdateNotifier::autoStartEnabled() ){
 
-	ac = statusicon::getAction( tr( "Check twitter" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( checkTwitter() ) ) ;
+                QCoreApplication::quit() ;
+        }else{
+                this->buildGUI() ;
 
-	ac = statusicon::getAction( tr( "Check for updates" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( manualCheckForUpdates() ) ) ;
+                this->logActivity( tr( "Qt-update-notifier started" ) ) ;
 
-	ac = statusicon::getAction( tr( "Done updating" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( doneUpdating() ) ) ;
+                QAction * ac ;
 
-	ac = statusicon::getAction( tr( "Open update log window" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( logWindowShow() ) ) ;
+                ac = m_statusicon->getAction( tr( "Open synaptic" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( startUpdater() ) ) ;
 
-	ac = statusicon::getAction( tr( "Open apt-get log window" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( aptGetLogWindow() ) ) ;
+                ac = m_statusicon->getAction( tr( "Check twitter" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( checkTwitter() ) ) ;
 
-	ac = statusicon::getAction( tr( "Configuration window" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( openConfigureDialog() ) ) ;
+                ac = m_statusicon->getAction( tr( "Check for updates" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( manualCheckForUpdates() ) ) ;
 
-	statusicon::setStandardActionsEnabled( false ) ;
+                ac = m_statusicon->getAction( tr( "Done updating" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( doneUpdating() ) ) ;
 
-	statusicon::addQuitAction() ;
+                ac = m_statusicon->getAction( tr( "Open update log window" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( logWindowShow() ) ) ;
 
-	auto t = new QTimer() ;
+                ac = m_statusicon->getAction( tr( "Open apt-get log window" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( aptGetLogWindow() ) ) ;
 
-	t->setSingleShot( true ) ;
+                ac = m_statusicon->getAction( tr( "Configuration window" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( openConfigureDialog() ) ) ;
 
-	connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
-	connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
+                m_statusicon->setStandardActionsEnabled( false ) ;
 
-	t->start( settings::delayTimeBeforeUpdateCheck() ) ;
+                m_statusicon->addQuitAction() ;
 
-	m_manager = new QNetworkAccessManager( this ) ;
+                auto t = new QTimer() ;
 
-	connect( m_manager,SIGNAL( finished( QNetworkReply * ) ),this,SLOT( networResponse( QNetworkReply * ) ) ) ;
+                t->setSingleShot( true ) ;
+
+                connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
+                connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
+
+                t->start( settings::delayTimeBeforeUpdateCheck() ) ;
+
+                m_manager = new QNetworkAccessManager( this ) ;
+
+                connect( m_manager,SIGNAL( finished( QNetworkReply * ) ),
+                         this,SLOT( networResponse( QNetworkReply * ) ) ) ;
+        }
 }
 
 void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
@@ -528,7 +480,7 @@ QString qtUpdateNotifier::getCurrentTime_1()
 void qtUpdateNotifier::logActivity( const QString& msg )
 {
 	QString log = QString( "%1:   %2\n").arg( this->getCurrentTime_1(),msg ) ;
-	utility::writeToFile( settings::activityLogFilePath(),log,false ).await(); ;
+        utility::writeToFile( settings::activityLogFilePath(),log,false ) ;
 	emit updateLogWindow() ;
 }
 
@@ -540,7 +492,7 @@ void qtUpdateNotifier::logActivity_1( const QString& msg )
 	auto t = this->getCurrentTime_1() ;
 	auto log = QString( "%1\n%2:   %3\n%4\n" ).arg( line,t,msg,line )  ;
 
-	utility::writeToFile( settings::activityLogFilePath(),log,false ).await() ;
+        utility::writeToFile( settings::activityLogFilePath(),log,false ) ;
 
 	emit updateLogWindow() ;
 }
@@ -599,7 +551,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = "qt-update-notifier-updates-are-available" ;
-			statusicon::setStatus( statusicon::NeedsAttention ) ;
+                        m_statusicon->setStatus( ItemStatus::NeedsAttention ) ;
 			this->showToolTip( icon,tr( "There are updates in the repository" ),r.taskOutput ) ;
 			this->autoDownloadPackages() ;
 
@@ -608,7 +560,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = "qt-update-notifier-important-info" ;
-			statusicon::setStatus( statusicon::Passive ) ;
+                        m_statusicon->setStatus( ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 			this->logActivity_1( r.taskOutput.at( 0 ) ) ;
 			this->showIconOnImportantInfo() ;
@@ -616,7 +568,7 @@ void qtUpdateNotifier::checkForUpdates()
 			break ;
 		case result::repoState::noUpdatesFound :
 
-			statusicon::setStatus( statusicon::Passive ) ;
+                        m_statusicon->setStatus( ItemStatus::Passive ) ;
 
 			/*
 			 * below function is called from checkForPackageUpdates() routine
@@ -634,14 +586,14 @@ void qtUpdateNotifier::checkForUpdates()
 		case result::repoState::noNetworkConnection :
 
 			icon = m_defaulticon ;
-			statusicon::setStatus( statusicon::Passive ) ;
+                        m_statusicon->setStatus( ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
 
 			break ;
 		case result::repoState::undefinedState :
 
 			icon = m_defaulticon ;
-			statusicon::setStatus( statusicon::Passive ) ;
+                        m_statusicon->setStatus( ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 
 			break ;
@@ -651,7 +603,7 @@ void qtUpdateNotifier::checkForUpdates()
 			 */
 
 			icon = m_defaulticon ;
-			statusicon::setStatus( statusicon::Passive ) ;
+                        m_statusicon->setStatus( ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 			this->checkForPackageUpdates() ;
 		}
@@ -673,7 +625,7 @@ void qtUpdateNotifier::saveAptGetLogOutPut( const result::array_t& l )
 		auto msg = tr( "Log entry was created at: " ) ;
 		auto header = line + msg + QDateTime::currentDateTime().toString( Qt::TextDate ) + "\n" + line ;
 
-		utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ).await() ;
+                utility::writeToFile( settings::aptGetLogFilePath(),header + x,true ) ;
 	}
 }
 
@@ -685,7 +637,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 
 		this->showToolTip( icon,tr( "Status" ),tr( "Update in progress, do not power down computer" ) ) ;
 
-		statusicon::setStatus( statusicon::NeedsAttention ) ;
+                m_statusicon->setStatus( ItemStatus::NeedsAttention ) ;
 
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
@@ -700,7 +652,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 			this->showIconOnImportantInfo() ;
 		}
 
-		statusicon::setStatus( statusicon::Passive ) ;
+                m_statusicon->setStatus( ItemStatus::Passive ) ;
 	}else{
 		this->logActivity( this->logMsg() ) ;
 	}
@@ -714,14 +666,14 @@ void qtUpdateNotifier::autoDownloadPackages()
 
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) ) ;
 
-		statusicon::setStatus( statusicon::NeedsAttention ) ;
+                m_statusicon->setStatus( ItemStatus::NeedsAttention ) ;
 
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
 
 		if( utility::autoDownloadPackages().await() ){
 
 			this->showToolTip( icon,tr( "Downloading of packages completed" ) ) ;
-			statusicon::setStatus( statusicon::NeedsAttention ) ;
+                        m_statusicon->setStatus( ItemStatus::NeedsAttention ) ;
 			this->autoUpdatePackages() ;
 		}else{
 			this->showToolTip( icon,tr( "Downloading of packages failed" ) ) ;
@@ -770,20 +722,20 @@ void qtUpdateNotifier::objectGone( QObject * obj )
 void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const result::array_t& l )
 {
 	this->logActivity( y ) ;
-	statusicon::setToolTip( x,tr( "Updates found" ),l.at( 0 ) ) ;
+        m_statusicon->setToolTip( x,tr( "Updates found" ),l.at( 0 ) ) ;
 	this->changeIcon( x ) ;
 }
 
 void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,const QString& z )
 {
-	statusicon::setToolTip( x,y,z ) ;
+        m_statusicon->setToolTip( x,y,z ) ;
 	this->changeIcon( x ) ;
 }
 
 void qtUpdateNotifier::showToolTip( const QString& x,const QString& y,int z )
 {
 	QString n = tr( "Next update check will be at %1" ).arg( this->nextUpdateTime( z ) ) ;
-	statusicon::setToolTip( x,y,n ) ;
+        m_statusicon->setToolTip( x,y,n ) ;
 	this->changeIcon( x ) ;
 }
 
@@ -797,7 +749,7 @@ void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 
 		this->logActivity( this->logMsg() ) ;
 
-		statusicon::setToolTip( x,y,n ) ;
+                m_statusicon->setToolTip( x,y,n ) ;
 	}else{
 		auto msg = QString( "<table><tr><td><b>%1</b></tr></td><tr><td>%2</tr></td></table>" ).arg( y,n ) ;
 
@@ -805,7 +757,7 @@ void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 
 		this->logActivity( this->logMsg() ) ;
 
-		statusicon::setToolTip( x,tr( "Status" ),msg ) ;
+                m_statusicon->setToolTip( x,tr( "Status" ),msg ) ;
 	}
 
 	this->changeIcon( x ) ;
@@ -876,7 +828,7 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 	m_timer.start( m_sleepDuration ) ;
 
 	auto x = m_defaulticon ;
-	auto y = statusicon::toolTipTitle() ;
+        auto y = m_statusicon->toolTipTitle() ;
 
 	auto d = static_cast<int>( m_sleepDuration ) ;
 

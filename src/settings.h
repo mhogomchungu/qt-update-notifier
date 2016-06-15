@@ -21,10 +21,11 @@
 #define SETTINGS_H
 
 #include<QString>
+#include <QSettings>
 
 namespace settings
 {
-	void init( void) ;
+        void init( QSettings * ) ;
 	QString configPath( void ) ;
 	QString aptGetLogFilePath( void ) ;
 	QString activityLogFilePath( void ) ;

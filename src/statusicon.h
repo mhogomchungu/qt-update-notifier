@@ -28,45 +28,28 @@
 #include <QUrl>
 #include <QPixmap>
 #include <QPainter>
+#include <QMenu>
 
 #include "tray_application_type.h"
 
-#if USE_KDE_STATUS_NOTIFIER
-#include <knotification.h>
-#include <kstatusnotifieritem.h>
-#include <knotification.h>
-#include <kmenu.h>
-#include <ktoolinvocation.h>
-#include <kcmdlineargs.h>
+enum class ItemCategory {
+        ApplicationStatus = 1,
+        Communications = 2,
+        SystemServices = 3,
+        Hardware = 4,
+        Reserved = 129
+};
+enum class ItemStatus{
+        Passive = 1,
+        Active = 2,
+        NeedsAttention = 3
+};
 
-class statusicon : public KStatusNotifierItem
-{
-
-#elif USE_LXQT_PLUGIN
-#include <QToolButton>
 class statusicon : public QObject
 {
-#else
-
-#include <QMenu>
-class statusicon : public QObject
-{
-#endif
 	Q_OBJECT
 public:
-	enum ItemCategory {
-		ApplicationStatus = 1,
-		Communications = 2,
-		SystemServices = 3,
-		Hardware = 4,
-		Reserved = 129
-	};
-	enum ItemStatus{
-		Passive = 1,
-		Active = 2,
-		NeedsAttention = 3
-	};
-	statusicon() ;
+        statusicon( QObject * parent ) ;
 	virtual ~statusicon() ;
 	void setAttentionIcon( const QString& name ) ;
 	void setCategory( const ItemCategory category ) ;
@@ -76,7 +59,7 @@ public:
 	void setStandardActionsEnabled( bool ) ;
 	void setIcon( const QString& name,int count ) ;
 	void setOverlayIcon( const QString& name ) ;
-	void setStatus( const statusicon::ItemStatus status ) ;
+        void setStatus( const ItemStatus status ) ;
 	void setToolTip( const QString& iconName,const QString& title,const QString& subTitle ) ;
 	void addAction( QAction * ) ;
 	QAction * getAction( const QString& title = QString() ) ;
@@ -89,14 +72,8 @@ public:
 private slots:
 	void quit( void ) ;
 private:
-#if USE_KDE_STATUS_NOTIFIER
-	KMenu * m_menu ;
-#elif USE_LXQT_PLUGIN
-	QToolButton m_toolButton ;
-#else
-	QMenu * m_menu ;
+        QMenu m_menu ;
 	QSystemTrayIcon * m_trayIcon ;
-#endif
 };
 
 #endif // STATUSICON_H

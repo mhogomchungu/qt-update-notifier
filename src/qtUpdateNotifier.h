@@ -33,6 +33,7 @@
 #include <QFileDialog>
 #include <QMetaMethod>
 #include <QDebug>
+#include <QSettings>
 #include <QCoreApplication>
 #include <QTimer>
 #include <QDateTime>
@@ -53,11 +54,13 @@
 #include "settings.h"
 #include "statusicon.h"
 
-class qtUpdateNotifier : public statusicon
+#include <memory>
+
+class qtUpdateNotifier : public QObject
 {
 	Q_OBJECT
 public:
-	explicit qtUpdateNotifier() ;
+        explicit qtUpdateNotifier( bool ) ;
 	~qtUpdateNotifier() ;
 	void start( void ) ;
 	void logActivity( const QString& ) ;
@@ -73,6 +76,7 @@ public slots:
 	void startUpdater( void ) ;
 	void setUpdateInterval( int ) ;
 private slots:
+        void buildGUI( void ) ;
 	void run( void ) ;
 	void closeApp( int ) ;
 	void closeApp( void ) ;
@@ -122,6 +126,7 @@ private:
 	bool m_threadIsRunning ;
 	bool m_autoStartEnabled ;
 	bool m_showIconOnImportantInfo ;
+        bool m_autoStart ;
 	QStringList m_updatesList ;
 	QString m_url ;
 	QString m_networkConnectivityChecker ;
@@ -132,8 +137,10 @@ private:
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
 	u_int64_t m_nextScheduledUpdateTime ;
-	QTranslator * m_translator ;
 	QNetworkAccessManager * m_manager ;
+        statusicon * m_statusicon ;
+        std::unique_ptr< QSettings > m_settings ;
+        QSystemTrayIcon * m_trayIcon ;
 	bool m_debug ;
 };
 

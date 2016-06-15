@@ -214,7 +214,7 @@ void configureDialog::setDelayTimeAtLogIn()
 {
 	int time = settings::delayTimeBeforeUpdateCheck() ;
 
-	time = time / 60 ;
+	time = time / ( 1000 * 60 ) ;
 
 	switch( time ){
 

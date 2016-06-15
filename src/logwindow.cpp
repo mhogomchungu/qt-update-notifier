@@ -65,19 +65,19 @@ void logWindow::showLogWindow()
 {
 	m_logFile = settings::activityLogFilePath() ;
 	m_logPath = m_logFile ;
-	m_ui->textEditLogField->setText( utility::readFromFile( m_logFile ).await() ) ;
+        m_ui->textEditLogField->setText( utility::readFromFile( m_logFile ) ) ;
 	m_ui->pbQuit_2->setVisible( false ) ;
 	this->show() ;
 }
 
 void logWindow::updateLogWindow()
 {
-	m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ).await() ) ;
+        m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ) ) ;
 }
 
 void logWindow::updateLogWindow_1()
 {
-	m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ).await() ) ;
+        m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ) ) ;
 }
 
 void logWindow::showAptGetWindow()

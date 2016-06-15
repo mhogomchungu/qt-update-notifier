@@ -80,58 +80,52 @@ void waitForTwoSeconds()
 	::sleep( 2 ) ;
 }
 
-Task::future< bool >& writeToFile( const QString& filepath,const QString& content,bool truncate )
+bool writeToFile( const QString& filepath,const QString& content,bool truncate )
 {
-	return Task::run< bool >( [ filepath,content,truncate ](){
+        if( filepath == settings::activityLogFilePath() ){
 
-		if( filepath == settings::activityLogFilePath() ){
-
-			if( settings::prefixLogEntries() ){
-				/*
-				 * add new entry at the front of the log
-				 */
-				auto data = content + utility::readFromFile( filepath ).get() ;
-				return _writeToFile( filepath,data,true )  ;
-			}else{
-				/*
-				 * add new entries at the back of the log
-				 */
-				return _writeToFile( filepath,content,truncate ) ;
-			}
-		}else{
-			/*
-			 * add new entries at the back of the log
-			 */
-			return _writeToFile( filepath,content,truncate ) ;
-		}
-	} ) ;
+                if( settings::prefixLogEntries() ){
+                        /*
+                         * add new entry at the front of the log
+                         */
+                        auto data = content + utility::readFromFile( filepath ) ;
+                        return _writeToFile( filepath,data,true )  ;
+                }else{
+                        /*
+                         * add new entries at the back of the log
+                         */
+                        return _writeToFile( filepath,content,truncate ) ;
+                }
+        }else{
+                /*
+                 * add new entries at the back of the log
+                 */
+                return _writeToFile( filepath,content,truncate ) ;
+        }
 }
 
-Task::future< QString >& readFromFile( const QString& filepath )
+QString readFromFile( const QString& filepath )
 {
-	return Task::run< QString >( [ filepath ](){
+        int fd = _openFile( filepath ) ;
 
-		int fd = _openFile( filepath ) ;
+        if( fd != -1 ){
 
-		if( fd != -1 ){
+                const int e = sizeof( wchar_t ) ;
+                struct stat st ;
 
-			const int e = sizeof( wchar_t ) ;
-			struct stat st ;
+                fstat( fd,&st ) ;
 
-			fstat( fd,&st ) ;
+                QVector< wchar_t > buffer( st.st_size ) ;
+                auto x = buffer.data() ;
 
-			QVector< wchar_t > buffer( st.st_size ) ;
-			auto x = buffer.data() ;
+                auto z = read( fd,x,st.st_size ) ;
 
-			auto z = read( fd,x,st.st_size ) ;
+                close( fd ) ;
 
-			close( fd ) ;
-
-			return QString::fromWCharArray( x,z / e ) ;
-		}else{
-			return QObject::tr( "Log is empty" ) ;
-		}
-	} ) ;
+                return QString::fromWCharArray( x,z / e ) ;
+        }else{
+                return QObject::tr( "Log is empty" ) ;
+        }
 }
 
 static result _processUpdates( QByteArray& output1,const QByteArray& output2 )

@@ -1,6 +1,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(SET CMP0017 OLD)
+cmake_policy(SET CMP0002 OLD)
 set_property(GLOBAL PROPERTY ALLOW_DUPLICATE_CUSTOM_TARGETS ON)
 
 project(qt-update-notifier)
@@ -9,63 +10,30 @@ INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
 file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.6\"\n" )
 
-if( NOT DEFINED QT5 )
-    set( QT5 "true" )
-endif()
+find_package( Qt5Widgets REQUIRED )
+find_package( Qt5Core REQUIRED )
+find_package( Qt5Network REQUIRED )
 
-if( QT5 )
-	find_package( Qt5Widgets REQUIRED )
-	find_package( Qt5Core REQUIRED )
-	find_package( Qt5Network REQUIRED )
+set( CMAKE_INCLUDE_CURRENT_DIR ON )
+include_directories( ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Network_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} )
 
-	set( CMAKE_INCLUDE_CURRENT_DIR ON )
-	include_directories( ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Network_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} )
+add_definitions( ${Qt5Widgets_DEFINITIONS} )
+add_definitions( ${Qt5Network_DEFINITIONS} )
+add_definitions( ${Qt5Core_DEFINITIONS} )
 
-	add_definitions( ${Qt5Widgets_DEFINITIONS} )
-	add_definitions( ${Qt5Network_DEFINITIONS} )
-	add_definitions( ${Qt5Core_DEFINITIONS} )
+Qt5_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
 
-	Qt5_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
+Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
 
-	Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
+Qt5_ADD_RESOURCES( ICONS icons/icons.qrc )
 
-	Qt5_ADD_RESOURCES( ICONS icons/icons.qrc )
-
-	add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
+add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
 		src/logwindow.cpp src/configuredialog.cpp src/utility.cpp src/twitter.cpp
                 ${MOC} ${UI} ${ICONS} )
 
-	file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
+file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
 
-	TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} )
-else()
-	find_package( Qt4 REQUIRED )
-	find_package( QJSON REQUIRED )
-
-	add_definitions( -I${Qt4_INCLUDE_DIR} )
-
-	INCLUDE( ${QT_USE_FILE} )
-
-	QT4_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
-
-	QT4_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
-
-	QT4_ADD_RESOURCES( ICONS icons/icons.qrc )
-
-	add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
-		src/logwindow.cpp src/configuredialog.cpp src/utility.cpp src/twitter.cpp
-                ${MOC} ${UI} ${ICONS} )
-
-	if( QT_BUILD )
-		file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
-		TARGET_LINK_LIBRARIES( qt-update-notifier -lQtCore -lQtGui -lQtNetwork -lqjson )
-	else()
-		find_package( KDE4 REQUIRED )
-		add_definitions( -I${KDE4_INCLUDE_DIR} )
-		file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 1\n#define USE_LXQT_PLUGIN 0\n" )
-		TARGET_LINK_LIBRARIES( qt-update-notifier -L${KDE4_LIB_DIR} -lQtCore -lQtGui -lkdecore -lkdeui -lQtNetwork -lqjson )
-	endif()
-endif()
+TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} )
 
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c++11" )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
@@ -150,15 +118,9 @@ MimeType=
 Name[en_US]=Qt-update-notifier
 Name=Qt-update-notifier
 NoDisplay=false
-Path=
 StartupNotify=true
 Terminal=false
-TerminalOptions=
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=Unique
-X-KDE-SubstituteUID=false
-X-KDE-Username=
 Categories=PackageManager;System;Application;X-MandrivaLinux-System-Configuration;X-MandrivaLinux-System-Configuration-Packaging;\n")
 
 file( WRITE "${PROJECT_BINARY_DIR}/qt-update-notifier-autostart.desktop"
@@ -174,13 +136,7 @@ MimeType=
 Name[en_US]=Qt-update-notifier-autostart
 Name=Qt-update-notifier-autostart
 NoDisplay=false
-Path=
 StartupNotify=true
 Terminal=false
-TerminalOptions=
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=Unique
-X-KDE-SubstituteUID=false
-X-KDE-Username=
 Categories=PackageManager;System;Application;X-MandrivaLinux-System-Configuration;X-MandrivaLinux-System-Configuration-Packaging;\n")
