@@ -751,7 +751,7 @@ void qtUpdateNotifier::showToolTip( const QString& x,const QString& y )
 
                 m_statusicon->setToolTip( x,y,n ) ;
 	}else{
-		auto msg = QString( "<table><tr><td><b>%1</b></tr></td><tr><td>%2</tr></td></table>" ).arg( y,n ) ;
+		auto msg = QString( "<table><tr><td><b>%1</b><br></tr></td><tr><td>%2</tr></td></table>" ).arg( y,n ) ;
 
 		this->logActivity( y ) ;
 
