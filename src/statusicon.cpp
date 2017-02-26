@@ -90,8 +90,8 @@ void statusicon::setStatus( const ItemStatus status )
 void statusicon::setToolTip( const QString& iconName,const QString& title,const QString& subTitle )
 {
 	Q_UNUSED( iconName ) ;
-        auto e = "<table><tr><td><b>%1</b></td></tr><tr><td>%2</td></tr></table>" ;
-        m_trayIcon->setToolTip( QString( e ).arg( title,subTitle ) ) ;
+	auto e = "<table><tr><td><b>%1</b></td><br></tr><tr><td>%2</td></tr></table>" ;
+	m_trayIcon->setToolTip( QString( e ).arg( title,subTitle ) ) ;
 }
 
 QList<QAction *> statusicon::getMenuActions()

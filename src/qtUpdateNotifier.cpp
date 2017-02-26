@@ -46,7 +46,7 @@ jsonResult _parseJSON( const QByteArray& e )
 }
 
 qtUpdateNotifier::qtUpdateNotifier( bool e ) : m_autoStart( e )
-{	
+{
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -314,7 +314,7 @@ void qtUpdateNotifier::buildGUI()
         this->setupTranslationText() ;
 
         auto q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
-        auto z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
+	auto z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;
         auto a = m_defaulticon ;
         auto b = tr( "Status" ) ;
 
