@@ -196,7 +196,7 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 	auto y = QString::number( replace ) ;
 	auto z = QString::number( New ) ;
 
-	auto q = QObject::tr( "<table><tr><td>%1 to be upgraded</td></tr><tr><td>%2 to be replaced</td></tr><tr><td>%3 to be installed</td></tr></table>" ) ;
+	auto q = QObject::tr( "<table><tr><td>%1 to be upgraded</td></tr><tr><td><br>%2 to be replaced</td></tr><tr><td><br>%3 to be installed</td></tr></table>" ) ;
 	auto updates = q.arg( x,y,z ) ;
 
 	return result{ 0,result::repoState::updatesFound,{ updates,output2 } } ;
