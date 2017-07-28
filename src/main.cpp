@@ -61,7 +61,7 @@ int main( int argc,char * argv[] )
                 std::cout << "\nversion  : " << VERSION << _msg << std::endl ;
 
                 return 0 ;
-        }else{
+	}else{
                 qtUpdateNotifier w( v.contains( "-a" ) ) ;
 
                 w.setDebug( v.contains( "-d" ) ) ;

@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <cmath>
 #include <QSettings>
+#include <QDateTime>
 
 #include "tray_application_type.h"
 #include "settings.h"
@@ -108,7 +109,15 @@ QString settings::networkConnectivityChecker()
 
 int settings::delayTimeBeforeUpdateCheck()
 {
-        return 1000 * _settings->value( "startUpDelay" ).toString().toInt() ;
+	QString opt( "startUpDelay" ) ;
+
+	if( _settings->contains( opt ) ){
+
+		return 1000 * _settings->value( opt ).toString().toInt() ;
+	}else{
+		_settings->setValue( opt,QString::number( 10 * 60 ) ) ;
+		return 1000 * 10 * 60 ;
+	}
 }
 
 QString settings::delayTimeBeforeUpdateCheck( int time )
@@ -206,12 +215,26 @@ bool settings::firstTimeRun()
 
 u_int32_t settings::updateCheckInterval()
 {
-        return 1000 * _settings->value( "updateCheckInterval" ).toString().toULong() ;
+	QString opt( "updateCheckInterval" ) ;
+
+	if( _settings->contains( opt ) ){
+
+		return 1000 * _settings->value( "updateCheckInterval" ).toString().toULong() ;
+	}else{
+		return 1000 * 86400 ;
+	}
 }
 
 u_int64_t settings::nextScheduledUpdateTime()
-{        
-        return _settings->value( "nextUpdateTime" ).toString().toULongLong() ;
+{
+	if( _settings->contains( "nextUpdateTime" ) ){
+
+		return _settings->value( "nextUpdateTime" ).toString().toULongLong() ;
+	}else{
+		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + settings::updateCheckInterval() ;
+		settings::writeUpdateTimeToConfigFile( s ) ;
+		return s ;
+	}
 }
 
 void settings::writeUpdateTimeToConfigFile( u_int64_t time )

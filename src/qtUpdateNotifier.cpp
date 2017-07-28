@@ -25,6 +25,8 @@
 
 #include <utility>
 
+#include <iostream>
+
 struct jsonResult
 {
 	bool ok ;
