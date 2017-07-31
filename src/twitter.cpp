@@ -28,13 +28,18 @@ twitter::twitter( QWidget * parent ) : QDialog( parent ),m_ui( new Ui::twitter )
 	this->setWindowIcon( QIcon( ":/qt-update-notifier.png" ) ) ;
 
 	connect( m_ui->pbClose,SIGNAL( clicked() ),this,SLOT( pbClose() ) ) ;
+	connect( &m_timer,SIGNAL( timeout() ),this,SLOT( updateUI() ) ) ;
 
 	this->installEventFilter( this ) ;
 }
 
 void twitter::ShowUI( const QString& text )
 {
-	m_ui->textEdit->setText( text ) ;
+	m_string = text ;
+
+	this->updateUI() ;
+
+	m_timer.start( 1000 ) ;
 
 	this->show() ;
 }
@@ -66,6 +71,7 @@ twitter::~twitter()
 
 void twitter::msg( const QString& msg )
 {
+	m_timer.stop() ;
 	m_ui->textEdit->setText( msg ) ;
 }
 
@@ -74,6 +80,13 @@ void twitter::pbClose()
 	this->hide() ;
 
 	this->deleteLater() ;
+}
+
+void twitter::updateUI()
+{
+	m_ui->textEdit->setText( m_string ) ;
+
+	m_string += " ..." ;
 }
 
 void twitter::closeEvent( QCloseEvent * e )

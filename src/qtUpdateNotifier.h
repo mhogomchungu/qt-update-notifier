@@ -41,10 +41,8 @@
 #include <cstdio>
 #include <QTranslator>
 #include <QLibraryInfo>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
 
+#include "networkAccessManager.hpp"
 #include "logwindow.h"
 #include "instance.h"
 #include "desktop_file.h"
@@ -96,13 +94,12 @@ private slots:
 	void configOptionsChanged( void ) ;
 	void autoRefreshSynaptic( bool ) ;
 	void objectGone( QObject * ) ;
-	void networResponse( QNetworkReply * ) ;
 	void checkTwitter( void ) ;
 private:
+	void networResponse( QNetworkReply& ) ;
 	QString getLastTwitterUpdate( void ) ;
 	void setLastTwitterUpdate( const QString& ) ;
 	void showIconOnImportantInfo( void ) ;
-	void accessTwitter( void ) ;
 	void checkForPackageUpdates( void ) ;
 	void autoDownloadPackages( void ) ;
 	void autoUpdatePackages( void ) ;
@@ -137,10 +134,8 @@ private:
 	u_int64_t m_sleepDuration ;
 	u_int64_t m_currentTime ;
 	u_int64_t m_nextScheduledUpdateTime ;
-	QNetworkAccessManager * m_manager ;
-        statusicon * m_statusicon ;
-        std::unique_ptr< QSettings > m_settings ;
-        QSystemTrayIcon * m_trayIcon ;
+	NetworkAccessManager m_manager ;
+	statusicon m_statusicon ;
 	bool m_debug ;
 };
 

@@ -23,7 +23,6 @@
 
 statusicon::statusicon( QObject * parent ) : QObject( parent )
 {
-        m_trayIcon = new QSystemTrayIcon( parent ) ;
 }
 
 QWidget * statusicon::widget()
@@ -37,7 +36,7 @@ statusicon::~statusicon()
 
 void statusicon::setAttentionIcon( const QString& name )
 {
-	m_trayIcon->setIcon( QIcon( ":/" + name ) ) ;
+	m_trayIcon.setIcon( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setCategory( const ItemCategory category )
@@ -47,7 +46,7 @@ void statusicon::setCategory( const ItemCategory category )
 
 void statusicon::setIconByName( const QString& name )
 {
-	m_trayIcon->setIcon( QIcon( ":/" + name ) ) ;
+	m_trayIcon.setIcon( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setIcon( const QString& name )
@@ -74,7 +73,7 @@ void statusicon::setIcon( const QString& name,int count )
 {
         Q_UNUSED( count ) ;
 
-        m_trayIcon->setIcon( QIcon( ":/" + name ) );
+	m_trayIcon.setIcon( QIcon( ":/" + name ) );
 }
 
 void statusicon::setOverlayIcon( const QString& name )
@@ -91,7 +90,7 @@ void statusicon::setToolTip( const QString& iconName,const QString& title,const 
 {
 	Q_UNUSED( iconName ) ;
 	auto e = "<table><tr><td><b>%1</b></td><br></tr><tr><td>%2</td></tr></table>" ;
-	m_trayIcon->setToolTip( QString( e ).arg( title,subTitle ) ) ;
+	m_trayIcon.setToolTip( QString( e ).arg( title,subTitle ) ) ;
 }
 
 QList<QAction *> statusicon::getMenuActions()
@@ -105,8 +104,8 @@ void statusicon::addQuitAction()
 	ac->setText( tr( "Quit" ) ) ;
 	connect( ac,SIGNAL( triggered() ),this,SLOT( quit() ) ) ;
         m_menu.addAction( ac ) ;
-        m_trayIcon->setContextMenu( &m_menu ) ;
-        m_trayIcon->show() ;
+	m_trayIcon.setContextMenu( &m_menu ) ;
+	m_trayIcon.show() ;
 }
 
 void statusicon::addAction( QAction * ac )

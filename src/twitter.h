@@ -21,7 +21,7 @@
 #define TWITTER_H
 
 #include <QDialog>
-
+#include <QTimer>
 #include <QCloseEvent>
 #include <QString>
 #include <QKeyEvent>
@@ -41,10 +41,12 @@ public slots:
 	void msg( const QString& ) ;
 private slots:
 	void pbClose( void ) ;
+	void updateUI( void ) ;
 private:
 	bool eventFilter( QObject * watched,QEvent * event ) ;
 	void closeEvent( QCloseEvent * e ) ;
-
+	QString m_string ;
+	QTimer m_timer ;
 	Ui::twitter * m_ui ;
 };
 

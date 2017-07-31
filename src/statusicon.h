@@ -73,7 +73,7 @@ private slots:
 	void quit( void ) ;
 private:
         QMenu m_menu ;
-	QSystemTrayIcon * m_trayIcon ;
+	QSystemTrayIcon m_trayIcon ;
 };
 
 #endif // STATUSICON_H

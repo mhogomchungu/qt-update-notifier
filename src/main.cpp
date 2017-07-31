@@ -24,6 +24,7 @@
 #include <QApplication>
 #include "qtUpdateNotifier.h"
 #include <iostream>
+#include <QSettings>
 
 static const auto _msg = R"R(
 copyright: 2013-2015 Francis Banyikwa,mhogomchungu@gmail.com
@@ -43,6 +44,10 @@ options:
 int main( int argc,char * argv[] )
 {
 	QApplication a( argc,argv ) ;
+
+	QSettings m( "qt-update-notifier","qt-update-notifier" ) ;
+
+	settings::init( &m ) ;
 
 	auto v = QCoreApplication::arguments() ;
 

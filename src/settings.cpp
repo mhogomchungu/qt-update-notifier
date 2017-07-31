@@ -231,7 +231,7 @@ u_int64_t settings::nextScheduledUpdateTime()
 
 		return _settings->value( "nextUpdateTime" ).toString().toULongLong() ;
 	}else{
-		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + settings::updateCheckInterval() ;
+		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + ( settings::updateCheckInterval() / 1000 ) ;
 		settings::writeUpdateTimeToConfigFile( s ) ;
 		return s ;
 	}

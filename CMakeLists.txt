@@ -23,7 +23,7 @@ add_definitions( ${Qt5Core_DEFINITIONS} )
 
 Qt5_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
 
-Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h )
+Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h src/networkAccessManager.hpp )
 
 Qt5_ADD_RESOURCES( ICONS icons/icons.qrc )
 
