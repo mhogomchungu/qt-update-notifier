@@ -24,6 +24,8 @@
 #include <QSettings>
 #include <QDateTime>
 
+#include <functional>
+
 #include "tray_application_type.h"
 #include "settings.h"
 
@@ -38,6 +40,50 @@ static QSettings * _settings ;
 static QString _localConfigDir( void )
 {
 	return QString( "%1/%2" ).arg( QDir::homePath(),"/.config/" ) ;
+}
+
+static bool _option_bool( const QString& opt,bool e )
+{
+	if( _settings->contains( opt ) ){
+
+		return _settings->value( opt,e ).toBool() ;
+	}else{
+		_settings->setValue( opt,e ) ;
+		return e ;
+	}
+}
+
+static QString _option_qstring( const QString& opt,const QString& e )
+{
+	if( _settings->contains( opt ) ){
+
+		return _settings->value( opt ).toString() ;
+	}else{
+		_settings->setValue( opt,e ) ;
+		return e ;
+	}
+}
+
+static int _option_int( const QString& opt,int e,int multiply = 1000 )
+{
+	if( _settings->contains( opt ) ){
+
+		return multiply * _settings->value( opt ).toInt() ;
+	}else{
+		_settings->setValue( opt,QString::number( e ) ) ;
+		return multiply * e ;
+	}
+}
+
+static u_int32_t _option_ulong( const QString& opt,int e,int multiply = 1000 )
+{
+	if( _settings->contains( opt ) ){
+
+		return multiply * _settings->value( opt ).toString().toULong() ;
+	}else{
+		_settings->setValue( opt,QString::number( e ) ) ;
+		return multiply * e ;
+	}
 }
 
 QString settings::aptGetLogFilePath()
@@ -95,29 +141,12 @@ void settings::setNextUpdateInterval( const QString& interval )
 
 QString settings::networkConnectivityChecker()
 {
-	QString opt( "networkConnectivityChecker" ) ;
-
-        if( _settings->contains( opt ) ){
-
-                return _settings->value( opt ).toString() ;
-	}else{
-		QString s( "ping -c 1 8.8.8.8" ) ;
-                _settings->setValue( opt,s ) ;
-		return s ;
-	}
+	return _option_qstring( "networkConnectivityChecker","ping -c 1 8.8.8.8" ) ;
 }
 
 int settings::delayTimeBeforeUpdateCheck()
 {
-	QString opt( "startUpDelay" ) ;
-
-	if( _settings->contains( opt ) ){
-
-		return 1000 * _settings->value( opt ).toString().toInt() ;
-	}else{
-		_settings->setValue( opt,QString::number( 10 * 60 ) ) ;
-		return 1000 * 10 * 60 ;
-	}
+	return _option_int( "startUpDelay",600 ) ;
 }
 
 QString settings::delayTimeBeforeUpdateCheck( int time )
@@ -140,16 +169,7 @@ QString settings::delayTimeBeforeUpdateCheck( int time )
 
 QString settings::defaultIcon()
 {
-	QString opt( "defaultIcon" ) ;
-
-        if( _settings->contains( opt ) ){
-
-                return _settings->value( opt ).toString() + ".png" ;
-	}else{
-		QString u( "qt-update-notifier" ) ;
-                _settings->setValue( opt,u ) ;
-		return u + ".png" ;
-	}
+	return _option_qstring( "defaultIcon","qt-update-notifier" ) ;
 }
 
 QByteArray settings::token()
@@ -158,31 +178,32 @@ QByteArray settings::token()
 }
 
 QString settings::url()
+{	
+	return _option_qstring( "url",_url ) ;
+}
+
+u_int64_t settings::nextScheduledUpdateTime()
 {
-	QString opt( "url" ) ;
+	if( _settings->contains( "nextScheduledUpdateTime" ) ){
 
-        if( _settings->contains( opt ) ){
-
-                return _settings->value( opt ).toString() ;
+		return _settings->value( "nextScheduledUpdateTime" ).toString().toULongLong() ;
 	}else{
-		QString u( _url ) ;
-                _settings->setValue( opt,u ) ;
-		return u ;
+		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + settings::updateCheckInterval() ;
+
+		settings::updateNextScheduledUpdateTime( s ) ;
+
+		return s ;
 	}
 }
 
 QString settings::getLastTwitterUpdate()
 {
-	QString opt( "lastTwitterUpdate" ) ;
+	return _option_qstring( "lastTwitterUpdate",QString() ) ;
+}
 
-        if( _settings->contains( opt ) ){
-
-                return _settings->value( opt ).toString() ;
-	}else{
-		QString u ;
-                _settings->setValue( opt,u ) ;
-		return u ;
-	}
+u_int32_t settings::updateCheckInterval()
+{
+	return _option_ulong( "updateCheckInterval",86400 ) ;
 }
 
 void settings::setLastTwitterUpdate( const QString& t )
@@ -203,112 +224,63 @@ void settings::setAutoRefreshSynaptic( bool autoRefresh )
 	}
 }
 
-bool settings::autoRefreshSynaptic()
-{
-        return _settings->value( "autoRefreshSynaptic" ).toBool() ;
-}
-
 bool settings::firstTimeRun()
 {
-        return !_settings->contains( "nextScheduledUpdateTime" ) ;
+	return !_settings->contains( "nextScheduledUpdateTime" ) ;
 }
 
-u_int32_t settings::updateCheckInterval()
-{
-	QString opt( "updateCheckInterval" ) ;
-
-	if( _settings->contains( opt ) ){
-
-		return 1000 * _settings->value( "updateCheckInterval" ).toString().toULong() ;
-	}else{
-		return 1000 * 86400 ;
-	}
-}
-
-u_int64_t settings::nextScheduledUpdateTime()
-{
-	if( _settings->contains( "nextScheduledUpdateTime" ) ){
-
-		return _settings->value( "nextScheduledUpdateTime" ).toString().toULongLong() ;
-	}else{
-		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + settings::updateCheckInterval() ;
-		settings::writeUpdateTimeToConfigFile( s ) ;
-		return s ;
-	}
-}
-
-void settings::writeUpdateTimeToConfigFile( u_int64_t time )
+void settings::updateNextScheduledUpdateTime( u_int64_t time )
 {
         _settings->setValue( "nextScheduledUpdateTime",QString::number( time ) ) ;
 }
 
 bool settings::autoUpdatePackages()
 {
-        return _settings->value( "autoUpdatePackages" ).toBool() ;
+	return _option_bool( "autoUpdatePackages",false ) ;
+}
+
+bool settings::autoRefreshSynaptic()
+{
+	return _option_bool( "autoRefreshSynaptic",false ) ;
 }
 
 bool settings::autoDownloadPackages()
 {
-        return _settings->value( "autoDownloadPackages" ).toBool() ;
+	return _option_bool( "autoDownloadPackages",false ) ;
 }
 
 bool settings::skipOldPackageCheck()
 {
-        return _settings->value( "skipOldPackageCheck" ).toBool() ;
+	return _option_bool( "skipOldPackageCheck",true ) ;
 }
 
 bool settings::autoStartEnabled()
 {
-        return _settings->value( "autoStartAtLogin" ).toBool() ;
-}
-
-bool settings::warnOnInconsistentState()
-{
-        return _settings->value( "warnOnInconsistentState" ).toBool() ;
-}
-
-bool settings::prefixLogEntries()
-{
-	QString opt( "prefixLogEntries" ) ;
-
-        if( _settings->contains( opt ) ){
-
-                return _settings->value( opt ).toBool() ;
-	}else{
-                _settings->setValue( opt,true ) ;
-
-		return true ;
-	}
-}
-
-bool settings::showIconOnImportantInfo()
-{
-	QString opt( "showIconOnImportantInfo" ) ;
-
-        if( _settings->contains( opt ) ){
-
-                return _settings->value( opt ).toBool() ;
-	}else{
-                _settings->setValue( opt,true ) ;
-		return true ;
-	}
+	return _option_bool( "autoStartAtLogin",true ) ;
 }
 
 void settings::enableAutoStart( bool autoStart )
 {
 	QString opt( "autoStartAtLogin" ) ;
-        _settings->setValue( opt,autoStart ) ;
+	_settings->setValue( opt,autoStart ) ;
+}
+
+bool settings::warnOnInconsistentState()
+{
+	return _option_bool( "warnOnInconsistentState",true ) ;
+}
+
+bool settings::prefixLogEntries()
+{
+	return _option_bool( "prefixLogEntries",true ) ;
+}
+
+bool settings::showIconOnImportantInfo()
+{
+	return _option_bool( "showIconOnImportantInfo",true ) ;
 }
 
 bool settings::checkNewerKernels()
 {
-	QString opt( "checkNewerKernels" ) ;
-
-        if( _settings->contains( opt ) ){
-
-                return _settings->value( opt ).toBool() ;
-	}else{
-                _settings->setValue( opt,false ) ;
-		return false ;
-	}
+	return _option_bool( "checkNewerKernels",false ) ;
 }

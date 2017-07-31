@@ -291,11 +291,10 @@ void qtUpdateNotifier::buildGUI()
 
         m_threadIsRunning = false ;
 
-        //QCoreApplication::setApplicationName( "qt-update-notfier" ) ;
 	m_statusicon.setStatus( ItemStatus::Passive ) ;
 	m_statusicon.setCategory( ItemCategory::ApplicationStatus ) ;
 
-        m_defaulticon = settings::defaultIcon() ;
+	m_defaulticon = settings::defaultIcon() + ".png" ;
 
         this->changeIcon( m_defaulticon ) ;
 
@@ -492,7 +491,7 @@ u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
 void qtUpdateNotifier::writeUpdateTimeToConfigFile( u_int64_t time )
 {
 	m_nextScheduledUpdateTime = time ;
-	settings::writeUpdateTimeToConfigFile( time ) ;
+	settings::updateNextScheduledUpdateTime( time ) ;
 }
 
 void qtUpdateNotifier::manualCheckForUpdates()

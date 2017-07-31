@@ -44,7 +44,7 @@ namespace settings
 	bool firstTimeRun( void ) ;
 	u_int32_t updateCheckInterval( void ) ;
 	u_int64_t nextScheduledUpdateTime() ;
-	void writeUpdateTimeToConfigFile( u_int64_t time ) ;
+	void updateNextScheduledUpdateTime( u_int64_t time ) ;
 	bool autoUpdatePackages( void ) ;
 	bool autoDownloadPackages( void ) ;
 	bool skipOldPackageCheck( void ) ;
