@@ -173,7 +173,7 @@ QString settings::url()
 
 QString settings::getLastTwitterUpdate()
 {
-	QString opt( "lastTwitterUpdate" ) ;        
+	QString opt( "lastTwitterUpdate" ) ;
 
         if( _settings->contains( opt ) ){
 
@@ -188,7 +188,7 @@ QString settings::getLastTwitterUpdate()
 void settings::setLastTwitterUpdate( const QString& t )
 {
 	QString opt( "lastTwitterUpdate" ) ;
-        _settings->setValue( opt,t ) ;        
+        _settings->setValue( opt,t ) ;
 }
 
 void settings::setAutoRefreshSynaptic( bool autoRefresh )
@@ -210,7 +210,7 @@ bool settings::autoRefreshSynaptic()
 
 bool settings::firstTimeRun()
 {
-        return !_settings->contains( "nextUpdateTime" ) ;
+        return !_settings->contains( "nextScheduledUpdateTime" ) ;
 }
 
 u_int32_t settings::updateCheckInterval()
@@ -227,11 +227,11 @@ u_int32_t settings::updateCheckInterval()
 
 u_int64_t settings::nextScheduledUpdateTime()
 {
-	if( _settings->contains( "nextUpdateTime" ) ){
+	if( _settings->contains( "nextScheduledUpdateTime" ) ){
 
-		return _settings->value( "nextUpdateTime" ).toString().toULongLong() ;
+		return _settings->value( "nextScheduledUpdateTime" ).toString().toULongLong() ;
 	}else{
-		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + ( settings::updateCheckInterval() / 1000 ) ;
+		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + settings::updateCheckInterval() ;
 		settings::writeUpdateTimeToConfigFile( s ) ;
 		return s ;
 	}
@@ -239,7 +239,7 @@ u_int64_t settings::nextScheduledUpdateTime()
 
 void settings::writeUpdateTimeToConfigFile( u_int64_t time )
 {
-        _settings->setValue( "nextUpdateTime",QString::number( time ) ) ;        
+        _settings->setValue( "nextScheduledUpdateTime",QString::number( time ) ) ;
 }
 
 bool settings::autoUpdatePackages()
