@@ -298,9 +298,6 @@ void qtUpdateNotifier::buildGUI()
 
         this->changeIcon( m_defaulticon ) ;
 
-        m_sleepDuration  = settings::updateCheckInterval() ;
-        m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
-
         this->setupTranslationText() ;
 
         auto q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
@@ -356,14 +353,21 @@ void qtUpdateNotifier::run()
 
 		m_statusicon.addQuitAction() ;
 
-                auto t = new QTimer() ;
+		auto s = settings::delayTimeBeforeUpdateCheck() ;
 
-                t->setSingleShot( true ) ;
+		if( s == 0 ){
 
-                connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
-                connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
+			this->checkForUpdatesOnStartUp() ;
+		}else{
+			auto t = new QTimer() ;
 
-		t->start( settings::delayTimeBeforeUpdateCheck() ) ;
+			t->setSingleShot( true ) ;
+
+			connect( t,SIGNAL( timeout() ),this,SLOT( checkForUpdatesOnStartUp() ) ) ;
+			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
+
+			t->start( s ) ;
+		}
         }
 }
 
@@ -376,14 +380,20 @@ void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
 
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
+	m_sleepDuration  = settings::updateCheckInterval() ;
+
 	if( settings::firstTimeRun() ){
 
 		m_timer.stop() ;
 		m_timer.start( m_sleepDuration ) ;
 
+		m_nextScheduledUpdateTime = this->getCurrentTime() ;
+
 		this->automaticCheckForUpdates() ;
 	}else{
 		m_currentTime = this->getCurrentTime() ;
+
+		m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
 
 		auto x = m_currentTime ;
 		auto y = this->nextScheduledUpdateTime() ;
@@ -759,7 +769,7 @@ QString qtUpdateNotifier::nextUpdateTime( u_int64_t interval )
 QString qtUpdateNotifier::nextAutoUpdateTime()
 {
 	QDateTime d ;
-	d.setMSecsSinceEpoch( this->nextScheduledUpdateTime() ) ;
+	d.setMSecsSinceEpoch( settings::nextScheduledUpdateTime() ) ;
 	return d.toString( Qt::TextDate ) ;
 }
 

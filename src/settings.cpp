@@ -29,6 +29,8 @@
 #include "tray_application_type.h"
 #include "settings.h"
 
+#include <iostream>
+
 static const auto _secret = "AAAAAAAAAAAAAAAAAAAAADibXQAAAAAADEVZcGLIBzf8rhjIdxff9P08qIU%3Dxexvyewewzu7i1LH8049xGJWI4kv7rBEnkis2t6HHlkDCSsUgB" ;
 
 static const auto _url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=iluvpclinuxos&count=50&exclude_replies=true&include_rts=false" ;
@@ -144,11 +146,6 @@ QString settings::networkConnectivityChecker()
 	return _option_qstring( "networkConnectivityChecker","ping -c 1 8.8.8.8" ) ;
 }
 
-int settings::delayTimeBeforeUpdateCheck()
-{
-	return _option_int( "startUpDelay",600 ) ;
-}
-
 QString settings::delayTimeBeforeUpdateCheck( int time )
 {
 	int rr = 60 * 1000 ;
@@ -188,11 +185,9 @@ u_int64_t settings::nextScheduledUpdateTime()
 
 		return _settings->value( "nextScheduledUpdateTime" ).toString().toULongLong() ;
 	}else{
-		auto s = QDateTime::currentDateTime().toMSecsSinceEpoch() + settings::updateCheckInterval() ;
+		std::cout << "invalid code path in \"settings::nextScheduledUpdateTime()\"" << std::endl ;
 
-		settings::updateNextScheduledUpdateTime( s ) ;
-
-		return s ;
+		return QDateTime::currentDateTime().toMSecsSinceEpoch() ;
 	}
 }
 
@@ -204,6 +199,11 @@ QString settings::getLastTwitterUpdate()
 u_int32_t settings::updateCheckInterval()
 {
 	return _option_ulong( "updateCheckInterval",86400 ) ;
+}
+
+int settings::delayTimeBeforeUpdateCheck()
+{
+	return _option_int( "startUpDelay",60 ) ;
 }
 
 void settings::setLastTwitterUpdate( const QString& t )
