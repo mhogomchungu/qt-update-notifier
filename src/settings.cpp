@@ -175,7 +175,7 @@ QByteArray settings::token()
 }
 
 QString settings::url()
-{	
+{
 	return _option_qstring( "url",_url ) ;
 }
 
@@ -203,7 +203,7 @@ u_int32_t settings::updateCheckInterval()
 
 int settings::delayTimeBeforeUpdateCheck()
 {
-	return _option_int( "startUpDelay",60 ) ;
+	return _option_int( "startUpDelay",300 ) ;
 }
 
 void settings::setLastTwitterUpdate( const QString& t )
