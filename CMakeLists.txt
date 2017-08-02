@@ -8,7 +8,7 @@ project(qt-update-notifier)
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.6\"\n" )
+file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.6.9\"\n" )
 
 find_package( Qt5Widgets REQUIRED )
 find_package( Qt5Core REQUIRED )
