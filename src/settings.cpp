@@ -123,7 +123,7 @@ QString settings::configPath()
 
 QString settings::prefferedLanguage()
 {
-        return _settings->value( "language" ).toString() ;
+	return _option_qstring( "language","english_US" ) ;
 }
 
 void settings::setPrefferedLanguage( const QString& language )
