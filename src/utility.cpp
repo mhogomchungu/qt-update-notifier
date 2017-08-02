@@ -266,9 +266,9 @@ static result _reportUpdates()
 		}else{
 			return true ;
 		}
-	} ;
+	}() ;
 
-	if( _not_online() ){
+	if( _not_online ){
 
 		return result{ 1,result::repoState::noNetworkConnection,{ "",QObject::tr( "Check skipped, user is not connected to the internet" ) } } ;
 	}
@@ -354,9 +354,9 @@ Task::future< bool >& startSynaptic()
 			}else{
 				return "--start-synaptic" ;
 			}
-		} ;
+		}() ;
 
-		return _task( run() ) != 0 ;
+		return _task( run ) != 0 ;
 	} ) ;
 }
 
@@ -477,12 +477,12 @@ static QString _checkKernelVersion()
 		auto _update = [ & ](){
 
 			/*
-			 * start warning if a user uses a kernel less than 3.15.9
+			 * start warning if a user uses a kernel less than 4.4.79
 			 */
 
-			int base_kernel_major_version = 3 ;
-			int base_kernel_minor_version = 15 ;
-			int base_kernel_patch_version = 9 ;
+			int base_kernel_major_version = 4 ;
+			int base_kernel_minor_version = 4 ;
+			int base_kernel_patch_version = 79 ;
 
 			if( major < base_kernel_major_version ){
 
@@ -501,9 +501,9 @@ static QString _checkKernelVersion()
 			}
 
 			return false ;
-		} ;
+		}() ;
 
-		if( _update() ){
+		if( _update ){
 
 			return QObject::tr( "Recommending updating the kernel from version %1 to a more recent version." ).arg( version ) ;
 		}else{
