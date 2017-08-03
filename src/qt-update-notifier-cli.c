@@ -427,7 +427,7 @@ static int downloadPackages( int fd,int debug )
 
 static int startSynaptic( const char * e )
 {
-	process_t p = Process( "/usr/sbin/synaptic",e,NULL ) ;
+	process_t p = Process( "/usr/bin/synaptic",e,NULL ) ;
 
 	if( userHasPermission() ){
 
