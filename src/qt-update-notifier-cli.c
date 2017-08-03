@@ -40,13 +40,6 @@
 
 #define PRIORITY -15
 
-/*
- * KDESU_PATH constant is set at build time
- */
-static const char * kdesu  = KDESU_PATH ;
-static const char * gksu   = "/usr/bin/gksu" ;
-static const char * ktsuss = "/usr/bin/ktsuss" ;
-
 static const char * groupName = "qtupdatenotifier" ;
 
 #define stringsAreEqual( x,y ) strcmp( x,y ) == 0
@@ -432,73 +425,15 @@ static int downloadPackages( int fd,int debug )
 	return r ;
 }
 
-static const char * getSUExe( void )
+static int startSynaptic( const char * e )
 {
-	struct stat statstr ;
-
-	const char * env = getenv( "DESKTOP_SESSION" ) ;
-
-	if( env == NULL ){
-
-		return gksu ;
-	}else{
-		#define desktopEnvironment( x ) strstr( env,x ) != NULL
-		#define pathExists( x ) stat( x,&statstr ) == 0
-
-		if( desktopEnvironment( "kde" ) || desktopEnvironment( "KDE" ) ){
-
-			if( pathExists( kdesu ) ){
-
-				return kdesu ;
-			}else{
-				return gksu ;
-			}
-		}else{
-			return gksu ;
-		}
-	}
-}
-
-static int startSynaptic( const char * e,int fd )
-{
-	process_t p ;
-
-	const char * exe ;
-
-	if( 0 && fd && ktsuss ){;}
+	process_t p = Process( "/usr/sbin/synaptic",e,NULL ) ;
 
 	if( userHasPermission() ){
 
-		p = Process( "/usr/sbin/synaptic",NULL ) ;
-
 		ProcessSetOptionUser( p,0 ) ;
-
-		if( e != NULL ){
-
-			ProcessSetArgumentList( p,e,NULL ) ;
-		}
 	}else{
-		exe = getSUExe() ;
-
-		p = Process( exe,NULL ) ;
 		ProcessSetOptionUser( p,getuid() ) ;
-
-		if( stringsAreEqual( exe,gksu ) ){
-
-			if( e != NULL ){
-
-				ProcessSetArgumentList( p,"/usr/sbin/synaptic --update-at-startup",NULL ) ;
-			}else{
-				ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
-			}
-		}else{
-			if( e != NULL ){
-
-				ProcessSetArgumentList( p,"/usr/sbin/synaptic",e,NULL ) ;
-			}else{
-				ProcessSetArgumentList( p,"/usr/sbin/synaptic",NULL ) ;
-			}
-		}
 	}
 
 	ProcessStart( p ) ;
@@ -598,13 +533,13 @@ int main( int argc,char * argv[] )
 
 				if( stringsAreEqual( f,"--update-at-startup" ) ){
 
-					st = startSynaptic( f,fd ) ;
+					st = startSynaptic( f ) ;
 				}else{
 					printf( "error: unrecognized or invalid synaptic option\n" ) ;
 					st = 1 ;
 				}
 			}else{
-				st = startSynaptic( NULL,fd ) ;
+				st = startSynaptic( NULL ) ;
 			}
 		}else{
 			if( stringsAreEqual( e,"--auto-update" ) ){
