@@ -181,9 +181,7 @@ void qtUpdateNotifier::checkTwitter()
 	s.setRawHeader( "Authorization",m_token ) ;
 	s.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
-	using NR = NetworkAccessManager::NetworkReply ;
-
-	m_manager.get( s,[ this ]( NR s ){ this->networResponse( s.handle() ) ; } ) ;
+	m_manager.get( s,[ this ]( QNetworkReply& e ){ this->networResponse( e ) ; } ) ;
 }
 
 void qtUpdateNotifier::showIconOnImportantInfo()
