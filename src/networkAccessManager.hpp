@@ -87,7 +87,7 @@ public:
 	template< typename T >
 	void post( const QNetworkRequest& r,const T& e,function_t f )
 	{
-		m_entries.emplace_back( { m_manager.post( r,e ),true,std::move( f ) } ) ;
+		m_entries.emplace_back( std::make_tuple( m_manager.post( r,e ),true,std::move( f ) ) ) ;
 	}
 	template< typename T >
 	NetworkReply post( const QNetworkRequest& r,const T& e )
@@ -98,7 +98,7 @@ public:
 
 		auto function = [ & ]( QNetworkReply& e ){ q = std::addressof( e ) ; s.quit() ;	} ;
 
-		m_entries.emplace_back( { m_manager.post( r,e ),false,std::move( function ) } ) ;
+		m_entries.emplace_back( std::make_tuple( m_manager.post( r,e ),false,std::move( function ) ) ) ;
 
 		s.exec() ;
 
