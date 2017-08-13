@@ -1,50 +1,21 @@
 
-Three versions of this project can be build.
 
-1. A KDE4 tray application
 
-To build this project as a KDE tray application,you need the following packages and their development versions installed
-KDE4
-Qt4
-g++
-gcc
+To build make sure you have the following packages installed(packages may be named differently in your distribution):
+
+A C compiler
+A C++ compiler
+cmake
+Qt5-devel
+KF5-Notifications-devel(required to build a KF5 status icon application)
 cmake
 
 To build,run the following commands in the source folder
 
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` -DQT_BUILD=false -DQT5=false -DCMAKE_BUILD_TYPE=release  ..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=release  ..
 make
 make install
 
-2. A Qt4 tray application
-
-To build this project as a Qt tray application,you need the following packages and their development versions installed
-Qt4
-g++
-gcc
-cmake
-
-To build,run the following commands in the source folder
-
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT_BUILD=true -DQT5=false -DCMAKE_BUILD_TYPE=release  ..
-make
-make install
-
-3. Qt5 application
-To build this project as a Qt tray application,you need the following packages and their development versions installed
-Qt5
-g++
-gcc
-cmake
-
-To build,run the following commands in the source folder
-
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DQT5=true -DCMAKE_BUILD_TYPE=release  ..
-make
-make install
+To build a KF5 status icon application,add "-DKF5=true" option.
