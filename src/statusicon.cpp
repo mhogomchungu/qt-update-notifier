@@ -19,19 +19,205 @@
 
 #include "statusicon.h"
 
-#include <QDebug>
+#include <QProcess>
+#include <iostream>
 
-statusicon::statusicon( QObject * parent ) : QObject( parent )
+static QPixmap _icon( const QString& name,int count )
 {
+	QIcon icon( ":/" + name ) ;
+	QPixmap pixmap = icon.pixmap( QSize( 152,152 ),QIcon::Normal,QIcon::On ) ;
+	int size = pixmap.height() * 0.01 * 60 ; //configurationoptionsdialog::fontSize() ;
+	QPainter paint( &pixmap ) ;
+	//QFont font( configurationoptionsdialog::fontFamily() ) ;
+	QFont font( "Helvetica" ) ;
+
+	QFontMetrics fm( font ) ;
+	QString number = QString::number( count ) ;
+
+	paint.setRenderHint( QPainter::SmoothPixmapTransform ) ;
+	paint.setRenderHint( QPainter::Antialiasing ) ;
+
+	int width = pixmap.width() * 0.8 ;
+
+	if( fm.width( number ) > width ){
+		while( fm.width( number ) > width && size > 0 ){
+			size = size - 1 ;
+			font.setPointSize( size ) ;
+		}
+	}
+
+	font.setPixelSize( size ) ;
+	font.setBold( true ) ;
+	paint.setFont( font ) ;
+	paint.setPen( QColor( "black" ) ) ;
+	paint.drawText( pixmap.rect(),Qt::AlignVCenter | Qt::AlignHCenter,number ) ;
+	paint.end() ;
+	return pixmap ;
 }
 
-QWidget * statusicon::widget()
+void statusicon::setIconClickedActions( const statusicon::clickActions& actions )
 {
-        return nullptr ;
+	m_clickActions = actions ;
+}
+
+#if KF5
+
+statusicon::statusicon() : m_menu( new QMenu() )
+{
+	m_menu->clear() ;
+
+	KStatusNotifierItem::setContextMenu( m_menu ) ;
+	KStatusNotifierItem::setStandardActionsEnabled( false ) ;
+
+	connect( this,SIGNAL( activateRequested( bool,const QPoint& ) ),
+		 this,SLOT( activateRequested( bool,const QPoint& ) ) ) ;
 }
 
 statusicon::~statusicon()
 {
+}
+
+void statusicon::setAttentionIcon( const QString& name )
+{
+	KStatusNotifierItem::setAttentionIconByPixmap( QIcon( ":/" + name ) ) ;
+}
+
+void statusicon::setCategory( const ItemCategory category )
+{
+	KStatusNotifierItem::setCategory( KStatusNotifierItem::ItemCategory( category ) ) ;
+}
+
+void statusicon::setIcon( const QString& name )
+{
+	KStatusNotifierItem::setIconByPixmap( QIcon( ":/" + name ) ) ;
+	statusicon::setAttentionIcon( name ) ;
+}
+
+void statusicon::setIcon( const QString& name,int count )
+{
+	QPixmap pixmap = _icon( name,count ) ;
+	KStatusNotifierItem::setIconByPixmap( pixmap ) ;
+	KStatusNotifierItem::setAttentionIconByPixmap( pixmap ) ;
+}
+
+void statusicon::setOverlayIcon( const QString& name )
+{
+	KStatusNotifierItem::setOverlayIconByPixmap( QIcon( ":/" + name ) ) ;
+}
+
+void statusicon::setStatus( const ItemStatus status )
+{
+	KStatusNotifierItem::setStatus( KStatusNotifierItem::ItemStatus( status ) ) ;
+}
+
+void statusicon::setToolTip( const QString& iconName,const QString& title,const QString& subTitle )
+{
+	KStatusNotifierItem::setToolTip( QString(),title,subTitle ) ;
+	KStatusNotifierItem::setToolTipIconByPixmap( QIcon( ":/" + iconName ) ) ;
+}
+
+void statusicon::setIconByName( const QString& name )
+{
+	this->setIcon( name ) ;
+}
+
+void statusicon::setStandardActionsEnabled( bool b )
+{
+	KStatusNotifierItem::setStandardActionsEnabled( b ) ;
+}
+
+void statusicon::addAction( QAction * ac )
+{
+	ac->setParent( m_menu ) ;
+	m_menu->addAction( ac ) ;
+}
+
+QAction * statusicon::getAction( const QString& title )
+{
+	auto ac = new QAction( m_menu ) ;
+	ac->setText( title ) ;
+	m_menu->addAction( ac ) ;
+	return ac ;
+}
+
+void statusicon::newEmailNotify()
+{
+	QByteArray r( "qCheckGMail" ) ;
+	KNotification::event( "qCheckGMail-NewMail","",QPixmap(),0,0,r ) ;
+}
+
+bool statusicon::enableDebug()
+{
+	return QCoreApplication::arguments().contains( "-d" ) ;
+}
+
+void statusicon::quit()
+{
+	QCoreApplication::exit() ;
+}
+
+void statusicon::setAttentionIconByName( const QString& name )
+{
+	KStatusNotifierItem::setAttentionIconByName( name ) ;
+}
+
+void statusicon::activateRequested( bool x,const QPoint& y )
+{
+	Q_UNUSED( x ) ;
+	Q_UNUSED( y ) ;
+	m_clickActions.onLeftClick() ;
+}
+
+void statusicon::trayIconClicked( QSystemTrayIcon::ActivationReason reason )
+{
+	Q_UNUSED( reason ) ;
+}
+
+void statusicon::addQuitAction()
+{
+	m_menu->addAction( [ this ](){
+
+		auto ac = new QAction( m_menu ) ;
+
+		ac->setText( tr( "Quit" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( quit() ) ) ;
+
+                return ac ;
+        }() ) ;
+}
+
+QString statusicon::toolTipTitle()
+{
+	return KStatusNotifierItem::toolTipTitle() ;
+}
+
+QList< QAction * > statusicon::getMenuActions()
+{
+	return m_menu->actions() ;
+}
+
+#else
+
+statusicon::statusicon()
+{
+	connect( &m_trayIcon,SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ),
+		this,SLOT( trayIconClicked(QSystemTrayIcon::ActivationReason ) ) ) ;
+
+	m_trayIcon.setContextMenu( &m_menu ) ;
+}
+
+statusicon::~statusicon()
+{
+}
+
+QList< QAction * > statusicon::getMenuActions()
+{
+	return m_menu.actions() ;
+}
+
+QString statusicon::toolTipTitle()
+{
+	return QString() ;
 }
 
 void statusicon::setAttentionIcon( const QString& name )
@@ -42,16 +228,6 @@ void statusicon::setAttentionIcon( const QString& name )
 void statusicon::setCategory( const ItemCategory category )
 {
 	Q_UNUSED( category ) ;
-}
-
-void statusicon::setIconByName( const QString& name )
-{
-	m_trayIcon.setIcon( QIcon( ":/" + name ) ) ;
-}
-
-void statusicon::setIcon( const QString& name )
-{
-	this->setIcon( name ) ;
 }
 
 void statusicon::quit()
@@ -69,11 +245,20 @@ void statusicon::setStandardActionsEnabled( bool b )
 	Q_UNUSED( b ) ;
 }
 
+void statusicon::setIcon( const QString& name )
+{
+	m_trayIcon.setIcon( QIcon( ":/" + name ) ) ;
+}
+
 void statusicon::setIcon( const QString& name,int count )
 {
-        Q_UNUSED( count ) ;
+        auto pixmap = _icon( name,count ) ;
+	m_trayIcon.setIcon( pixmap ) ;
+}
 
-	m_trayIcon.setIcon( QIcon( ":/" + name ) );
+void statusicon::setIconByName( const QString& name )
+{
+	m_trayIcon.setIcon( QIcon( ":/" + name ) ) ;
 }
 
 void statusicon::setOverlayIcon( const QString& name )
@@ -89,50 +274,70 @@ void statusicon::setStatus( const ItemStatus status )
 void statusicon::setToolTip( const QString& iconName,const QString& title,const QString& subTitle )
 {
 	Q_UNUSED( iconName ) ;
-	auto e = "<table><tr><td><b>%1</b></td><br></tr><tr><td>%2</td></tr></table>" ;
-	m_trayIcon.setToolTip( QString( e ).arg( title,subTitle ) ) ;
-}
-
-QList<QAction *> statusicon::getMenuActions()
-{
-        return m_menu.actions() ;
+	Q_UNUSED( title ) ;
+	auto r = QString( "<table><tr><td><b>%1<br></b></td></tr><tr><td>%2</td></tr></table>" ).arg( title,subTitle ) ;
+	m_trayIcon.setToolTip( r ) ;
 }
 
 void statusicon::addQuitAction()
 {
-        auto ac = new QAction( this ) ;
-	ac->setText( tr( "Quit" ) ) ;
-	connect( ac,SIGNAL( triggered() ),this,SLOT( quit() ) ) ;
-        m_menu.addAction( ac ) ;
-	m_trayIcon.setContextMenu( &m_menu ) ;
+	m_menu.addAction( [ this ](){
+
+		auto ac = new QAction( &m_menu ) ;
+		ac->setText( tr( "Quit" ) ) ;
+                connect( ac,SIGNAL( triggered() ),this,SLOT( quit() ) ) ;
+
+                return ac ;
+        }() ) ;
+
 	m_trayIcon.show() ;
+}
+
+void statusicon::newEmailNotify()
+{
+}
+
+bool statusicon::enableDebug()
+{
+	return QCoreApplication::arguments().contains( "-d" ) ;
 }
 
 void statusicon::addAction( QAction * ac )
 {
-        ac->setParent( this ) ;
-        m_menu.addAction( ac ) ;
+	ac->setParent( &m_menu ) ;
+	m_menu.addAction( ac ) ;
 }
 
 QAction * statusicon::getAction( const QString& title )
 {
-        auto ac = new QAction( this ) ;
+	auto ac = new QAction( &m_menu ) ;
 	ac->setText( title ) ;
-        m_menu.addAction( ac ) ;
+	m_menu.addAction( ac ) ;
 	return ac ;
 }
 
-QString statusicon::iconName()
+void statusicon::activateRequested( bool x,const QPoint& y )
 {
-	return QString() ;
+	Q_UNUSED( x ) ;
+	Q_UNUSED( y ) ;
 }
 
-QString statusicon::toolTipTitle()
+void statusicon::trayIconClicked( QSystemTrayIcon::ActivationReason reason )
 {
-	return QString() ;
+	if( reason == QSystemTrayIcon::Context ){
+
+		m_clickActions.onRightClick() ;
+
+	}else if( reason == QSystemTrayIcon::Trigger ){
+
+		m_clickActions.onLeftClick() ;
+
+	}else if( reason == QSystemTrayIcon::MiddleClick ){
+
+		m_clickActions.onMiddleClick() ;
+	}else{
+		m_clickActions.onRightClick() ;
+	}
 }
 
-QObject * statusicon::statusQObject()
-{
-	return this ;
-}
+#endif

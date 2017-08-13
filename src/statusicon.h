@@ -30,49 +30,73 @@
 #include <QPainter>
 #include <QMenu>
 
+#include <functional>
+
 #include "tray_application_type.h"
 
-enum class ItemCategory {
-        ApplicationStatus = 1,
-        Communications = 2,
-        SystemServices = 3,
-        Hardware = 4,
-        Reserved = 129
-};
-enum class ItemStatus{
-        Passive = 1,
-        Active = 2,
-        NeedsAttention = 3
-};
+#if KF5
+#include <kstatusnotifieritem.h>
+#include <knotification.h>
 
+class statusicon : public KStatusNotifierItem
+{
+#else
 class statusicon : public QObject
 {
+#endif
 	Q_OBJECT
 public:
-        statusicon( QObject * parent ) ;
+	typedef struct{
+		std::function< void( void ) > onLeftClick   = [](){} ;
+		std::function< void( void ) > onRightClick  = [](){} ;
+		std::function< void( void ) > onMiddleClick = [](){} ;
+	}clickActions;
+
+	enum ItemCategory {
+		ApplicationStatus = 1,
+		Communications = 2,
+		SystemServices = 3,
+		Hardware = 4,
+		Reserved = 129
+	};
+	enum ItemStatus{
+		Passive = 1,
+		Active = 2,
+		NeedsAttention = 3
+	};
+
+	statusicon() ;
 	virtual ~statusicon() ;
+	static void newEmailNotify( void ) ;
+	static bool enableDebug( void ) ;
 	void setAttentionIcon( const QString& name ) ;
-	void setCategory( const ItemCategory category ) ;
-	void setIconByName( const QString& name ) ;
+	void setCategory( const statusicon::ItemCategory category ) ;
 	void setIcon( const QString& name ) ;
+	void setIcon( const QString& name,int count ) ;
+	void setIconByName( const QString& name ) ;
 	void setAttentionIconByName( const QString& name ) ;
 	void setStandardActionsEnabled( bool ) ;
-	void setIcon( const QString& name,int count ) ;
+	QString toolTipTitle() ;
 	void setOverlayIcon( const QString& name ) ;
-        void setStatus( const ItemStatus status ) ;
+	void setStatus( statusicon::ItemStatus status ) ;
 	void setToolTip( const QString& iconName,const QString& title,const QString& subTitle ) ;
-	void addAction( QAction * ) ;
+	void setIconClickedActions( const statusicon::clickActions& ) ;
 	QAction * getAction( const QString& title = QString() ) ;
-	QString iconName( void ) ;
-	QString toolTipTitle( void ) ;
-	QWidget * widget( void ) ;
-	QObject * statusQObject( void ) ;
+	void addAction( QAction * ) ;
 	QList< QAction * > getMenuActions( void ) ;
 	void addQuitAction( void ) ;
 private slots:
 	void quit( void ) ;
+	void activateRequested( bool,const QPoint& ) ;
+	void trayIconClicked( QSystemTrayIcon::ActivationReason reason ) ;
 private:
-        QMenu m_menu ;
+#if KF5
+	QMenu * m_menu ;
+#else
+	QMenu m_menu ;
+#endif
+	QString m_defaultApplication ;
+	statusicon::clickActions m_clickActions ;
 	QSystemTrayIcon m_trayIcon ;
 };
 

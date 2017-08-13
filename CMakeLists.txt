@@ -26,14 +26,23 @@ Qt5_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
 Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/task.h src/networkAccessManager.hpp )
 
 Qt5_ADD_RESOURCES( ICONS icons/icons.qrc )
+if( KF5 )
+        find_package( KF5Notifications REQUIRED )
+        add_definitions( ${KF5Notifications_DEFINITIONS} )
+
+        file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define KF5 1\n" )
+else()
+        file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define KF5 0\n" )
+endif()
 
 add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
 		src/logwindow.cpp src/configuredialog.cpp src/utility.cpp src/twitter.cpp
                 ${MOC} ${UI} ${ICONS} )
-
-file( WRITE "${PROJECT_BINARY_DIR}/tray_application_type.h" "\n#define USE_KDE_STATUS_NOTIFIER 0\n#define USE_LXQT_PLUGIN 0\n" )
-
-TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} )
+if( KF5 )
+        TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} KF5::Notifications )
+else()
+        TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} )
+endif()
 
 set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c++11" )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
@@ -101,8 +110,8 @@ configure_file(
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
     IMMEDIATE @ONLY )
 
-#add_custom_target( uninstall
-#    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake )
+add_custom_target( uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake )
 
 # desktop file section
 file( WRITE "${PROJECT_BINARY_DIR}/qt-update-notifier.desktop"

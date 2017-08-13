@@ -47,7 +47,7 @@ jsonResult _parseJSON( const QByteArray& e )
 	}
 }
 
-qtUpdateNotifier::qtUpdateNotifier( bool e ) : m_autoStart( e ),m_statusicon( this )
+qtUpdateNotifier::qtUpdateNotifier( bool e ) : m_autoStart( e )
 {
 }
 
@@ -187,7 +187,8 @@ void qtUpdateNotifier::checkTwitter()
 void qtUpdateNotifier::showIconOnImportantInfo()
 {
 	if( m_showIconOnImportantInfo ){
-		m_statusicon.setStatus( ItemStatus::NeedsAttention ) ;
+
+		m_statusicon.setStatus( statusicon::statusicon::ItemStatus::NeedsAttention ) ;
 	}
 }
 
@@ -201,7 +202,7 @@ void qtUpdateNotifier::doneUpdating()
 	auto z = tr( "Status" ) ;
 
 	this->showToolTip( m_defaulticon,z,n ) ;
-	m_statusicon.setStatus( ItemStatus::Passive ) ;
+	m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
 }
 
 bool qtUpdateNotifier::autoStartEnabled()
@@ -289,8 +290,8 @@ void qtUpdateNotifier::buildGUI()
 
         m_threadIsRunning = false ;
 
-	m_statusicon.setStatus( ItemStatus::Passive ) ;
-	m_statusicon.setCategory( ItemCategory::ApplicationStatus ) ;
+	m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
+	m_statusicon.setCategory( statusicon::ItemCategory::ApplicationStatus ) ;
 
 	m_defaulticon = settings::defaultIcon() + ".png" ;
 
@@ -540,7 +541,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = "qt-update-notifier-updates-are-available" ;
-			m_statusicon.setStatus( ItemStatus::NeedsAttention ) ;
+			m_statusicon.setStatus( statusicon::ItemStatus::NeedsAttention ) ;
 			this->showToolTip( icon,tr( "There are updates in the repository" ),r.taskOutput ) ;
 			this->autoDownloadPackages() ;
 
@@ -549,7 +550,7 @@ void qtUpdateNotifier::checkForUpdates()
 
 			this->saveAptGetLogOutPut( r.taskOutput ) ;
 			icon = "qt-update-notifier-important-info" ;
-			m_statusicon.setStatus( ItemStatus::Passive ) ;
+			m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository appears to be in an inconsistent state" ) ) ;
 			this->logActivity_1( r.taskOutput.at( 0 ) ) ;
 			this->showIconOnImportantInfo() ;
@@ -557,7 +558,7 @@ void qtUpdateNotifier::checkForUpdates()
 			break ;
 		case result::repoState::noUpdatesFound :
 
-			m_statusicon.setStatus( ItemStatus::Passive ) ;
+			m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
 
 			/*
 			 * below function is called from checkForPackageUpdates() routine
@@ -575,14 +576,14 @@ void qtUpdateNotifier::checkForUpdates()
 		case result::repoState::noNetworkConnection :
 
 			icon = m_defaulticon ;
-			m_statusicon.setStatus( ItemStatus::Passive ) ;
+			m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Check skipped, user is not connected to the internet" ) ) ;
 
 			break ;
 		case result::repoState::undefinedState :
 
 			icon = m_defaulticon ;
-			m_statusicon.setStatus( ItemStatus::Passive ) ;
+			m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 
 			break ;
@@ -592,7 +593,7 @@ void qtUpdateNotifier::checkForUpdates()
 			 */
 
 			icon = m_defaulticon ;
-			m_statusicon.setStatus( ItemStatus::Passive ) ;
+			m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
 			this->showToolTip( icon,tr( "Update check complete, repository is in an unknown state" ) ) ;
 			this->checkForPackageUpdates() ;
 		}
@@ -626,7 +627,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 
 		this->showToolTip( icon,tr( "Status" ),tr( "Update in progress, do not power down computer" ) ) ;
 
-		m_statusicon.setStatus( ItemStatus::NeedsAttention ) ;
+		m_statusicon.setStatus( statusicon::ItemStatus::NeedsAttention ) ;
 
 		this->logActivity( tr( "Automatic package update initiated" ) ) ;
 
@@ -641,7 +642,7 @@ void qtUpdateNotifier::autoUpdatePackages()
 			this->showIconOnImportantInfo() ;
 		}
 
-		m_statusicon.setStatus( ItemStatus::Passive ) ;
+		m_statusicon.setStatus( statusicon::ItemStatus::Passive ) ;
 	}else{
 		this->logActivity( this->logMsg() ) ;
 	}
@@ -655,14 +656,14 @@ void qtUpdateNotifier::autoDownloadPackages()
 
 		this->showToolTip( icon,tr( "Status" ),tr( "Downloading packages" ) ) ;
 
-		m_statusicon.setStatus( ItemStatus::NeedsAttention ) ;
+		m_statusicon.setStatus( statusicon::ItemStatus::NeedsAttention ) ;
 
 		this->logActivity( tr( "Packages downloading initiated" ) ) ;
 
 		if( utility::autoDownloadPackages().await() ){
 
 			this->showToolTip( icon,tr( "Downloading of packages completed" ) ) ;
-			m_statusicon.setStatus( ItemStatus::NeedsAttention ) ;
+			m_statusicon.setStatus( statusicon::ItemStatus::NeedsAttention ) ;
 			this->autoUpdatePackages() ;
 		}else{
 			this->showToolTip( icon,tr( "Downloading of packages failed" ) ) ;
