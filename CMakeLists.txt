@@ -8,7 +8,7 @@ project(qt-update-notifier)
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} )
 
-file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.7.0\"\n" )
+file( WRITE "${PROJECT_BINARY_DIR}/version.h" "#define VERSION \"1.7.1\"\n" )
 
 find_package( Qt5Widgets REQUIRED )
 find_package( Qt5Core REQUIRED )
@@ -44,12 +44,12 @@ else()
         TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} )
 endif()
 
-set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c++11" )
+set_target_properties( qt-update-notifier PROPERTIES COMPILE_FLAGS "-Wextra -Wall -s -fPIE -pthread -pedantic" )
 set_target_properties( qt-update-notifier PROPERTIES LINK_FLAGS "-pie" )
 
 add_executable( qt-update-notifier-cli src/qt-update-notifier-cli.c src/process.c )
 
-set_target_properties( qt-update-notifier-cli PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64 -Wextra -Wall -s -fPIE -pthread  -pedantic -std=c99" )
+set_target_properties( qt-update-notifier-cli PROPERTIES COMPILE_FLAGS "-Wextra -Wall -s -fPIE -pthread -pedantic -std=c99" )
 set_target_properties( qt-update-notifier-cli PROPERTIES LINK_FLAGS "-pie" )
 
 TARGET_LINK_LIBRARIES( qt-update-notifier-cli -pthread )
