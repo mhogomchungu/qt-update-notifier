@@ -275,7 +275,8 @@ void statusicon::setToolTip( const QString& iconName,const QString& title,const 
 {
 	Q_UNUSED( iconName ) ;
 	Q_UNUSED( title ) ;
-	m_trayIcon.setToolTip( QString( "%1\n%2" ).arg( title,subTitle ) ) ;
+	auto r = QString( "<table><tr><td><b>%1<br></b></td></tr><tr><td>%2</td></tr></table>" ).arg( title,subTitle ) ;
+	m_trayIcon.setToolTip( r ) ;
 }
 
 void statusicon::addQuitAction()
