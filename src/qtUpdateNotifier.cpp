@@ -99,7 +99,7 @@ void qtUpdateNotifier::setLastTwitterUpdate( const QString& e )
 	settings::setLastTwitterUpdate( e ) ;
 }
 
-void qtUpdateNotifier::networResponse( QNetworkReply& s )
+QString qtUpdateNotifier::networResponse( QNetworkReply& s )
 {
 	auto l = s.rawHeaderList() ;
 
@@ -115,16 +115,14 @@ void qtUpdateNotifier::networResponse( QNetworkReply& s )
 
 	if( s.rawHeader( "status" ) != "200 OK" ){
 
-		emit msg( e ) ;
-		return ;
+		return e ;
 	}
 
 	auto data = s.readAll() ;
 
 	if( data.isEmpty() ){
 
-		emit msg( e ) ;
-		return ;
+		return e ;
 	}
 
 	auto j = _parseJSON( data ) ;
@@ -158,17 +156,15 @@ void qtUpdateNotifier::networResponse( QNetworkReply& s )
 
 		e += "\nhttps://twitter.com/iluvpclinuxos" ;
 
-		emit msg( e ) ;
+		return e ;
 	}else{
-		emit msg( e ) ;
+		return e ;
 	}
 }
 
 void qtUpdateNotifier::checkTwitter()
 {
 	auto t = new twitter() ;
-
-	connect( this,SIGNAL( msg( QString ) ),t,SLOT( msg( QString ) ) ) ;
 
 	t->ShowUI( tr( "connecting ..." ) ) ;
 
@@ -181,7 +177,14 @@ void qtUpdateNotifier::checkTwitter()
 	s.setRawHeader( "Authorization",m_token ) ;
 	s.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
-	m_manager.get( s,[ this ]( QNetworkReply& e ){ this->networResponse( e ) ; } ) ;
+	m_manager.get( 30,s,[ t,this ]( QNetworkReply& e ){
+
+		t->msg( this->networResponse( e ) ) ;
+
+	},[ t ](){
+
+		t->msg( QString() ) ;
+	} ) ;
 }
 
 void qtUpdateNotifier::showIconOnImportantInfo()

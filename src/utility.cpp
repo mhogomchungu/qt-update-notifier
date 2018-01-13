@@ -37,6 +37,14 @@
 #include <unistd.h>
 #include <stdio.h>
 
+struct Result
+{
+	result m_result ;
+	int upgrade ;
+	int replace ;
+	int New ;
+};
+
 static int _openFile( const QString& filePath,bool truncate )
 {
 	if( truncate ){
@@ -128,7 +136,7 @@ QString readFromFile( const QString& filepath )
         }
 }
 
-static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
+static Result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 {
 	auto l = QString( output1 ).split( "\n" ) ;
 
@@ -138,6 +146,21 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 
 	int upgrade = 0 ;
 
+	auto ignorePackages = settings::ignorePackageList() ;
+
+	auto _ignorePackage = [ & ]( const QString& e ){
+
+		for( const auto& it : ignorePackages ){
+
+			if( !it.isEmpty() && e.contains( it ) ){
+
+				return true ;
+			}
+		}
+
+		return false ;
+	} ;
+
 	if( index != -1 ){
 
 		while( true ){
@@ -146,7 +169,10 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
 
-				upgrade++ ;
+				if( !_ignorePackage( l.at( index ) ) ){
+
+					upgrade++ ;
+				}
 			}else{
 				break ;
 			}
@@ -165,7 +191,10 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
 
-				replace++ ;
+				if( !_ignorePackage( l.at( index ) ) ){
+
+					replace++ ;
+				}
 			}else{
 				break ;
 			}
@@ -184,7 +213,6 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 
 			if( l.at( index ).startsWith( threeSpaceCharacters ) ){
 
-
 				New++ ;
 			}else{
 				break ;
@@ -199,7 +227,7 @@ static result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 	auto q = QObject::tr( "<table><tr><td>%1 to be upgraded</td></tr><tr><td><br>%2 to be replaced</td></tr><tr><td><br>%3 to be installed</td></tr></table>" ) ;
 	auto updates = q.arg( x,y,z ) ;
 
-	return result{ 0,result::repoState::updatesFound,{ updates,output2 } } ;
+	return Result{ { 0,result::repoState::updatesFound,{ updates,output2 } },upgrade,replace,New } ;
 }
 
 static QByteArray _upgrade_0( const QString& configPath,bool setEnglishLanguage )
@@ -312,11 +340,21 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 
 			}else if( output.contains( success ) ){
 
-				if( language == "english_US" ){
+				auto r = [ & ](){
 
-					return _processUpdates( output,output ) ;
+					if( language == "english_US" ){
+
+						return _processUpdates( output,output ) ;
+					}else{
+						return _processUpdates( output,_upgrade_1( configPath ) ) ;
+					}
+				}() ;
+
+				if( r.New > 0 || r.replace > 0 || r.upgrade > 0 ){
+
+					return r.m_result ;
 				}else{
-					return _processUpdates( output,_upgrade_1( configPath ) ) ;
+					return result{ 0,result::repoState::noUpdatesFound,{ "",QObject::tr( "No updates found" ) } } ;
 				}
 			}else{
 				return result{ 0,result::repoState::noUpdatesFound,{ "",QObject::tr( "No updates found" ) } } ;
@@ -329,7 +367,7 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 
 Task::future< result >& reportUpdates()
 {
-	return Task::run< result >( [](){ return _reportUpdates() ; } ) ;
+	return Task::run( [](){ return _reportUpdates() ; } ) ;
 }
 
 static int _task( const char * e )
@@ -344,7 +382,7 @@ static int _task( const char * e )
 
 Task::future< bool >& startSynaptic()
 {
-	return Task::run< bool >( [](){
+	return Task::run( [](){
 
 		auto run = [](){
 
@@ -362,12 +400,12 @@ Task::future< bool >& startSynaptic()
 
 Task::future< bool >& autoDownloadPackages()
 {
-	return Task::run< bool >( [](){ return _task( "--download-packages" ) == 0 ; } ) ;
+	return Task::run( [](){ return _task( "--download-packages" ) == 0 ; } ) ;
 }
 
 Task::future< int >& autoUpdatePackages()
 {
-	return Task::run< int >( [](){ return _task( "--auto-update" ) ; } ) ;
+	return Task::run( [](){ return _task( "--auto-update" ) ; } ) ;
 }
 
 static bool _check_version( const QString& e,const QString& f )
@@ -593,7 +631,7 @@ static QString _checkCallibeVersion()
 
 Task::future< QString >& checkForPackageUpdates()
 {
-	return Task::run< QString >( [](){
+	return Task::run( [](){
 
 		auto e = _checkKernelVersion() ;
 
@@ -645,7 +683,7 @@ fi
 
 Task::future<QString>& checkKernelVersions()
 {
-	return Task::run<QString>( [](){
+	return Task::run( []()->QString{
 
 		auto s = settings::configPath() + "/tmp" ;
 

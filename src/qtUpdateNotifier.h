@@ -96,7 +96,7 @@ private slots:
 	void objectGone( QObject * ) ;
 	void checkTwitter( void ) ;
 private:
-	void networResponse( QNetworkReply& ) ;
+	QString networResponse( QNetworkReply& ) ;
 	QString getLastTwitterUpdate( void ) ;
 	void setLastTwitterUpdate( const QString& ) ;
 	void showIconOnImportantInfo( void ) ;

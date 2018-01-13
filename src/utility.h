@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <array>
 
-#include "task.h"
+#include "task.hpp"
 
 struct result
 {

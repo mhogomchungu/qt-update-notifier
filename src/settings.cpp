@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  *  Copyright (c) 2013
  *  name : Francis Banyikwa
@@ -283,4 +283,16 @@ bool settings::showIconOnImportantInfo()
 bool settings::checkNewerKernels()
 {
 	return _option_bool( "checkNewerKernels",false ) ;
+}
+
+QStringList settings::ignorePackageList()
+{
+	if( _settings->contains( "ignoredPackageList" ) ){
+
+		return _settings->value( "ignoredPackageList" ).toStringList() ;
+	}else{
+		QStringList e ;
+		_settings->setValue( "ignoredPackageList",e ) ;
+		return e ;
+	}
 }

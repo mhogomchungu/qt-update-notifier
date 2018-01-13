@@ -37,7 +37,6 @@ public:
 	explicit twitter( QWidget * parent = 0 ) ;
 	void ShowUI( const QString& ) ;
 	~twitter();
-public slots:
 	void msg( const QString& ) ;
 private slots:
 	void pbClose( void ) ;

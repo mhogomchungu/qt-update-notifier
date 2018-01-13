@@ -20,7 +20,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include<QString>
+#include <QString>
+#include <QStringList>
 #include <QSettings>
 
 namespace settings
@@ -59,6 +60,7 @@ namespace settings
 	void setNextUpdateInterval( const QString& ) ;
 	QString networkConnectivityChecker( void ) ;
 	bool checkNewerKernels( void ) ;
+	QStringList ignorePackageList( void ) ;
 }
 
 #endif // SETTINGS_H
