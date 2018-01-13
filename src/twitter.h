@@ -38,6 +38,7 @@ public:
 	void ShowUI( const QString& ) ;
 	~twitter();
 	void msg( const QString& ) ;
+	void translate( void ) ;
 private slots:
 	void pbClose( void ) ;
 	void updateUI( void ) ;

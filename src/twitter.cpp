@@ -75,11 +75,14 @@ void twitter::msg( const QString& msg )
 	m_ui->textEdit->setText( msg ) ;
 }
 
+void twitter::translate()
+{
+	m_ui->retranslateUi( this ) ;
+}
+
 void twitter::pbClose()
 {
 	this->hide() ;
-
-	this->deleteLater() ;
 }
 
 void twitter::updateUI()

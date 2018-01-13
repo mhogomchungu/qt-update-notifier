@@ -49,6 +49,8 @@ jsonResult _parseJSON( const QByteArray& e )
 
 qtUpdateNotifier::qtUpdateNotifier( bool e ) : m_autoStart( e )
 {
+	this->setupTranslationText() ;
+	m_twitter.translate() ;
 }
 
 void qtUpdateNotifier::logWindowShow()
@@ -164,9 +166,7 @@ QString qtUpdateNotifier::networResponse( QNetworkReply& s )
 
 void qtUpdateNotifier::checkTwitter()
 {
-	auto t = new twitter() ;
-
-	t->ShowUI( tr( "connecting ..." ) ) ;
+	m_twitter.ShowUI( tr( "connecting ..." ) ) ;
 
 	QUrl url( m_url ) ;
 
@@ -177,13 +177,13 @@ void qtUpdateNotifier::checkTwitter()
 	s.setRawHeader( "Authorization",m_token ) ;
 	s.setRawHeader( "Accept-Encoding","text/plain" ) ;
 
-	m_manager.get( 30,s,[ t,this ]( QNetworkReply& e ){
+	m_manager.get( 30,s,[ this ]( QNetworkReply& e ){
 
-		t->msg( this->networResponse( e ) ) ;
+		m_twitter.msg( this->networResponse( e ) ) ;
 
-	},[ t ](){
+	},[ this ](){
 
-		t->msg( QString() ) ;
+		m_twitter.msg( QString() ) ;
 	} ) ;
 }
 
@@ -256,37 +256,6 @@ void qtUpdateNotifier::setupTranslationText()
 	}
 }
 
-int qtUpdateNotifier::instanceAlreadyRunning()
-{
-	auto r = settings::prefferedLanguage() ;
-
-	if( r == "english_US" ){
-
-		/*
-		 * english_US language,its the default and hence dont load anything
-		 */
-		qDebug() << tr( "Another instance is already running, closing this one" ) ;
-	}else{
-		const char * x[ 2 ] = { "qt-update-notifier",nullptr } ;
-
-		int z = 1 ;
-
-		QCoreApplication app( z,const_cast< char ** >( x ) ) ;
-
-		auto translator = new QTranslator() ;
-
-		translator->load( r.toLatin1().constData(),QT_UPDATE_NOTIFIER_TRANSLATION_PATH ) ;
-		app.installTranslator( translator ) ;
-
-		qDebug() << tr( "Another instance is already running, closing this one" ) ;
-
-		app.removeTranslator( translator ) ;
-		translator->deleteLater() ;
-	}
-
-	return 1 ;
-}
-
 void qtUpdateNotifier::buildGUI()
 {
         connect( &m_timer,SIGNAL( timeout() ),this,SLOT( automaticCheckForUpdates() ) ) ;
@@ -299,8 +268,6 @@ void qtUpdateNotifier::buildGUI()
 	m_defaulticon = settings::defaultIcon() + ".png" ;
 
         this->changeIcon( m_defaulticon ) ;
-
-        this->setupTranslationText() ;
 
         auto q = settings::delayTimeBeforeUpdateCheck( settings::delayTimeBeforeUpdateCheck() ) ;
 	auto z = tr( "Waiting for %1 minutes before checking for updates" ).arg( q ) ;

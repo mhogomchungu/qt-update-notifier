@@ -51,6 +51,7 @@
 #include "utility.h"
 #include "settings.h"
 #include "statusicon.h"
+#include "twitter.h"
 
 #include <memory>
 
@@ -65,7 +66,6 @@ public:
 	void logActivity_1( const QString& ) ;
 	void setDebug( bool ) ;
 	static bool autoStartEnabled( void ) ;
-	static int instanceAlreadyRunning( void ) ;
 signals:
 	void updateLogWindow( void ) ;
 	void configOptionsChanged_1( void ) ;
@@ -137,6 +137,7 @@ private:
 	NetworkAccessManager m_manager ;
 	statusicon m_statusicon ;
 	bool m_debug ;
+	twitter m_twitter ;
 };
 
 #endif // MAINWINDOW_H
