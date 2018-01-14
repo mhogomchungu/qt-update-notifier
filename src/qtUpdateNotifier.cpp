@@ -291,6 +291,8 @@ void qtUpdateNotifier::run()
 
                 QCoreApplication::quit() ;
         }else{
+		m_sleepDuration  = settings::updateCheckInterval() ;
+
                 this->buildGUI() ;
 
                 this->logActivity( tr( "Qt-update-notifier started" ) ) ;
@@ -349,8 +351,6 @@ void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
 
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
-	m_sleepDuration  = settings::updateCheckInterval() ;
-
 	if( settings::firstTimeRun() ){
 
 		m_timer.stop() ;
@@ -476,6 +476,12 @@ void qtUpdateNotifier::writeUpdateTimeToConfigFile( u_int64_t time )
 void qtUpdateNotifier::manualCheckForUpdates()
 {
 	this->logActivity( tr( "Manual check for updates initiated" ) ) ;
+
+	if( settings::firstTimeRun() ){
+
+		this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
+	}
+
 	this->checkForUpdates() ;
 }
 
