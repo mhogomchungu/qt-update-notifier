@@ -507,27 +507,27 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
 <context>
     <name>ignorepackagelist</name>
     <message>
-        <location filename="../src/ignorepackagelist.ui" line="14"/>
-        <source>Dialog</source>
+        <location filename="../src/ignorepackagelist.ui" line="17"/>
+        <source>Qt-update-notifier ignore package window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ignorepackagelist.ui" line="33"/>
+        <location filename="../src/ignorepackagelist.ui" line="36"/>
         <source>Package name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ignorepackagelist.ui" line="47"/>
+        <location filename="../src/ignorepackagelist.ui" line="50"/>
         <source>&amp;Close</source>
         <translation type="unfinished">&amp;Κλείσιμο</translation>
     </message>
     <message>
-        <location filename="../src/ignorepackagelist.ui" line="70"/>
+        <location filename="../src/ignorepackagelist.ui" line="73"/>
         <source>Enter below a name of a package to be ignored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ignorepackagelist.ui" line="86"/>
+        <location filename="../src/ignorepackagelist.ui" line="89"/>
         <source>&amp;Add</source>
         <translation type="unfinished"></translation>
     </message>
