@@ -26,9 +26,9 @@ ADD_SUBDIRECTORY( src/3rdParty/NetworkAccessManager )
 include_directories( src/3rdParty/tasks )
 include_directories( src/3rdParty/NetworkAccessManager )
 
-Qt5_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui )
+Qt5_WRAP_UI( UI src/logwindow.ui src/configuredialog.ui src/twitter.ui src/ignorepackagelist.ui )
 
-Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h )
+Qt5_WRAP_CPP( MOC src/qtUpdateNotifier.h src/logwindow.h src/configuredialog.h src/statusicon.h src/twitter.h src/ignorepackagelist.h )
 
 Qt5_ADD_RESOURCES( ICONS icons/icons.qrc )
 if( KF5 )
@@ -41,7 +41,7 @@ else()
 endif()
 
 add_executable( qt-update-notifier src/main.cpp src/qtUpdateNotifier.cpp src/settings.cpp src/statusicon.cpp
-		src/logwindow.cpp src/configuredialog.cpp src/utility.cpp src/twitter.cpp
+                src/logwindow.cpp src/configuredialog.cpp src/utility.cpp src/twitter.cpp src/ignorepackagelist.cpp src/tablewidget.cpp
                 ${MOC} ${UI} ${ICONS} )
 if( KF5 )
         TARGET_LINK_LIBRARIES( qt-update-notifier ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} KF5::Notifications networkAccessManager tasks )

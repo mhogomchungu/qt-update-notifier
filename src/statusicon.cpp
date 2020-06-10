@@ -21,6 +21,7 @@
 
 #include <QProcess>
 #include <iostream>
+#include <QTimer>
 
 static QPixmap _icon( const QString& name,int count )
 {
@@ -279,6 +280,19 @@ void statusicon::setToolTip( const QString& iconName,const QString& title,const 
 	m_trayIcon.setToolTip( r ) ;
 }
 
+static void _suspend( int s )
+{
+	QTimer t ;
+
+	QEventLoop l ;
+
+	QObject::connect( &t,SIGNAL( timeout() ),&l,SLOT( quit() ) ) ;
+
+	t.start( 1000 * s ) ;
+
+	l.exec() ;
+}
+
 void statusicon::addQuitAction()
 {
 	m_menu.addAction( [ this ](){
@@ -289,6 +303,16 @@ void statusicon::addQuitAction()
 
                 return ac ;
         }() ) ;
+
+	for( int i = 0 ; i < 10 ; i++ ){
+
+		if( QSystemTrayIcon::isSystemTrayAvailable() ){
+
+			break ;
+		}else{
+			_suspend( 1 ) ;
+		}
+	}
 
 	m_trayIcon.show() ;
 }

@@ -77,11 +77,11 @@ static int _option_int( const QString& opt,int e,int multiply = 1000 )
 	}
 }
 
-static u_int32_t _option_ulong( const QString& opt,int e,int multiply = 1000 )
+static qint64 _option_longlong( const QString& opt,int e,int multiply = 1000 )
 {
 	if( _settings->contains( opt ) ){
 
-		return multiply * _settings->value( opt ).toString().toULong() ;
+		return multiply * _settings->value( opt ).toString().toLong() ;
 	}else{
 		_settings->setValue( opt,QString::number( e ) ) ;
 		return multiply * e ;
@@ -157,7 +157,7 @@ QString settings::delayTimeBeforeUpdateCheck( int time )
 		int ff = time / rr ;
 		snprintf( buffer,64,"%d",ff ) ;
 	}else{
-		float ff =  static_cast<float>( time ) / rr ;
+		auto ff =  static_cast<double>( time ) / rr ;
 		snprintf( buffer,64,"%.2f",ff ) ;
 	}
 
@@ -179,11 +179,11 @@ QString settings::url()
 	return _option_qstring( "url",_url ) ;
 }
 
-u_int64_t settings::nextScheduledUpdateTime()
+qint64 settings::nextScheduledUpdateTime()
 {
 	if( _settings->contains( "nextScheduledUpdateTime" ) ){
 
-		return _settings->value( "nextScheduledUpdateTime" ).toString().toULongLong() ;
+		return _settings->value( "nextScheduledUpdateTime" ).toString().toLongLong() ;
 	}else{
 		std::cout << "invalid code path in \"settings::nextScheduledUpdateTime()\"" << std::endl ;
 
@@ -196,9 +196,9 @@ QString settings::getLastTwitterUpdate()
 	return _option_qstring( "lastTwitterUpdate",QString() ) ;
 }
 
-u_int32_t settings::updateCheckInterval()
+qint64 settings::updateCheckInterval()
 {
-	return _option_ulong( "updateCheckInterval",86400 ) ;
+	return _option_longlong( "updateCheckInterval",86400 ) ;
 }
 
 int settings::delayTimeBeforeUpdateCheck()
@@ -229,7 +229,7 @@ bool settings::firstTimeRun()
 	return !_settings->contains( "nextScheduledUpdateTime" ) ;
 }
 
-void settings::updateNextScheduledUpdateTime( u_int64_t time )
+void settings::updateNextScheduledUpdateTime( qint64 time )
 {
         _settings->setValue( "nextScheduledUpdateTime",QString::number( time ) ) ;
 }
@@ -295,4 +295,9 @@ QStringList settings::ignorePackageList()
 		_settings->setValue( "ignoredPackageList",e ) ;
 		return e ;
 	}
+}
+
+void settings::ignorePackageList( const QStringList& e )
+{
+	_settings->setValue( "ignoredPackageList",e ) ;
 }

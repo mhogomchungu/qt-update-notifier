@@ -43,9 +43,9 @@ namespace settings
 	int delayTimeBeforeUpdateCheck( void ) ;
 	bool autoRefreshSynaptic( void ) ;
 	bool firstTimeRun( void ) ;
-	u_int32_t updateCheckInterval( void ) ;
-	u_int64_t nextScheduledUpdateTime() ;
-	void updateNextScheduledUpdateTime( u_int64_t time ) ;
+	qint64 updateCheckInterval( void ) ;
+	qint64 nextScheduledUpdateTime() ;
+	void updateNextScheduledUpdateTime( qint64 time ) ;
 	bool autoUpdatePackages( void ) ;
 	bool autoDownloadPackages( void ) ;
 	bool skipOldPackageCheck( void ) ;
@@ -61,6 +61,7 @@ namespace settings
 	QString networkConnectivityChecker( void ) ;
 	bool checkNewerKernels( void ) ;
 	QStringList ignorePackageList( void ) ;
+	void ignorePackageList( const QStringList& ) ;
 }
 
 #endif // SETTINGS_H

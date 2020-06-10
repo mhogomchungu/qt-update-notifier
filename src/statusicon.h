@@ -35,8 +35,8 @@
 #include "tray_application_type.h"
 
 #if KF5
-#include <kstatusnotifieritem.h>
-#include <knotification.h>
+#include <KF5/KNotifications/kstatusnotifieritem.h>
+#include <KF5/KNotifications/knotification.h>
 
 class statusicon : public KStatusNotifierItem
 {

@@ -44,6 +44,7 @@
 
 #include "networkAccessManager.hpp"
 #include "logwindow.h"
+#include "ignorepackagelist.h"
 #include "instance.h"
 #include "desktop_file.h"
 #include "configuredialog.h"
@@ -85,6 +86,7 @@ private slots:
 	void checkForUpdatesOnStartUp( void ) ;
 	void scheduleUpdates( int ) ;
 	void logWindowShow( void ) ;
+	void ignorePackageList( void ) ;
 	void aptGetLogWindow( void) ;
 	void doneUpdating( void ) ;
 	void toggleAutoStart( bool ) ;
@@ -104,20 +106,20 @@ private:
 	void autoDownloadPackages( void ) ;
 	void autoUpdatePackages( void ) ;
 	void setupTranslationText( void ) ;
-	void printTime( const QString&,u_int64_t ) ;
+	void printTime( const QString&,qint64 ) ;
 	void saveAptGetLogOutPut( const result::array_t& ) ;
-	u_int64_t getCurrentTime( void ) ;
+	qint64 getCurrentTime( void ) ;
 	QString getCurrentTime_1( void ) ;
-	u_int64_t nextScheduledUpdateTime( void ) ;
-	void writeUpdateTimeToConfigFile( u_int64_t ) ;
+	qint64 nextScheduledUpdateTime( void ) ;
+	void writeUpdateTimeToConfigFile( qint64 ) ;
 	void showToolTip( const QString&,const QString&,const result::array_t& ) ;
 	void showToolTip( const QString&,const QString&,const QString& ) ;
 	void showToolTip( const QString&,const QString&,int ) ;
 	void showToolTip( const QString&,const QString& ) ;
 	QString nextUpdateTime( void ) ;
 	QString nextAutoUpdateTime( void ) ;
-	QString nextUpdateTime( u_int64_t ) ;
-	QString logMsg( u_int64_t ) ;
+	QString nextUpdateTime( qint64 ) ;
+	QString logMsg( qint64 ) ;
 	QString logMsg( void ) ;
 	bool m_canCloseApplication ;
 	bool m_threadIsRunning ;
@@ -131,9 +133,9 @@ private:
 	QString m_lastTwitterUpdate ;
 	QByteArray m_token ;
 	QTimer m_timer ;
-	u_int64_t m_sleepDuration ;
-	u_int64_t m_currentTime ;
-	u_int64_t m_nextScheduledUpdateTime ;
+	qint64 m_sleepDuration ;
+	qint64 m_currentTime ;
+	qint64 m_nextScheduledUpdateTime ;
 	NetworkAccessManager m_manager ;
 	statusicon m_statusicon ;
 	bool m_debug ;

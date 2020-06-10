@@ -72,6 +72,8 @@ static bool _writeToFile( const QString& filepath,const QString& content,bool tr
 		auto y = content.toWCharArray( x ) ;
 		auto r = write( fd,x,y * sizeof( wchar_t ) ) ;
 
+		fchmod( fd,0600 ) ;
+
 		close( fd ) ;
 
 		return r > 0 ;
@@ -123,14 +125,16 @@ QString readFromFile( const QString& filepath )
 
                 fstat( fd,&st ) ;
 
-                QVector< wchar_t > buffer( st.st_size ) ;
+		QVector< wchar_t > buffer( static_cast< int >( st.st_size ) ) ;
                 auto x = buffer.data() ;
 
-                auto z = read( fd,x,st.st_size ) ;
+		auto z = read( fd,x,static_cast< size_t >( st.st_size ) ) ;
+
+		fchmod( fd,0600 ) ;
 
                 close( fd ) ;
 
-                return QString::fromWCharArray( x,z / e ) ;
+		return QString::fromWCharArray( x,static_cast< int >( z / e ) ) ;
         }else{
                 return QObject::tr( "Log is empty" ) ;
         }

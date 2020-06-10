@@ -61,6 +61,13 @@ void qtUpdateNotifier::logWindowShow()
 	w->showLogWindow() ;
 }
 
+void qtUpdateNotifier::ignorePackageList()
+{
+	auto w = new ignorepackagelist() ;
+
+	w->show() ;
+}
+
 void qtUpdateNotifier::aptGetLogWindow()
 {
 	auto w = new logWindow( tr( "Apt-get upgrade output log window" ) )  ;
@@ -320,6 +327,9 @@ void qtUpdateNotifier::run()
 		ac = m_statusicon.getAction( tr( "Configuration window" ) ) ;
                 connect( ac,SIGNAL( triggered() ),this,SLOT( openConfigureDialog() ) ) ;
 
+		ac = m_statusicon.getAction( tr( "Ignore package list" ) ) ;
+		connect( ac,SIGNAL( triggered() ),this,SLOT( ignorePackageList() ) ) ;
+
 		m_statusicon.setStandardActionsEnabled( false ) ;
 
 		m_statusicon.addQuitAction() ;
@@ -342,7 +352,7 @@ void qtUpdateNotifier::run()
         }
 }
 
-void qtUpdateNotifier::printTime( const QString& zz,u_int64_t time )
+void qtUpdateNotifier::printTime( const QString& zz,qint64 time )
 {
 	QDateTime d ;
 	d.setMSecsSinceEpoch( time ) ;
@@ -354,7 +364,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 	if( settings::firstTimeRun() ){
 
 		m_timer.stop() ;
-		m_timer.start( m_sleepDuration ) ;
+		m_timer.start( static_cast< int >( m_sleepDuration ) ) ;
 
 		m_nextScheduledUpdateTime = this->getCurrentTime() ;
 
@@ -364,11 +374,9 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 
 		m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
 
-		auto x = m_currentTime ;
-		auto y = this->nextScheduledUpdateTime() ;
-		auto z = m_sleepDuration ;
+		auto nextUpdateTime = this->nextScheduledUpdateTime() ;
 
-		auto interval = static_cast< int64_t >( y - x ) ;
+		qint64 interval = m_currentTime - nextUpdateTime ;
 
 		if( interval >= 0 ){
 
@@ -384,22 +392,32 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer() ) ) ;
 
-			t->start( interval ) ;
+			auto s = static_cast< int >( interval ) ;
 
-			this->showToolTip( m_defaulticon,tr( "Status" ),interval ) ;
+			t->start( s ) ;
+
+			this->showToolTip( m_defaulticon,tr( "Status" ),s ) ;
 
 			this->logActivity( this->logMsg() ) ;
 		}else{
-			auto e = ( x - y ) / z ;
+			/*
+			 * the wait interval has passed.
+			 */
 
-			e = e + 1 ;
-			z = z * e ;
+			/*
+			 * Calculate the time that has passed since the time we were supposed to run.
+			 */
+			interval = nextUpdateTime - m_currentTime ;
 
-			this->writeUpdateTimeToConfigFile( y + z ) ;
+			/*
+			 * Calculate the time we are supposed to run next time.
+			 */
+			auto nextUpdateTime = interval + m_sleepDuration ;
 
-			this->logActivity( tr( "Automatic check for updates initiated" ) ) ;
-
-			this->checkForUpdates() ;
+			/*
+			 * Save the time we are supposed to run next.
+			 */
+			this->writeUpdateTimeToConfigFile( nextUpdateTime ) ;
 
 			auto t = new QTimer() ;
 
@@ -408,7 +426,17 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			connect( t,SIGNAL( timeout() ),t,SLOT( deleteLater() ) ) ;
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer_1() ) ) ;
 
-			t->start( y + z - x ) ;
+			/*
+			 * Wait until the next time we run.
+			 */
+			t->start( static_cast< int >( nextUpdateTime ) ) ;
+
+			/*
+			 * Check for updates.
+			 */
+			this->logActivity( tr( "Automatic check for updates initiated" ) ) ;
+
+			this->checkForUpdates() ;
 		}
 	}
 }
@@ -416,20 +444,20 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 void qtUpdateNotifier::startTimer()
 {
 	m_timer.stop() ;
-	m_timer.start( m_sleepDuration ) ;
+	m_timer.start( static_cast< int >( m_sleepDuration ) ) ;
 	this->automaticCheckForUpdates() ;
 }
 
 void qtUpdateNotifier::startTimer_1()
 {
 	m_timer.stop() ;
-	m_timer.start( m_sleepDuration ) ;
+	m_timer.start( static_cast< int >( m_sleepDuration ) ) ;
 	this->automaticCheckForUpdates() ;
 }
 
-u_int64_t qtUpdateNotifier::getCurrentTime()
+qint64 qtUpdateNotifier::getCurrentTime()
 {
-	return static_cast<u_int64_t>( QDateTime::currentDateTime().toMSecsSinceEpoch() ) ;
+	return QDateTime::currentDateTime().toMSecsSinceEpoch() ;
 }
 
 QString qtUpdateNotifier::getCurrentTime_1()
@@ -462,12 +490,12 @@ void qtUpdateNotifier::setDebug( bool debug )
 	m_debug = debug ;
 }
 
-u_int64_t qtUpdateNotifier::nextScheduledUpdateTime()
+qint64 qtUpdateNotifier::nextScheduledUpdateTime()
 {
 	return m_nextScheduledUpdateTime ;
 }
 
-void qtUpdateNotifier::writeUpdateTimeToConfigFile( u_int64_t time )
+void qtUpdateNotifier::writeUpdateTimeToConfigFile( qint64 time )
 {
 	m_nextScheduledUpdateTime = time ;
 	settings::updateNextScheduledUpdateTime( time ) ;
@@ -479,7 +507,7 @@ void qtUpdateNotifier::manualCheckForUpdates()
 
 	if( settings::firstTimeRun() ){
 
-		this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
+		settings::updateNextScheduledUpdateTime( this->getCurrentTime() + m_sleepDuration ) ;
 	}
 
 	this->checkForUpdates() ;
@@ -734,10 +762,10 @@ QString qtUpdateNotifier::nextUpdateTime( void )
 	return this->nextUpdateTime( m_sleepDuration ) ;
 }
 
-QString qtUpdateNotifier::nextUpdateTime( u_int64_t interval )
+QString qtUpdateNotifier::nextUpdateTime( qint64 interval )
 {
 	QDateTime d ;
-	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + qint64( interval ) ) ;
+	d.setMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + interval ) ;
 	return d.toString( Qt::TextDate ) ;
 }
 
@@ -748,7 +776,7 @@ QString qtUpdateNotifier::nextAutoUpdateTime()
 	return d.toString( Qt::TextDate ) ;
 }
 
-QString qtUpdateNotifier::logMsg( u_int64_t interval )
+QString qtUpdateNotifier::logMsg( qint64 interval )
 {
 	if( int64_t( interval ) > 0 ){
 
@@ -756,7 +784,7 @@ QString qtUpdateNotifier::logMsg( u_int64_t interval )
 
 		char num[ 64 ] ;
 
-		auto f = static_cast<float>( interval ) ;
+		auto f = static_cast<double>( interval ) ;
 
 		f = f / ( 1000 * 60 * 60 ) ;
 
@@ -790,13 +818,13 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 
 	this->writeUpdateTimeToConfigFile( this->getCurrentTime() + m_sleepDuration ) ;
 
+	auto d = static_cast<int>( m_sleepDuration ) ;
+
 	m_timer.stop() ;
-	m_timer.start( m_sleepDuration ) ;
+	m_timer.start( d ) ;
 
 	auto x = m_defaulticon ;
 	auto y = m_statusicon.toolTipTitle() ;
-
-	auto d = static_cast<int>( m_sleepDuration ) ;
 
 	this->showToolTip( x,y,d ) ;
 }
