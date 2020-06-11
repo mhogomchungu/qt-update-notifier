@@ -543,13 +543,13 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/logwindow.ui" line="29"/>
+        <location filename="../src/logwindow.ui" line="46"/>
         <source>&amp;Clear log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/logwindow.ui" line="42"/>
-        <location filename="../src/logwindow.ui" line="77"/>
+        <location filename="../src/logwindow.ui" line="23"/>
+        <location filename="../src/logwindow.ui" line="53"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -579,11 +579,11 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="212"/>
         <location filename="../src/qtUpdateNotifier.cpp" line="282"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="414"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="562"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="659"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="688"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="781"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="412"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="557"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="654"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="683"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="776"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -633,107 +633,97 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="410"/>
-        <source>**Going to sleep for %1 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="452"/>
-        <source>*****Going to sleep for %1 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="459"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="550"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="454"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="545"/>
         <source>Automatic check for updates initiated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="533"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="528"/>
         <source>Manual check for updates initiated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="558"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="553"/>
         <source>Warning:	attempt to start update check while another one is still in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="562"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="557"/>
         <source>Checking for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="646"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="641"/>
         <source>Log entry was created at: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="663"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="658"/>
         <source>Automatic package update initiated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="672"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="667"/>
         <source>Automatic package update failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="696"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="691"/>
         <source>Downloading of packages completed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="700"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="695"/>
         <source>Downloading of packages failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="688"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="683"/>
         <source>Downloading packages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="585"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="580"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="720"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="715"/>
         <source>Outdated packages found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="733"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="728"/>
         <source>Kernel version &quot;%1&quot; is available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="877"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="872"/>
         <source>Qt-update-notifier quitting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="576"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="571"/>
         <source>There are updates in the repository</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="669"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="664"/>
         <source>Automatic package update completed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="692"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="687"/>
         <source>Packages downloading initiated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="157"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="638"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="711"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="717"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="767"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="633"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="706"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="712"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="762"/>
         <source>No updates found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -743,41 +733,41 @@ If the problem persists and Synaptic is unable to solve it, then open a support 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="659"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="654"/>
         <source>Update in progress, do not power down computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="611"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="606"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="618"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="628"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="613"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="623"/>
         <source>Update check complete, repository is in an unknown state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="746"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="741"/>
         <source>Updates found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="210"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="758"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="765"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="822"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="753"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="760"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="817"/>
         <source>Next update check will be at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="820"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="815"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="840"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="835"/>
         <source>Rescheduling update check</source>
         <translation type="unfinished"></translation>
     </message>

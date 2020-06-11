@@ -407,8 +407,6 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 
 			auto s = static_cast< int >( interval ) ;
 
-			this->logActivity( tr( "**Going to sleep for %1 hours" ).arg( _tohours( s ) ) ) ;
-
 			t->start( s ) ;
 
 			this->showToolTip( m_defaulticon,tr( "Status" ),s ) ;
@@ -448,9 +446,6 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			/*
 			 * Wait until the next time we run.
 			 */
-
-			this->logActivity( tr( "*****Going to sleep for %1 hours" ).arg( _tohours( s ) ) ) ;
-
 			t->start( static_cast< int >( s ) ) ;
 
 			/*
