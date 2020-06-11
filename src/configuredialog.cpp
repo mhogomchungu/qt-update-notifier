@@ -44,6 +44,11 @@ configureDialog::configureDialog( QWidget * parent ) :
 	connect( m_ui->gbUpdateIntervalComboBoxMinutes,SIGNAL( currentIndexChanged( int ) ),this,SLOT(labelMinutes( int ) ) ) ;
 	connect( m_ui->checkBoxSynapticAutoRefresh,SIGNAL( toggled( bool ) ),this,SLOT( autoRefreshSynaptic_1( bool ) ) ) ;
 
+	connect( m_ui->checkBoxReportOutdatedPackages,&QCheckBox::toggled,[]( bool e ){
+
+		settings::skipOldPackageCheck( e ) ;
+	} ) ;
+
 	this->installEventFilter( this ) ;
 }
 
@@ -78,6 +83,7 @@ configureDialog::~configureDialog()
 
 void configureDialog::showUI()
 {
+	m_ui->checkBoxReportOutdatedPackages->setChecked( settings::skipOldPackageCheck() ) ;
 	this->setIntervalBetweenUpdateChecks() ;
 	this->setDelayTimeAtLogIn() ;
 	this->setupLanguageList() ;
@@ -90,7 +96,7 @@ void configureDialog::closeUI()
 	int hours   = m_ui->gbUpdateIntervalComboBoxHours->currentText().toInt()   * 60 * 60 ;
 	int minutes = m_ui->gbUpdateIntervalComboBoxMinutes->currentText().toInt() * 60 ;
 
-	u_int32_t duration = days + hours + minutes ;
+	auto duration = days + hours + minutes ;
 
 	if( duration < 10 * 60 ){
 
@@ -107,8 +113,6 @@ void configureDialog::closeUI()
 			emit setUpdateInterval( duration * 1000 ) ;
 			emit configOptionsChanged() ;
 			settings::setNextUpdateInterval( QString::number( duration ) ) ;
-		}else{
-			;
 		}
 
 		settings::setPrefferedLanguage( m_ui->comboBoxLanguageList->currentText() ) ;
@@ -229,21 +233,21 @@ void configureDialog::setDelayTimeAtLogIn()
 
 void configureDialog::setIntervalBetweenUpdateChecks()
 {
-	u_int32_t interval = settings::updateCheckInterval() / 1000 ;
+	qint64 interval = settings::updateCheckInterval() / 1000 ;
 
-	u_int32_t days = interval / ( 1 * 24 * 60 * 60 ) ;
+	qint64 days = interval / ( 1 * 24 * 60 * 60 ) ;
 
-	u_int32_t remainer = interval % ( 1 * 24 * 60 * 60 ) ;
+	qint64 remainer = interval % ( 1 * 24 * 60 * 60 ) ;
 
-	u_int32_t hours = remainer / ( 60 * 60 ) ;
+	qint64 hours = remainer / ( 60 * 60 ) ;
 
 	remainer = remainer % ( 60 * 60 ) ;
 
-	u_int32_t minutes = remainer / 60 ;
+	qint64 minutes = remainer / 60 ;
 
-	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( days ) ;
-	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( hours ) ;
-	m_ui->gbUpdateIntervalComboBoxMinutes->setCurrentIndex( minutes ) ;
+	m_ui->gbUpdateIntervalComboBoxDays->setCurrentIndex( static_cast< int >( days ) ) ;
+	m_ui->gbUpdateIntervalComboBoxHours->setCurrentIndex( static_cast< int >( hours ) ) ;
+	m_ui->gbUpdateIntervalComboBoxMinutes->setCurrentIndex( static_cast< int >( minutes ) ) ;
 }
 
 void configureDialog::closeEvent( QCloseEvent * e )

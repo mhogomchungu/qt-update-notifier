@@ -70,7 +70,7 @@ static bool _writeToFile( const QString& filepath,const QString& content,bool tr
 		auto x = buffer.data() ;
 
 		auto y = content.toWCharArray( x ) ;
-		auto r = write( fd,x,y * sizeof( wchar_t ) ) ;
+		auto r = write( fd,x,static_cast< size_t >( y ) * sizeof( wchar_t ) ) ;
 
 		fchmod( fd,0600 ) ;
 
@@ -236,8 +236,6 @@ static Result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 
 static QByteArray _upgrade_0( const QString& configPath,bool setEnglishLanguage )
 {
-	QProcess exe ;
-
 	auto e = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( configPath ) ;
 
 	if( setEnglishLanguage ){
@@ -247,12 +245,10 @@ static QByteArray _upgrade_0( const QString& configPath,bool setEnglishLanguage 
 		env.insert( "LANG","en_US.UTF-8" ) ;
 		env.insert( "LANGUAGE","en_US.UTF-8:en_US:en" ) ;
 
-		exe.setProcessEnvironment( env ) ;
+		return Task::process::run( e,{},-1,{},env ).get().std_out() ;
+	}else{
+		return Task::process::run( e ).get().std_out() ;
 	}
-
-	exe.start( e ) ;
-	exe.waitForFinished( -1 ) ;
-	return exe.readAllStandardOutput() ;
 }
 
 static QByteArray _upgrade( const QString& configPath )
@@ -267,37 +263,21 @@ static QByteArray _upgrade_1( const QString& configPath )
 
 static bool _update( const QString& configPath )
 {
-	QProcess exe ;
-
 	QProcessEnvironment env ;
 
 	env.insert( "LANG","en_US.UTF-8" ) ;
 	env.insert( "LANGUAGE","en_US.UTF-8:en_US:en" ) ;
 
-	exe.setProcessEnvironment( env ) ;
-
 	auto e = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( configPath ) ;
 
-	exe.start( e ) ;
-	exe.waitForFinished( -1 ) ;
-
-	return exe.exitStatus() == 0 ;
+	return Task::process::run( e,{},-1,{},env ).get().success() ;
 }
 
 static result _reportUpdates()
 {
 	auto _not_online = [](){
 
-		QProcess exe ;
-
-		exe.start( settings::networkConnectivityChecker() ) ;
-
-		if( exe.waitForFinished() ){
-
-			return exe.exitCode() != 0 ;
-		}else{
-			return true ;
-		}
+		return !Task::process::run( settings::networkConnectivityChecker() ).get().success() ;
 	}() ;
 
 	if( _not_online ){
@@ -376,12 +356,9 @@ Task::future< result >& reportUpdates()
 
 static int _task( const char * e )
 {
-	QProcess exe ;
+	auto s = QString( "%1 %2" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH,e ) ;
 
-	exe.start( QString( "%1 %2" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH,e ) ) ;
-	exe.waitForFinished( -1 ) ;
-
-	return exe.exitCode() ;
+	return Task::process::run( s ).get().exit_code() ;
 }
 
 Task::future< bool >& startSynaptic()
@@ -486,11 +463,7 @@ static bool _check_version( const QString& e,const QString& f )
 
 static QString _checkKernelVersion()
 {
-	QProcess exe ;
-	exe.start( "uname -r" ) ;
-	exe.waitForFinished( -1 ) ;
-	QString version = exe.readAll() ;
-	exe.close() ;
+	QString version = Task::process::run( "uname -r" ).get().std_out() ;
 
 	int index = version.indexOf( "-" ) ;
 
@@ -523,8 +496,8 @@ static QString _checkKernelVersion()
 			 */
 
 			int base_kernel_major_version = 4 ;
-			int base_kernel_minor_version = 4 ;
-			int base_kernel_patch_version = 79 ;
+			int base_kernel_minor_version = 19 ;
+			int base_kernel_patch_version = 127 ;
 
 			if( major < base_kernel_major_version ){
 
@@ -558,11 +531,7 @@ static QString _checkKernelVersion()
 
 static bool _updateAvailable( const QString& e,QString * newVersion,QString * installedVersion )
 {
-	QProcess exe ;
-	exe.start( e ) ;
-	exe.waitForFinished( -1 ) ;
-
-	QString r = exe.readAll() ;
+	QString r = Task::process::run( e ).get().std_out() ;
 
 	if( r.isEmpty() ){
 
@@ -710,13 +679,7 @@ Task::future<QString>& checkKernelVersions()
 
 		f.setPermissions( QFile::ReadOwner | QFile::ExeOwner ) ;
 
-		QProcess p ;
-
-		p.start( exe ) ;
-
-		p.waitForFinished( -1 ) ;
-
-		return p.readAll() ;
+		return Task::process::run( exe ).get().std_out() ;
 	} ) ;
 }
 

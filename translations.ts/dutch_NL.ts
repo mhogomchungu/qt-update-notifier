@@ -18,12 +18,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="305"/>
+        <location filename="../src/utility.cpp" line="285"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Controle is overgeslagen, er is geen internetverbinding</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="323"/>
+        <location filename="../src/utility.cpp" line="303"/>
         <source>Recommending trying again later as the Repository appear to be in an inconsistent state.
 If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
@@ -32,34 +32,34 @@ Indien het probleem blijft bestaan, open Synaptic en probeer of het bijwerken mo
 Indien het probleem blijft bestaan en het bijwerken in Synaptic niet mogelijk is, meldt het probleem dan op het forum door het aanmaken van een topic.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="334"/>
-        <location filename="../src/utility.cpp" line="368"/>
+        <location filename="../src/utility.cpp" line="314"/>
+        <location filename="../src/utility.cpp" line="348"/>
         <source>Warning: apt-get update finished with errors</source>
         <translation>Waarschuwing: apt-get update is met fouten beëindigd</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="361"/>
-        <location filename="../src/utility.cpp" line="364"/>
+        <location filename="../src/utility.cpp" line="341"/>
+        <location filename="../src/utility.cpp" line="344"/>
         <source>No updates found</source>
         <translation>Geen updates gevonden</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="550"/>
+        <location filename="../src/utility.cpp" line="523"/>
         <source>Recommending updating the kernel from version %1 to a more recent version.</source>
         <translation>Updaten van kernel versie &quot;%1&quot; naar een meer recentere versie wordt aanbevolen.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="604"/>
+        <location filename="../src/utility.cpp" line="573"/>
         <source>Updating Libreoffice from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Updaten van LibreOffice versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="617"/>
+        <location filename="../src/utility.cpp" line="586"/>
         <source>Updating VirtualBox from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Updaten van VirtualBox versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
     <message>
-        <location filename="../src/utility.cpp" line="630"/>
+        <location filename="../src/utility.cpp" line="599"/>
         <source>Updating Calibre from version &quot;%1&quot; to available version &quot;%2&quot; is recommended.</source>
         <translation>Updaten van Calibre versie &quot;%1&quot; naar versie &quot;%2&quot; wordt aanbevolen.</translation>
     </message>
@@ -454,6 +454,11 @@ Standaard en aanbevolen interval
 (Synaptic kan eventueel crashen)</translation>
     </message>
     <message>
+        <location filename="../src/configuredialog.ui" line="845"/>
+        <source>Skip old package check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/configuredialog.ui" line="683"/>
         <source>Select localization language</source>
         <translation>Taal instellen</translation>
@@ -474,37 +479,37 @@ Standaard en aanbevolen interval
         <translation>Configuratiescherm</translation>
     </message>
     <message>
-        <location filename="../src/configuredialog.cpp" line="98"/>
+        <location filename="../src/configuredialog.cpp" line="104"/>
         <source>Update check interval must be at least 10 minutes</source>
         <translation>Interval voor updates dient tenminste 10 minuten te zijn</translation>
     </message>
     <message>
-        <location filename="../src/configuredialog.cpp" line="187"/>
+        <location filename="../src/configuredialog.cpp" line="191"/>
         <source>Day</source>
         <translation>Dag</translation>
     </message>
     <message>
-        <location filename="../src/configuredialog.cpp" line="189"/>
+        <location filename="../src/configuredialog.cpp" line="193"/>
         <source>Days</source>
         <translation>Dagen</translation>
     </message>
     <message>
-        <location filename="../src/configuredialog.cpp" line="197"/>
+        <location filename="../src/configuredialog.cpp" line="201"/>
         <source>Minute</source>
         <translation>Minuut</translation>
     </message>
     <message>
-        <location filename="../src/configuredialog.cpp" line="199"/>
+        <location filename="../src/configuredialog.cpp" line="203"/>
         <source>Minutes</source>
         <translation>Minuten</translation>
     </message>
     <message>
-        <location filename="../src/configuredialog.cpp" line="207"/>
+        <location filename="../src/configuredialog.cpp" line="211"/>
         <source>Hour</source>
         <translation>Uur</translation>
     </message>
     <message>
-        <location filename="../src/configuredialog.cpp" line="209"/>
+        <location filename="../src/configuredialog.cpp" line="213"/>
         <source>Hours</source>
         <translation>Uren</translation>
     </message>
@@ -524,7 +529,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/ignorepackagelist.ui" line="50"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Sluiten</translation>
+        <translation>&amp;Sluiten</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="73"/>
@@ -585,11 +590,11 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="212"/>
         <location filename="../src/qtUpdateNotifier.cpp" line="282"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="399"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="535"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="632"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="661"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="754"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="414"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="562"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="659"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="688"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="781"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
@@ -648,121 +653,131 @@ Standaard en aanbevolen interval
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="437"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="523"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="410"/>
+        <source>**Going to sleep for %1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtUpdateNotifier.cpp" line="452"/>
+        <source>*****Going to sleep for %1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtUpdateNotifier.cpp" line="459"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="550"/>
         <source>Automatic check for updates initiated</source>
         <translation>Automatische controle is geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="506"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="533"/>
         <source>Manual check for updates initiated</source>
         <translation>Handmatige controle is geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="531"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="558"/>
         <source>Warning:	attempt to start update check while another one is still in progress</source>
         <translation>Waarschuwing: Er is reeds een controle actief</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="535"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="562"/>
         <source>Checking for updates</source>
         <translation>Op updates controleren</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="619"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="646"/>
         <source>Log entry was created at: </source>
         <translation>Geschiedenisuitvoer aangemaakt op: </translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="636"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="663"/>
         <source>Automatic package update initiated</source>
         <translation>Automatisch updaten van pakket is gestart</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="642"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="669"/>
         <source>Automatic package update completed</source>
         <translation>Automatisch updaten van pakket is compleet</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="645"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="672"/>
         <source>Automatic package update failed</source>
         <translation>Automatisch updaten van pakket is mislukt</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="669"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="696"/>
         <source>Downloading of packages completed</source>
         <translation>Downloaden van pakketten is voltooid</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="673"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="700"/>
         <source>Downloading of packages failed</source>
         <translation>Downloaden van pakketten is mislukt</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="661"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="688"/>
         <source>Downloading packages</source>
         <translation>Pakketten aan het downloaden</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="665"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="692"/>
         <source>Packages downloading initiated</source>
         <translation>Downloaden pakketten is geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="558"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="585"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
         <translation>Controle is voltooid, pakketbron lijkt in een inconsistente status te zijn</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="693"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="720"/>
         <source>Outdated packages found</source>
         <translation>Verouderde pakketten gevonden</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="850"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="877"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Qt-update-notifier afsluiten</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="549"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="576"/>
         <source>There are updates in the repository</source>
         <translation>Er zijn in Synaptic updates beschikbaar</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="157"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="611"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="684"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="690"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="740"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="638"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="711"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="717"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="767"/>
         <source>No updates found</source>
         <translation>Geen updates gevonden</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="632"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="659"/>
         <source>Update in progress, do not power down computer</source>
         <translation>Bezig met updaten, computer nu NIET UITSCHAKELEN.</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="584"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="611"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Controle is overgeslagen, er is geen internetverbinding</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="591"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="601"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="618"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="628"/>
         <source>Update check complete, repository is in an unknown state</source>
         <translation>Controle is gedaan, pakketbron is in een onbekende status</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="719"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="746"/>
         <source>Updates found</source>
         <translation>Updates gevonden</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="210"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="731"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="738"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="795"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="758"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="765"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="822"/>
         <source>Next update check will be at %1</source>
         <translation>Volgende controle zal zijn op %1</translation>
     </message>
@@ -772,17 +787,17 @@ Standaard en aanbevolen interval
         <translation>Synaptic is met fouten afgesloten</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="706"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="733"/>
         <source>Kernel version &quot;%1&quot; is available</source>
         <translation>Kernel versie ”%1” is beschikbaar</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="793"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="820"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation>Volgende geplande controle is na %1 uren op %2</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="813"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="840"/>
         <source>Rescheduling update check</source>
         <translation>Controle opnieuw plannen</translation>
     </message>

@@ -359,6 +359,19 @@ void qtUpdateNotifier::printTime( const QString& zz,qint64 time )
 	qDebug() << zz << d.toString( Qt::TextDate ) ;
 }
 
+static QString _tohours( qint64 s )
+{
+	std::array< char,64 > num ;
+
+	auto f = static_cast<double>( s ) ;
+
+	f = f / ( 1000 * 60 * 60 ) ;
+
+	snprintf( num.data(),num.size(),"%.2f",f ) ;
+
+	return QString( num.data() ) ;
+}
+
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
 	if( settings::firstTimeRun() ){
@@ -372,13 +385,13 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 	}else{
 		m_currentTime = this->getCurrentTime() ;
 
-		m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
+		auto scheduledTime = settings::nextScheduledUpdateTime() ;
 
-		auto nextUpdateTime = this->nextScheduledUpdateTime() ;
+		qint64 interval = m_currentTime - scheduledTime ;
 
-		qint64 interval = m_currentTime - nextUpdateTime ;
+		if( interval < 0 ){
 
-		if( interval >= 0 ){
+			interval = -interval ;
 
 			/*
 			 * the wait interval has not passed,wait for the remainder of the interval before
@@ -394,6 +407,8 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 
 			auto s = static_cast< int >( interval ) ;
 
+			this->logActivity( tr( "**Going to sleep for %1 hours" ).arg( _tohours( s ) ) ) ;
+
 			t->start( s ) ;
 
 			this->showToolTip( m_defaulticon,tr( "Status" ),s ) ;
@@ -405,19 +420,18 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			 */
 
 			/*
-			 * Calculate the time that has passed since the time we were supposed to run.
-			 */
-			interval = nextUpdateTime - m_currentTime ;
-
-			/*
 			 * Calculate the time we are supposed to run next time.
 			 */
-			auto nextUpdateTime = interval + m_sleepDuration ;
+
+			while( scheduledTime < m_currentTime ){
+
+				scheduledTime += m_sleepDuration ;
+			}
 
 			/*
 			 * Save the time we are supposed to run next.
 			 */
-			this->writeUpdateTimeToConfigFile( nextUpdateTime ) ;
+			this->writeUpdateTimeToConfigFile( scheduledTime ) ;
 
 			auto t = new QTimer() ;
 
@@ -427,9 +441,17 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			connect( t,SIGNAL( timeout() ),this,SLOT( startTimer_1() ) ) ;
 
 			/*
+			 * Calculate time difference between now and next update check
+			 */
+			auto s = scheduledTime - m_currentTime ;
+
+			/*
 			 * Wait until the next time we run.
 			 */
-			t->start( static_cast< int >( nextUpdateTime ) ) ;
+
+			this->logActivity( tr( "*****Going to sleep for %1 hours" ).arg( _tohours( s ) ) ) ;
+
+			t->start( static_cast< int >( s ) ) ;
 
 			/*
 			 * Check for updates.
@@ -492,6 +514,11 @@ void qtUpdateNotifier::setDebug( bool debug )
 
 qint64 qtUpdateNotifier::nextScheduledUpdateTime()
 {
+	if( m_nextScheduledUpdateTime == 0 ){
+
+		m_nextScheduledUpdateTime = settings::nextScheduledUpdateTime() ;
+	}
+
 	return m_nextScheduledUpdateTime ;
 }
 
@@ -782,15 +809,15 @@ QString qtUpdateNotifier::logMsg( qint64 interval )
 
 		auto n = this->nextUpdateTime( interval ) ;
 
-		char num[ 64 ] ;
+		std::array< char,64 > num ;
 
 		auto f = static_cast<double>( interval ) ;
 
 		f = f / ( 1000 * 60 * 60 ) ;
 
-		snprintf( num,64,"%.2f",f ) ;
+		snprintf( num.data(),num.size(),"%.2f",f ) ;
 
-		return tr( "Scheduled next check to be in %1 hours at %2" ).arg( num,n ) ;
+		return tr( "Scheduled next check to be in %1 hours at %2" ).arg( num.data(),n ) ;
 	}else{
 		return tr( "Next update check will be at %1" ).arg( this->nextAutoUpdateTime() ) ;
 	}

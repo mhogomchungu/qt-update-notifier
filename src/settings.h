@@ -49,6 +49,7 @@ namespace settings
 	bool autoUpdatePackages( void ) ;
 	bool autoDownloadPackages( void ) ;
 	bool skipOldPackageCheck( void ) ;
+	void skipOldPackageCheck( bool ) ;
 	bool autoStartEnabled( void ) ;
 	bool warnOnInconsistentState( void ) ;
 	bool prefixLogEntries( void ) ;

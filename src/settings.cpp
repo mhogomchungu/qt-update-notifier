@@ -181,11 +181,11 @@ QString settings::url()
 
 qint64 settings::nextScheduledUpdateTime()
 {
-	if( _settings->contains( "nextScheduledUpdateTime" ) ){
+	if( _settings->contains( "nextScheduledUpdateTime0" ) ){
 
-		return _settings->value( "nextScheduledUpdateTime" ).toString().toLongLong() ;
+		return _settings->value( "nextScheduledUpdateTime0" ).toLongLong() ;
 	}else{
-		std::cout << "invalid code path in \"settings::nextScheduledUpdateTime()\"" << std::endl ;
+		qDebug() << "invalid code path in \"settings::nextScheduledUpdateTime()\"" ;
 
 		return QDateTime::currentDateTime().toMSecsSinceEpoch() ;
 	}
@@ -226,12 +226,12 @@ void settings::setAutoRefreshSynaptic( bool autoRefresh )
 
 bool settings::firstTimeRun()
 {
-	return !_settings->contains( "nextScheduledUpdateTime" ) ;
+	return !_settings->contains( "nextScheduledUpdateTime0" ) ;
 }
 
 void settings::updateNextScheduledUpdateTime( qint64 time )
 {
-        _settings->setValue( "nextScheduledUpdateTime",QString::number( time ) ) ;
+	_settings->setValue( "nextScheduledUpdateTime0",QString::number( time ) ) ;
 }
 
 bool settings::autoUpdatePackages()
@@ -252,6 +252,11 @@ bool settings::autoDownloadPackages()
 bool settings::skipOldPackageCheck()
 {
 	return _option_bool( "skipOldPackageCheck",true ) ;
+}
+
+void settings::skipOldPackageCheck( bool e )
+{
+	_settings->setValue( "skipOldPackageCheck",e ) ;
 }
 
 bool settings::autoStartEnabled()
