@@ -306,3 +306,25 @@ void settings::ignorePackageList( const QStringList& e )
 {
 	_settings->setValue( "ignoredPackageList",e ) ;
 }
+
+QRect settings::logWindowDimensions()
+{
+	if( !_settings->contains( "logWindowDimensions" ) ){
+
+		QRect r ;
+
+		r.setX( 332 ) ;
+		r.setY( 188 ) ;
+		r.setWidth( 701 ) ;
+		r.setHeight( 380 ) ;
+
+		_settings->setValue( "logWindowDimensions",r ) ;
+	}
+
+	return _settings->value( "logWindowDimensions" ).toRect() ;
+}
+
+void settings::logWindowDimensions( const QRect& e )
+{
+	_settings->setValue( "logWindowDimensions",e ) ;
+}

@@ -23,6 +23,7 @@
 #include <QString>
 #include <QStringList>
 #include <QSettings>
+#include <QRect>
 
 namespace settings
 {
@@ -63,6 +64,8 @@ namespace settings
 	bool checkNewerKernels( void ) ;
 	QStringList ignorePackageList( void ) ;
 	void ignorePackageList( const QStringList& ) ;
+	QRect logWindowDimensions( void ) ;
+	void logWindowDimensions( const QRect& ) ;
 }
 
 #endif // SETTINGS_H
