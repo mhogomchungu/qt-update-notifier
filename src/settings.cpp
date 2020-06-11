@@ -328,3 +328,25 @@ void settings::logWindowDimensions( const QRect& e )
 {
 	_settings->setValue( "logWindowDimensions",e ) ;
 }
+
+QRect settings::aptGetWindowDimensions()
+{
+	if( !_settings->contains( "aptGetWindowDimensions" ) ){
+
+		QRect r ;
+
+		r.setX( 332 ) ;
+		r.setY( 188 ) ;
+		r.setWidth( 701 ) ;
+		r.setHeight( 380 ) ;
+
+		_settings->setValue( "aptGetWindowDimensions",r ) ;
+	}
+
+	return _settings->value( "aptGetWindowDimensions" ).toRect() ;
+}
+
+void settings::aptGetWindowDimensions( const QRect& e )
+{
+	_settings->setValue( "aptGetWindowDimensions",e ) ;
+}

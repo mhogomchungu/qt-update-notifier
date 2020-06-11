@@ -53,6 +53,7 @@ private:
 	Ui::logWindow * m_ui;
 	QString m_logFile ;
 	QString m_logPath ;
+	enum class windowType{ logWindow,aptGetWindow } m_windowType ;
 };
 
 #endif // LOGWINDOW_H

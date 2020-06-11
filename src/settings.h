@@ -66,6 +66,8 @@ namespace settings
 	void ignorePackageList( const QStringList& ) ;
 	QRect logWindowDimensions( void ) ;
 	void logWindowDimensions( const QRect& ) ;
+	QRect aptGetWindowDimensions( void ) ;
+	void aptGetWindowDimensions( const QRect& ) ;
 }
 
 #endif // SETTINGS_H

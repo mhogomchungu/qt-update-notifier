@@ -32,8 +32,6 @@ logWindow::logWindow( QString title,QWidget * parent ) :QWidget( parent ),m_ui( 
 	connect( m_ui->pbQuit_2,SIGNAL( clicked() ),this,SLOT( pbQuit() ) ) ;
 	connect( m_ui->pbClear,SIGNAL( clicked() ),this,SLOT( pbClearLog() ) ) ;
 
-	this->window()->setGeometry( settings::logWindowDimensions() ) ;
-
 	this->installEventFilter( this ) ;
 }
 
@@ -68,6 +66,25 @@ void logWindow::showLogWindow()
 	m_logPath = m_logFile ;
         m_ui->textEditLogField->setText( utility::readFromFile( m_logFile ) ) ;
 	m_ui->pbQuit_2->setVisible( false ) ;
+
+	this->window()->setGeometry( settings::logWindowDimensions() ) ;
+
+	m_windowType = windowType::logWindow ;
+
+	this->show() ;
+}
+
+void logWindow::showAptGetWindow()
+{
+	m_logPath = settings::aptGetLogFilePath() ;
+	this->updateLogWindow_1() ;
+	m_ui->pbClear->setVisible( false ) ;
+	m_ui->pbQuit->setVisible( false ) ;
+
+	m_windowType = windowType::aptGetWindow ;
+
+	this->window()->setGeometry( settings::aptGetWindowDimensions() ) ;
+
 	this->show() ;
 }
 
@@ -79,15 +96,6 @@ void logWindow::updateLogWindow()
 void logWindow::updateLogWindow_1()
 {
         m_ui->textEditLogField->setText( utility::readFromFile( m_logPath ) ) ;
-}
-
-void logWindow::showAptGetWindow()
-{
-	m_logPath = settings::aptGetLogFilePath() ;
-	this->updateLogWindow_1() ;
-	m_ui->pbClear->setVisible( false ) ;
-	m_ui->pbQuit->setVisible( false ) ;
-	this->show() ;
 }
 
 void logWindow::pbClearLog()
@@ -106,7 +114,12 @@ void logWindow::closeEvent( QCloseEvent * e )
 
 void logWindow::pbQuit()
 {	
-	settings::logWindowDimensions( this->window()->geometry() ) ;
+	if( m_windowType == windowType::logWindow ){
+
+		settings::logWindowDimensions( this->window()->geometry() ) ;
+	}else{
+		settings::aptGetWindowDimensions( this->window()->geometry() ) ;
+	}
 
 	this->hide() ;
 	this->deleteLater() ;
