@@ -359,19 +359,6 @@ void qtUpdateNotifier::printTime( const QString& zz,qint64 time )
 	qDebug() << zz << d.toString( Qt::TextDate ) ;
 }
 
-static QString _tohours( qint64 s )
-{
-	std::array< char,64 > num ;
-
-	auto f = static_cast<double>( s ) ;
-
-	f = f / ( 1000 * 60 * 60 ) ;
-
-	snprintf( num.data(),num.size(),"%.2f",f ) ;
-
-	return QString( num.data() ) ;
-}
-
 void qtUpdateNotifier::checkForUpdatesOnStartUp()
 {
 	if( settings::firstTimeRun() ){
@@ -383,11 +370,11 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 
 		this->automaticCheckForUpdates() ;
 	}else{
-		m_currentTime = this->getCurrentTime() ;
+		auto currentTime = this->getCurrentTime() ;
 
 		auto scheduledTime = settings::nextScheduledUpdateTime() ;
 
-		qint64 interval = m_currentTime - scheduledTime ;
+		qint64 interval = currentTime - scheduledTime ;
 
 		if( interval < 0 ){
 
@@ -421,7 +408,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			 * Calculate the time we are supposed to run next time.
 			 */
 
-			while( scheduledTime < m_currentTime ){
+			while( scheduledTime < currentTime ){
 
 				scheduledTime += m_sleepDuration ;
 			}
@@ -441,7 +428,7 @@ void qtUpdateNotifier::checkForUpdatesOnStartUp()
 			/*
 			 * Calculate time difference between now and next update check
 			 */
-			auto s = scheduledTime - m_currentTime ;
+			auto s = scheduledTime - currentTime ;
 
 			/*
 			 * Wait until the next time we run.
@@ -793,8 +780,23 @@ QString qtUpdateNotifier::nextUpdateTime( qint64 interval )
 
 QString qtUpdateNotifier::nextAutoUpdateTime()
 {
+	auto a = settings::nextScheduledUpdateTime() ;
+	auto b = this->getCurrentTime() ;
+
 	QDateTime d ;
-	d.setMSecsSinceEpoch( settings::nextScheduledUpdateTime() ) ;
+
+	if( a >= b ){
+
+		d.setMSecsSinceEpoch( a ) ;
+	}else{
+		while( a < b ){
+
+			a += m_sleepDuration ;
+		}
+
+		d.setMSecsSinceEpoch( a ) ;
+	}
+
 	return d.toString( Qt::TextDate ) ;
 }
 

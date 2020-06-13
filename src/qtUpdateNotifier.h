@@ -134,7 +134,6 @@ private:
 	QByteArray m_token ;
 	QTimer m_timer ;
 	qint64 m_sleepDuration ;
-	qint64 m_currentTime ;
 	qint64 m_nextScheduledUpdateTime ;
 	NetworkAccessManager m_manager ;
 	statusicon m_statusicon ;

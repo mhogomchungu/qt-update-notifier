@@ -9,10 +9,6 @@
         <translation>Log je prázdný</translation>
     </message>
     <message>
-        <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation type="vanished">&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 bude aktualizováno&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%2 bude přepsáno&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;%3 bude nainstalováno&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
-    </message>
-    <message>
         <location filename="../src/utility.cpp" line="231"/>
         <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
         <translation type="unfinished"></translation>
@@ -568,10 +564,6 @@ Pokud problém přetrvává, a Synaptic není schopen ho vyřešit, pak požáde
         <translation>Qt-update-notifier spuštěn</translation>
     </message>
     <message>
-        <source>Qt-update-notifier</source>
-        <translation type="vanished">Qt-update-notifier</translation>
-    </message>
-    <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="58"/>
         <source>Update output log window</source>
         <translation>Okno výstupu aktualizace</translation>
@@ -589,11 +581,11 @@ Pokud problém přetrvává, a Synaptic není schopen ho vyřešit, pak požáde
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="212"/>
         <location filename="../src/qtUpdateNotifier.cpp" line="282"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="412"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="557"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="654"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="683"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="776"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="399"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="544"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="641"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="670"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="763"/>
         <source>Status</source>
         <translation>Stav</translation>
     </message>
@@ -601,10 +593,6 @@ Pokud problém přetrvává, a Synaptic není schopen ho vyřešit, pak požáde
         <location filename="../src/qtUpdateNotifier.cpp" line="176"/>
         <source>connecting ...</source>
         <translation>připojuji...</translation>
-    </message>
-    <message>
-        <source>Another instance is already running, closing this one</source>
-        <translation type="vanished">Jiná instance je již spuštěna, tuto ukončuji</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="309"/>
@@ -647,83 +635,83 @@ Pokud problém přetrvává, a Synaptic není schopen ho vyřešit, pak požáde
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="454"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="545"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="441"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="532"/>
         <source>Automatic check for updates initiated</source>
         <translation>Automatická kontrola aktualizací spuštěna</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="528"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="515"/>
         <source>Manual check for updates initiated</source>
         <translation>Manuální kontrola aktualizací spuštěna</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="553"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="540"/>
         <source>Warning:	attempt to start update check while another one is still in progress</source>
         <translation>Varování:		pokoušíte se spustit kontrolu aktualizací, zatímco jiná ještě probíhá</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="557"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="544"/>
         <source>Checking for updates</source>
         <translation>Kontrola aktualizací</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="641"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="628"/>
         <source>Log entry was created at: </source>
         <translation>Výstupní záznam vytvořen: </translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="658"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="645"/>
         <source>Automatic package update initiated</source>
         <translation>Automatická aktualizace balíčků zahájena</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="667"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="654"/>
         <source>Automatic package update failed</source>
         <translation>Automatická aktualizace byla neúspěšná</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="691"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="678"/>
         <source>Downloading of packages completed</source>
         <translation>Stahování balíčků dokončeno</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="695"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="682"/>
         <source>Downloading of packages failed</source>
         <translation>Stahování balíčků bylo neúspěšné</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="683"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="670"/>
         <source>Downloading packages</source>
         <translation>Stahuji balíčky</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="580"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="567"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
         <translation>Kontrola aktualizací dokončena, repozitář se zdá být v nekonzistentním stavu</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="654"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="641"/>
         <source>Update in progress, do not power down computer</source>
         <translation>Probíhá aktualizace, nevypínejte počítač</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="715"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="702"/>
         <source>Outdated packages found</source>
         <translation>Nalezeny zastaralé balíčky</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="728"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="715"/>
         <source>Kernel version &quot;%1&quot; is available</source>
         <translation>Je dostupné jádro ve verzi &quot;%1&quot; </translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="872"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="874"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Qt-update-notifier ukončen</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="571"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="558"/>
         <source>There are updates in the repository</source>
         <translation>V repozitáři jsou k dispozici aktualizace</translation>
     </message>
@@ -733,55 +721,55 @@ Pokud problém přetrvává, a Synaptic není schopen ho vyřešit, pak požáde
         <translation>Synaptic byl ukončen chybou</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="664"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="651"/>
         <source>Automatic package update completed</source>
         <translation>Automatický aktualizace balíčků dokončena</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="687"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="674"/>
         <source>Packages downloading initiated</source>
         <translation>Stahování balíčků zahájeno</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="157"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="633"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="706"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="712"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="762"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="620"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="693"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="699"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="749"/>
         <source>No updates found</source>
         <translation>Aktualizace nejsou k dispozici</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="606"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="593"/>
         <source>Check skipped, user is not connected to the internet</source>
         <translation>Kontrola přeskočena, uživatel není připojen k internetu</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="613"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="623"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="600"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="610"/>
         <source>Update check complete, repository is in an unknown state</source>
         <translation>Kontrola aktualizací dokončena, repozitář je v neznámém stavu</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="741"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="728"/>
         <source>Updates found</source>
         <translation>Aktualizace nalezeny</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="210"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="753"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="760"/>
-        <location filename="../src/qtUpdateNotifier.cpp" line="817"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="740"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="747"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="819"/>
         <source>Next update check will be at %1</source>
         <translation>Další kontrola aktualizací bude za %1</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="815"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="817"/>
         <source>Scheduled next check to be in %1 hours at %2</source>
         <translation>Další plánovaná kontrola bude za %1 hodin(u)  %2</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="835"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="837"/>
         <source>Rescheduling update check</source>
         <translation>Změna plánování kontroly aktualizací</translation>
     </message>
