@@ -11,7 +11,7 @@
     <message>
         <location filename="../src/utility.cpp" line="231"/>
         <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 werden aktualisiert&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%2 werden ersetzt&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%3 werden installiert&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="285"/>
@@ -449,7 +449,7 @@ im Forum.</translation>
     <message>
         <location filename="../src/configuredialog.ui" line="845"/>
         <source>Skip old package check</source>
-        <translation type="unfinished"></translation>
+        <translation>Prüfung alter Pakete überspringen</translation>
     </message>
     <message>
         <location filename="../src/configuredialog.ui" line="683"/>
@@ -512,12 +512,12 @@ im Forum.</translation>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="17"/>
         <source>Qt-update-notifier ignore package window</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt-update-notifier - Pakete ignorieren</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="36"/>
         <source>Package name</source>
-        <translation type="unfinished"></translation>
+        <translation>Paketname</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="50"/>
@@ -527,17 +527,17 @@ im Forum.</translation>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="73"/>
         <source>Enter below a name of a package to be ignored</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie unten den Namen eines Pakets ein, dass ignoriert werden soll</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="89"/>
         <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.cpp" line="58"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>
@@ -635,7 +635,7 @@ im Forum.</translation>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="330"/>
         <source>Ignore package list</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste der ignorierten Pakete</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="441"/>
