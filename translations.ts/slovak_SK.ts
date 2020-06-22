@@ -706,7 +706,7 @@ Ak problém pretrváva, a Synaptic nie je schopný ho vyriešiť, potom požiada
         <translation>Je dostupné jadro vo verzii &quot;%1&quot; </translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="874"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="871"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Qt-update-notifier ukončený</translation>
     </message>

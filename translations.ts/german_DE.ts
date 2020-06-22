@@ -704,7 +704,7 @@ im Forum.</translation>
         <translation>Kernel in Version &quot;%1&quot; verfügbar</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="874"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="871"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Qt-Update-Notifier beendet</translation>
     </message>

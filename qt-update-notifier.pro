@@ -56,3 +56,6 @@ TRANSLATIONS += translations.ts/czech_CS.ts
 TRANSLATIONS += translations.ts/slovak_SK.ts
 TRANSLATIONS += translations.ts/polish_PL.ts
 TRANSLATIONS += translations.ts/italian_IT.ts
+TRANSLATIONS += translations.ts/french_Fr.ts
+TRANSLATIONS += translations.ts/spanish_SP.ts
+TRANSLATIONS += translations.ts/catalan_SP.ts

@@ -701,7 +701,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
         <translation>Wersja kernela \&quot;%1\&quot; jest dostępna</translation>
     </message>
     <message>
-        <location filename="../src/qtUpdateNotifier.cpp" line="874"/>
+        <location filename="../src/qtUpdateNotifier.cpp" line="871"/>
         <source>Qt-update-notifier quitting</source>
         <translation>Zamykanie Qt-update-notifier  </translation>
     </message>

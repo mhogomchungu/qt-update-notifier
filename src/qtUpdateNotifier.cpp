@@ -855,10 +855,7 @@ void qtUpdateNotifier::setUpdateInterval( int interval )
 
 void qtUpdateNotifier::closeApp()
 {
-	if( !m_threadIsRunning ){
-
-		QCoreApplication::exit( 0 ) ;
-	}
+	this->closeApp( 0 ) ;
 }
 
 void qtUpdateNotifier::closeApp( int st )
