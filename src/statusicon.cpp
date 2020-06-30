@@ -27,7 +27,7 @@ static QPixmap _icon( const QString& name,int count )
 {
 	QIcon icon( ":/" + name ) ;
 	QPixmap pixmap = icon.pixmap( QSize( 152,152 ),QIcon::Normal,QIcon::On ) ;
-	int size = pixmap.height() * 0.01 * 60 ; //configurationoptionsdialog::fontSize() ;
+	int size = static_cast< int >( pixmap.height() * 0.01 * 60 ) ; //configurationoptionsdialog::fontSize() ;
 	QPainter paint( &pixmap ) ;
 	//QFont font( configurationoptionsdialog::fontFamily() ) ;
 	QFont font( "Helvetica" ) ;
@@ -38,10 +38,10 @@ static QPixmap _icon( const QString& name,int count )
 	paint.setRenderHint( QPainter::SmoothPixmapTransform ) ;
 	paint.setRenderHint( QPainter::Antialiasing ) ;
 
-	int width = pixmap.width() * 0.8 ;
+	int width = static_cast< int >( pixmap.width() * 0.8 ) ;
 
-	if( fm.width( number ) > width ){
-		while( fm.width( number ) > width && size > 0 ){
+	if( fm.horizontalAdvance( number ) > width ){
+		while( fm.horizontalAdvance( number ) > width && size > 0 ){
 			size = size - 1 ;
 			font.setPointSize( size ) ;
 		}
@@ -228,7 +228,7 @@ void statusicon::setAttentionIcon( const QString& name )
 
 void statusicon::setCategory( const ItemCategory category )
 {
-	Q_UNUSED( category ) ;
+	Q_UNUSED( category )
 }
 
 void statusicon::quit()
@@ -238,12 +238,12 @@ void statusicon::quit()
 
 void statusicon::setAttentionIconByName( const QString& name )
 {
-	Q_UNUSED( name ) ;
+	Q_UNUSED( name )
 }
 
 void statusicon::setStandardActionsEnabled( bool b )
 {
-	Q_UNUSED( b ) ;
+	Q_UNUSED( b )
 }
 
 void statusicon::setIcon( const QString& name )
@@ -264,20 +264,37 @@ void statusicon::setIconByName( const QString& name )
 
 void statusicon::setOverlayIcon( const QString& name )
 {
-	Q_UNUSED( name ) ;
+	Q_UNUSED( name )
 }
 
 void statusicon::setStatus( const ItemStatus status )
 {
-	Q_UNUSED( status ) ;
+	Q_UNUSED( status )
 }
 
 void statusicon::setToolTip( const QString& iconName,const QString& title,const QString& subTitle )
 {
-	Q_UNUSED( iconName ) ;
-	Q_UNUSED( title ) ;
-	auto r = QString( "<table><tr><td><b>%1<br></b></td></tr><tr><td>%2</td></tr></table>" ).arg( title,subTitle ) ;
-	m_trayIcon.setToolTip( r ) ;
+	Q_UNUSED( iconName )
+
+	//std::cout << subTitle.toStdString() << std::endl ;
+
+	if( subTitle.startsWith( "<table>" ) ){
+
+		auto a = subTitle ;
+
+		a.replace( "<table><tr><td>","" ) ;
+		a.replace( "</td></tr><tr><td><br>","\n" ) ;
+		a.replace( "</td></tr></table>","" ) ;
+		a.replace( "<table><tr><td><br>","" ) ;
+		a.replace( "<table><tr><td><b>","" ) ;
+		a.replace( "</b><br></tr></td><tr><td>","\n" ) ;
+		a.replace( "</tr></td></table>","" ) ;
+		a.replace( "<b>","" ) ;
+
+		m_trayIcon.setToolTip( title + "\n" + a ) ;
+	}else{
+		m_trayIcon.setToolTip( title + "\n" + subTitle ) ;
+	}
 }
 
 static void _suspend( int s )
@@ -342,8 +359,8 @@ QAction * statusicon::getAction( const QString& title )
 
 void statusicon::activateRequested( bool x,const QPoint& y )
 {
-	Q_UNUSED( x ) ;
-	Q_UNUSED( y ) ;
+	Q_UNUSED( x )
+	Q_UNUSED( y )
 }
 
 void statusicon::trayIconClicked( QSystemTrayIcon::ActivationReason reason )

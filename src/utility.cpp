@@ -37,6 +37,8 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#include <iostream>
+
 struct Result
 {
 	result m_result ;
@@ -234,20 +236,74 @@ static Result _processUpdates( QByteArray& output1,const QByteArray& output2 )
 	return Result{ { 0,result::repoState::updatesFound,{ updates,output2 } },upgrade,replace,New } ;
 }
 
+struct cmd_args_mutable{
+	QString cmd ;
+	QStringList args ;
+} ;
+
+struct cmd_args{
+
+	cmd_args( const cmd_args_mutable& s,const QProcessEnvironment& e ) :
+		cmd( s.cmd ),args( s.args ),env( e )
+	{
+	}
+	cmd_args( const QString& c,
+		  const QStringList& a = QStringList(),
+		  const QProcessEnvironment& e = QProcessEnvironment() ) :
+		cmd( c ),args( a ),env( e )
+	{
+	}
+	const QString& cmd ;
+	const QStringList& args ;
+	const QProcessEnvironment& env ;
+} ;
+
+static bool _debug = true ;
+
+static Task::future< Task::process::result >& _run_cmd( const cmd_args& cmd_args )
+{
+	if( _debug ){
+
+		std::cout << "\"" << cmd_args.cmd.toStdString() << "\"" ;
+
+		for( const auto& it : cmd_args.args ){
+
+			std::cout << " \"" + it.toStdString() << "\"" ;
+		}
+
+		std::cout << std::endl ;
+	}
+
+	return Task::process::run( cmd_args.cmd,cmd_args.args,-1,"",cmd_args.env ) ;
+}
+
+static cmd_args_mutable _setup_apt( const QString& cmd,
+				    const QString& configPath,
+				    const QString& opt )
+{
+	QStringList args = { "-s","-o","Debug::NoLocking=true","-o" } ;
+
+	args.append( "dir::state=" + configPath + "/apt" ) ;
+
+	args.append( opt ) ;
+
+	return { cmd,args } ;
+}
+
 static QByteArray _upgrade_0( const QString& configPath,bool setEnglishLanguage )
 {
-	auto e = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt dist-upgrade" ).arg( configPath ) ;
+	auto w = _setup_apt( "apt-get",configPath,"dist-upgrade" ) ;
+	
+	QProcessEnvironment env ;
 
 	if( setEnglishLanguage ){
-
-		QProcessEnvironment env ;
 
 		env.insert( "LANG","en_US.UTF-8" ) ;
 		env.insert( "LANGUAGE","en_US.UTF-8:en_US:en" ) ;
 
-		return Task::process::run( e,{},-1,{},env ).get().std_out() ;
+		return _run_cmd( { w,env } ).get().std_out() ;
 	}else{
-		return Task::process::run( e ).get().std_out() ;
+		return _run_cmd( { w,env } ).get().std_out() ;
 	}
 }
 
@@ -268,16 +324,20 @@ static bool _update( const QString& configPath )
 	env.insert( "LANG","en_US.UTF-8" ) ;
 	env.insert( "LANGUAGE","en_US.UTF-8:en_US:en" ) ;
 
-	auto e = QString( "apt-get -s -o Debug::NoLocking=true -o dir::state=%1/apt update" ).arg( configPath ) ;
+	auto w = _setup_apt( "apt-get",configPath,"update" ) ;
 
-	return Task::process::run( e,{},-1,{},env ).get().success() ;
+	return _run_cmd( { w,env } ).get().success() ;
 }
 
 static result _reportUpdates()
 {
 	auto _not_online = [](){
 
-		return !Task::process::run( settings::networkConnectivityChecker() ).get().success() ;
+		auto args = settings::networkConnectivityChecker().split( ' ',Qt::SkipEmptyParts ) ;
+
+		auto exe = args.takeAt( 0 ) ;
+
+		return !_run_cmd( { exe,args } ).get().success() ;
 	}() ;
 
 	if( _not_online ){
@@ -354,24 +414,22 @@ Task::future< result >& reportUpdates()
 	return Task::run( [](){ return _reportUpdates() ; } ) ;
 }
 
-static int _task( const char * e )
+static int _task( const QStringList& e )
 {
-	auto s = QString( "%1 %2" ).arg( QT_UPDATE_NOTIFIER_HELPER_PATH,e ) ;
-
-	return Task::process::run( s ).get().exit_code() ;
+	return _run_cmd( { QT_UPDATE_NOTIFIER_HELPER_PATH,e } ).get().exit_code() ;
 }
 
 Task::future< bool >& startSynaptic()
 {
 	return Task::run( [](){
 
-		auto run = [](){
+		auto run = []()->QStringList{
 
 			if( settings::autoRefreshSynaptic() ){
 
-				return  "--start-synaptic --update-at-startup" ;
+				return { "--start-synaptic","--update-at-startup" } ;
 			}else{
-				return "--start-synaptic" ;
+				return { "--start-synaptic" } ;
 			}
 		}() ;
 
@@ -381,12 +439,12 @@ Task::future< bool >& startSynaptic()
 
 Task::future< bool >& autoDownloadPackages()
 {
-	return Task::run( [](){ return _task( "--download-packages" ) == 0 ; } ) ;
+	return Task::run( [](){ return _task( { "--download-packages" } ) == 0 ; } ) ;
 }
 
 Task::future< int >& autoUpdatePackages()
 {
-	return Task::run( [](){ return _task( "--auto-update" ) ; } ) ;
+	return Task::run( [](){ return _task( { "--auto-update" } ) ; } ) ;
 }
 
 static bool _check_version( const QString& e,const QString& f )
@@ -463,7 +521,7 @@ static bool _check_version( const QString& e,const QString& f )
 
 static QString _checkKernelVersion()
 {
-	QString version = Task::process::run( "uname -r" ).get().std_out() ;
+	QString version = _run_cmd( { "uname",{ "-r" } } ).get().std_out() ;
 
 	int index = version.indexOf( "-" ) ;
 
@@ -529,9 +587,9 @@ static QString _checkKernelVersion()
 	}
 }
 
-static bool _updateAvailable( const QString& e,QString * newVersion,QString * installedVersion )
+static bool _updateAvailable( const QString& e,const QStringList& args,QString * newVersion,QString * installedVersion )
 {
-	QString r = Task::process::run( e ).get().std_out() ;
+	QString r = _run_cmd( { e,args } ).get().std_out() ;
 
 	if( r.isEmpty() ){
 
@@ -568,7 +626,7 @@ static QString _checkLibreOfficeVersion()
 	QString iv ;
 	QString nv ;
 
-	if( _updateAvailable( "lomanager --vinfo",&nv,&iv ) ){
+	if( _updateAvailable( "lomanager",{ "--vinfo" },&nv,&iv ) ){
 
 		return QObject::tr( "Updating Libreoffice from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 	}else{
@@ -581,7 +639,7 @@ static QString _checkVirtualBoxVersion()
 	QString iv ;
 	QString nv ;
 
-	if( _updateAvailable( "getvirtualbox --vinfo",&nv,&iv ) ){
+	if( _updateAvailable( "getvirtualbox",{ "--vinfo" },&nv,&iv ) ){
 
 		return QObject::tr( "Updating VirtualBox from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 	}else{
@@ -594,7 +652,7 @@ static QString _checkCallibeVersion()
 	QString iv ;
 	QString nv ;
 
-	if( _updateAvailable( "calibre-manager --vinfo",&nv,&iv ) ){
+	if( _updateAvailable( "calibre-manager",{ "--vinfo" },&nv,&iv ) ){
 
 		return QObject::tr( "Updating Calibre from version \"%1\" to available version \"%2\" is recommended." ).arg( iv ).arg( nv ) ;
 	}else{
@@ -679,7 +737,7 @@ Task::future<QString>& checkKernelVersions()
 
 		f.setPermissions( QFile::ReadOwner | QFile::ExeOwner ) ;
 
-		return Task::process::run( exe ).get().std_out() ;
+		return _run_cmd( exe ).get().std_out() ;
 	} ) ;
 }
 
