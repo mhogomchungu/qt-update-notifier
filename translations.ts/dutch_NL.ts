@@ -11,7 +11,7 @@
     <message>
         <location filename="../src/utility.cpp" line="231"/>
         <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 to be upgraded&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%2 to be replaced&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%3 to be installed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;%1 opwaarderen&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%2 te vervangen&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;%3 te installeren&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="285"/>
@@ -452,7 +452,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/configuredialog.ui" line="845"/>
         <source>Skip old package check</source>
-        <translation type="unfinished"></translation>
+        <translation>Controle oude pakketten overslaan</translation>
     </message>
     <message>
         <location filename="../src/configuredialog.ui" line="683"/>
@@ -515,12 +515,12 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/ignorepackagelist.ui" line="17"/>
         <source>Qt-update-notifier ignore package window</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt-update-notifier pakketwindow negeren</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="36"/>
         <source>Package name</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketnaam</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="50"/>
@@ -530,17 +530,17 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/ignorepackagelist.ui" line="73"/>
         <source>Enter below a name of a package to be ignored</source>
-        <translation type="unfinished"></translation>
+        <translation>Geef hieronder de naam van het te negeren pakket op</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="89"/>
         <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Toevoegen</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.cpp" line="58"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen</translation>
     </message>
 </context>
 <context>
@@ -638,7 +638,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="330"/>
         <source>Ignore package list</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketlijst negeren</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="441"/>
@@ -733,7 +733,7 @@ Standaard en aanbevolen interval
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="641"/>
         <source>Update in progress, do not power down computer</source>
-        <translation>Bezig met updaten, computer nu NIET UITSCHAKELEN.</translation>
+        <translation>Bezig met updaten, computer nu NIET UITSCHAKELEN</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="593"/>

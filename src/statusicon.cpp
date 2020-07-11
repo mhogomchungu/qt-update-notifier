@@ -142,9 +142,7 @@ QAction * statusicon::getAction( const QString& title )
 }
 
 void statusicon::newEmailNotify()
-{
-	QByteArray r( "qCheckGMail" ) ;
-	KNotification::event( "qCheckGMail-NewMail","",QPixmap(),0,0,r ) ;
+{	
 }
 
 bool statusicon::enableDebug()
@@ -164,14 +162,14 @@ void statusicon::setAttentionIconByName( const QString& name )
 
 void statusicon::activateRequested( bool x,const QPoint& y )
 {
-	Q_UNUSED( x ) ;
-	Q_UNUSED( y ) ;
+	Q_UNUSED( x )
+	Q_UNUSED( y )
 	m_clickActions.onLeftClick() ;
 }
 
 void statusicon::trayIconClicked( QSystemTrayIcon::ActivationReason reason )
 {
-	Q_UNUSED( reason ) ;
+	Q_UNUSED( reason )
 }
 
 void statusicon::addQuitAction()

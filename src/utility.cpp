@@ -258,7 +258,7 @@ struct cmd_args{
 	const QProcessEnvironment& env ;
 } ;
 
-static bool _debug = true ;
+static bool _debug = false ;
 
 static Task::future< Task::process::result >& _run_cmd( const cmd_args& cmd_args )
 {
