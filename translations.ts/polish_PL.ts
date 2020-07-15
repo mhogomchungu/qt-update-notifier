@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/utility.cpp" line="139"/>
         <source>Log is empty</source>
-        <translation>Log jest pusty.</translation>
+        <translation>Log jest pusty</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="231"/>
@@ -25,7 +25,7 @@ If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
         <translation>Spróbuj później, repozytorium jest wstanie niespójnym.
 Jeżeli problem trwa dłużej, uruchom Synaptic i sprawdź czy jest możliwa aktualizacja systemu.
-Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na forum w celu otrzymania pomocy. </translation>
+Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na forum w celu otrzymania pomocy.</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="314"/>
@@ -37,7 +37,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
         <location filename="../src/utility.cpp" line="341"/>
         <location filename="../src/utility.cpp" line="344"/>
         <source>No updates found</source>
-        <translation>Nie znaleziono aktualizacji.</translation>
+        <translation>Nie znaleziono aktualizacji</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="523"/>
@@ -65,12 +65,12 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/configuredialog.ui" line="14"/>
         <source>configuration window</source>
-        <translation>Ustawienia. </translation>
+        <translation>Ustawienia</translation>
     </message>
     <message>
         <location filename="../src/configuredialog.ui" line="38"/>
         <source>Set the time interval btw updates.Default and recommended interval is 1 day, 0 hours, 0 minutes</source>
-        <translation>Ustaw odstęp pomiędzy aktualizacjami. Domyślnie zalecacy odstęp to 1 dzień, 0 godzin, 0 minut. </translation>
+        <translation>Ustaw odstęp pomiędzy aktualizacjami. Domyślnie zalecacy odstęp to 1 dzień, 0 godzin, 0 minut</translation>
     </message>
     <message>
         <location filename="../src/configuredialog.ui" line="55"/>
@@ -519,7 +519,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/ignorepackagelist.ui" line="50"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Zamknij</translation>
+        <translation>&amp;Zamknij</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="73"/>
@@ -542,7 +542,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/logwindow.ui" line="17"/>
         <source>Qt-update-notifier log window</source>
-        <translation> log Qt-update-notifier</translation>
+        <translation>log Qt-update-notifier</translation>
     </message>
     <message>
         <location filename="../src/logwindow.ui" line="46"/>
@@ -607,12 +607,12 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="315"/>
         <source>Check for updates</source>
-        <translation>Sprawdź aktualizacje.</translation>
+        <translation>Sprawdź aktualizacje</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="318"/>
         <source>Done updating</source>
-        <translation>Aktualizację zakończono.</translation>
+        <translation>Aktualizację zakończono</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="321"/>
@@ -622,7 +622,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="324"/>
         <source>Open apt-get log window</source>
-        <translation>Otwórz apt-get log </translation>
+        <translation>Otwórz apt-get log</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="327"/>
@@ -638,7 +638,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
         <location filename="../src/qtUpdateNotifier.cpp" line="441"/>
         <location filename="../src/qtUpdateNotifier.cpp" line="532"/>
         <source>Automatic check for updates initiated</source>
-        <translation>Uruchomiono automatyczne sprawdzanie aktualizacji.</translation>
+        <translation>Uruchomiono automatyczne sprawdzanie aktualizacji</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="515"/>
@@ -648,17 +648,17 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="540"/>
         <source>Warning:	attempt to start update check while another one is still in progress</source>
-        <translation>Ostrzeżenie:	próba uruchomienia sprawdzenia aktualizacji, gdy inny proces nie zakończył sprawdzać.</translation>
+        <translation>Ostrzeżenie:	próba uruchomienia sprawdzenia aktualizacji, gdy inny proces nie zakończył sprawdzać</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="544"/>
         <source>Checking for updates</source>
-        <translation>Sprawdzanie aktualizacji.</translation>
+        <translation>Sprawdzanie aktualizacji</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="628"/>
         <source>Log entry was created at: </source>
-        <translation>Log został stworzony:</translation>
+        <translation>Log został stworzony: </translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="645"/>
@@ -688,12 +688,12 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="567"/>
         <source>Update check complete, repository appears to be in an inconsistent state</source>
-        <translation>Ukończono sprawdzanie aktualizacji, repozytorium jest nie spójne.</translation>
+        <translation>Ukończono sprawdzanie aktualizacji, repozytorium jest nie spójne</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="702"/>
         <source>Outdated packages found</source>
-        <translation>Znaleziono nieaktualne pakiety. </translation>
+        <translation>Znaleziono nieaktualne pakiety</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="715"/>
@@ -703,22 +703,22 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="871"/>
         <source>Qt-update-notifier quitting</source>
-        <translation>Zamykanie Qt-update-notifier  </translation>
+        <translation>Zamykanie Qt-update-notifier</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="558"/>
         <source>There are updates in the repository</source>
-        <translation>Aktualizacje są dostępne w repozytorium.</translation>
+        <translation>Aktualizacje są dostępne w repozytorium</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="651"/>
         <source>Automatic package update completed</source>
-        <translation>Zakończono automatyczne aktualizacje pakietów. </translation>
+        <translation>Zakończono automatyczne aktualizacje pakietów</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="674"/>
         <source>Packages downloading initiated</source>
-        <translation>Uruchomiono pobieranie pakietów.</translation>
+        <translation>Uruchomiono pobieranie pakietów</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="157"/>
@@ -727,33 +727,33 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
         <location filename="../src/qtUpdateNotifier.cpp" line="699"/>
         <location filename="../src/qtUpdateNotifier.cpp" line="749"/>
         <source>No updates found</source>
-        <translation>Nie znaleziono aktualizacji.</translation>
+        <translation>Nie znaleziono aktualizacji</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="94"/>
         <source>Synaptic exited with errors</source>
-        <translation>Synaptic zakończył działanie z błędami.</translation>
+        <translation>Synaptic zakończył działanie z błędami</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="641"/>
         <source>Update in progress, do not power down computer</source>
-        <translation>Trwa aktualizacja, nie wyłączaj komputera. </translation>
+        <translation>Trwa aktualizacja, nie wyłączaj komputera</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="593"/>
         <source>Check skipped, user is not connected to the internet</source>
-        <translation>Przerwano sprawdzanie, użytkownik nie jest połaczony z internetem. </translation>
+        <translation>Przerwano sprawdzanie, użytkownik nie jest połaczony z internetem</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="600"/>
         <location filename="../src/qtUpdateNotifier.cpp" line="610"/>
         <source>Update check complete, repository is in an unknown state</source>
-        <translation>Zakończono sprawdzenie aktualizacji, repozytorium jest w nieznanym stanie. </translation>
+        <translation>Zakończono sprawdzenie aktualizacji, repozytorium jest w nieznanym stanie</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="728"/>
         <source>Updates found</source>
-        <translation>Znaleziono aktualizacje.</translation>
+        <translation>Znaleziono aktualizacje</translation>
     </message>
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="210"/>
@@ -771,7 +771,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/qtUpdateNotifier.cpp" line="837"/>
         <source>Rescheduling update check</source>
-        <translation>Zmiana sprawdzenia aktualizacji.</translation>
+        <translation>Zmiana sprawdzenia aktualizacji</translation>
     </message>
 </context>
 <context>
@@ -788,7 +788,7 @@ Jeżeli problemu nie da się naprawić przy pomocy Synaptic otwórz post na foru
     <message>
         <location filename="../src/twitter.ui" line="14"/>
         <source>PCLinuxOS twitter handle</source>
-        <translation>PCLinuxOS twitter informacje.  </translation>
+        <translation>PCLinuxOS twitter informacje</translation>
     </message>
     <message>
         <location filename="../src/twitter.ui" line="26"/>

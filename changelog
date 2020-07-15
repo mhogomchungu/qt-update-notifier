@@ -93,3 +93,29 @@
 	- maintenance release
 -version 1.6.1
 	- fix a bug: synaptic did not start when set to auto refresh when started with gtksu
+-version 1.6.2
+	- add Polish translations.
+-version 1.6.3
+	- various changes and improvements.
+-version 1.6.4
+	- various changes and improvements.
+-version 1.6.5
+	- port the application to Qt5.
+-version 1.6.6
+	- remove qjson as a dependency in Qt5 build since Qt5 has native support for parsing json format.
+-version 1.6.7
+	- fix UI bug.
+-version 1.6.8
+	- fix a crash when the application is started for the very first time.
+-version 1.6.9
+	- various changes and improvements.
+-version 1.7.0
+	- remove gksu support since synaptic can now self elevate through pkexec.
+-version 1.7.1
+	- add a compile time option to build the project as a KF5 status icon application.
+-version 1.7.2
+	- update log window can now be resized and the new size will be remembered.
+	- apt-get log window can now be resized and the new size will be remembered.
+	- user will be advised to update their kernel detected version is less than 4.19.127.
+	- update translation strings.
+	- it is now possible to set packages to be ignored when checking for new packages.

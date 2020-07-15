@@ -519,7 +519,7 @@ Se il problema persiste e Synaptic non è in grado di risolverlo, apri un post d
     <message>
         <location filename="../src/ignorepackagelist.ui" line="50"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Chiudi</translation>
+        <translation>&amp;Chiudi</translation>
     </message>
     <message>
         <location filename="../src/ignorepackagelist.ui" line="73"/>

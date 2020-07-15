@@ -25,7 +25,7 @@ If the problem persists, run Synaptic and see if it is still possible to update.
 If the problem persists and Synaptic is unable to solve it, then open a support post in the forum and ask for assistance.</source>
         <translation>Odporúčanie: skúste to neskôr znova, repozitár sa zdá byť v nekonzistentnom stave.
 Ak problém pretrváva, spustite Synaptic a uvidíte, či je možné aktualizovať.
-Ak problém pretrváva, a Synaptic nie je schopný ho vyriešiť, potom požiadajte o pomoc na fóre</translation>
+Ak problém pretrváva, a Synaptic nie je schopný ho vyriešiť, potom požiadajte o pomoc na fóre.</translation>
     </message>
     <message>
         <location filename="../src/utility.cpp" line="314"/>
@@ -436,12 +436,12 @@ Ak problém pretrváva, a Synaptic nie je schopný ho vyriešiť, potom požiada
     <message>
         <location filename="../src/configuredialog.ui" line="619"/>
         <source>When the program starts, wait for this number of minutes before checking for updates (useful to give time to set up network interfaces)</source>
-        <translation>Čas od spustenia aplikácie po zistenie nových aktualizácií (užitočné, pokiaľ po štarte systému nastavujete pripojenie k sieti ručne).</translation>
+        <translation>Čas od spustenia aplikácie po zistenie nových aktualizácií (užitočné, pokiaľ po štarte systému nastavujete pripojenie k sieti ručne)</translation>
     </message>
     <message>
         <location filename="../src/configuredialog.ui" line="790"/>
         <source>Auto reload Synaptic when it is started from the context menu (Synaptic may crash under certain use cases)</source>
-        <translation>Vyhľadavánie aktualizácií v ponuke Synapticu (Synaptic môže v niektorých prípadoch havarovať).</translation>
+        <translation>Vyhľadavánie aktualizácií v ponuke Synapticu (Synaptic môže v niektorých prípadoch havarovať)</translation>
     </message>
     <message>
         <location filename="../src/configuredialog.ui" line="845"/>
